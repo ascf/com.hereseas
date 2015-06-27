@@ -29,8 +29,7 @@ var UserSchema = new Schema({
         type: String
     },
     gender: {
-        type: Boolean,
-        default: true
+        type: String
     },
     school: {
         type: String

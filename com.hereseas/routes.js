@@ -53,7 +53,8 @@ module.exports = function (app) {
     });
 
     app.post('/user', userRoute.createUser);
-    app.get('/user', userRoute.test);
+    app.get('/user', userRoute.getUserList);
+    app.get('/user/:id', userRoute.getUser);
 
 
 

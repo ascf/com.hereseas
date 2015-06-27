@@ -7,6 +7,7 @@ var validator = require('validator');
 var EventProxy = require('eventproxy');
 var tools = require('../common/tools');
 
+var Results = require('./commonResult');
 
 var User = require('../models').User;
 
@@ -15,9 +16,7 @@ var fs = require('fs');
 
 
 exports.test = function (req, res, next) {
-    res.json({
-        result: 'this is result'
-    });
+    res.json(Results.ERR_DB_ERR);
 };
 
 exports.ensureAuthenticated = function (req, res, next) {
@@ -47,10 +46,8 @@ exports.createUser = function (req, res, next) {
         user.email = data.email;
         user.username = data.email;
 
-        console.log('email:' + user.email);
         user.save(function (err, user) {
 
-            console.log('err:', err);
             if (err)
                 return next();
             else
@@ -77,4 +74,42 @@ exports.createUser = function (req, res, next) {
             ep.emit('checkEmail');
         }
     });
+};
+
+exports.getUserList = function (req, res, next) {
+
+
+    var query = {};
+    if (req.query.gender)
+        query.gender = req.query.gender;
+
+
+    User.find(
+        query,
+        'first_name last_name username email gender school avatar description tags last_login',
+        function (err, users) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+            } else {
+                res.json({
+                    result: true,
+                    data: users
+                });
+            }
+        });
+};
+
+exports.getUser = function (req, res, next) {
+    var userId = req.query.id;
+    if (userId) {
+        User.findById(userId,
+            'username email',
+            function (err, user) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                }
+            });
+    } else {
+        res.json(Results.ERR_URL_ERR);
+    }
 };
