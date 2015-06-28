@@ -1,0 +1,29 @@
+<div ui-view="content">
+    <div layout="row" layout-wrap>
+        <div flex="20">
+
+        </div>
+        <div flex>
+            <md-toolbar class=" md-accent">
+                <h2 class="md-toolbar-tools">
+                    <span>Sign up</span>
+                </h2>
+            </md-toolbar>
+            <md-content md-theme="docs-dark" layout-padding>
+                <md-input-container flex>
+                    <label>Email</label>
+                    <input ng-model="user.email" type="email">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Password</label>
+                    <input ng-model="user.password" type="password">
+                </md-input-container>
+                <md-button flex="100">Sign up</md-button>
+            </md-content>
+
+        </div>
+        <div flex="20">
+
+        </div>
+    </div>
+</div>

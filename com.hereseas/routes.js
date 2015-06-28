@@ -56,6 +56,8 @@ module.exports = function (app) {
     app.get('/user', userRoute.getUserList);
     app.get('/user/:id', userRoute.getUser);
 
-
+    app.get('/', function (req, res) {
+        res.render('index');
+    });
 
 };

@@ -1,11 +1,40 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html ng-app="hereseasApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Hereseas</title>
+
+    <link rel='stylesheet' href='/public/angular-material/angular-material.css'>
+    <!-- Libraries -->
+    <!-- angular -->
+    <script type="text/javascript" src="/public/angular/angular.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-route.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-ui-router.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-animate.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-aria.js"></script>
+    <script type="text/javascript" src="/public/angular-material/angular-material.js"></script>
+
+
+
+    <script type="text/javascript" src="/app/hereseas.js"></script>
+
+    <!-- Controllers -->
+    <script type="text/javascript" src="/app/controller/appCtrl.js"></script>
+
+
+</head>
+
+<body>
+
+
+
+    <div ui-view></div>
+    <!-- We'll also add some navigation: 
+    <a ui-sref="state1">State 1</a>
+    <a ui-sref="state2">State 2</a>-->
+</body>
+
 </html>
