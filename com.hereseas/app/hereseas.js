@@ -1,5 +1,5 @@
 var hereseasApp = angular.module('hereseasApp', [
-  'ui.router', 'ngMaterial'
+  'ui.router', 'ngMaterial', 'ngMessages'
 ]);
 
 
@@ -13,10 +13,8 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) 
     $stateProvider
         .state('signup', {
             url: '/signup',
-
             templateUrl: '/app/view/signup.html',
             controller: 'LoginCtrl'
-
 
         });
 });
