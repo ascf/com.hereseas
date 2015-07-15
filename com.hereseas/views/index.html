@@ -16,11 +16,19 @@
     <script type="text/javascript" src="/public/angular/angular-animate.js"></script>
     <script type="text/javascript" src="/public/angular/angular-aria.js"></script>
     <script type="text/javascript" src="/public/angular/angular-messages.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-cookies.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-sanitize.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-local-storage.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-translate.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-translate-loader-partial.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-translate-storage-cookie.js"></script>
+    <script type="text/javascript" src="/public/angular/angular-translate-storage-local.js"></script>
     <script type="text/javascript" src="/public/angular-material/angular-material.js"></script>
 
 
 
     <script type="text/javascript" src="/app/hereseas.js"></script>
+    <script type="text/javascript" src="/app/common/languages.js"></script>
 
     <!-- Controllers -->
     <script type="text/javascript" src="/app/service/userService.js"></script>
@@ -32,12 +40,10 @@
 
 <body>
 
+    <div ui-view="header"></div>
+    <div ui-view="content"></div>
+    <div ui-view="footer"></div>
 
-
-    <div ui-view></div>
-    <!-- We'll also add some navigation: 
-    <a ui-sref="state1">State 1</a>
-    <a ui-sref="state2">State 2</a>-->
 </body>
 
 </html>

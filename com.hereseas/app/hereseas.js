@@ -1,22 +1,53 @@
 var hereseasApp = angular.module('hereseasApp', [
-  'ui.router', 'ngMaterial', 'ngMessages'
+    'ngAnimate', 'ngCookies', 'ngSanitize',
+  'ui.router', 'ngMaterial', 'ngMessages',
+    'pascalprecht.translate', 'LocalStorageModule',
+    'pascalprecht.translate'
 ]);
 
+hereseasApp.constant('APP', {
+    name: 'hereseas',
+    logo: 'assets/images/logo.png',
+    version: '1.2.0',
+    languages: [{
+        name: 'LANGUAGES.ENGLISH',
+        key: 'en'
+    }, {
+        name: 'LANGUAGES.FRENCH',
+        key: 'fr'
+    }],
+    defaultSkin: 'cyan-cloud'
+});
+hereseasApp.config(function ($stateProvider, $urlRouterProvider,
+    $translateProvider, $httpProvider,
+    $translatePartialLoaderProvider,
+    localStorageServiceProvider, APP) {
 
-hereseasApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
-
-    //$httpProvider.defaults.withCredentials = true;
 
 
     $urlRouterProvider.otherwise("/signup");
 
-    $stateProvider
-        .state('signup', {
-            url: '/signup',
-            templateUrl: '/app/view/signup.html',
-            controller: 'LoginCtrl'
+    $stateProvider.state('signup', {
+        url: '/signup',
+        views: {
+            "content": {
+                templateUrl: '/app/view/signup.html',
+                controller: 'LoginCtrl'
+            }
+        }
+    });
 
-        });
+    $stateProvider.state('login', {
+        url: '/login',
+        views: {
+            "content": {
+                templateUrl: '/app/view/login.html',
+                controller: 'LoginController'
+            }
+        }
+
+    });
+
 });
 
 hereseasApp.config(function ($mdThemingProvider, $mdIconProvider) {

@@ -1,5 +1,5 @@
-<div ui-view="content">
-    <div layout="row" layout-wrap>
+
+    <div layout="row" layout-wrap style="padding-top:100px;">
         <div flex="20">
 
         </div>
@@ -28,8 +28,21 @@
                             <div ng-message="md-minlength">At least 6 characters.</div>
                         </div>
                     </md-input-container>
+                    <md-input-container flex>
+                        <label>Confirm Password</label>
+                        <input required md-minlength="6" name="password" ng-model="signUpData.password2" type="password">
+                        <div ng-messages="signupForm.password.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="md-minlength">At least 6 characters.</div>
+                        </div>
+                    </md-input-container>
                     <md-button flex="100" type="submit" ng-disabled="signupForm.$invalid" ng-click="signUpSubmit()">Sign up</md-button>
                     <md-button flex="100" type="reset">Reset</md-button>
+
+                    <div flex="100">
+                        Already have an account?
+                        <md-button class="md-primary" ng-href="#/login">Log in</md-button>
+                    </div>
                 </form>
             </md-content>
 
@@ -38,4 +51,3 @@
 
         </div>
     </div>
-</div>
