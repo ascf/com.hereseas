@@ -14,6 +14,10 @@ var User = require('../models').User;
 
 var fs = require('fs');
 
+var passport = require('passport');
+
+var md5 = require('MD5');
+
 
 exports.test = function (req, res, next) {
     res.json(Results.ERR_DB_ERR);
@@ -30,21 +34,64 @@ exports.ensureAuthenticated = function (req, res, next) {
 
 };
 
+exports.login = function (req, res, next){
+    passport.authenticate('local', function (err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.jsonp({
+                result: false,
+                err: info
+            });
+            //return res.redirect('/m_login_failure?callback='+req.body.callback);
+        }
+        req.logIn(user, function (err) {
+            if (err) {
+                return next(err);
+            }
 
+            var user = {};
+            user.id = req.user._id;
+            user.username = req.user.username;
+            user.firstname = req.user.firstname;
+            user.lastname = req.user.lastname;
+            user.gender = req.user.gender;
+            user.avatar = req.user.avatar;
+
+            return res.json({
+                user: user,
+                result: true
+            });
+
+        });
+    })(req, res, next);
+};
+
+
+/**
+ * check email & password
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.createUser = function (req, res, next) {
 
-    var data = {
-        email: req.body.email
-    };
 
-    console.log(data);
+    var user = new User();
+    user.email =  req.body.email;
+    user.password = req.body.password;
+
+    if(tools.isEmpty(user.email)||tools.isEmpty(user.password)){
+        return res.json(Results.ERR_PARAM_ERR);
+    }
+
+    user.password = md5(user.password);
+
 
     var ep = new EventProxy();
     ep.all('checkEmail', function () {
-        var user = new User();
-        //user.username = data.username;
-        user.email = data.email;
-        user.username = data.email;
+
 
         user.save(function (err, user) {
 
@@ -66,7 +113,7 @@ exports.createUser = function (req, res, next) {
     });
 
     User.findOne({
-        email: data.email
+        email: user.email
     }, function (err, item) {
         if (item != null) {
             ep.emit("error", 'ERR_EXISTED_EMAIL ');

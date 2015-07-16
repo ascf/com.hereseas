@@ -2,16 +2,32 @@ hereseasApp.controller('AppCtrl',
     function ($scope, $stateParams, $rootScope, $location) {
 
 
-});
+    });
+
+hereseasApp.controller('HeaderController',
+    function ($scope, $stateParams, $rootScope, $location) {
+
+
+    });
+
+hereseasApp.controller('FooterController',
+    function ($scope, $stateParams, $rootScope, $location) {
+
+    });
+
+
+hereseasApp.controller('CommonController',
+    function ($scope, $stateParams, $rootScope, $location) {
+
+    });
+
 
 hereseasApp.controller('LoginCtrl',
     function ($scope, $stateParams,
-        $rootScope, $location,
-        $mdDialog, userService) {
+              $rootScope, $location,
+              $mdDialog, userService, alertService) {
 
-        $scope.signUpData = {
-
-        };
+        $scope.signUpData = {};
 
         $scope.signUpSubmit = function () {
             console.log($scope.signUpData);
@@ -24,47 +40,50 @@ hereseasApp.controller('LoginCtrl',
                     } else {
                         //alert("failed");
 
-                        $mdDialog.show(
-                            $mdDialog.alert()
-                            .parent(angular.element(document.body))
-                            .title('This is an alert title')
-                            .content('You can specify some description text in here.')
-                            .ariaLabel('Alert Dialog Demo')
-                            .ok('Got it!')
-                            //.targetEvent(ev)
-                        );
+                        alertService.alert('The email has already been registered!');
                     }
                 });
         };
     });
 
-hereseasApp.controller('LoginController', function ($scope, $state) {
-    // create blank user variable for login form
-    $scope.user = {
-        email: 'info@oxygenna.com',
-        password: 'demo'
-    };
+hereseasApp.controller('LoginController',
+    function ($scope, $state, userService, alertService) {
+        // create blank user variable for login form
+        $scope.user = {
+            email: 'yangmang@msn.com',
+            password: 'mission'
+        };
 
-    $scope.socialLogins = [{
-        icon: 'fa-twitter',
-        color: '#5bc0de',
-        url: '#'
-    }, {
-        icon: 'fa-facebook',
-        color: '#337ab7',
-        url: '#'
-    }, {
-        icon: 'fa-google-plus',
-        color: '#e05d6f',
-        url: '#'
-    }, {
-        icon: 'fa-linkedin',
-        color: '#337ab7',
-        url: '#'
-    }];
+        $scope.socialLogins = [{
+            icon: 'fa-twitter',
+            color: '#5bc0de',
+            url: '#'
+        }, {
+            icon: 'fa-facebook',
+            color: '#337ab7',
+            url: '#'
+        }, {
+            icon: 'fa-google-plus',
+            color: '#e05d6f',
+            url: '#'
+        }, {
+            icon: 'fa-linkedin',
+            color: '#337ab7',
+            url: '#'
+        }];
 
-    // controller to handle login check
-    $scope.loginClick = function () {
-        $state.go('admin-panel.default.introduction');
-    };
-});
+        // controller to handle login check
+        $scope.loginClick = function () {
+
+            userService.login($scope.user)
+                .then(function (res) {
+                    if (res.result) {
+                        $state.go('user.dashboard');
+                    } else {
+                        //alert!
+                        alertService.alert(res.err);
+                    }
+                });
+
+        };
+    });

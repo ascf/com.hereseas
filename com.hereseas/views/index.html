@@ -7,23 +7,26 @@
 
     <title>Hereseas</title>
 
-    <link rel='stylesheet' href='/public/angular-material/angular-material.css'>
+    <link rel='stylesheet' href='/public/libs/angular-material/angular-material.css'>
+    <link rel='stylesheet' href='/public/libs/angular-loading-bar/loading-bar.css'>
     <!-- Libraries -->
     <!-- angular -->
-    <script type="text/javascript" src="/public/angular/angular.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-route.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-ui-router.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-animate.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-aria.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-messages.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-cookies.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-sanitize.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-local-storage.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-translate.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-translate-loader-partial.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-translate-storage-cookie.js"></script>
-    <script type="text/javascript" src="/public/angular/angular-translate-storage-local.js"></script>
-    <script type="text/javascript" src="/public/angular-material/angular-material.js"></script>
+    <script type="text/javascript" src="/public/libs/jquery/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-route.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-ui-router.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-animate.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-aria.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-messages.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-cookies.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-sanitize.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-local-storage.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-translate.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-translate-loader-partial.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-translate-storage-cookie.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-translate-storage-local.js"></script>
+    <script type="text/javascript" src="/public/libs/angular-material/angular-material.js"></script>
+    <script type="text/javascript" src="/public/libs/angular-loading-bar/loading-bar.js"></script>
 
 
 
@@ -31,6 +34,8 @@
     <script type="text/javascript" src="/app/common/languages.js"></script>
 
     <!-- Controllers -->
+    <script type="text/javascript" src="/app/service/commonService.js"></script>
+    <script type="text/javascript" src="/app/service/derectives.js"></script>
     <script type="text/javascript" src="/app/service/userService.js"></script>
     <script type="text/javascript" src="/app/controller/appCtrl.js"></script>
 
@@ -39,11 +44,11 @@
 </head>
 
 <body>
-
+<md-content>
     <div ui-view="header"></div>
     <div ui-view="content"></div>
     <div ui-view="footer"></div>
-
+</md-content>
 </body>
 
 </html>

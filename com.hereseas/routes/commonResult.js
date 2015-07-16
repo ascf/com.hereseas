@@ -9,6 +9,10 @@ var Results = {
     ERR_URL_ERR: {
         result: false,
         err: 'ERR_URL_ERR'
+    },
+    ERR_PARAM_ERR: {
+        result: false,
+        err: 'ERR_PARAM_ERR'
     }
 };
 
