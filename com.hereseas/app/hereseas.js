@@ -49,7 +49,6 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
 
     $stateProvider.state('user',{
         url:'/user',
-        abstract: true,
         views:{
             'header': {
                 templateUrl: '/app/view/partials/_header.html',
@@ -64,6 +63,17 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
                 controller: 'CommonController'
             }
         }
+    });
+
+    $stateProvider.state('user.dashboard', {
+        url: '/dashboard',
+        views: {
+            "content": {
+                templateUrl: '/app/view/dashboard.html',
+                controller: 'CommonController'
+            }
+        }
+
     });
 
 });
