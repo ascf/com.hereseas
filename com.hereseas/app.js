@@ -67,6 +67,71 @@ app.use(passport.session());
 //app.use(authUser.authUser);
 
 
+
+
+
+
+// Passport session setup.
+//   To support persistent login sessions, Passport needs to be able to
+//   serialize users into and deserialize users out of the session.  Typically,
+//   this will be as simple as storing the user ID when serializing, and finding
+//   the user by ID when deserializing.
+passport.serializeUser(function (user, done) {
+    //res.locals.current_user
+    done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+    User.getUserById(id, function (err, user) {
+        done(err, user);
+    });
+});
+
+// Use the LocalStrategy within Passport.
+//   Strategies in passport require a `verify` function, which accept
+//   credentials (in this case, a username and password), and invoke a callback
+//   with a user object.  In the real world, this would query a database;
+//   however, in this example we are using a baked-in set of users.
+var User = require('./models').User;
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+        badRequestMessage: 'ERR_MISSING_CREDENTIALS'
+},
+    function (email, password, done) {
+        // asynchronous verification, for effect...
+        process.nextTick(function () {
+
+            // Find the user by username.  If there is no user with the given
+            // username, or the password is not correct, set the user to `false` to
+            // indicate failure and set a flash message.  Otherwise, return the
+            // authenticated `user`.
+            User.findOne( {email:email}, function(err, user){
+                if (err) {
+                    return done(err);
+                }
+                if (!user) {
+                    return done(null, false, {
+                        message: 'Unknown user ' + username
+                    });
+                }
+                if (user.password != password) {
+                    return done(null, false, {
+                        message: 'Invalid password'
+                    });
+                }
+
+                user.last_login = new Date();
+                user.save();
+
+
+                return done(null, user);
+            })
+        });
+    }
+));
+
+
 app.use(multer({
     dest: './public/upload'
 }));
@@ -83,12 +148,6 @@ if (app.get('env') === 'development') {
         res.render('error', {
             message: err.message,
             error: err
-        });
-        return;
-        res.json({
-            result: false,
-            err: 'ERR_SERVICE_ERROR',
-            message: err.message
         });
     });
 
