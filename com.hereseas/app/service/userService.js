@@ -4,10 +4,7 @@ hereseasApp.factory('userService', function ($http) {
 
 
     var commonResponseHandler = function (res) {
-        return {
-            result: true,
-            data: res.data
-        }
+        return res.data;
     };
 
     var errResponseHandler = function (res) {
