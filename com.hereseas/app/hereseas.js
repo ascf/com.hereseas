@@ -2,7 +2,7 @@ var hereseasApp = angular.module('hereseasApp', [
     'ngAnimate', 'ngCookies', 'ngSanitize',
   'ui.router', 'ngMaterial', 'ngMessages',
     'pascalprecht.translate', 'LocalStorageModule',
-    'pascalprecht.translate'
+    'pascalprecht.translate','angular-loading-bar','hereseasDirectives'
 ]);
 
 hereseasApp.constant('APP', {
@@ -22,7 +22,6 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
     $translateProvider, $httpProvider,
     $translatePartialLoaderProvider,
     localStorageServiceProvider, APP) {
-
 
 
     $urlRouterProvider.otherwise("/signup");
@@ -48,6 +47,15 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
 
     });
 
+});
+
+/**
+ * loading bar options
+ */
+hereseasApp.config(function(cfpLoadingBarProvider){
+    cfpLoadingBarProvider.includeBar = true;
+    cfpLoadingBarProvider.includeSpinner = true;
+    cfpLoadingBarProvider.latencyThreshold = 100;
 });
 
 hereseasApp.config(function ($mdThemingProvider, $mdIconProvider) {

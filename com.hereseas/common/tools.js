@@ -27,6 +27,18 @@ exports.validateId = function (str) {
 //};
 
 
+exports.isEmpty = function (val){
+    return val == undefined || val == null|| val=='';
+}
+
+exports.hasNull = function (data){
+    for(var key in data){
+        if(data[key]==undefined||data[key]==null||data[key]=="")
+            return true;
+    }
+    return false;
+}
+
 
 Array.prototype.remove = function (item) {
     if (item == null)

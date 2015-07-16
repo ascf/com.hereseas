@@ -22,7 +22,7 @@
                     </md-input-container>
                     <md-input-container flex>
                         <label>Password</label>
-                        <input required md-minlength="6" name="password" ng-model="signUpData.password" type="password">
+                        <input required md-minlength="6" name="password" id="password" ng-model="signUpData.password" type="password">
                         <div ng-messages="signupForm.password.$error">
                             <div ng-message="required">This is required.</div>
                             <div ng-message="md-minlength">At least 6 characters.</div>
@@ -30,13 +30,13 @@
                     </md-input-container>
                     <md-input-container flex>
                         <label>Confirm Password</label>
-                        <input required md-minlength="6" name="password" ng-model="signUpData.password2" type="password">
-                        <div ng-messages="signupForm.password.$error">
+                        <input required md-minlength="6" name="password2" match-value="password" ng-model="signUpData.password2" type="password">
+                        <div ng-messages="signupForm.password2.$error">
                             <div ng-message="required">This is required.</div>
-                            <div ng-message="md-minlength">At least 6 characters.</div>
+                            <div ng-message="unmatched">Password not the same</div>
                         </div>
                     </md-input-container>
-                    <md-button flex="100" type="submit" ng-disabled="signupForm.$invalid" ng-click="signUpSubmit()">Sign up</md-button>
+                    <md-button flex="100" type="submit" ng-disabled="signupForm.$invalid||signupForm.password2.$error.unmatched" ng-click="signUpSubmit()">Sign up</md-button>
                     <md-button flex="100" type="reset">Reset</md-button>
 
                     <div flex="100">

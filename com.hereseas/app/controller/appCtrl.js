@@ -7,7 +7,7 @@ hereseasApp.controller('AppCtrl',
 hereseasApp.controller('LoginCtrl',
     function ($scope, $stateParams,
         $rootScope, $location,
-        $mdDialog, userService) {
+        $mdDialog, userService,alertService) {
 
         $scope.signUpData = {
 
@@ -24,15 +24,7 @@ hereseasApp.controller('LoginCtrl',
                     } else {
                         //alert("failed");
 
-                        $mdDialog.show(
-                            $mdDialog.alert()
-                            .parent(angular.element(document.body))
-                            .title('This is an alert title')
-                            .content('You can specify some description text in here.')
-                            .ariaLabel('Alert Dialog Demo')
-                            .ok('Got it!')
-                            //.targetEvent(ev)
-                        );
+                        alertService.alert('The email has already been registered!');
                     }
                 });
         };

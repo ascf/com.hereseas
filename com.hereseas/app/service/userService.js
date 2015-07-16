@@ -3,16 +3,6 @@ hereseasApp.factory('userService', function ($http) {
     var host = "";
 
 
-    var commonResponseHandler = function (res) {
-        return res.data;
-    };
-
-    var errResponseHandler = function (res) {
-        return {
-            result: false,
-            err: 'Server error:' + res.status
-        };
-    };
 
     return {
         registerUser: function (data) {

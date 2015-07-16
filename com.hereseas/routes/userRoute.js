@@ -82,16 +82,16 @@ exports.createUser = function (req, res, next) {
     user.email =  req.body.email;
     user.password = req.body.password;
 
-    if(tools.isEmpty(user.email))
+    if(tools.isEmpty(user.email)||tools.isEmpty(user.password)){
+        return res.json(Results.ERR_PARAM_ERR);
+    }
 
+    user.password = md5(user.password);
 
 
     var ep = new EventProxy();
     ep.all('checkEmail', function () {
 
-        //user.username = data.username;
-        user.email = data.email;
-        user.username = data.email;
 
         user.save(function (err, user) {
 
@@ -113,7 +113,7 @@ exports.createUser = function (req, res, next) {
     });
 
     User.findOne({
-        email: data.email
+        email: user.email
     }, function (err, item) {
         if (item != null) {
             ep.emit("error", 'ERR_EXISTED_EMAIL ');
