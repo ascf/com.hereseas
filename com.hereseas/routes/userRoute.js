@@ -42,7 +42,7 @@ exports.login = function (req, res, next){
         if (!user) {
             return res.jsonp({
                 result: false,
-                message: info
+                err: info
             });
             //return res.redirect('/m_login_failure?callback='+req.body.callback);
         }

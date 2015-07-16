@@ -47,6 +47,25 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
 
     });
 
+    $stateProvider.state('user',{
+        url:'/user',
+        abstract: true,
+        views:{
+            'header': {
+                templateUrl: '/app/view/partials/_header.html',
+                controller: 'HeaderController'
+            },
+            'footer': {
+                templateUrl: '/app/view/partials/_footer.html',
+                controller: 'FooterController'
+            },
+            'container' :{
+                templateUrl: '/app/view/partials/_public.html',
+                controller: 'CommonController'
+            }
+        }
+    });
+
 });
 
 /**

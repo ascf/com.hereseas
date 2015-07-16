@@ -9,6 +9,8 @@ var MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
 var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
+var md5 = require('MD5');
+
 
 //var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -111,14 +113,10 @@ passport.use(new LocalStrategy({
                     return done(err);
                 }
                 if (!user) {
-                    return done(null, false, {
-                        message: 'Unknown user ' + username
-                    });
+                    return done(null, false,'ERR_INVALID_USER');
                 }
-                if (user.password != password) {
-                    return done(null, false, {
-                        message: 'Invalid password'
-                    });
+                if (user.password != md5(password)) {
+                    return done(null, false,'ERR_INVALID_PASSWORD');
                 }
 
                 user.last_login = new Date();
