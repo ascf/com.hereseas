@@ -17,8 +17,11 @@ module.exports = function (app) {
     app.get('/user', userRoute.getUserList);
     app.get('/user/:id', userRoute.getUser);
 
-app.post('/apartment',apartmentRoute.addApartment)
 
+    app.get('/apartment',apartmentRoute.getApartmentList);
+    app.post('/apartment',apartmentRoute.addApartment);
+    app.put('/apartment',apartmentRoute.updateApartmentById);
+    
 
     app.get('/', function (req, res) {
         res.render('index');

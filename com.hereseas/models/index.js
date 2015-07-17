@@ -10,6 +10,7 @@ mongoose.connect(config.db, function (err) {
 
 // models
 require('./user.js');
-
+require('./apartment.js');
 
 exports.User = mongoose.model('User');
+exports.Apartment = mongoose.model('Apartment');

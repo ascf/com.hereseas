@@ -7,10 +7,7 @@ var ApartmentSchema = new Schema({
 
 	user_id: [Schema.ObjectId],
 	user_name: {
-		type: String,
-		index: {
-			unique: true
-		}
+		type: String
 	},
 	user_avatar: {
 		type: String
@@ -62,3 +59,5 @@ ApartmentSchema.virtual('avatar_url').get(function() {
 mongoose.model('Apartment', ApartmentSchema);
 
 exports.Apartment = mongoose.model('Apartment');
+
+
