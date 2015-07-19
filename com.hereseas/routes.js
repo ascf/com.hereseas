@@ -17,7 +17,7 @@ module.exports = function (app) {
     app.get('/user/:id', userRoute.getUser);
 
     app.get('/', function (req, res) {
-        res.render('index');
+        res.render('index_new');
     });
 
 };
