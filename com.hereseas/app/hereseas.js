@@ -1,5 +1,5 @@
 var hereseasApp = angular.module('hereseasApp', [
-    'ngAnimate', 'ngCookies', 'ngSanitize',
+    'ngAnimate', 'ngCookies', 'ngSanitize','ui.select2',
     'ui.router', 'ngMaterial', 'ngMessages',
     'pascalprecht.translate', 'LocalStorageModule',
     'pascalprecht.translate', 'angular-loading-bar', 'hereseasDirectives'
@@ -110,6 +110,16 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
             "content": {
                 templateUrl: '/app/view/profile.html',
                 controller: 'CommonController'
+            }
+        }
+    });
+
+    $stateProvider.state('user.edit', {
+        url: '/edit',
+        views: {
+            "content": {
+                templateUrl: '/app/view/profile-edit.html',
+                controller: 'profileController'
             }
         }
     });
@@ -301,4 +311,8 @@ hereseasApp.config(function ($mdThemingProvider) {
         .warnPalette('deep-orange');
 
 
-})
+});
+//
+//hereseasApp.config(function(uiSelectConfig) {
+//    uiSelectConfig.theme = 'select2';
+//});

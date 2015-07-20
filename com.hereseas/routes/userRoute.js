@@ -60,7 +60,7 @@ exports.login = function (req, res, next){
             user.avatar = req.user.avatar;
 
             return res.json({
-                user: user,
+                id: user.id,
                 result: true
             });
 
@@ -147,13 +147,25 @@ exports.getUserList = function (req, res, next) {
 };
 
 exports.getUser = function (req, res, next) {
-    var userId = req.query.id;
+    var userId = req.param('id');
     if (userId) {
         User.findById(userId,
-            'username email',
             function (err, user) {
                 if (err) {
                     res.json(Results.ERR_DB_ERR);
+                }else{
+                    res.json({result:true,data:{
+                        id:user.id,
+                        email:user.email,
+                        firstName: user.first_name,
+                        lastName: user.last_name,
+                        gender: user.gender,
+                        school: user.school,
+                        avatar: user.avatar_url,
+                        description: user.description,
+                        tags: user.tags,
+                        favorite: user.favorite
+                    }});
                 }
             });
     } else {

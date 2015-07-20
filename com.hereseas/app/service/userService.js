@@ -1,5 +1,7 @@
-hereseasApp.factory('userService', function ($http, $cookies) {
+hereseasApp.factory('userService', function ($http, $cookies, $cookieStore) {
 
+
+    var userService = this;
     var host = "";
 
     /**
@@ -7,38 +9,68 @@ hereseasApp.factory('userService', function ($http, $cookies) {
      * @type {{}}
      */
     var user = {};
+    var userInfo = {};
 
-    return {
-        user: user,
-        getStoredUser : function(){
-            this.user = $cookies.getObject('hereseas.user');
-            console.log('user in cookies:',this.user);
-        },
-        registerUser: function (data) {
-            return $http.post(host+'/user', {
-                email: data.email,
-                password: data.password
-            }).then(
-                commonResponseHandler,
-                errResponseHandler
-            );
-
-        },
-        login : function (data){
-            return $http.post(host+'/login',data)
-                .then(function(res){
-                    if(res.data.result){
-                        this.user = {
-                            username : data.username,
-                            password : data.password,
-                            id : res.data.id
-                        }
-                        if(data.save){
-                            $cookies.putObject('hereseas.user',this.user);
-                        }
-                    }
-                    return commonResponseHandler(res);
-                },errResponseHandler);
+    this.setUserInfo = function(userInfo){
+        this.userInfo = userInfo;
+    };
+    this.getStoredUser = function(){
+        var userInfoCoookie = $cookieStore.get('hereseas.user');
+        if(userInfoCoookie){
+            console.log("userInfoCoookie",userInfoCoookie);
+            this.userInfo = JSON.parse(userInfoCoookie);
         }
     };
+
+    this.getUser = function(){
+
+        //console.log('cookie:',JSON.parse($cookieStore.get('hereseas.user')));
+
+        this.getStoredUser();
+
+        return $http.get(host+'/user/'+userService.userInfo.id)
+            .then(function(res){
+                if(res.data.result){
+                    userService.user = res.data.data;
+                    return {result:true,data:res.data.data  }
+                }else
+                    return {result:false,err:res.err};
+            },errResponseHandler);
+    };
+
+    this.setUser = function(newUser){
+        userService.user = newUser;
+    };
+
+    this.registerUser = function (data) {
+        return $http.post(host+'/user', {
+            email: data.email,
+            password: data.password
+        }).then(
+            commonResponseHandler,
+            errResponseHandler
+        );
+
+    }
+    this.login = function (data){
+        return $http.post(host+'/login',data)
+            .then(function(res){
+                if(res.data.result){
+
+                    console.log('login',res);
+                    userService.setUserInfo({
+                        username : data.username,
+                        password : data.password,
+                        id : res.data.id
+                    });
+                    if(data.save && userService.userInfo){
+                        $cookieStore.put('hereseas.user',JSON.stringify(userService.userInfo));
+                    };
+                }
+                return commonResponseHandler(res);
+            },errResponseHandler);
+    };
+
+
+    return userService;
 });

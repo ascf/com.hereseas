@@ -1,0 +1,244 @@
+<!-- Page Header -->
+<div class="content bg-gray-lighter">
+    <div class="row items-push">
+        <div class="col-sm-8">
+            <h1 class="page-heading">
+                Profile setting
+                <small></small>
+            </h1>
+        </div>
+        <!--<div class="col-sm-4 text-right hidden-xs">-->
+            <!--<ol class="breadcrumb push-10-t">-->
+                <!--<li>Forms</li>-->
+                <!--<li><a class="link-effect" href="">Wizard</a></li>-->
+            <!--</ol>-->
+        <!--</div>-->
+    </div>
+</div>
+<!-- END Page Header -->
+
+<!-- Page Content -->
+<div class="content content-narrow">
+
+    <div class="row">
+
+
+        <div class="col-lg-12">
+            <!-- Validation Wizard (.js-wizard-validation class is initialized in js/pages/base_forms_wizard.js) -->
+            <!-- For more examples you can check out http://vadimg.com/twitter-bootstrap-wizard-example/ -->
+            <div class="js-wizard-validation js-wizard-simple block">
+
+
+                <!-- Steps Progress -->
+                <div class="block-content block-content-mini block-content-full border-b">
+                    <div class="wizard-progress progress active remove-margin-b">
+                        <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0"></div>
+                    </div>
+                </div>
+                <!-- END Steps Progress -->
+
+                <!-- Step Tabs -->
+                <ul class="nav nav-tabs nav-tabs-alt nav-justified">
+                    <li class="active">
+                        <a class="inactive" href="#validation-step1" data-toggle="tab">1. Personal</a>
+                    </li>
+                    <li>
+                        <a class="inactive" href="#validation-step2" data-toggle="tab">2. Details</a>
+                    </li>
+                    <li>
+                        <a class="inactive" href="#validation-step3" data-toggle="tab">3. Extra</a>
+                    </li>
+                </ul>
+                <!-- END Step Tabs -->
+
+                <!-- Form -->
+                <!-- jQuery Validation (.js-form2 class is initialized in js/pages/base_forms_wizard.js) -->
+                <!-- For more examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                <form class="js-form2 form-horizontal"  method="post">
+
+
+
+
+
+
+                    <!-- Steps Content -->
+                    <div class="block-content tab-content">
+                        <!-- Step 1 -->
+                        <div class="tab-pane fade fade-right in push-30-t push-50 active" id="validation-step1">
+
+                            <div class="form-group">
+
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material">
+                                        <input class="form-control" type="text" id="validation-firstname"
+                                               ng-model="user.firstName"
+                                               name="validation-firstname" placeholder="Please enter your firstname">
+                                        <label for="validation-firstname">First Name</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material">
+                                        <input class="form-control" type="text" id="validation-lastname"
+                                               ng-model="user.lastName"
+                                               name="validation-lastname" placeholder="Please enter your lastname">
+                                        <label for="validation-lastname">Last Name</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+
+                                    <label class="col-xs-12">Gender</label>
+                                    <div class="col-xs-12">
+
+                                        <label class="css-input css-radio css-radio-primary push-10-r">
+                                            <input type="radio" checked ng-model="user.gender"
+                                                   id="validation-gender" name="validation-gender"
+                                                   value="male"><span></span> Male
+                                        </label>
+                                        <label class="css-input css-radio css-radio-primary">
+                                            <input type="radio" name="validation-gender" ng-model="user.gender"
+                                                   value="female"><span></span> Female
+                                        </label>
+                                        <div class="form-material">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- END Step 1 -->
+
+                        <!-- Step 2 -->
+                        <div class="tab-pane fade fade-right push-30-t push-50" id="validation-step2">
+                            <div class="form-group">
+
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-group">
+                                        <div class="col-xs-12">
+                                            <div class="form-material">
+                                                <!--<select ng-model="select2" data-placeholder="Pick a number">-->
+                                                    <!--<option value=""></option>-->
+                                                    <!--<option value="one">First</option>-->
+                                                    <!--<option value="two">Second</option>-->
+                                                    <!--<option value="three">Third</option>-->
+                                                <!--</select>-->
+
+                                                <select class="js-select2 form-control" id="example2-select2"
+                                                        ng-model="user.school"
+                                                        name="example2-select2" style="width: 100%;" data-placeholder="Choose one..">
+                                                    <option></option><!-- Required for data-placeholder attribute to work with Chosen plugin -->
+                                                    <option value="1">George Washington University</option>
+                                                    <option value="2">Johns Hopkins University</option>
+                                                    <option value="3">Georgetown University</option>
+                                                </select>
+                                                <label for="example2-select2">Select your school</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material">
+                                        <input class="js-tags-input form-control" type="text"
+                                               id="example-tags2" name="example-tags2"
+                                               value="HTML,CSS,JavaScript">
+                                        <label for="example-tags2">Tag yourself</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material">
+                                        <textarea class="form-control" id="validation-details"
+                                                  ng-model="user.description"
+                                                  name="validation-details"
+                                                  rows="5" placeholder="Share something about yourself"></textarea>
+                                        <label for="validation-details">Details</label>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                        <!-- END Step 2 -->
+
+                        <!-- Step 3 -->
+                        <div class="tab-pane fade fade-right push-30-t push-50" id="validation-step3">
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material">
+                                        <input class="form-control" type="text" id="validation-city"
+                                               ng-model="user.city"
+                                               name="validation-city" placeholder="Where do you live?">
+                                        <label for="validation-city">City</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material">
+                                    <label class="css-input switch switch-sm switch-primary" for="validation-terms">
+                                        <input type="checkbox" id="validation-terms"
+                                               name="validation-terms"><span></span> Agree with the <a
+                                            data-toggle="modal" data-target="#modal-terms" href="#">terms</a>
+                                    </label>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Step 3 -->
+                    </div>
+                    <!-- END Steps Content -->
+
+                    <!-- Steps Navigation -->
+                    <div class="block-content block-content-mini block-content-full border-t">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <button class="wizard-prev btn btn-warning" type="button"><i
+                                        class="fa fa-arrow-circle-o-left"></i> Previous
+                                </button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="wizard-next btn btn-success" type="button">Next <i
+                                        class="fa fa-arrow-circle-o-right"></i></button>
+                                <button class="wizard-finish btn btn-primary" type="submit"><i
+                                        class="fa fa-check-circle-o"></i> Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Steps Navigation -->
+                </form>
+                <!-- END Form -->
+            </div>
+            <!-- END Validation Wizard Wizard -->
+        </div>
+    </div>
+    <!-- END Wizards with Validation -->
+
+</div>
+
+
+<link rel="stylesheet" href="/public/assets/js/plugins/select2/select2.min.css">
+<link rel="stylesheet" href="/public/assets/js/plugins/select2/select2-bootstrap.css">
+<link rel="stylesheet" href="/public/assets/js/plugins/dropzonejs/dropzone.min.css">
+
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
+<link  href="/public/libs/cropper/cropper.css" rel="stylesheet">
+
+<script src="/public/libs/cropper/cropper.js"></script>
+
+<script src="/public/assets/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="/public/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="/public/assets/js/plugins/select2/select2.full.min.js"></script>
+<script src="/public/assets/js/plugins/jquery-tags-input/jquery.tagsinput.min.js"></script>
