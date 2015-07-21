@@ -29,15 +29,20 @@ exports.validateId = function (str) {
 
 exports.isEmpty = function (val){
     return val == undefined || val == null|| val=='';
-}
+};
 
+/**
+ * 判断data中是否有没有值的变量
+ * @param data
+ * @returns {boolean}
+ */
 exports.hasNull = function (data){
     for(var key in data){
         if(data[key]==undefined||data[key]==null||data[key]=="")
             return true;
     }
     return false;
-}
+};
 
 
 Array.prototype.remove = function (item) {

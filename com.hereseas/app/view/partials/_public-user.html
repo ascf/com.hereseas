@@ -1,0 +1,28 @@
+<div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
+    <aside id="side-overlay" ui-view="side-overlay"></aside>
+
+    <!-- Sidebar -->
+    <nav id="sidebar" ng-include="'/app/view/partials/_sidebar-user.html'">
+    </nav>
+    <!-- END Sidebar -->
+
+
+    <!-- Header -->
+    <header id="header-navbar" class="content-mini content-mini-full"
+            ng-include="'/app/view/partials/_header-one.html'"
+            ng-controller="HeaderController">
+    </header>
+    <!-- END Header -->
+
+
+    <!-- Main Container -->
+    <main id="main-container" ui-view="content"></main>
+    <!-- END Main Container -->
+
+    <!-- Footer -->
+    <footer id="page-footer" ng-include="'/app/view/partials/_footer-one.html'"
+            class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
+    </footer>
+    <!-- END Footer -->
+
+</div>
