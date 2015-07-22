@@ -3,9 +3,10 @@ var Schema = mongoose.Schema;
 var utility = require('utility');
 
 
+
 var ApartmentSchema = new Schema({
 
-	user_id: [Schema.ObjectId],
+	user_id: {type:Schema.ObjectId, ref: 'User' },
 	user_name: {
 		type: String
 	},
@@ -18,14 +19,27 @@ var ApartmentSchema = new Schema({
 	content: {
 		type: String
 	},
-	rooms: [Schema.ObjectId],
-	favorite: [Schema.ObjectId],
+
+    cover: {
+    	type: String
+    },
+
+	images: [String],
+
+	type: {
+		type: String
+	},
+	
+	rooms: [{ type:Schema.ObjectId, ref: 'Room'}],
+	favorite: [{type:Schema.ObjectId, ref: 'User'}],
 
 	available: {
 		type: Boolean,
 	},
 
-	contact: [Schema.Types.Mixed],	
+	description: {
+		type: String
+	},
 
 	location: [Schema.Types.Mixed],
 

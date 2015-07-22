@@ -18,7 +18,7 @@ module.exports = function (app) {
     app.get('/user/:id', userRoute.getUser);
 
 
-    app.get('/apartment',apartmentRoute.getApartmentList);
+    app.get('/apartments',apartmentRoute.getApartmentList);
     app.post('/apartment',apartmentRoute.addApartment);
     app.put('/apartment',apartmentRoute.updateApartmentById);
     
