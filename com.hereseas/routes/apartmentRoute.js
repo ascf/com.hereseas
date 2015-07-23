@@ -47,21 +47,6 @@ exports.getApartmentList = function(req, res, next) {
 };
 
 
-//     Apartment.find(
-//         query,
-//         'id user_id user_name user_avatar title cover location create_at update_at',
-//         function(err, apartments) {
-//             if (err) {
-//                 res.json(Results.ERR_DB_ERR);
-//             } else {
-//                 res.json({
-//                     result: true,
-//                     data: apartments
-//                 });
-//             }
-//         });
-// };
-
 
 exports.addApartment = function(req, res, next) {
 
