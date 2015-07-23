@@ -35,6 +35,11 @@ var RoomSchema = new Schema({
 		type: String
 	},
 
+	is_active:{
+		type: Boolean,
+		default: true
+	},
+
 	create_at: {
 		type: Date,
 		default: Date.now
