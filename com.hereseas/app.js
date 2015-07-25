@@ -19,8 +19,6 @@ var config = require('./config');
 var _ = require('lodash');
 
 
-
-
 var app = express();
 
 var routes = require('./routes');

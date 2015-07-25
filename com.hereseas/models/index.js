@@ -12,8 +12,11 @@ mongoose.connect(config.db, function (err) {
 require('./user.js');
 require('./apartment.js');
 require('./room.js');
+require('./school.js');
+
 
 
 exports.User = mongoose.model('User');
 exports.Apartment = mongoose.model('Apartment');
 exports.Room = mongoose.model('Room');
+exports.School = mongoose.model('School');
