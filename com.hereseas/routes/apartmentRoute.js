@@ -44,7 +44,6 @@ exports.getThreeApartments = function(req, res, next) {
 };
 
 
-
 exports.getApartmentList = function(req, res, next) {
 
     var query = {
