@@ -28,7 +28,7 @@ exports.validateId = function (str) {
 
 
 exports.isEmpty = function (val){
-    return val == undefined || val == null|| val=='';
+    return val == undefined || val == null|| val=='' || val.length == 0;
 };
 
 /**
@@ -38,8 +38,11 @@ exports.isEmpty = function (val){
  */
 exports.hasNull = function (data){
     for(var key in data){
-        if(data[key]==undefined||data[key]==null||data[key]=="")
+        if(data[key]==undefined||data[key]==null)
+        {
+            console.log(key);
             return true;
+        }
     }
     return false;
 };

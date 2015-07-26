@@ -20,13 +20,14 @@ module.exports = function (app) {
 
 
     app.get('/apartments',apartmentRoute.getApartmentList);
+    app.get('/apartment/:id',apartmentRoute.getApartmentById);
     app.post('/apartment',apartmentRoute.addApartment);
     app.put('/apartment',apartmentRoute.updateApartmentById);
 
     app.get('/school/:id',schoolRoute.getSchoolById);
     app.get('/schools',schoolRoute.getSchoolList);
-   
     app.post('/school',schoolRoute.addSchool);
+    app.put('/school/:id',schoolRoute.updateSchoolById);
 
 
 

@@ -5,9 +5,13 @@ var utility = require('utility');
 
 var RoomSchema = new Schema({
 
-	apartment_id: {type:Schema.ObjectId, ref: 'Apartment' },
+	apartmentId: {type:Schema.ObjectId, ref: 'Apartment' },
 
 	type: {
+		type: String
+	},
+
+	price: {
 		type: String
 	},
 
@@ -19,25 +23,27 @@ var RoomSchema = new Schema({
 		type: Boolean
 	},
 
-	walk_in_closet: {
+	walkInCloset: {
 		type: Boolean
 	},
 
-	begin_date: {
+	beginDate: {
 		type: Date
 	},
 
-	end_date: {
+	endDate: {
 		type: Date
 	},
 
-	price: {
-		type: String
-	},
 
-	is_active:{
+	available: {
 		type: Boolean,
 		default: true
+	},
+
+	status:{
+		type: Number,
+		default : 1
 	},
 
 	create_at: {

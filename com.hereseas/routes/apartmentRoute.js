@@ -12,31 +12,28 @@ var Results = require('./commonResult');
 var Apartment = require('../models').Apartment;
 var Room = require('../models').Room;
 
-
-
 var fs = require('fs');
 
 
 
-exports.getApartmentList = function(req, res, next) {
+exports.getThreeApartments = function(req, res, next) {
 
-
-    var query = {};
-    if (req.query.gender)
-        query.gender = req.query.gender;
+    var query = {
+        'status': 1
+    };
 
     Apartment.find(
             query,
-            'id user_id user_name user_avatar title content cover images type rooms description location create_at update_at')
+            'id userId userName userAvatar schoolId title cover type createAt updateAt')
         .sort({
             create_at: 'desc'
         }).
-    limit(3).populate('rooms', null, {
-        'is_active': true
-    }).
+    limit(3).
     exec(function(err, apartments) {
         if (err) {
             console.log(err);
+        } else if (!schools.length) {
+            res.json(Results.ERR_NOTFOUND_ERR);
         } else {
             res.json({
                 result: true,
@@ -48,41 +45,128 @@ exports.getApartmentList = function(req, res, next) {
 
 
 
-exports.addApartment = function(req, res, next) {
+exports.getApartmentList = function(req, res, next) {
 
-    var data = {
-        user_id: req.body.user_id,
-        user_name: req.body.user_name,
-        user_avatar: req.body.user_avatar,
-        title: req.body.title,
-        content: req.body.content,
-        cover: req.body.cover,
-        location: req.body.location,
-        rooms: req.body.rooms
+    var query = {
+        'status': 1
     };
 
+    Apartment.find(
+            query,
+            'id userId userFirstName userLastName userAvatar schoolId title cover type longitude latitude createAt updateAt')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, apartments) {
+            if (err) {
+                console.log(err);
+            } else if (!apartments.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+            } else {
+                res.json({
+                    result: true,
+                    data: apartments
+                });
+            }
+        })
+};
 
-    data.user_id = '55a5c6e1c748b9cd0e3733ad';
-    data.favorite = '55a5c6e1c748b9cd0e3733ad';
-    //data.rooms = '55a5c6e1c748b9cd0e3733ad';
 
-    if (tools.hasNull(data)) {
 
+exports.getApartmentById = function(req, res, next) {
+
+    var apartmentId = req.param('id');
+
+    console.log(apartmentId);
+
+    var query = {
+        '_id': apartmentId,
+        'status': 1
+    };
+
+    Apartment.find(
+            query,
+            'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at ').limit(1)
+        .populate('rooms', null, {
+            'status': 1
+        }).exec(function(err, apartment) {
+            if (err) {
+                console.log(err);
+            } else if (!apartment.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+            } else {
+
+                console.log(apartment);
+
+                res.json({
+                    result: true,
+                    data: apartment
+                });
+            }
+        })
+
+};
+//'type price bathroom closet walkInCloset beginDate endDate available create_at update_at'
+
+
+exports.addApartment = function(req, res, next) {
+
+    var reqData = {
+        userId: req.body.userId,
+        userFirstName: req.body.userFirstName,
+        userLastName: req.body.userLastName,
+        userAvatar: req.body.userAvatar,
+        schoolId: req.body.schoolId,
+        title: req.body.title,
+        description: req.body.description,
+        cover: req.body.cover,
+        images: req.body.images,
+        type: req.body.type,
+        fees: req.body.fees,
+        facilities: req.body.facilities,
+        address: req.body.address,
+        longitude: req.body.longitude,
+        latitude: req.body.latitude
+    };
+
+    if (tools.isEmpty(req.body.rooms)) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
 
-    // console.log(data);
     var apartment = new Apartment();
 
-    apartment.user_id = data.user_id;
-    apartment.user_name = data.user_name;
-    apartment.user_avatar = data.user_avatar;
-    apartment.title = data.title;
-    apartment.content = data.content;
-    apartment.cover = data.cover;
-    apartment.location = data.location;
+    for (var key in reqData) {
+        apartment[key] = reqData[key];
+    }
 
+    var rooms = [];
+
+    for (var i = 0; i < req.body.rooms.length; i++) {
+
+        var room = {
+            type: req.body.rooms[i].type,
+            price: req.body.rooms[i].price,
+            bathroom: req.body.rooms[i].bathroom,
+            closet: req.body.rooms[i].closet,
+            walkInCloset: req.body.rooms[i].walkInCloset,
+            beginDate: req.body.rooms[i].beginDate,
+            endDate: req.body.rooms[i].endDate
+        }
+
+        if (tools.hasNull(room)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        rooms.push(room);
+    }
+
+    reqData.rooms = rooms;
+
+    if (tools.hasNull(reqData)) {
+
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
 
     apartment.save(function(err, apartment) {
 
@@ -92,12 +176,13 @@ exports.addApartment = function(req, res, next) {
         } else {
 
             var ep = new EventProxy();
-            for (var i = 0; i < data.rooms.length; i++) {
+            for (var i = 0; i < reqData.rooms.length; i++) {
 
                 var room = new Room();
-                room.apartment_id = apartment.id;
-                room.type = data.rooms[i].type;
-                room.bathroom = data.rooms[i].bathroom;
+
+                for (var key in reqData.rooms[i]) {
+                    room[key] = reqData.rooms[i][key];
+                }
 
                 room.save(function(err, room) {
 
@@ -105,18 +190,16 @@ exports.addApartment = function(req, res, next) {
                         console.log(err);
                         return next();
                     } else {
-                        ep.emit("insertRoom",room)
+                        ep.emit("insertRoom", room)
                     }
 
                 });
 
             }
 
-            ep.after("insertRoom", data.rooms.length, function(roomList) {
+            ep.after("insertRoom", reqData.rooms.length, function(roomList) {
 
-
-
-                 for (var i = 0; i < roomList.length; i++) {
+                for (var i = 0; i < roomList.length; i++) {
                     apartment.rooms.push(roomList[i].id);
                 }
 
@@ -134,7 +217,6 @@ exports.addApartment = function(req, res, next) {
                 });
             });
 
-
         }
     });
 }
@@ -143,75 +225,178 @@ exports.addApartment = function(req, res, next) {
 
 exports.updateApartmentById = function(req, res, next) {
 
-    console.log("update apartment!");
+    var apartmentId = req.param('id');
 
-    var apartmentId = req.body.id;
-
-    var data = {
+    var reqData = {
+        schoolId: req.body.schoolId,
         title: req.body.title,
-        rooms: req.body.rooms,
-        favorite: req.body.favorite,
-        available: req.body.available,
-        contact: req.body.contact,
-        location: req.body.location
+        description: req.body.description,
+        cover: req.body.cover,
+        images: req.body.images,
+        type: req.body.type,
+        fees: req.body.fees,
+        facilities: req.body.facilities,
+        address: req.body.address,
+        longitude: req.body.longitude,
+        latitude: req.body.latitude
     };
 
-
-    if (tools.hasNull(data)) {
+    if (tools.isEmpty(req.body.rooms)) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
 
-    console.log("update test!");
-
-    var ep = new EventProxy();
     var apartment = new Apartment();
 
+    for (var key in reqData) {
+        apartment[key] = reqData[key];
+    }
 
-    console.log(data.id);
+    var rooms = [];
+
+    for (var i = 0; i < req.body.rooms.length; i++) {
+
+        var room = {
+            type: req.body.rooms[i].type,
+            price: req.body.rooms[i].price,
+            bathroom: req.body.rooms[i].bathroom,
+            closet: req.body.rooms[i].closet,
+            walkInCloset: req.body.rooms[i].walkInCloset,
+            beginDate: req.body.rooms[i].beginDate,
+            endDate: req.body.rooms[i].endDate
+        }
+
+        if (tools.hasNull(room)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        rooms.push(room);
+    }
+
+    reqData.rooms = rooms;
+
+    if (tools.hasNull(reqData)) {
+
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+
+    var ep = new EventProxy();
+
+
+    var newRoomLength = reqData.rooms.length;
+    var oldRoomLength = 0;
 
     Apartment.findById(apartmentId, function(err, apartment) {
         if (err) {
             console.log(err);
             res.json(Results.ERR_DB_ERR);
             return;
+        } else if (!apartment) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
         } else {
-            // for (var key in data) {
-            //     apartment[key] = data[key];
-
-            //     console.log(key + " " + data[key]);
-
-            console.log("t!!");
-            console.log(apartment);
-
             apartment.update_at = new Date();
-
-            // data.id = '55a80b81bda8264e1178d9ab';
-            // data.user_id = '55a5c6e1c748b9cd0e3733ad';
-            // data.favorite = '55a5c6e1c748b9cd0e3733ad';
-            // data.rooms = '55a5c6e1c748b9cd0e3733ad';
-
-            ep.emit('findApartment');
+            ep.emit('findApartment', apartment);
         }
 
     });
 
 
-    ep.all('findApartment', function() {
+    ep.after("findApartment", function(apartment) {
+
+        oldRoomLength = apartment.rooms.length;
+
+        for (var i = 0; i < oldRoomLength; i++) {
+
+            Room.findById(apartment.rooms[i].id, function(err, room) {
+                if (err) {
+                    console.log(err);
+                    res.json(Results.ERR_DB_ERR);
+                    return;
+                } else if (!room) {
+                    res.json(Results.ERR_NOTFOUND_ERR);
+                    return;
+                } else {
+                    ep.emit('findOldRoom', room);
+                }
+            });
+        }
+
+
+        for (var i = 0; i < newRoomLength; i++) {
+            var room = new Room();
+
+            for (var key in reqData.rooms[i]) {
+                room[key] = reqData.rooms[i][key];
+            }
+
+            room.save(function(err, room) {
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else {
+                    ep.emit("insertNewRoom", room);
+                }
+
+            });
+        }
+    });
+
+    ep.after("findOldRoom", oldRoomLength, function(oldRoomList) {
+        ep.emit("findOldRoomsDone", oldRoomList);
+    });
+
+
+    ep.after("insertNewRoom", newRoomLength, function(newRoomList) {
+        ep.emit("insertNewRoomsDone", newRoomList);
+    });
+
+
+    ep.all("findApartment", "findOldRoomsDone", "insertNewRoomsDone", function(apartment, oldRoomList, newRoomList) {
+
+        for (var i = 0; i < newRoomLength; i++) {
+            apartment.rooms.push(newRoomList[i].id);
+        }
 
         apartment.save(function(err, apartment) {
-
             if (err) {
                 console.log(err);
                 return next();
-            } else
-                res.json({
-                    result: true,
-                    id: apartment.id
-                });
+            } else {
+                ep.emit("saveNewRoomToApartment");
+            }
         });
+
+        for (var i = 0; i < oldRoomLength; i++) {
+            OldRoomList[i].status = -1;
+            OldRoomList[i].save(function(err, oldRoom) {
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else {
+                    ep.emit("setStatus");
+                }
+            });
+        }
+
     });
 
+
+    ep.after("setStatus", oldRoomLength, function() {
+        ep.emit("oldRoomStatusDone");
+    });
+
+
+    ep.all("oldRoomStatusDone", "saveNewRoomToApartment", function() {
+
+        res.json({
+            result: true,
+            data: {}
+        });
+
+    });
 
 
     ep.fail(function(err) {
@@ -220,7 +405,6 @@ exports.updateApartmentById = function(req, res, next) {
             err: err
         });
     });
-
 
 
 };

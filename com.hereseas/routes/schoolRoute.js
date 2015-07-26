@@ -44,34 +44,32 @@ exports.getSchoolById = function(req, res, next) {
     var query = {};
     var resData = {};
 
-    console.log(schoolId);
-
     School.findById(schoolId, function(err, school) {
-            if (err) {
-                console.log(err);
-                return next();
+        if (err) {
+            console.log(err);
+            return next();
 
-            } else if (school) {
-                if (school.status == 1) {
-                    resData.name = school.name;
-                    resData.description = school.description;
-                    resData.avatar = school.avatar;
-                    resData.image = school.image;
-                    resData.address = school.reqDate;
-                    resData.longitude = school.longitude;
-                    resData.latitude = school.latitude;
+        } else if (school) {
+            if (school.status == 1) {
+                resData.name = school.name;
+                resData.description = school.description;
+                resData.avatar = school.avatar;
+                resData.image = school.image;
+                resData.address = school.reqDate;
+                resData.longitude = school.longitude;
+                resData.latitude = school.latitude;
 
-                    res.json({
-                        result: true,
-                        data: resData
-                    });
+                res.json({
+                    result: true,
+                    data: resData
+                });
 
-                } else {
-                    res.json(Results.ERR_ACTIVATED_ERR);
-                }
             } else {
-                res.json(Results.ERR_NOTFOUND_ERR);
+                res.json(Results.ERR_ACTIVATED_ERR);
             }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+        }
 
     });
 };
@@ -82,11 +80,13 @@ exports.getSchoolInfoList = function(req, res, next) {
     School.findAll(function(err, schools) {
         if (err)
             return next();
-        else {
+        else if (schools.length) {
             res.json({
                 result: true,
                 data: schools
             });
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
         }
     });
 
@@ -141,7 +141,7 @@ exports.addSchool = function(req, res, next) {
 
 exports.updateSchoolById = function(req, res, next) {
 
-    var schoolId = req.body.id;
+    var schoolId = req.param('id');
 
     var reqData = {
         name: req.body.name,
@@ -159,7 +159,7 @@ exports.updateSchoolById = function(req, res, next) {
         return;
     }
 
-    if (tools.hasNull(data)) {
+    if (tools.hasNull(reqData)) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
@@ -168,15 +168,32 @@ exports.updateSchoolById = function(req, res, next) {
         id: schoolId
     };
 
-    School.update(query, reqData, function(err) {
+    School.findById(schoolId, function(err, school) {
         if (err) {
+            console.log(err);
+            return next();
+
+        } else if (!school) {
             res.json(Results.ERR_NOTFOUND_ERR);
-            return;
         } else {
-            res.json({
-                result: true,
-                data: {
-                    'id': schoolId
+
+            for (var key in reqData) {
+                school[key] = reqData[key];
+            }
+
+            school.save(function(err, schoolSave) {
+
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else {
+
+                    res.json({
+                        result: true,
+                        data: {
+                            'id': schoolSave.id
+                        }
+                    });
                 }
             });
 

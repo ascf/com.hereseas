@@ -7,22 +7,21 @@ var SchoolSchema = new Schema({
 
 	name: {
 		type: String
-	},Legendary
+	},
 
+	avatar: {
+		type: String
+	},
 
- 	avatar: {
-        type: String
-    },
-
-    description: {
-    	type: String
-    },
+	description: {
+		type: String
+	},
 
 	image: {
 		type: String
 	},
 
-	address: [Schema.Types.Mixed],
+	address: Schema.Types.Mixed,
 
 	longitude: {
 		type: String
@@ -37,7 +36,7 @@ var SchoolSchema = new Schema({
 		default: 0
 	},
 
-	status:{
+	status: {
 		type: Number,
 		default: 1
 	},

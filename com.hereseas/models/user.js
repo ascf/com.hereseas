@@ -4,12 +4,7 @@ var utility = require('utility');
 
 
 var UserSchema = new Schema({
-    username: {
-        type: String,
-        index: {
-            unique: true
-        }
-    },
+
     email: {
         type: String,
         index: {
@@ -19,33 +14,21 @@ var UserSchema = new Schema({
     password: {
         type: String
     },
-    salt: {
+
+    firstName: {
         type: String
     },
-    first_name: {
+    lastName: {
         type: String
     },
-    last_name: {
-        type: String
-    },
-    gender: {
-        type: String,
-        default: 'male'
-    },
-    school: {
-        type: String
-    },
+
+    schoolId: {type:Schema.ObjectId, ref: 'School' },
+
     avatar: {
         type: String,
         default: 'default.png'
     },
-    birthday: {
-        type: Date
-    },
 
-    role: {
-        type: String
-    },
 
     description: {
         type: String
@@ -64,15 +47,19 @@ var UserSchema = new Schema({
         default: false
     },
 
-    create_at: {
+    status:{
+        type: Number
+    },
+
+    createAt: {
         type: Date,
         default: Date.now
     },
-    update_at: {
+    updateAt: {
         type: Date,
         default: Date.now
     },
-    last_login: {
+    lastLogin: {
         type: Date,
         default: Date.now
     }
@@ -92,7 +79,6 @@ UserSchema.virtual('age').get(function () {
 
 
 UserSchema.index({
-    username: 1,
     email: 1
 }, {
     unique: true

@@ -6,17 +6,27 @@ var utility = require('utility');
 
 var ApartmentSchema = new Schema({
 
-	user_id: {type:Schema.ObjectId, ref: 'User' },
-	user_name: {
+	userId: {type:Schema.ObjectId, ref: 'User' },
+	
+	userFirstName: {
 		type: String
 	},
-	user_avatar: {
+
+	userLastName: {
 		type: String
 	},
+
+	userAvatar: {
+		type: String
+	},
+
+	schoolId: {type:Schema.ObjectId, ref: 'School' },
+
 	title: {
 		type: String
 	},
-	content: {
+	
+	description: {
 		type: String
 	},
 
@@ -31,24 +41,39 @@ var ApartmentSchema = new Schema({
 	},
 	
 	rooms: [{ type:Schema.ObjectId, ref: 'Room'}],
+
 	favorite: [{type:Schema.ObjectId, ref: 'User'}],
 
 	available: {
 		type: Boolean,
+		default: true
 	},
 
-	description: {
+	fees: Schema.Types.Mixed,
+
+	facilities: Schema.Types.Mixed,
+
+	address: Schema.Types.Mixed,
+
+	longitude: {
 		type: String
 	},
 
-	location: [Schema.Types.Mixed],
+	latitude: {
+		type: String
+	},
+	
+	status: {
+		type: Number,
+		default: 1
+	},
 
-
-	create_at: {
+	createAt: {
 		type: Date,
 		default: Date.now
 	},
-	update_at: {
+
+	updateAt: {
 		type: Date,
 		default: Date.now
 	}
