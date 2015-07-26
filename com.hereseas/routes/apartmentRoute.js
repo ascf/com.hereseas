@@ -273,10 +273,7 @@ exports.updateApartmentById = function(req, res, next) {
         rooms.push(room);
     }
 
-    reqData.rooms = rooms;
-
     if (tools.hasNull(reqData)) {
-
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
@@ -285,7 +282,7 @@ exports.updateApartmentById = function(req, res, next) {
     var ep = new EventProxy();
 
 
-    var newRoomLength = reqData.rooms.length;
+    var newRoomLength = rooms.length;
     var oldRoomLength = 0;
 
     Apartment.findById(apartmentId, function(err, apartment) {
@@ -297,20 +294,18 @@ exports.updateApartmentById = function(req, res, next) {
             res.json(Results.ERR_NOTFOUND_ERR);
             return;
         } else {
-            apartment.update_at = new Date();
+            oldRoomLength = apartment.rooms.length;
             ep.emit('findApartment', apartment);
         }
 
     });
 
 
-    ep.after("findApartment", function(apartment) {
-
-        oldRoomLength = apartment.rooms.length;
+    ep.after("findApartment", 1, function(apartment) {
 
         for (var i = 0; i < oldRoomLength; i++) {
 
-            Room.findById(apartment.rooms[i].id, function(err, room) {
+            Room.findById(apartment[0].rooms[i], function(err, room) {
                 if (err) {
                     console.log(err);
                     res.json(Results.ERR_DB_ERR);
@@ -324,12 +319,11 @@ exports.updateApartmentById = function(req, res, next) {
             });
         }
 
-
         for (var i = 0; i < newRoomLength; i++) {
             var room = new Room();
 
-            for (var key in reqData.rooms[i]) {
-                room[key] = reqData.rooms[i][key];
+            for (var key in rooms[i]) {
+                room[key] = rooms[i][key];
             }
 
             room.save(function(err, room) {
@@ -342,22 +336,28 @@ exports.updateApartmentById = function(req, res, next) {
 
             });
         }
+
+        ep.after("findOldRoom", oldRoomLength, function(oldRoomList) {
+            ep.emit("findOldRoomsDone", oldRoomList);
+        });
+
+        ep.after("insertNewRoom", newRoomLength, function(newRoomList) {
+            ep.emit("insertNewRoomsDone", newRoomList);
+        });
+
     });
 
-    ep.after("findOldRoom", oldRoomLength, function(oldRoomList) {
-        ep.emit("findOldRoomsDone", oldRoomList);
-    });
-
-
-    ep.after("insertNewRoom", newRoomLength, function(newRoomList) {
-        ep.emit("insertNewRoomsDone", newRoomList);
-    });
 
 
     ep.all("findApartment", "findOldRoomsDone", "insertNewRoomsDone", function(apartment, oldRoomList, newRoomList) {
 
         for (var i = 0; i < newRoomLength; i++) {
             apartment.rooms.push(newRoomList[i].id);
+        }
+
+        apartment.update_at = new Date();
+        for (var key in reqData) {
+            apartment[key] = reqData[key];
         }
 
         apartment.save(function(err, apartment) {
@@ -370,8 +370,8 @@ exports.updateApartmentById = function(req, res, next) {
         });
 
         for (var i = 0; i < oldRoomLength; i++) {
-            OldRoomList[i].status = -1;
-            OldRoomList[i].save(function(err, oldRoom) {
+            oldRoomList[i].status = -1;
+            oldRoomList[i].save(function(err, oldRoom) {
                 if (err) {
                     console.log(err);
                     return next();
@@ -381,11 +381,9 @@ exports.updateApartmentById = function(req, res, next) {
             });
         }
 
-    });
-
-
-    ep.after("setStatus", oldRoomLength, function() {
-        ep.emit("oldRoomStatusDone");
+        ep.after("setStatus", oldRoomLength, function() {
+            ep.emit("oldRoomStatusDone");
+        });
     });
 
 
@@ -397,7 +395,6 @@ exports.updateApartmentById = function(req, res, next) {
         });
 
     });
-
 
     ep.fail(function(err) {
         res.json({
