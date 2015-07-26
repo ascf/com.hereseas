@@ -96,7 +96,10 @@ exports.createUser = function (req, res, next) {
         user.save(function (err, user) {
 
             if (err)
+            {
+                console.log(err);
                 return next();
+            }
             else
                 res.json({
                     result: true,

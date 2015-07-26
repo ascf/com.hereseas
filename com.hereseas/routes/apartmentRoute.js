@@ -32,7 +32,7 @@ exports.getThreeApartments = function(req, res, next) {
     exec(function(err, apartments) {
         if (err) {
             console.log(err);
-        } else if (!schools.length) {
+        } else if (!apartments.length) {
             res.json(Results.ERR_NOTFOUND_ERR);
         } else {
             res.json({

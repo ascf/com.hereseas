@@ -13,13 +13,14 @@ module.exports = function (app) {
         });
     });
 
+
+    app.get('/users', userRoute.getUserList);
+    app.get('/user/:id', userRoute.getUser);
     app.post('/login', userRoute.login);
     app.post('/user', userRoute.createUser);
-    app.get('/user', userRoute.getUserList);
-    app.get('/user/:id', userRoute.getUser);
-
 
     app.get('/apartments',apartmentRoute.getApartmentList);
+    app.get('/apartments/three',apartmentRoute.getThreeApartments);
     app.get('/apartment/:id',apartmentRoute.getApartmentById);
     app.post('/apartment',apartmentRoute.addApartment);
     app.put('/apartment/:id',apartmentRoute.updateApartmentById);
@@ -28,8 +29,6 @@ module.exports = function (app) {
     app.get('/schools',schoolRoute.getSchoolList);
     app.post('/school',schoolRoute.addSchool);
     app.put('/school/:id',schoolRoute.updateSchoolById);
-
-
 
     
 

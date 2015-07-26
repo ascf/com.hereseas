@@ -38,9 +38,7 @@ var UserSchema = new Schema({
 
     favorite: [Schema.ObjectId],
 
-    last_contact: [Schema.Types.Mixed],
-
-    last_location: Schema.Types.Mixed,
+    lastLocation: [Schema.Types.Mixed],
 
     verified: {
         type: Boolean,
