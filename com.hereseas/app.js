@@ -10,6 +10,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 var md5 = require('MD5');
+var cors = require('cors')
 
 
 //var routes = require('./routes/index');
@@ -58,6 +59,8 @@ app.use(session({
 
 
 
+
+app.use(cors());
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).

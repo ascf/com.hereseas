@@ -1150,13 +1150,19 @@ hereseasApp.controller('CommonController',
 
 hereseasApp.controller('LoginCtrl',
     function ($scope, $stateParams,
-              $rootScope, $location,
+              $rootScope, $location,$http,
               $mdDialog, userService, alertService) {
 
         $scope.signUpData = {};
 
         $scope.signUpSubmit = function () {
             console.log($scope.signUpData);
+            
+            
+            $http.get('http://52.25.82.212:8080/users').then(function (res) {
+                console.log(res.data);
+            });
+            
 
             userService.registerUser($scope.signUpData)
                 .then(function (res) {
