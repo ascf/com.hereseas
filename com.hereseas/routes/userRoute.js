@@ -19,6 +19,7 @@ var passport = require('passport');
 var md5 = require('MD5');
 
 
+
 exports.test = function (req, res, next) {
     res.json(Results.ERR_DB_ERR);
 };
@@ -58,6 +59,8 @@ exports.login = function (req, res, next){
             user.lastname = req.user.lastname;
             user.gender = req.user.gender;
             user.avatar = req.user.avatar;
+
+
 
             return res.json({
                 id: user.id,
@@ -136,7 +139,7 @@ exports.getUserList = function (req, res, next) {
 
     User.find(
         query,
-        'first_name last_name username email gender school avatar description tags last_login',
+        'firstName lastName email schoolId avatar description tags last_login',
         function (err, users) {
             if (err) {
                 res.json(Results.ERR_DB_ERR);
@@ -160,10 +163,9 @@ exports.getUser = function (req, res, next) {
                     res.json({result:true,data:{
                         id:user.id,
                         email:user.email,
-                        firstName: user.first_name,
-                        lastName: user.last_name,
-                        gender: user.gender,
-                        school: user.school,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        schoolId: user.schoolId,
                         avatar: user.avatar_url,
                         description: user.description,
                         tags: user.tags,

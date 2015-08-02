@@ -21,6 +21,10 @@ var Results = {
     ERR_NOTFOUND_ERR: {
         result: false,
         err: 'ERR_NOTFOUND_ERR'
+    },
+    ERR_REQUIRELOGIN_ERR: {
+        result: false,
+        err: 'ERR_REQUIRELOGIN_ERR'
     }
 
 

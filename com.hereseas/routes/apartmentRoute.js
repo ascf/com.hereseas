@@ -11,6 +11,7 @@ var Results = require('./commonResult');
 
 var Apartment = require('../models').Apartment;
 var Room = require('../models').Room;
+var User = require('../models').User;
 
 var fs = require('fs');
 
@@ -31,14 +32,19 @@ exports.getThreeApartments = function(req, res, next) {
     limit(3).
     exec(function(err, apartments) {
         if (err) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+
             console.log(err);
+            return;
         } else if (!apartments.length) {
             res.json(Results.ERR_NOTFOUND_ERR);
+            return;
         } else {
             res.json({
                 result: true,
                 data: apartments
             });
+            return;
         }
     })
 };
@@ -58,13 +64,17 @@ exports.getApartmentList = function(req, res, next) {
         }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
             } else if (!apartments.length) {
                 res.json(Results.ERR_NOTFOUND_ERR);
+                return;
             } else {
                 res.json({
                     result: true,
                     data: apartments
                 });
+                return;
             }
         })
 };
@@ -90,8 +100,11 @@ exports.getApartmentById = function(req, res, next) {
         }).exec(function(err, apartment) {
             if (err) {
                 console.log(err);
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
             } else if (!apartment.length) {
                 res.json(Results.ERR_NOTFOUND_ERR);
+                return;
             } else {
 
                 console.log(apartment);
@@ -100,6 +113,7 @@ exports.getApartmentById = function(req, res, next) {
                     result: true,
                     data: apartment
                 });
+                return;
             }
         })
 
@@ -109,115 +123,138 @@ exports.getApartmentById = function(req, res, next) {
 
 exports.addApartment = function(req, res, next) {
 
-    var reqData = {
-        userId: req.body.userId,
-        userFirstName: req.body.userFirstName,
-        userLastName: req.body.userLastName,
-        userAvatar: req.body.userAvatar,
-        schoolId: req.body.schoolId,
-        title: req.body.title,
-        description: req.body.description,
-        cover: req.body.cover,
-        images: req.body.images,
-        type: req.body.type,
-        fees: req.body.fees,
-        facilities: req.body.facilities,
-        address: req.body.address,
-        longitude: req.body.longitude,
-        latitude: req.body.latitude
-    };
 
-    if (tools.isEmpty(req.body.rooms)) {
-        res.json(Results.ERR_PARAM_ERR);
-        return;
-    }
+    var epUser = new EventProxy();
 
-    var apartment = new Apartment();
+    User.findById(req.user.id,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                epUser.emit("findUser", user);
+            }
+        });
 
-    for (var key in reqData) {
-        apartment[key] = reqData[key];
-    }
 
-    var rooms = [];
 
-    for (var i = 0; i < req.body.rooms.length; i++) {
+    epUser.all("findUser", function(user) {
 
-        var room = {
-            type: req.body.rooms[i].type,
-            price: req.body.rooms[i].price,
-            bathroom: req.body.rooms[i].bathroom,
-            closet: req.body.rooms[i].closet,
-            walkInCloset: req.body.rooms[i].walkInCloset,
-            beginDate: req.body.rooms[i].beginDate,
-            endDate: req.body.rooms[i].endDate
-        }
 
-        if (tools.hasNull(room)) {
+        console.log("user",user);
+
+        var reqData = {
+            userId: user.id,
+            userFirstName: user.firstName,
+            userLastName: user.lastName,
+            userAvatar: user.avatar,
+            schoolId: req.body.schoolId,
+            title: req.body.title,
+            description: req.body.description,
+            cover: req.body.cover,
+            images: req.body.images,
+            type: req.body.type,
+            fees: req.body.fees,
+            facilities: req.body.facilities,
+            address: req.body.address,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude
+        };
+
+        if (tools.isEmpty(req.body.rooms)) {
             res.json(Results.ERR_PARAM_ERR);
             return;
         }
-        rooms.push(room);
-    }
 
-    reqData.rooms = rooms;
+        var apartment = new Apartment();
 
-    if (tools.hasNull(reqData)) {
+        for (var key in reqData) {
+            apartment[key] = reqData[key];
+        }
 
-        res.json(Results.ERR_PARAM_ERR);
-        return;
-    }
+        var rooms = [];
 
-    apartment.save(function(err, apartment) {
+        for (var i = 0; i < req.body.rooms.length; i++) {
 
-        if (err) {
-            console.log(err);
-            return next();
-        } else {
+            var room = {
+                type: req.body.rooms[i].type,
+                priceType: req.body.rooms[i].priceType,
+                price: req.body.rooms[i].price,
+                bathroom: req.body.rooms[i].bathroom,
+                closet: req.body.rooms[i].closet,
+                walkInCloset: req.body.rooms[i].walkInCloset,
+                beginDate: req.body.rooms[i].beginDate,
+                endDate: req.body.rooms[i].endDate
+            }
 
-            var ep = new EventProxy();
-            for (var i = 0; i < reqData.rooms.length; i++) {
+            if (tools.hasNull(room)) {
+                res.json(Results.ERR_PARAM_ERR);
+                return;
+            }
+            rooms.push(room);
+        }
 
-                var room = new Room();
+        reqData.rooms = rooms;
 
-                for (var key in reqData.rooms[i]) {
-                    room[key] = reqData.rooms[i][key];
-                }
+        if (tools.hasNull(reqData)) {
 
-                room.save(function(err, room) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
 
-                    if (err) {
-                        console.log(err);
-                        return next();
-                    } else {
-                        ep.emit("insertRoom", room)
+        apartment.save(function(err, apartment) {
+
+            if (err) {
+                console.log(err);
+                return next();
+            } else {
+
+                var ep = new EventProxy();
+                for (var i = 0; i < reqData.rooms.length; i++) {
+
+                    var room = new Room();
+
+                    for (var key in reqData.rooms[i]) {
+                        room[key] = reqData.rooms[i][key];
                     }
 
+                    room.save(function(err, room) {
+
+                        if (err) {
+                            console.log(err);
+                            return next();
+                        } else {
+                            ep.emit("insertRoom", room);
+                        }
+
+                    });
+
+                }
+
+                ep.after("insertRoom", reqData.rooms.length, function(roomList) {
+
+                    for (var i = 0; i < roomList.length; i++) {
+                        apartment.rooms.push(roomList[i].id);
+                    }
+
+                    apartment.save(function(err, apartment) {
+
+                        if (err) {
+                            console.log(err);
+                            return next();
+                        } else {
+                            res.json({
+                                result: true,
+                                data: apartment
+                            });
+                        }
+                    });
                 });
 
             }
-
-            ep.after("insertRoom", reqData.rooms.length, function(roomList) {
-
-                for (var i = 0; i < roomList.length; i++) {
-                    apartment.rooms.push(roomList[i].id);
-                }
-
-                apartment.save(function(err, apartment) {
-
-                    if (err) {
-                        console.log(err);
-                        return next();
-                    } else {
-                        res.json({
-                            result: true,
-                            data: apartment
-                        });
-                    }
-                });
-            });
-
-        }
+        });
     });
+
 }
 
 
@@ -258,6 +295,7 @@ exports.updateApartmentById = function(req, res, next) {
         var room = {
             type: req.body.rooms[i].type,
             price: req.body.rooms[i].price,
+            priceType: req.body.rooms[i].priceType,
             bathroom: req.body.rooms[i].bathroom,
             closet: req.body.rooms[i].closet,
             walkInCloset: req.body.rooms[i].walkInCloset,
@@ -403,4 +441,59 @@ exports.updateApartmentById = function(req, res, next) {
     });
 
 
+};
+
+exports.image_upload = function(req, res, next) {
+    //res.json({result:'hell'});
+    //return;
+
+    console.log(JSON.stringify(req.files));
+
+    var result = {};
+    result.result = 'true';
+    var image = "apartment_" + req.files.file.name;
+
+
+    // 获得文件的临时路径
+    var tmp_path = req.files.file.path;
+    // 指定文件上传后的目录 - 示例为"images"目录。 
+    // var target_path = './public/images/' + 'apartment' +'/'+ image;
+
+    var target_path = './public/images/apartment/' + image;
+    // 移动文件
+    fs.rename(tmp_path, target_path, function(err) {
+        // 删除临时文件夹文件, 
+        //fs.unlink(tmp_path, function(err){
+        if (err) {
+            console.log(err);
+            res.json({
+                result: 'false'
+            });
+        } else {
+            res.json({
+                result: 'true',
+                image: image
+            });
+
+        };
+        //});
+    });
+
+
+
+    //console.log("message");
+
+    //res.json({result:'hell'});
+};
+
+function saveImage(file, path, newName, callback) {
+    // 获得文件的临时路径
+    var tmp_path = file.path;
+    // 指定文件上传后的目录 - 示例为"images"目录。 
+    var target_path = './public/images/' + path + '/' + newName;
+    // 移动文件
+    fs.rename(tmp_path, target_path, function(err) {
+        // 删除临时文件夹文件, 
+        fs.unlink(tmp_path, callback(err));
+    });
 };

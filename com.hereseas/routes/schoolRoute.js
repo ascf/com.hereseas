@@ -21,17 +21,22 @@ exports.getSchoolList = function(req, res, next) {
         'status': 1
     };
 
+
+    console.log();
+
     School.find(
         query,
         'id name avatar',
         function(err, schools) {
             if (err) {
-                res.json(Results.ERR_DB_ERR);
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
             } else {
                 res.json({
                     result: true,
                     data: schools
                 });
+                return;
             }
         });
 
@@ -47,7 +52,8 @@ exports.getSchoolById = function(req, res, next) {
     School.findById(schoolId, function(err, school) {
         if (err) {
             console.log(err);
-            return next();
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
 
         } else if (school) {
             if (school.status == 1) {
@@ -63,12 +69,15 @@ exports.getSchoolById = function(req, res, next) {
                     result: true,
                     data: resData
                 });
+                return;
 
             } else {
                 res.json(Results.ERR_ACTIVATED_ERR);
+                return;
             }
         } else {
             res.json(Results.ERR_NOTFOUND_ERR);
+            return;
         }
 
     });
@@ -78,9 +87,10 @@ exports.getSchoolById = function(req, res, next) {
 exports.getSchoolInfoList = function(req, res, next) {
 
     School.findAll(function(err, schools) {
-        if (err)
-            return next();
-        else if (schools.length) {
+        if (err) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else if (schools.length) {
             res.json({
                 result: true,
                 data: schools

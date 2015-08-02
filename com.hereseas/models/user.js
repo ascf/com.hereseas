@@ -16,10 +16,12 @@ var UserSchema = new Schema({
     },
 
     firstName: {
-        type: String
+        type: String,
+        default: ''
     },
     lastName: {
-        type: String
+        type: String,
+        default: ''
     },
 
     schoolId: {type:Schema.ObjectId, ref: 'School' },

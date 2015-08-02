@@ -11,6 +11,10 @@ var RoomSchema = new Schema({
 		type: String
 	},
 
+	priceType: {
+		type: String
+	},
+
 	price: {
 		type: String
 	},

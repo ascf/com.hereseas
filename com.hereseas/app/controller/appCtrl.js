@@ -1163,6 +1163,19 @@ hereseasApp.controller('LoginCtrl',
                 console.log(res.data);
             });
             
+            
+                    $http.post('http://52.25.82.212:8080/login', {
+                    email: "hhz1992@gmail.com",
+                    password: "123",
+
+                })
+                .then(function (response) {
+                    if (response.data.res)
+                        console.log(response.data);
+                    else
+                        console.log(response.data);
+                });
+            
 
             userService.registerUser($scope.signUpData)
                 .then(function (res) {
