@@ -31,3 +31,27 @@ exports.logout = function(req, res) {
 
 	// res.redirect('/');
 };
+
+
+exports.initialize = function(req, res) {
+
+	if (req.isAuthenticated()) {
+		
+		res.json({
+			result: true,
+			userId: req.user.id
+		});	
+
+
+	}else{
+
+		res.json({
+			result: false
+		});
+
+
+	}
+
+
+	// res.redirect('/');
+};

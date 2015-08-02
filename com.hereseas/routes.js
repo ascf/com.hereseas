@@ -21,6 +21,8 @@ module.exports = function (app) {
     });
 
 
+    app.get('/init', sign.initialize);
+
     app.get('/users', userRoute.getUserList);
     app.get('/user/:id', userRoute.getUser);
     app.post('/login', userRoute.login);
@@ -38,7 +40,6 @@ module.exports = function (app) {
     app.get('/schools',schoolRoute.getSchoolList);
     app.post('/school',schoolRoute.addSchool);
     app.put('/school/:id',schoolRoute.updateSchoolById);
-
     
    app.post('/m_upload_image', sign.ensureAuthenticated,apartmentRoute.image_upload);
 
