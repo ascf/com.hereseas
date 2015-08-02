@@ -28,8 +28,7 @@ module.exports = function (app) {
 
     app.get('/logout', sign.ensureAuthenticated,sign.logout);
 
-
-    app.get('/apartments',sign.ensureAuthenticated,apartmentRoute.getApartmentList);
+    app.get('/apartments',apartmentRoute.getApartmentList);
     app.get('/apartments/three',apartmentRoute.getThreeApartments);
     app.get('/apartment/:id',apartmentRoute.getApartmentById);
     app.post('/apartment',sign.ensureAuthenticated,apartmentRoute.addApartment);
