@@ -2,7 +2,7 @@ var hereseasApp = angular.module('hereseasApp', [
     'ngAnimate', 'ngCookies', 'ngSanitize','ui.select2',
     'ui.router', 'ngMaterial', 'ngMessages',
     'pascalprecht.translate', 'LocalStorageModule',
-    'pascalprecht.translate', 'angular-loading-bar', 'hereseasDirectives'
+    'pascalprecht.translate', 'angular-loading-bar', 'hereseasDirectives','uiGmapgoogle-maps'
 ]);
 
 hereseasApp.constant('APP', {
@@ -24,12 +24,12 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
                              localStorageServiceProvider, APP) {
 
 
-    $urlRouterProvider.otherwise("/signup");
+    $urlRouterProvider.otherwise("/home");
 
     $stateProvider.state('signup', {
         url: '/signup',
         templateUrl: '/app/view/signup.html',
-        controller: 'LoginCtrl'
+        controller: 'SignupCtrl'
 
     });
 
@@ -37,6 +37,7 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
         url: '/login',
         templateUrl: '/app/view/login.html',
         controller: 'LoginController'
+
     });
 
     //$stateProvider.state('user', {
@@ -63,6 +64,32 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
         templateUrl: '/app/view/partials/_public.html'
     });
 
+    $stateProvider.state('home', {
+        url: '/home',
+        templateUrl: '/app/view/home.html',
+        controller: 'HomeController'
+    });
+    
+    $stateProvider.state('school', {
+        url: '/school',
+        templateUrl: '/app/view/school.html',
+        controller: 'SchoolController'
+    });
+    
+    
+    $stateProvider.state('rooms', {
+        url: '/rooms/:aptId',
+        templateUrl: '/app/view/rooms.html',
+        controller: 'RoomController'
+    });
+
+    /*$stateProvider.state('roompost', {
+        url: '/roompost',
+        templateUrl: '/app/view/room_post.html',
+        controller: 'RoomPostController'
+    });*/
+    
+    
     $stateProvider.state('user', {
         url: '/user',
         templateUrl: '/app/view/partials/_public-user.html'

@@ -82,12 +82,12 @@
 </div>
 
 -->
-
-<script src="/public/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+<!--script src="/public/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script-->
 <!-- Login Content -->
-<div class="content overflow-hidden">
+<md-dialog flex="60">
+<div >
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+        <div >
             <!-- Login Block -->
             <div class="block block-themed animated fadeIn">
                 <div class="block-header bg-primary">
@@ -96,7 +96,10 @@
                             <a href="base_pages_reminder.html">Forgot Password?</a>
                         </li>
                         <li>
-                            <a href="base_pages_register.html" data-toggle="tooltip" data-placement="left" title="New Account"><i class="si si-plus"></i></a>
+                            <a href="" ng-click="goSignup()" data-toggle="tooltip" data-placement="left" title="New Account"><i class="si si-plus"></i></a>
+                        </li>
+                        <li>
+                            <a href="" ng-click="hide()" data-toggle="tooltip" data-placement="left" title="">关闭</a>
                         </li>
                     </ul>
                     <h3 class="block-title">Login</h3>
@@ -110,7 +113,7 @@
                     <!-- Login Form -->
                     <!-- jQuery Validation (.js-validation-login class is initialized in js/pages/base_pages_login.js) -->
                     <!-- For more examples you can check out https://github.com/jzaefferer/jquery-validation -->
-                    <form class="js-validation-login form-horizontal push-30-t push-50" ng-submit="loginClick()"  method="post">
+                    <form class="js-validation-login form-horizontal push-30-t push-50" ng-submit="loginClick()">
                         <div class="form-group">
                             <div class="col-xs-12">
                                 <div class="form-material form-material-primary">
@@ -149,6 +152,4 @@
 </div>
 <!-- END Login Content -->
 
-<div ng-include="'/app/view/partials/_footer-simple.html'"></div>
-
-
+</md-dialog>
