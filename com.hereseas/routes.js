@@ -35,6 +35,9 @@ module.exports = function (app) {
     app.get('/apartment/:id',apartmentRoute.getApartmentById);
     app.post('/apartment',sign.ensureAuthenticated,apartmentRoute.addApartment);
     app.put('/apartment/:id',sign.ensureAuthenticated,apartmentRoute.updateApartmentById);
+    app.get('/apartments/search',apartmentRoute.searchApartment);
+
+
 
     app.get('/school/:id',schoolRoute.getSchoolById);
     app.get('/schools',schoolRoute.getSchoolList);

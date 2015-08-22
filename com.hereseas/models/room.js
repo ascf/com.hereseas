@@ -7,8 +7,18 @@ var RoomSchema = new Schema({
 
 	apartmentId: {type:Schema.ObjectId, ref: 'Apartment' },
 
+	schoolId: {type:Schema.ObjectId, ref: 'School' },
+
 	type: {
 		type: String
+	},
+
+	apartmentType: {
+		apartmentType: String
+	},
+
+	share: {
+		type: Boolean
 	},
 
 	priceType: {

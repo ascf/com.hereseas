@@ -121,6 +121,137 @@ exports.getApartmentById = function(req, res, next) {
 //'type price bathroom closet walkInCloset beginDate endDate available create_at update_at'
 
 
+
+//     if (!req.query) {
+//   var val = parseUrl(req).query;
+//  req.query = queryparse(val, options);
+// }
+
+
+exports.searchApartment = function(req, res, next) {
+
+    var query = {};
+
+    console.log(req.query);
+
+
+    if (!req.query) {
+
+    }
+
+    if (req.query.startPrice && req.query.endPrice) {
+        var subQuery = {};
+        subQuery['$gte'] = req.query.startPrice;
+        subQuery['$lt'] = req.query.endPrice;
+        query['price'] = subQuery;
+    } else if (req.query.startPrice) {
+        var subQuery = {};
+        subQuery['$gte'] = req.query.startPrice;
+        query['price'] = subQuery;
+    } else if (req.query.endPrice) {
+        var subQuery = {};
+        subQuery['$lt'] = req.query.endPrice;
+        query['price'] = subQuery;
+    }
+
+
+    if (req.query.apartmentType) {
+        query['apartmentType'] = req.query.apartmentType;
+    }
+
+    if (req.query.roomType) {
+        query['type'] = req.query.roomType;
+    }
+
+    if (req.query.date) {
+        var subQuery1 = {};
+        subQuery1['$gte'] = req.query.date;
+        query['endDate'] = subQuery1;
+
+        var subQuery2 = {};
+        subQuery2['$lt'] = req.query.date;
+        query['beginDate'] = subQuery2;
+    }
+
+    if (req.query.share) {
+        query['share'] = req.query.share;
+    }
+
+    query['status'] = 1;
+
+    console.log("query",query);
+
+
+    Room.find(query, 'apartmentId').sort({
+        create_at: 'desc'
+    }).exec(function(err, rooms) {
+        if (err) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            console.log(err);
+            return;
+        } else if (!rooms.length) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else {
+
+            var ep = new EventProxy();
+            var apartments = [];
+           
+            var roomLength = rooms.length;
+
+            for (var i = 0; i < rooms.length; i++) {
+                Apartment.findById(rooms[i].apartmentId, function(err, apartment) {
+                    if (err) {
+                        console.log(err);
+                         roomLength--;
+                        
+                    } else if (!apartment) {
+                        console.log('notfound?');
+                        roomLength--;
+                   
+                    } else {
+                      
+                        apartments.push[apartment];
+                        ep.emit("findApartment",apartment);
+                    }
+
+                });
+            }
+
+            ep.after("findApartment", roomLength, function(apartments) {
+                
+                var checkSame = {};
+
+                for (var i = 0; i < roomLength; i++) {
+
+                     console.log("apartmentid",apartments[i].id);
+
+                    if (checkSame[apartments[i].id]) {
+                        apartments.splice(i, 1);
+                        continue;
+                    } else if (apartments[i].status != 1) {
+                        apartments.splice(i, 1);
+                        continue;
+                    }
+                     checkSame[apartments[i].id] = true;
+
+                }
+
+                res.json({
+                    result: true,
+                    data: apartments
+                });
+                return;
+            });
+
+        }
+
+    });
+
+}
+
+
+
 exports.addApartment = function(req, res, next) {
 
 
@@ -136,12 +267,9 @@ exports.addApartment = function(req, res, next) {
             }
         });
 
-
-
     epUser.all("findUser", function(user) {
 
-
-        console.log("user",user);
+        console.log("user", user);
 
         var reqData = {
             userId: user.id,
@@ -177,7 +305,9 @@ exports.addApartment = function(req, res, next) {
         for (var i = 0; i < req.body.rooms.length; i++) {
 
             var room = {
+                schoolId: req.body.schoolId,
                 type: req.body.rooms[i].type,
+                apartmentType: req.body.type,
                 priceType: req.body.rooms[i].priceType,
                 price: req.body.rooms[i].price,
                 bathroom: req.body.rooms[i].bathroom,
@@ -217,6 +347,8 @@ exports.addApartment = function(req, res, next) {
                     for (var key in reqData.rooms[i]) {
                         room[key] = reqData.rooms[i][key];
                     }
+
+                    room.apartmentId = apartment.id;
 
                     room.save(function(err, room) {
 
@@ -293,7 +425,9 @@ exports.updateApartmentById = function(req, res, next) {
     for (var i = 0; i < req.body.rooms.length; i++) {
 
         var room = {
+            schoolId: req.body.schoolId,
             type: req.body.rooms[i].type,
+            apartmentType: req.body.type,
             price: req.body.rooms[i].price,
             priceType: req.body.rooms[i].priceType,
             bathroom: req.body.rooms[i].bathroom,
@@ -362,6 +496,7 @@ exports.updateApartmentById = function(req, res, next) {
             for (var key in rooms[i]) {
                 room[key] = rooms[i][key];
             }
+            room.apartmentId = apartment[0].id;
 
             room.save(function(err, room) {
                 if (err) {
