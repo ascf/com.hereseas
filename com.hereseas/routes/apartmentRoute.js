@@ -114,6 +114,74 @@ exports.getApartmentById = function(req, res, next) {
             }
         })
 
+};
+
+
+
+exports.getApartmentDraftList = function(req, res, next) {
+
+    var query = {
+        'status': 2
+    };
+
+    query['userId'] = req.user.id;
+
+    Apartment.find(
+            query,
+            'id userId userFirstName userLastName userAvatar schoolId title cover type longitude latitude createAt updateAt')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, apartments) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else if (!apartments.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: apartments
+                });
+                return;
+            }
+        })
+};
+
+
+exports.getApartmentDraftById = function(req, res, next) {
+
+    var apartmentId = req.param('id');
+
+    console.log(apartmentId);
+
+    var query = {
+        '_id': apartmentId,
+        'status': 2
+    };
+
+    Apartment.find(
+            query,
+            'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, apartments) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else if (!apartments.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: apartments
+                });
+                return;
+            }
+        })
 
 };
 
@@ -208,14 +276,14 @@ exports.searchApartment = function(req, res, next) {
 
     prepareQuery['$elemMatch'] = query;
 
-    aptQuery['rooms'] = prepareQuery;   
+    aptQuery['rooms'] = prepareQuery;
 
     aptQuery['status'] = 1;
 
     console.log("aptQuery", aptQuery);
 
 
-        Apartment.find(
+    Apartment.find(
             aptQuery,
             'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at', pagination)
         .sort({
@@ -237,17 +305,283 @@ exports.searchApartment = function(req, res, next) {
             }
         })
 
+}
 
 
+exports.createApartment = function(req, res, next) {
 
 
+    var epUser = new EventProxy();
+
+    User.findById(req.user.id,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                epUser.emit("findUser", user);
+            }
+        });
+
+    epUser.all("findUser", function(user) {
+
+        console.log("user", user);
+
+        var reqData = {
+            userId: user.id,
+            userFirstName: user.firstName,
+            userLastName: user.lastName,
+            userAvatar: user.avatar,
+            schoolId: req.body.schoolId,
+        };
+
+        if (tools.hasNull(reqData)) {
+
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+
+        var apartment = new Apartment();
+
+        for (var key in reqData) {
+            apartment[key] = reqData[key];
+        }
+
+        apartment['status'] = 2;
+
+        apartment.save(function(err, apartment) {
+
+            if (err) {
+                console.log(err);
+                return next();
+            } else {
+
+                res.json({
+                    result: true,
+                    data: apartment
+                });
 
 
-
+            }
+        });
+    });
 
 }
 
 
+exports.editApartmentById = function(req, res, next) {
+
+    var apartmentId = req.param('id');
+    var reqData = {};
+    var userId = req.user.id;
+
+    if (!req.query.step) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    if (req.query.step == 1) {
+        reqData = {
+            type: req.body.type,
+        }
+
+        if (tools.isEmpty(req.body.rooms)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+
+        var rooms = [];
+
+        for (var i = 0; i < req.body.rooms.length; i++) {
+
+            var room = {
+                share: req.body.rooms[i].share,
+                type: req.body.rooms[i].type,
+                price: req.body.rooms[i].price,
+                priceType: req.body.rooms[i].priceType,
+                bathroom: req.body.rooms[i].bathroom,
+                closet: req.body.rooms[i].closet,
+                walkInCloset: req.body.rooms[i].walkInCloset,
+                beginDate: req.body.rooms[i].beginDate,
+                endDate: req.body.rooms[i].endDate
+            }
+
+            if (tools.hasNull(room)) {
+                res.json(Results.ERR_PARAM_ERR);
+                return;
+            }
+            rooms.push(room);
+        }
+        reqData.rooms = rooms;
+
+
+    } else if (req.query.step == 2) {
+        reqData = {
+            facilities: req.body.facilities
+        }
+    } else if (req.query.step == 3) {
+        reqData = {
+            fees: req.body.fees
+        }
+    } else if (req.query.step == 4) {
+        reqData = {
+            title: req.body.title,
+            description: req.body.description,
+        }
+    } else if (req.query.step == 5) {
+        reqData = {
+            address: req.body.address,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude
+        }
+    } else if (req.query.step == 6) {
+        reqData = {
+            address: req.body.address,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude
+        }
+    } else if (req.query.step == 7) {
+        reqData = {
+            cover: req.body.cover,
+            images: req.body.images,
+        }
+    } else {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    if (tools.hasNull(reqData)) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+
+    Apartment.findById(apartmentId, function(err, apartment) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else if (!apartment) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else {
+
+            if (apartment.userId != userId) {
+                res.json(Results.ERR_PERMISSION_ERR);
+                return;
+            }
+
+            for (var key in reqData) {
+                apartment[key] = reqData[key];
+            }
+            apartment.update_at = new Date();
+
+            apartment.save(function(err, apartment) {
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else {
+                    res.json({
+                        result: true,
+                        data: {}
+                    });
+
+                }
+            });
+
+        }
+
+    });
+
+};
+
+exports.postApartmentById = function(req, res, next) {
+
+    var apartmentId = req.param('id');
+    var reqData = {};
+    var userId = req.user.id;
+
+    var epUser = new EventProxy();
+
+    User.findById(req.user.id,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                epUser.emit("findUser", user);
+            }
+        });
+
+    epUser.all("findUser", function(user) {
+
+        Apartment.findById(apartmentId, function(err, apartment) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!apartment) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                if (apartment.userId != userId || apartment.status != 2) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                }
+
+                var reqData = {
+                    userId: apartment.userId,
+                    userFirstName: apartment.userFirstName,
+                    userLastName: apartment.userFirstName,
+                    userAvatar: apartment.userAvatar,
+                    schoolId: apartment.schoolId,
+                    title: apartment.title,
+                    description: apartment.description,
+                    cover: apartment.cover,
+                    images: apartment.images,
+                    type: apartment.type,
+                    fees: apartment.fees,
+                    facilities: apartment.facilities,
+                    address: apartment.address,
+                    longitude: apartment.longitude,
+                    latitude: apartment.latitude,
+                    rooms: apartment.rooms,
+                    status: apartment.status
+                };
+
+                if (tools.isEmpty(reqData.rooms) || tools.isEmpty(reqData.images)) {
+                    res.json(Results.ERR_NOTFINISHED_ERR);
+                    return;
+                }
+
+                if (tools.hasNull(reqData)) {
+                    res.json(Results.ERR_NOTFINISHED_ERR);
+                    return;
+                }
+
+                apartment['status'] = 1;
+                apartment.update_at = new Date();
+
+                apartment.save(function(err, apartment) {
+                    if (err) {
+                        console.log(err);
+                        return next();
+                    } else {
+                        res.json({
+                            result: true,
+                            data: apartment
+                        });
+
+                    }
+                });
+
+            }
+
+        });
+
+    });
+
+}
 
 
 
@@ -436,7 +770,7 @@ exports.updateApartmentById = function(req, res, next) {
 
                 }
             });
-          
+
         }
 
     });

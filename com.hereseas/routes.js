@@ -33,11 +33,18 @@ module.exports = function (app) {
     app.get('/apartments',apartmentRoute.getApartmentList);
     app.get('/apartments/three',apartmentRoute.getThreeApartments);
     app.get('/apartment/:id',apartmentRoute.getApartmentById);
-    app.post('/apartment',sign.ensureAuthenticated,apartmentRoute.addApartment);
-    app.put('/apartment/:id',sign.ensureAuthenticated,apartmentRoute.updateApartmentById);
+
+    app.get('/apartments/draft',sign.ensureAuthenticated,apartmentRoute.getApartmentDraftList);
+    app.get('/apartment/draft/:id',apartmentRoute.getApartmentDraftById);
+
     app.get('/apartments/:schoolId/search',apartmentRoute.searchApartment);
 
+    app.post('/apartment',sign.ensureAuthenticated,apartmentRoute.createApartment);
+    app.put('/apartment/:id',sign.ensureAuthenticated,apartmentRoute.editApartmentById);
+    app.put('/apartment/post/:id',sign.ensureAuthenticated,apartmentRoute.postApartmentById);
 
+    // app.post('/apartment',sign.ensureAuthenticated,apartmentRoute.addApartment);
+    // app.put('/apartment/:id',sign.ensureAuthenticated,apartmentRoute.updateApartmentById);
 
     app.get('/school/:id',schoolRoute.getSchoolById);
     app.get('/schools',schoolRoute.getSchoolList);
