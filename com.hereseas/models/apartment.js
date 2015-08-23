@@ -40,7 +40,65 @@ var ApartmentSchema = new Schema({
 		type: String
 	},
 	
-	rooms: [{ type:Schema.ObjectId, ref: 'Room'}],
+	rooms: [{
+
+		type: {
+			type: String
+		},
+
+		share: {
+			type: Boolean
+		},
+
+		priceType: {
+			type: String
+		},
+
+		price: {
+			type: Number
+		},
+
+		bathroom: {
+			type: Boolean
+		},
+
+		closet: {
+			type: Boolean
+		},
+
+		walkInCloset: {
+			type: Boolean
+		},
+
+		beginDate: {
+			type: Date
+		},
+
+		endDate: {
+			type: Date
+		},
+
+
+		available: {
+			type: Boolean,
+			default: true
+		},
+
+		status:{
+			type: Number,
+			default : 1
+		},
+
+		create_at: {
+			type: Date,
+			default: Date.now
+		},
+		update_at: {
+			type: Date,
+			default: Date.now
+		}
+
+	}],
 
 	favorite: [{type:Schema.ObjectId, ref: 'User'}],
 

@@ -94,49 +94,75 @@ exports.getApartmentById = function(req, res, next) {
 
     Apartment.find(
             query,
-            'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at ').limit(1)
-        .populate('rooms', null, {
-            'status': 1
-        }).exec(function(err, apartment) {
+            'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
-            } else if (!apartment.length) {
+            } else if (!apartments.length) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
             } else {
-
-                console.log(apartment);
-
                 res.json({
                     result: true,
-                    data: apartment
+                    data: apartments
                 });
                 return;
             }
         })
 
+
 };
-//'type price bathroom closet walkInCloset beginDate endDate available create_at update_at'
-
-
-
-//     if (!req.query) {
-//   var val = parseUrl(req).query;
-//  req.query = queryparse(val, options);
-// }
 
 
 exports.searchApartment = function(req, res, next) {
 
     var query = {};
+    var aptQuery = {};
+    var pagination = {};
 
     console.log(req.query);
+    var page = false;
 
 
-    if (!req.query) {
+    var schoolId = req.param('schoolId');
 
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    aptQuery['schoolId'] = schoolId;
+
+
+    if (req.query.page && req.query.pageSize) {
+        pagination['skip'] = (req.query.page - 1) * req.query.pageSize;
+        pagination['limit'] = req.query.pageSize;
+    }
+
+    if (req.query.car) {
+        var subQuery = {};
+        subQuery['car'] = req.query.car;
+        aptQuery['facilities'] = subQuery;
+    }
+
+    if (req.query.utility) {
+        var subQuery = {};
+        subQuery['utility'] = req.query.utility;
+        aptQuery['facilities'] = subQuery;
+    }
+
+    if (req.query.pet) {
+        var subQuery = {};
+        subQuery['pet'] = req.query.pet;
+        aptQuery['facilities'] = subQuery;
+    }
+
+    if (req.query.share) {
+        query['share'] = req.query.share;
     }
 
     if (req.query.startPrice && req.query.endPrice) {
@@ -154,9 +180,8 @@ exports.searchApartment = function(req, res, next) {
         query['price'] = subQuery;
     }
 
-
     if (req.query.apartmentType) {
-        query['apartmentType'] = req.query.apartmentType;
+        aptQuery['type'] = req.query.apartmentType;
     }
 
     if (req.query.roomType) {
@@ -179,76 +204,50 @@ exports.searchApartment = function(req, res, next) {
 
     query['status'] = 1;
 
-    console.log("query",query);
+    var prepareQuery = {};
+
+    prepareQuery['$elemMatch'] = query;
+
+    aptQuery['rooms'] = prepareQuery;   
+
+    aptQuery['status'] = 1;
+
+    console.log("aptQuery", aptQuery);
 
 
-    Room.find(query, 'apartmentId').sort({
-        create_at: 'desc'
-    }).exec(function(err, rooms) {
-        if (err) {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            console.log(err);
-            return;
-        } else if (!rooms.length) {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            return;
-        } else {
-
-            var ep = new EventProxy();
-            var apartments = [];
-           
-            var roomLength = rooms.length;
-
-            for (var i = 0; i < rooms.length; i++) {
-                Apartment.findById(rooms[i].apartmentId, function(err, apartment) {
-                    if (err) {
-                        console.log(err);
-                         roomLength--;
-                        
-                    } else if (!apartment) {
-                        console.log('notfound?');
-                        roomLength--;
-                   
-                    } else {
-                      
-                        apartments.push[apartment];
-                        ep.emit("findApartment",apartment);
-                    }
-
-                });
-            }
-
-            ep.after("findApartment", roomLength, function(apartments) {
-                
-                var checkSame = {};
-
-                for (var i = 0; i < roomLength; i++) {
-
-                     console.log("apartmentid",apartments[i].id);
-
-                    if (checkSame[apartments[i].id]) {
-                        apartments.splice(i, 1);
-                        continue;
-                    } else if (apartments[i].status != 1) {
-                        apartments.splice(i, 1);
-                        continue;
-                    }
-                     checkSame[apartments[i].id] = true;
-
-                }
-
+        Apartment.find(
+            aptQuery,
+            'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at', pagination)
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, apartments) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else if (!apartments.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
                 res.json({
                     result: true,
                     data: apartments
                 });
                 return;
-            });
+            }
+        })
 
-        }
 
-    });
+
+
+
+
+
+
 
 }
+
+
 
 
 
@@ -296,18 +295,13 @@ exports.addApartment = function(req, res, next) {
 
         var apartment = new Apartment();
 
-        for (var key in reqData) {
-            apartment[key] = reqData[key];
-        }
-
         var rooms = [];
 
         for (var i = 0; i < req.body.rooms.length; i++) {
 
             var room = {
-                schoolId: req.body.schoolId,
+                share: req.body.rooms[i].share,
                 type: req.body.rooms[i].type,
-                apartmentType: req.body.type,
                 priceType: req.body.rooms[i].priceType,
                 price: req.body.rooms[i].price,
                 bathroom: req.body.rooms[i].bathroom,
@@ -326,6 +320,10 @@ exports.addApartment = function(req, res, next) {
 
         reqData.rooms = rooms;
 
+        for (var key in reqData) {
+            apartment[key] = reqData[key];
+        }
+
         if (tools.hasNull(reqData)) {
 
             res.json(Results.ERR_PARAM_ERR);
@@ -339,49 +337,11 @@ exports.addApartment = function(req, res, next) {
                 return next();
             } else {
 
-                var ep = new EventProxy();
-                for (var i = 0; i < reqData.rooms.length; i++) {
-
-                    var room = new Room();
-
-                    for (var key in reqData.rooms[i]) {
-                        room[key] = reqData.rooms[i][key];
-                    }
-
-                    room.apartmentId = apartment.id;
-
-                    room.save(function(err, room) {
-
-                        if (err) {
-                            console.log(err);
-                            return next();
-                        } else {
-                            ep.emit("insertRoom", room);
-                        }
-
-                    });
-
-                }
-
-                ep.after("insertRoom", reqData.rooms.length, function(roomList) {
-
-                    for (var i = 0; i < roomList.length; i++) {
-                        apartment.rooms.push(roomList[i].id);
-                    }
-
-                    apartment.save(function(err, apartment) {
-
-                        if (err) {
-                            console.log(err);
-                            return next();
-                        } else {
-                            res.json({
-                                result: true,
-                                data: apartment
-                            });
-                        }
-                    });
+                res.json({
+                    result: true,
+                    data: apartment
                 });
+
 
             }
         });
@@ -416,18 +376,13 @@ exports.updateApartmentById = function(req, res, next) {
 
     var apartment = new Apartment();
 
-    for (var key in reqData) {
-        apartment[key] = reqData[key];
-    }
-
     var rooms = [];
 
     for (var i = 0; i < req.body.rooms.length; i++) {
 
         var room = {
-            schoolId: req.body.schoolId,
+            share: req.body.rooms[i].share,
             type: req.body.rooms[i].type,
-            apartmentType: req.body.type,
             price: req.body.rooms[i].price,
             priceType: req.body.rooms[i].priceType,
             bathroom: req.body.rooms[i].bathroom,
@@ -449,12 +404,8 @@ exports.updateApartmentById = function(req, res, next) {
         return;
     }
 
+    reqData.rooms = rooms;
 
-    var ep = new EventProxy();
-
-
-    var newRoomLength = rooms.length;
-    var oldRoomLength = 0;
 
     Apartment.findById(apartmentId, function(err, apartment) {
         if (err) {
@@ -465,115 +416,31 @@ exports.updateApartmentById = function(req, res, next) {
             res.json(Results.ERR_NOTFOUND_ERR);
             return;
         } else {
-            oldRoomLength = apartment.rooms.length;
-            ep.emit('findApartment', apartment);
-        }
 
-    });
-
-
-    ep.after("findApartment", 1, function(apartment) {
-
-        for (var i = 0; i < oldRoomLength; i++) {
-
-            Room.findById(apartment[0].rooms[i], function(err, room) {
-                if (err) {
-                    console.log(err);
-                    res.json(Results.ERR_DB_ERR);
-                    return;
-                } else if (!room) {
-                    res.json(Results.ERR_NOTFOUND_ERR);
-                    return;
-                } else {
-                    ep.emit('findOldRoom', room);
-                }
-            });
-        }
-
-        for (var i = 0; i < newRoomLength; i++) {
-            var room = new Room();
-
-            for (var key in rooms[i]) {
-                room[key] = rooms[i][key];
+            for (var key in reqData) {
+                apartment[key] = reqData[key];
             }
-            room.apartmentId = apartment[0].id;
 
-            room.save(function(err, room) {
+            apartment.update_at = new Date();
+
+            apartment.save(function(err, apartment) {
                 if (err) {
                     console.log(err);
                     return next();
                 } else {
-                    ep.emit("insertNewRoom", room);
-                }
-
-            });
-        }
-
-        ep.after("findOldRoom", oldRoomLength, function(oldRoomList) {
-            ep.emit("findOldRoomsDone", oldRoomList);
-        });
-
-        ep.after("insertNewRoom", newRoomLength, function(newRoomList) {
-            ep.emit("insertNewRoomsDone", newRoomList);
-        });
-
-    });
+                    res.json({
+                        result: true,
+                        data: {}
+                    });
 
 
-
-    ep.all("findApartment", "findOldRoomsDone", "insertNewRoomsDone", function(apartment, oldRoomList, newRoomList) {
-
-        for (var i = 0; i < newRoomLength; i++) {
-            apartment.rooms.push(newRoomList[i].id);
-        }
-
-        apartment.update_at = new Date();
-        for (var key in reqData) {
-            apartment[key] = reqData[key];
-        }
-
-        apartment.save(function(err, apartment) {
-            if (err) {
-                console.log(err);
-                return next();
-            } else {
-                ep.emit("saveNewRoomToApartment");
-            }
-        });
-
-        for (var i = 0; i < oldRoomLength; i++) {
-            oldRoomList[i].status = -1;
-            oldRoomList[i].save(function(err, oldRoom) {
-                if (err) {
-                    console.log(err);
-                    return next();
-                } else {
-                    ep.emit("setStatus");
                 }
             });
+          
         }
 
-        ep.after("setStatus", oldRoomLength, function() {
-            ep.emit("oldRoomStatusDone");
-        });
     });
 
-
-    ep.all("oldRoomStatusDone", "saveNewRoomToApartment", function() {
-
-        res.json({
-            result: true,
-            data: {}
-        });
-
-    });
-
-    ep.fail(function(err) {
-        res.json({
-            result: false,
-            err: err
-        });
-    });
 
 
 };
