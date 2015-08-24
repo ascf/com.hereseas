@@ -266,9 +266,7 @@ exports.searchApartment = function(req, res, next) {
         query['beginDate'] = subQuery2;
     }
 
-    if (req.query.share) {
-        query['share'] = req.query.share;
-    }
+
 
     query['status'] = 1;
 
@@ -319,6 +317,12 @@ exports.createApartment = function(req, res, next) {
                 res.json(Results.ERR_DB_ERR);
                 return;
             } else {
+
+                if(user.status!=1){
+                     res.json(Results.ERR_PERMISSION_ERR);
+                     return;    
+                }
+
                 epUser.emit("findUser", user);
             }
         });
@@ -435,12 +439,6 @@ exports.editApartmentById = function(req, res, next) {
             latitude: req.body.latitude
         }
     } else if (req.query.step == 6) {
-        reqData = {
-            address: req.body.address,
-            longitude: req.body.longitude,
-            latitude: req.body.latitude
-        }
-    } else if (req.query.step == 7) {
         reqData = {
             cover: req.body.cover,
             images: req.body.images,

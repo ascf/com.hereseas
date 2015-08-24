@@ -177,3 +177,74 @@ exports.getUser = function (req, res, next) {
         res.json(Results.ERR_URL_ERR);
     }
 };
+
+exports.editUser = function (req, res, next) {
+    
+  var epUser = new EventProxy();
+
+    User.findById(req.user.id,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                epUser.emit("findUser", user);
+            }
+        });
+
+    epUser.all("findUser", function(user) {
+
+        console.log("user", user);
+
+        var reqData = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            schoolId: req.body.schoolId,
+        };
+
+        if (tools.hasNull(reqData)) {
+
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+
+        if(req.body.avatar){
+              reqData.avatar = req.body.avatar;
+        }
+
+         if(req.body.description){
+              reqData.description = req.body.description;
+        }
+
+
+        for (var key in reqData) {
+            user[key] = reqData[key];
+        }
+
+        user['status'] = 1;
+
+        user.save(function(err, user) {
+
+            if (err) {
+                console.log(err);
+                return next();
+            } else {
+
+                res.json({
+                    result: true,
+                    data: user
+                });
+
+
+            }
+        });
+    });
+
+
+};
+
+
+
+
+
+

@@ -28,6 +28,8 @@ module.exports = function (app) {
     app.post('/login', userRoute.login);
     app.post('/user', userRoute.createUser);
 
+    app.put('/user', sign.ensureAuthenticated,userRoute.editUser);
+    
     app.get('/logout', sign.ensureAuthenticated,sign.logout);
 
     app.get('/apartments',apartmentRoute.getApartmentList);
