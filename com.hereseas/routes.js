@@ -1,6 +1,7 @@
 var userRoute = require('./routes/userRoute');
 var apartmentRoute = require('./routes/apartmentRoute');
 var schoolRoute = require('./routes/schoolRoute');
+var carRoute = require('./routes/carRoute');
 
 var sign = require('./routes/sign');
 
@@ -56,6 +57,8 @@ module.exports = function (app) {
    app.post('/m_upload_image', sign.ensureAuthenticated,apartmentRoute.image_upload);
 
 
+    //APIs for cars
+    app.post('/cars', sign.ensureAuthenticated, carRoute.createCar);
 
     app.get('/', function (req, res) {
         res.render('index');
