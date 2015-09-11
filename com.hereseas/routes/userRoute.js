@@ -84,6 +84,10 @@ exports.createUser = function (req, res, next) {
     var user = new User();
     user.email =  req.body.email;
     user.password = req.body.password;
+    var randomstring = require("randomstring");
+    //console.log(randomstring.generate());
+    user.activecode = randomstring.generate();
+    
 
     if(tools.isEmpty(user.email)||tools.isEmpty(user.password)){
         return res.json(Results.ERR_PARAM_ERR);

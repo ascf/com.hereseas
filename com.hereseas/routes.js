@@ -53,12 +53,12 @@ module.exports = function (app) {
     app.get('/schools',schoolRoute.getSchoolList);
     app.post('/school',schoolRoute.addSchool);
     app.put('/school/:id',schoolRoute.updateSchoolById);
-    
-   app.post('/m_upload_image', sign.ensureAuthenticated,apartmentRoute.image_upload);
-
+    app.post('/m_upload_image', sign.ensureAuthenticated,apartmentRoute.image_upload);
 
     //APIs for cars
-    app.post('/cars', sign.ensureAuthenticated, carRoute.createCar);
+    app.post('/car', sign.ensureAuthenticated, carRoute.createCar);
+    app.put('/car/post/:id', sign.ensureAuthenticated, carRoute.postCarById);
+
 
     app.get('/', function (req, res) {
         res.render('index');

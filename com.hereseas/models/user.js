@@ -63,6 +63,9 @@ var UserSchema = new Schema({
     lastLogin: {
         type: Date,
         default: Date.now
+    },
+    activecode: {
+        type: String
     }
 
 
