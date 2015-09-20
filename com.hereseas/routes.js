@@ -57,8 +57,8 @@ module.exports = function (app) {
 
     //APIs for cars
     app.post('/car', sign.ensureAuthenticated, carRoute.createCar);
-    app.put('/car/post/:id', sign.ensureAuthenticated, carRoute.postCarById);
-
+    app.put('/car/:id', sign.ensureAuthenticated, carRoute.editCarById);
+    app.put('/car/post/:id',sign.ensureAuthenticated,carRoute.postCarById);
 
     app.get('/', function (req, res) {
         res.render('index');

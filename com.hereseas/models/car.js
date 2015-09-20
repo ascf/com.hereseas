@@ -32,49 +32,44 @@ var CarSchema = new Schema({
     },
 
 	images: [String],
-
+	/*
 	type: {
 		type: String
-	},
-	
-	rooms: [{
-
-		type: {
+	},*/
+	//车辆信息
+	basicInfo: [{
+		//年份
+		year: {
 			type: String
 		},
-
-		share: {
-			type: Boolean
-		},
-
-		priceType: {
+		//制造商
+		make: {
 			type: String
 		},
-
+		//里程
+		totalMiles: {
+			type: Number
+		},
+		//型号
+		style: {
+			type: String
+		},
+		//车型
+		category: {
+			type: String
+		},
+		//车系
+		model: {
+			type: String
+		},
+		//价格
 		price: {
 			type: Number
 		},
-
-		bathroom: {
-			type: Boolean
-		},
-
-		closet: {
-			type: Boolean
-		},
-
-		walkInCloset: {
-			type: Boolean
-		},
-
-		beginDate: {
+		//购买日期
+		boughtDate: {
 			type: Date
 		},
-
-		endDate: {
-			type: Date
-		},
-
 
 		available: {
 			type: Boolean,
@@ -95,6 +90,37 @@ var CarSchema = new Schema({
 			default: Date.now
 		}
 	}],
+	//颜色
+	color: {
+		type: String
+	},
+	//无事故
+	noAccident: {
+		type: Boolean
+	},
+	//驱动系统
+	driveSystem: {
+		type: String
+	},
+	//传动系统
+	transSystem: {
+		type: String
+	},
+	//排量
+	output: {
+		type: String
+	},
+	//刹车
+	breakType: {
+		type: String
+	},
+	//安全
+	security: {
+		type: String
+	},
+	//舒适
+	comfort: Schema.Types.Mixed,
+/*
 	favorite: [{type:Schema.ObjectId, ref: 'User'}],
 
 	available: {
@@ -105,7 +131,7 @@ var CarSchema = new Schema({
 	fees: Schema.Types.Mixed,
 
 	facilities: Schema.Types.Mixed,
-
+*/
 	address: Schema.Types.Mixed,
 
 	longitude: {

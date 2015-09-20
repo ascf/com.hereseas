@@ -388,7 +388,6 @@ exports.editApartmentById = function(req, res, next) {
         reqData = {
             type: req.body.type,
         }
-
         if (tools.isEmpty(req.body.rooms)) {
             res.json(Results.ERR_PARAM_ERR);
             return;

@@ -53,6 +53,113 @@ exports.createCar = function(req, res, next) {
 	});
 }
 
+exports.editCarById = function(req, res, next) {
+	var carId = req.param('id');
+	var reqData = {};
+	var userId = req.user.id;
+	if (!req.query.step) {
+		res.json(Results.ERR_PARAM_ERR);
+		return;
+	}
+	if (req.query.step == 1) {
+		/* no type of car for now
+		reqData = {
+			type: req.body.type,
+		}
+		*/
+		if (tools.isEmpty(req.body.basicInfo)) {
+			res.json(Results.ERR_PARAM_ERR);
+			return;
+		}
+		var basicInfo = [];
+		for (var i = 0; i < req.body.basicInfo.length; i++) {
+			var basic = {
+				year: req.body.basicInfo[i].year,
+				make: req.body.basicInfo[i].make,
+				totalMiles: req.body.basicInfo[i].totalMiles,
+				style: req.body.basicInfo[i].style,
+				category: req.body.basicInfo[i].category,
+				model: req.body.basicInfo[i].model,
+				price: req.body.basicInfo[i].price,
+				boughtDate: req.body.basicInfo[i].boughtDate,
+				available: req.body.basicInfo[i].available
+			}
+			if (tools.hasNull(basic)) {
+				res.json(Results.ERR_PARAM_ERR);
+				return;
+			}
+			basicInfo.push(basic);
+		}
+		reqData.basicInfo = basicInfo;
+	} else if (req.query.step == 2) {
+		reqData = {
+			color: req.body.color,
+			noAccident: req.body.noAccident,
+			driveSystem: req.body.driveSystem,
+			transSystem: req.body.transSystem,
+			output: req.body.output
+		}
+	} else if (req.query.step == 3) {
+        reqData = {
+            breakType: req.body.breakType,
+            security: req.body.security,
+            comfort: req.body.comfort
+        }
+    } else if (req.query.step == 4) {
+        reqData = {
+            description: req.body.description,
+        }
+    } else if (req.query.step == 5) {
+        reqData = {
+            address: req.body.address,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude
+        }
+    } else if (req.query.step == 6) {
+        reqData = {
+            cover: req.body.cover,
+            images: req.body.images,
+        }
+    } else {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+	if (tools.hasNull(reqData)) {
+		res.json(Results.ERR_PARAM_ERR);
+		return;
+	}
+	Car.findById(carId, function(err, car) {
+		if (err) {
+			console.log(err);
+			res.json(Results.ERR_DB_ERR);
+			return;
+		} else if (!car) {
+			res.json(Results.ERR_NOTFOUND_ERR);
+			return;
+		} else {
+			if (car.userId != userId) {
+				res.json(Results.ERR_PERMISSION_ERR);
+                return;
+			}
+			for (var key in reqData) {
+				car[key] = reqData[key];
+			}
+			car.update_at = new Date();
+			car.save(function(err, apartment) {
+				if (err) {
+					console.log(err);
+					return next();
+				} else {
+					res.json({
+						result: true,
+						data: {}
+					});
+				}
+			});
+		}
+	});
+};
+
 exports.postCarById = function(req, res, next) {
 	var carId = req.param('id');
 	var reqData = {};
@@ -83,23 +190,24 @@ exports.postCarById = function(req, res, next) {
 				var reqData = {
 					userId: car.userId,
                     userFirstName: car.userFirstName,
-                    userLastName: car.userFirstName,
+                    userLastName: car.userLastName,
                     userAvatar: car.userAvatar,
                     schoolId: car.schoolId,
-                    title: car.title,
                     description: car.description,
                     cover: car.cover,
                     images: car.images,
-                    type: car.type,
-                    fees: car.fees,
-                    facilities: car.facilities,
                     address: car.address,
                     longitude: car.longitude,
                     latitude: car.latitude,
-                    rooms: car.rooms,
+                    breakType: car.breakType,
+                    security: car.security,
+                    comfort: car.comfort,
+                    basicInfo: car.basicInfo,
                     status: car.status
+                   
 				};
-				if (tools.isEmpty(reqData.rooms) || tools.isEmpty(reqData.images)) {
+				//console.log(reqData);
+				if (tools.isEmpty(reqData.basicInfo) || tools.isEmpty(reqData.images)) {
 					res.json(Results.ERR_NOTFINISHED_ERR);
 					return;
 				}
@@ -109,7 +217,7 @@ exports.postCarById = function(req, res, next) {
 				}
 				car['status'] = 1;
 				car.update_at = new Date();
-				car.save(function(err, apartment) {
+				car.save(function(err, car) {
 					if (err) {
 						consolo.log(err);
 						return next();
