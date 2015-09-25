@@ -3,13 +3,13 @@ var Schema = mongoose.Schema;
 var utility = require('utility');
 
 var CarSchema = new Schema({
-	userId: {type:Schema.ObjectId, ref: 'User' },
-	
-	userFirstName: {
-		type: String
+	userId: {
+		type: Schema.ObjectId,
+		ref: 'User'
 	},
 
-	userLastName: {
+
+	username: {
 		type: String
 	},
 
@@ -17,19 +17,22 @@ var CarSchema = new Schema({
 		type: String
 	},
 
-	schoolId: {type:Schema.ObjectId, ref: 'School' },
+	schoolId: {
+		type: Schema.ObjectId,
+		ref: 'School'
+	},
 
 	title: {
 		type: String
 	},
-	
+
 	description: {
 		type: String
 	},
 
-    cover: {
-    	type: String
-    },
+	cover: {
+		type: String
+	},
 
 	images: [String],
 	/*
@@ -76,9 +79,9 @@ var CarSchema = new Schema({
 			default: true
 		},
 
-		status:{
+		status: {
 			type: Number,
-			default : 1
+			default: 1
 		},
 
 		create_at: {
@@ -120,18 +123,18 @@ var CarSchema = new Schema({
 	},
 	//舒适
 	comfort: Schema.Types.Mixed,
-/*
-	favorite: [{type:Schema.ObjectId, ref: 'User'}],
+	/*
+		favorite: [{type:Schema.ObjectId, ref: 'User'}],
 
-	available: {
-		type: Boolean,
-		default: true
-	},
+		available: {
+			type: Boolean,
+			default: true
+		},
 
-	fees: Schema.Types.Mixed,
+		fees: Schema.Types.Mixed,
 
-	facilities: Schema.Types.Mixed,
-*/
+		facilities: Schema.Types.Mixed,
+	*/
 	address: Schema.Types.Mixed,
 
 	longitude: {
@@ -141,7 +144,7 @@ var CarSchema = new Schema({
 	latitude: {
 		type: String
 	},
-	
+
 	status: {
 		type: Number,
 		default: 2

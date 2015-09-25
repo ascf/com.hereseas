@@ -6,40 +6,43 @@ var utility = require('utility');
 
 var ApartmentSchema = new Schema({
 
-	userId: {type:Schema.ObjectId, ref: 'User' },
-	
-	userFirstName: {
+	userId: {
+		type: Schema.ObjectId,
+		ref: 'User'
+	},
+
+	username: {
 		type: String
 	},
 
-	userLastName: {
-		type: String
-	},
 
 	userAvatar: {
 		type: String
 	},
 
-	schoolId: {type:Schema.ObjectId, ref: 'School' },
+	schoolId: {
+		type: Schema.ObjectId,
+		ref: 'School'
+	},
 
 	title: {
 		type: String
 	},
-	
+
 	description: {
 		type: String
 	},
 
-    cover: {
-    	type: String
-    },
+	cover: {
+		type: String
+	},
 
 	images: [String],
 
 	type: {
 		type: String
 	},
-	
+
 	rooms: [{
 
 		type: {
@@ -84,9 +87,9 @@ var ApartmentSchema = new Schema({
 			default: true
 		},
 
-		status:{
+		status: {
 			type: Number,
-			default : 1
+			default: 1
 		},
 
 		create_at: {
@@ -100,7 +103,10 @@ var ApartmentSchema = new Schema({
 
 	}],
 
-	favorite: [{type:Schema.ObjectId, ref: 'User'}],
+	favorite: [{
+		type: Schema.ObjectId,
+		ref: 'User'
+	}],
 
 	available: {
 		type: Boolean,
@@ -120,7 +126,7 @@ var ApartmentSchema = new Schema({
 	latitude: {
 		type: String
 	},
-	
+
 	status: {
 		type: Number,
 		default: 2
@@ -156,5 +162,3 @@ ApartmentSchema.virtual('avatar_url').get(function() {
 mongoose.model('Apartment', ApartmentSchema);
 
 exports.Apartment = mongoose.model('Apartment');
-
-

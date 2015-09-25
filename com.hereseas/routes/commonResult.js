@@ -25,12 +25,18 @@ var Results = {
     ERR_REQUIRELOGIN_ERR: {
         result: false,
         err: 'ERR_REQUIRELOGIN_ERR'
-    },ERR_PERMISSION_ERR: {
+    },
+    ERR_PERMISSION_ERR: {
         result: false,
         err: 'ERR_PERMISSION_ERR'
-    },ERR_NOTFINISHED_ERR: {
+    },
+    ERR_NOTFINISHED_ERR: {
         result: false,
         err: 'ERR_NOTFINISHED_ERR'
+    },
+    ERR_DATAFORMAT_ERR: {
+        result: false,
+        err: 'ERR_DATAFORMAT_ERR'
     }
 
 

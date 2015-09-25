@@ -20,11 +20,11 @@ var md5 = require('MD5');
 
 
 
-exports.test = function (req, res, next) {
+exports.test = function(req, res, next) {
     res.json(Results.ERR_DB_ERR);
 };
 
-exports.ensureAuthenticated = function (req, res, next) {
+exports.ensureAuthenticated = function(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
@@ -35,8 +35,8 @@ exports.ensureAuthenticated = function (req, res, next) {
 
 };
 
-exports.login = function (req, res, next){
-    passport.authenticate('local', function (err, user, info) {
+exports.login = function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
         if (err) {
             return next(err);
         }
@@ -47,7 +47,7 @@ exports.login = function (req, res, next){
             });
             //return res.redirect('/m_login_failure?callback='+req.body.callback);
         }
-        req.logIn(user, function (err) {
+        req.logIn(user, function(err) {
             if (err) {
                 return next(err);
             }
@@ -78,18 +78,25 @@ exports.login = function (req, res, next){
  * @param res
  * @param next
  */
-exports.createUser = function (req, res, next) {
+exports.createUser = function(req, res, next) {
 
 
     var user = new User();
-    user.email =  req.body.email;
+    user.email = req.body.email;
+
+    var validator = require("email-validator");
+    if (!validator.validate(user.email)) {
+        return res.json(Results.ERR_DATAFORMAT_ERR);
+    }
+
+
     user.password = req.body.password;
     var randomstring = require("randomstring");
     //console.log(randomstring.generate());
     user.activecode = randomstring.generate();
-    
 
-    if(tools.isEmpty(user.email)||tools.isEmpty(user.password)){
+
+    if (tools.isEmpty(user.email) || tools.isEmpty(user.password)) {
         return res.json(Results.ERR_PARAM_ERR);
     }
 
@@ -97,17 +104,14 @@ exports.createUser = function (req, res, next) {
 
 
     var ep = new EventProxy();
-    ep.all('checkEmail', function () {
+    ep.all('checkEmail', function() {
 
+        user.save(function(err, user) {
 
-        user.save(function (err, user) {
-
-            if (err)
-            {
+            if (err) {
                 console.log(err);
                 return next();
-            }
-            else
+            } else
                 res.json({
                     result: true,
                     id: user.id
@@ -115,7 +119,7 @@ exports.createUser = function (req, res, next) {
         });
     });
 
-    ep.fail(function (err) {
+    ep.fail(function(err) {
         res.json({
             result: false,
             err: err
@@ -124,7 +128,7 @@ exports.createUser = function (req, res, next) {
 
     User.findOne({
         email: user.email
-    }, function (err, item) {
+    }, function(err, item) {
         if (item != null) {
             ep.emit("error", 'ERR_EXISTED_EMAIL ');
         } else {
@@ -133,7 +137,7 @@ exports.createUser = function (req, res, next) {
     });
 };
 
-exports.getUserList = function (req, res, next) {
+exports.getUserList = function(req, res, next) {
 
 
     var query = {};
@@ -144,7 +148,7 @@ exports.getUserList = function (req, res, next) {
     User.find(
         query,
         'firstName lastName email schoolId avatar description tags last_login',
-        function (err, users) {
+        function(err, users) {
             if (err) {
                 res.json(Results.ERR_DB_ERR);
             } else {
@@ -156,25 +160,28 @@ exports.getUserList = function (req, res, next) {
         });
 };
 
-exports.getUser = function (req, res, next) {
+exports.getUser = function(req, res, next) {
     var userId = req.param('id');
     if (userId) {
         User.findById(userId,
-            function (err, user) {
+            function(err, user) {
                 if (err) {
                     res.json(Results.ERR_DB_ERR);
-                }else{
-                    res.json({result:true,data:{
-                        id:user.id,
-                        email:user.email,
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        schoolId: user.schoolId,
-                        avatar: user.avatar_url,
-                        description: user.description,
-                        tags: user.tags,
-                        favorite: user.favorite
-                    }});
+                } else {
+                    res.json({
+                        result: true,
+                        data: {
+                            id: user.id,
+                            email: user.email,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            schoolId: user.schoolId,
+                            avatar: user.avatar_url,
+                            description: user.description,
+                            tags: user.tags,
+                            favorite: user.favorite
+                        }
+                    });
                 }
             });
     } else {
@@ -182,9 +189,9 @@ exports.getUser = function (req, res, next) {
     }
 };
 
-exports.editUser = function (req, res, next) {
-    
-  var epUser = new EventProxy();
+exports.editUser = function(req, res, next) {
+
+    var epUser = new EventProxy();
 
     User.findById(req.user.id,
         function(err, user) {
@@ -212,12 +219,12 @@ exports.editUser = function (req, res, next) {
             return;
         }
 
-        if(req.body.avatar){
-              reqData.avatar = req.body.avatar;
+        if (req.body.avatar) {
+            reqData.avatar = req.body.avatar;
         }
 
-         if(req.body.description){
-              reqData.description = req.body.description;
+        if (req.body.description) {
+            reqData.description = req.body.description;
         }
 
 
@@ -246,9 +253,3 @@ exports.editUser = function (req, res, next) {
 
 
 };
-
-
-
-
-
-

@@ -31,7 +31,7 @@ var multer = require('multer');
 
 require('./common/dateformat.js');
 
-// view engine setup
+// view eƒƒngine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs-mate'));
@@ -54,7 +54,9 @@ app.use(session({
         url: config.db
     }),
     // cookie: { maxAge: 60000,secure: true },
-    cookie: { maxAge : 3600000 }, 
+    cookie: {
+        maxAge: 3600000
+    },
     resave: true,
     saveUninitialized: true,
 }));
@@ -64,25 +66,25 @@ app.use(session({
 // app.use(cors());
 
 var allowCrossDomain = function(req, res, next) {
-  res.header("Access-Control-Allow-Credentials", true);
-//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-// if ('OPTIONS' == req.method) {
-//       res.send(200);
-//     }
-//     else {
-//       next();
-//     }
- 
-}
-// app.use(allowCrossDomain);
+        res.header("Access-Control-Allow-Credentials", true);
+        //   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+        // if ('OPTIONS' == req.method) {
+        //       res.send(200);
+        //     }
+        //     else {
+        //       next();
+        //     }
+
+    }
+    // app.use(allowCrossDomain);
 
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin",  req.headers.origin);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization,X-Prototype-Version,Allow,*, Content-Length");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods",  "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-  next();
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization,X-Prototype-Version,Allow,*, Content-Length");
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+    next();
 });
 
 
@@ -162,9 +164,9 @@ passport.use(new LocalStrategy({
 ));
 
 
-app.use(multer({
-    dest: './public/upload'
-}));
+// app.use(multer({
+//     dest: './public/upload'
+// }));
 
 // routes
 routes(app);

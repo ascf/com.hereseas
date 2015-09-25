@@ -15,16 +15,15 @@ var UserSchema = new Schema({
         type: String
     },
 
-    firstName: {
-        type: String,
-        default: ''
-    },
-    lastName: {
+    username: {
         type: String,
         default: ''
     },
 
-    schoolId: {type:Schema.ObjectId, ref: 'School' },
+    schoolId: {
+        type: Schema.ObjectId,
+        ref: 'School'
+    },
 
     avatar: {
         type: String,
@@ -47,7 +46,7 @@ var UserSchema = new Schema({
         default: false
     },
 
-    status:{
+    status: {
         type: Number,
         default: 2
     },
@@ -71,13 +70,13 @@ var UserSchema = new Schema({
 
 });
 
-UserSchema.virtual('avatar_url').get(function () {
+UserSchema.virtual('avatar_url').get(function() {
     return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
     //return 'avatars/' + this.avatar;
 });
 
 
-UserSchema.virtual('age').get(function () {
+UserSchema.virtual('age').get(function() {
     return 18;
 });
 
