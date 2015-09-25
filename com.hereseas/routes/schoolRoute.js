@@ -21,7 +21,6 @@ exports.getSchoolList = function(req, res, next) {
         'status': 1
     };
 
-
     console.log();
 
     School.find(

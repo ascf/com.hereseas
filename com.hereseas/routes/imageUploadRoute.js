@@ -12,39 +12,7 @@ var AWS = require('aws-sdk');
 
 exports.image_upload = function(req, res, next) {
 
-
-
     console.log(req.files)
-
-    // var keys = [];
-    // for (var key in req.files) {
-    //     if (req.files.hasOwnProperty(key)) {
-    //         keys.push(key);
-    //     }
-    // }
-    // if (keys.length != 1) {
-
-
-    //     res.json({
-    //         result: false
-    //     });
-    //     return;
-    // }
-
-
-    // console.log("rr")
-    //     //console.log(checkfields.indexOf(key[0]))
-
-    // var checkfields = ["apartment", "car", "user"];
-    // if (checkfields.indexOf(keys[0]) < 0) {
-    //     res.json({
-    //         result: false
-    //     });
-    //     return;
-    // }
-
-    // console.log("rr")
-
     var category = req.files[0].fieldname;
     var tmp_path = req.files[0].path;
     var fileName = uuid.v4() + '.jpeg';
@@ -54,6 +22,8 @@ exports.image_upload = function(req, res, next) {
         dst: './convert/' + fileName,
         quality: 100
     }).then(function(file) {
+
+        deleteTempImage(tmp_path);
 
         if (file.type != 'jpeg' || file.path == undefined) {
             res.json({
@@ -65,7 +35,7 @@ exports.image_upload = function(req, res, next) {
         var image = require('fs').createReadStream(file.path);
 
         var params = {
-            Bucket: 'hereseas-images',
+            Bucket: 'hereseas-public-images',
             Key: category + '/' + file.name,
             Body: image,
             ACL: "public-read",
@@ -73,6 +43,9 @@ exports.image_upload = function(req, res, next) {
         };
 
         s3.putObject(params, function(err, data) {
+
+            deleteTempImage(file.path);
+
             if (err) {
                 console.log(err)
                 res.json({
@@ -93,15 +66,20 @@ exports.image_upload = function(req, res, next) {
 };
 
 
-function deleteTempImage(files, callback) {
-
-    for (var key in files) {
-        var tmp_path = file.path;
+function deleteTempImage(path) {
 
 
-    }
+    fs.unlink(path, function(err) {
+  
+        if (err) {
+            console.log(err);
+            throw err;
+        } else {
+          
+        }
 
-    fs.unlink(tmp_path, callback(err));
+    });
+
 
 
 };

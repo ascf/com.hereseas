@@ -11,7 +11,6 @@ var Results = require('./commonResult');
 
 var User = require('../models').User;
 
-
 var fs = require('fs');
 
 var passport = require('passport');

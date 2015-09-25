@@ -61,7 +61,7 @@ module.exports = function(app) {
     app.put('/school/:id', schoolRoute.updateSchoolById);
     app.post('/m_upload_image', sign.ensureAuthenticated, apartmentRoute.image_upload);
 
-    app.post('/test_image', upload.array("apartment", 1), imageUploadRoute.image_upload);
+    app.post('/apartment/m_upload_image',sign.ensureAuthenticated,upload.array("apartment", 1), imageUploadRoute.image_upload);
 
 
 
