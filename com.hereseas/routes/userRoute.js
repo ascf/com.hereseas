@@ -16,8 +16,9 @@ var fs = require('fs');
 var passport = require('passport');
 
 var md5 = require('MD5');
-
 var AWS = require('aws-sdk');
+
+var APIHOST = "http://localhost:8080";
 
 
 
@@ -261,6 +262,18 @@ exports.activeUserSendEmail = function(req, res, next) {
 
     eduEmail = req.body.eduEmail;
 
+    console.log(eduEmail)
+
+    if (!eduChecker(eduEmail)) {
+        res.json({
+            result: false,
+            err: 'ERR_NOT_EDUEMAIL_ERR'
+        });
+        return;
+    }
+
+
+
     User.findOne({
         eduEmail: eduEmail
     }, function(err, user) {
@@ -276,16 +289,28 @@ exports.activeUserSendEmail = function(req, res, next) {
                         res.json(Results.ERR_DB_ERR);
                         return;
                     } else {
-                        user.eduEmailTemp = eduEmail;
 
+                        if (user.verified) {
+                            res.json(Results.ERR_ALREADYVERIFIED_ERR);
+                            return;
+                        }
+
+                        user.eduEmailTemp = eduEmail;
                         user.save(function(err, user) {
 
                             if (err) {
                                 console.log(err);
                                 return next();
                             } else {
-                                var url = '?uid=' + user.id + '&action=activate&code=' + user.activecode + '&eduEmail=' + user.eduEmailTemp;
-                                sendEmail(url)
+                                var url = APIHOST + '/verify' + '?uid=' + user.id + '&action=activate&code=' + user.activecode;
+                                // sendEmail(url)
+
+                                res.json({
+                                    result: true,
+                                });
+
+
+
                             }
                         });
 
@@ -311,6 +336,9 @@ exports.activeUserVerifyLink = function(req, res, next) {
         action: req.query.action,
         code: req.query.code
     };
+
+    console.log(reqData);
+
 
     if (tools.hasNull(reqData)) {
         res.json(Results.ERR_PARAM_ERR);
@@ -373,26 +401,26 @@ exports.activeUserVerifyLink = function(req, res, next) {
 
 
 
-function sendEmail(url) {
+function sendEmail(email, url) {
 
     var ses = new AWS.SES({
         apiVersion: '2010-12-01',
         region: 'us-east-1'
     });
 
-    var email = "no-reply@hereseas.com";
+    var emailHereseas = "no-reply@hereseas.com";
 
-    var emailTO = "hhz1992@gmail.com";
+    var emailTO = email;
 
-    var ses_mail = "From: 'Hereseas.com' <" + email + ">\n";
+    var ses_mail = "From: 'Hereseas.com' <" + emailHereseas + ">\n";
     ses_mail = ses_mail + "To: " + emailTO + "\n";
     ses_mail = ses_mail + "Subject: Hereseas account activation\n";
     ses_mail = ses_mail + "MIME-Version: 1.0\n";
     ses_mail = ses_mail + "Content-Type: multipart/mixed; boundary=\"NextPart\"\n\n";
     ses_mail = ses_mail + "--NextPart\n";
     ses_mail = ses_mail + "Content-Type: text/html; charset=us-ascii\n\n";
-    ses_mail = ses_mail + "Thank you for joining Hereseas community ! Please click the link below to verify that this is your edu email address：";
-    ses_mail = url + "\n\n";
+    ses_mail = ses_mail + "Thank you for joining Hereseas community ! Please click the link below to verify that this is your edu email address：" + url + '\n\n';
+    // ses_mail = url + "\n\n";
 
 
     var params = {
@@ -400,16 +428,29 @@ function sendEmail(url) {
             Data: new Buffer(ses_mail)
         },
         Destinations: [emailTO],
-        Source: "'AWS Tutorial Series' <" + email + ">'"
+        Source: "'Hereseas account activation' <" + emailHereseas + ">'"
     };
 
     ses.sendRawEmail(params, function(err, data) {
         if (err) {
-            res.send(err);
+            throw (err);
+            console.log(err)
+            return false;
         } else {
-            res.send(data);
+            return true;
         }
     });
+
+
+}
+
+function eduChecker(email) {
+
+    var str = email.substring(email.indexOf('@') + 1);
+
+    console.log(str);
+
+    return str.indexOf(".edu") > -1
 
 
 }

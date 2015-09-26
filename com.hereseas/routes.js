@@ -38,8 +38,8 @@ module.exports = function(app) {
 
 
 
-    app.post('/active', userRoute.activeUserSendEmail);
-
+    app.post('/user/active',sign.ensureAuthenticated, userRoute.activeUserSendEmail);
+    app.get('/verify', userRoute.activeUserVerifyLink);
 
 
 
