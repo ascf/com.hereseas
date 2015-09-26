@@ -318,9 +318,9 @@ exports.createApartment = function(req, res, next) {
                 return;
             } else {
 
-                if(user.status!=1){
-                     res.json(Results.ERR_PERMISSION_ERR);
-                     return;    
+                if (user.status != 1 || user.verified != true) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
                 }
 
                 epUser.emit("findUser", user);
@@ -453,42 +453,59 @@ exports.editApartmentById = function(req, res, next) {
     }
 
 
-    Apartment.findById(apartmentId, function(err, apartment) {
-        if (err) {
-            console.log(err);
-            res.json(Results.ERR_DB_ERR);
-            return;
-        } else if (!apartment) {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            return;
-        } else {
-
-            if (apartment.userId != userId) {
+    User.findById(req.user.id,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (user.status != 1 || user.verified != true) {
                 res.json(Results.ERR_PERMISSION_ERR);
                 return;
+            } else {
+
+                Apartment.findById(apartmentId, function(err, apartment) {
+                    if (err) {
+                        console.log(err);
+                        res.json(Results.ERR_DB_ERR);
+                        return;
+                    } else if (!apartment) {
+                        res.json(Results.ERR_NOTFOUND_ERR);
+                        return;
+                    } else {
+
+                        if (apartment.userId != userId) {
+                            res.json(Results.ERR_PERMISSION_ERR);
+                            return;
+                        }
+
+                        for (var key in reqData) {
+                            apartment[key] = reqData[key];
+                        }
+                        apartment.update_at = new Date();
+
+                        apartment.save(function(err, apartment) {
+                            if (err) {
+                                console.log(err);
+                                return next();
+                            } else {
+                                res.json({
+                                    result: true,
+                                    data: {}
+                                });
+
+                            }
+                        });
+
+                    }
+
+                });
+
+
+
             }
+        });
 
-            for (var key in reqData) {
-                apartment[key] = reqData[key];
-            }
-            apartment.update_at = new Date();
 
-            apartment.save(function(err, apartment) {
-                if (err) {
-                    console.log(err);
-                    return next();
-                } else {
-                    res.json({
-                        result: true,
-                        data: {}
-                    });
-
-                }
-            });
-
-        }
-
-    });
 
 };
 
@@ -506,6 +523,11 @@ exports.postApartmentById = function(req, res, next) {
                 res.json(Results.ERR_DB_ERR);
                 return;
             } else {
+                if (user.status != 1 || user.verified != true) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                }
+
                 epUser.emit("findUser", user);
             }
         });
@@ -582,199 +604,6 @@ exports.postApartmentById = function(req, res, next) {
 
 
 
-exports.addApartment = function(req, res, next) {
-
-
-    var epUser = new EventProxy();
-
-    User.findById(req.user.id,
-        function(err, user) {
-            if (err) {
-                res.json(Results.ERR_DB_ERR);
-                return;
-            } else {
-                epUser.emit("findUser", user);
-            }
-        });
-
-    epUser.all("findUser", function(user) {
-
-        console.log("user", user);
-
-        var reqData = {
-            userId: user.id,
-            userFirstName: user.firstName,
-            userLastName: user.lastName,
-            userAvatar: user.avatar,
-            schoolId: req.body.schoolId,
-            title: req.body.title,
-            description: req.body.description,
-            cover: req.body.cover,
-            images: req.body.images,
-            type: req.body.type,
-            fees: req.body.fees,
-            facilities: req.body.facilities,
-            address: req.body.address,
-            longitude: req.body.longitude,
-            latitude: req.body.latitude
-        };
-
-        if (tools.isEmpty(req.body.rooms)) {
-            res.json(Results.ERR_PARAM_ERR);
-            return;
-        }
-
-        var apartment = new Apartment();
-
-        var rooms = [];
-
-        for (var i = 0; i < req.body.rooms.length; i++) {
-
-            var room = {
-                share: req.body.rooms[i].share,
-                type: req.body.rooms[i].type,
-                priceType: req.body.rooms[i].priceType,
-                price: req.body.rooms[i].price,
-                bathroom: req.body.rooms[i].bathroom,
-                closet: req.body.rooms[i].closet,
-                walkInCloset: req.body.rooms[i].walkInCloset,
-                beginDate: req.body.rooms[i].beginDate,
-                endDate: req.body.rooms[i].endDate
-            }
-
-            if (tools.hasNull(room)) {
-                res.json(Results.ERR_PARAM_ERR);
-                return;
-            }
-            rooms.push(room);
-        }
-
-        reqData.rooms = rooms;
-
-        for (var key in reqData) {
-            apartment[key] = reqData[key];
-        }
-
-        if (tools.hasNull(reqData)) {
-
-            res.json(Results.ERR_PARAM_ERR);
-            return;
-        }
-
-        apartment.save(function(err, apartment) {
-
-            if (err) {
-                console.log(err);
-                return next();
-            } else {
-
-                res.json({
-                    result: true,
-                    data: apartment
-                });
-
-
-            }
-        });
-    });
-
-}
-
-
-
-exports.updateApartmentById = function(req, res, next) {
-
-    var apartmentId = req.param('id');
-
-    var reqData = {
-        schoolId: req.body.schoolId,
-        title: req.body.title,
-        description: req.body.description,
-        cover: req.body.cover,
-        images: req.body.images,
-        type: req.body.type,
-        fees: req.body.fees,
-        facilities: req.body.facilities,
-        address: req.body.address,
-        longitude: req.body.longitude,
-        latitude: req.body.latitude
-    };
-
-    if (tools.isEmpty(req.body.rooms)) {
-        res.json(Results.ERR_PARAM_ERR);
-        return;
-    }
-
-    var apartment = new Apartment();
-
-    var rooms = [];
-
-    for (var i = 0; i < req.body.rooms.length; i++) {
-
-        var room = {
-            share: req.body.rooms[i].share,
-            type: req.body.rooms[i].type,
-            price: req.body.rooms[i].price,
-            priceType: req.body.rooms[i].priceType,
-            bathroom: req.body.rooms[i].bathroom,
-            closet: req.body.rooms[i].closet,
-            walkInCloset: req.body.rooms[i].walkInCloset,
-            beginDate: req.body.rooms[i].beginDate,
-            endDate: req.body.rooms[i].endDate
-        }
-
-        if (tools.hasNull(room)) {
-            res.json(Results.ERR_PARAM_ERR);
-            return;
-        }
-        rooms.push(room);
-    }
-
-    if (tools.hasNull(reqData)) {
-        res.json(Results.ERR_PARAM_ERR);
-        return;
-    }
-
-    reqData.rooms = rooms;
-
-
-    Apartment.findById(apartmentId, function(err, apartment) {
-        if (err) {
-            console.log(err);
-            res.json(Results.ERR_DB_ERR);
-            return;
-        } else if (!apartment) {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            return;
-        } else {
-
-            for (var key in reqData) {
-                apartment[key] = reqData[key];
-            }
-
-            apartment.update_at = new Date();
-
-            apartment.save(function(err, apartment) {
-                if (err) {
-                    console.log(err);
-                    return next();
-                } else {
-                    res.json({
-                        result: true,
-                        data: {}
-                    });
-
-
-                }
-            });
-
-        }
-
-    });
-
-
-
-};
 
 exports.image_upload = function(req, res, next) {
     //res.json({result:'hell'});

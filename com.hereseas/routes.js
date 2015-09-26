@@ -30,50 +30,43 @@ module.exports = function(app) {
 
     app.get('/init', sign.initialize);
 
+
+    /*   user */
     app.get('/users', userRoute.getUserList);
     app.get('/user/:id', userRoute.getUser);
-    app.post('/login', userRoute.login);
+ 
     app.post('/user', userRoute.createUser);
-
-
-
+    app.post('/login', userRoute.login);
+    app.get('/logout', sign.ensureAuthenticated, sign.logout);
 
     app.post('/user/active',sign.ensureAuthenticated, userRoute.activeUserSendEmail);
     app.get('/verify', userRoute.activeUserVerifyLink);
 
-
-
     app.put('/user', sign.ensureAuthenticated, userRoute.editUser);
 
-    app.get('/logout', sign.ensureAuthenticated, sign.logout);
+    app.post('/avatar/m_upload_image',sign.ensureAuthenticated,upload.array("avatar", 1), imageUploadRoute.image_upload);
 
+
+    /*  apartment */
     app.get('/apartments', apartmentRoute.getApartmentList);
     app.get('/apartments/three', apartmentRoute.getThreeApartments);
     app.get('/apartment/:id', apartmentRoute.getApartmentById);
-
     app.get('/apartments/draft', sign.ensureAuthenticated, apartmentRoute.getApartmentDraftList);
     app.get('/apartment/draft/:id', apartmentRoute.getApartmentDraftById);
-
     app.get('/apartments/:schoolId/search', apartmentRoute.searchApartment);
 
     app.post('/apartment', sign.ensureAuthenticated, apartmentRoute.createApartment);
+
     app.put('/apartment/:id', sign.ensureAuthenticated, apartmentRoute.editApartmentById);
     app.put('/apartment/post/:id', sign.ensureAuthenticated, apartmentRoute.postApartmentById);
 
-    // app.post('/apartment',sign.ensureAuthenticated,apartmentRoute.addApartment);
-    // app.put('/apartment/:id',sign.ensureAuthenticated,apartmentRoute.updateApartmentById);
+    app.post('/apartment/m_upload_image',sign.ensureAuthenticated,upload.array("apartment", 1), imageUploadRoute.image_upload);
 
+    /*  school */
     app.get('/school/:id', schoolRoute.getSchoolById);
     app.get('/schools', schoolRoute.getSchoolList);
     app.post('/school', schoolRoute.addSchool);
     app.put('/school/:id', schoolRoute.updateSchoolById);
-    app.post('/m_upload_image', sign.ensureAuthenticated, apartmentRoute.image_upload);
-
-    app.post('/apartment/m_upload_image',sign.ensureAuthenticated,upload.array("apartment", 1), imageUploadRoute.image_upload);
-
-
-     app.post('/avatar/m_upload_image',sign.ensureAuthenticated,upload.array("avatar", 1), imageUploadRoute.image_upload);
-
 
 
     //APIs for cars

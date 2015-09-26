@@ -60,7 +60,7 @@ var UserSchema = new Schema({
 
     status: {
         type: Number,
-        default: 2
+        default: 1
     },
 
     createAt: {
