@@ -46,6 +46,18 @@ var UserSchema = new Schema({
         default: false
     },
 
+    eduEmail: {
+        type: String,
+        index: {
+            unique: true,
+            sparse: true
+        }
+    },
+    eduEmailTemp: {
+        type: String
+    },
+
+
     status: {
         type: Number,
         default: 2

@@ -35,6 +35,14 @@ module.exports = function(app) {
     app.post('/login', userRoute.login);
     app.post('/user', userRoute.createUser);
 
+
+
+
+    app.post('/active', userRoute.activeUserSendEmail);
+
+
+
+
     app.put('/user', sign.ensureAuthenticated, userRoute.editUser);
 
     app.get('/logout', sign.ensureAuthenticated, sign.logout);
@@ -62,6 +70,9 @@ module.exports = function(app) {
     app.post('/m_upload_image', sign.ensureAuthenticated, apartmentRoute.image_upload);
 
     app.post('/apartment/m_upload_image',sign.ensureAuthenticated,upload.array("apartment", 1), imageUploadRoute.image_upload);
+
+
+     app.post('/avatar/m_upload_image',sign.ensureAuthenticated,upload.array("avatar", 1), imageUploadRoute.image_upload);
 
 
 

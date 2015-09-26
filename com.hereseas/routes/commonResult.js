@@ -37,6 +37,10 @@ var Results = {
     ERR_DATAFORMAT_ERR: {
         result: false,
         err: 'ERR_DATAFORMAT_ERR'
+    },
+    ERR_ALREADYVERIFIED_ERR: {
+        result: false,
+        err: 'ERR_ALREADYVERIFIED_ERR'
     }
 
 
