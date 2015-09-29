@@ -19,8 +19,16 @@ var fs = require('fs');
 
 exports.getThreeApartments = function(req, res, next) {
 
+    schoolId = req.query.schoolId
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
     var query = {
-        'status': 1
+        'status': 1,
+        'schoolId': schoolId
     };
 
     Apartment.find(
@@ -52,13 +60,21 @@ exports.getThreeApartments = function(req, res, next) {
 
 exports.getApartmentList = function(req, res, next) {
 
+    schoolId = req.query.schoolId
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
     var query = {
-        'status': 1
+        'status': 1,
+        'schoolId': schoolId
     };
 
     Apartment.find(
             query,
-            'id userId userFirstName userLastName userAvatar schoolId title cover type longitude latitude createAt updateAt')
+            'id userId username userAvatar schoolId title cover type longitude latitude createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
@@ -94,7 +110,7 @@ exports.getApartmentById = function(req, res, next) {
 
     Apartment.find(
             query,
-            'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at')
+            'userId username userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at')
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
@@ -128,7 +144,7 @@ exports.getApartmentDraftList = function(req, res, next) {
 
     Apartment.find(
             query,
-            'id userId userFirstName userLastName userAvatar schoolId title cover type longitude latitude createAt updateAt')
+            'id userId username userAvatar schoolId title cover type longitude latitude createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
@@ -163,7 +179,7 @@ exports.getApartmentDraftById = function(req, res, next) {
 
     Apartment.find(
             query,
-            'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at')
+            'userId username userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at')
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
@@ -283,7 +299,7 @@ exports.searchApartment = function(req, res, next) {
 
     Apartment.find(
             aptQuery,
-            'userId userFirstName userLastName userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at', pagination)
+            'userId username userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at', pagination)
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
@@ -333,8 +349,7 @@ exports.createApartment = function(req, res, next) {
 
         var reqData = {
             userId: user.id,
-            userFirstName: user.firstName,
-            userLastName: user.lastName,
+            username: user.username,
             userAvatar: user.avatar,
             schoolId: req.body.schoolId,
         };
@@ -550,8 +565,7 @@ exports.postApartmentById = function(req, res, next) {
 
                 var reqData = {
                     userId: apartment.userId,
-                    userFirstName: apartment.userFirstName,
-                    userLastName: apartment.userFirstName,
+                    username: apartment.username,
                     userAvatar: apartment.userAvatar,
                     schoolId: apartment.schoolId,
                     title: apartment.title,
@@ -601,7 +615,6 @@ exports.postApartmentById = function(req, res, next) {
     });
 
 }
-
 
 
 

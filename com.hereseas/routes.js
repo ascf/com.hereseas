@@ -40,7 +40,7 @@ module.exports = function(app) {
     app.get('/logout', sign.ensureAuthenticated, sign.logout);
 
     app.post('/user/active',sign.ensureAuthenticated, userRoute.activeUserSendEmail);
-    app.get('/verify', userRoute.activeUserVerifyLink);
+    app.post('/verify', userRoute.activeUserVerifyLink);
 
     app.put('/user', sign.ensureAuthenticated, userRoute.editUser);
 
@@ -65,6 +65,9 @@ module.exports = function(app) {
     /*  school */
     app.get('/school/:id', schoolRoute.getSchoolById);
     app.get('/schools', schoolRoute.getSchoolList);
+    app.get('/schools/three', schoolRoute.getSchoolListThree);
+
+    
     app.post('/school', schoolRoute.addSchool);
     app.put('/school/:id', schoolRoute.updateSchoolById);
 
@@ -73,6 +76,10 @@ module.exports = function(app) {
     app.post('/car', sign.ensureAuthenticated, carRoute.createCar);
     app.put('/car/:id', sign.ensureAuthenticated, carRoute.editCarById);
     app.put('/car/post/:id', sign.ensureAuthenticated, carRoute.postCarById);
+
+
+    app.post('/temp/user/:id', userRoute.tempUser);
+
 
     app.get('/', function(req, res) {
         res.render('index');

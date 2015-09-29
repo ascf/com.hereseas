@@ -27,7 +27,7 @@ var UserSchema = new Schema({
 
     avatar: {
         type: String,
-        default: 'default.png'
+        default: 'avatar/default.png'
     },
 
 
@@ -82,10 +82,10 @@ var UserSchema = new Schema({
 
 });
 
-UserSchema.virtual('avatar_url').get(function() {
-    return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
-    //return 'avatars/' + this.avatar;
-});
+// UserSchema.virtual('avatar_url').get(function() {
+//     return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
+//     //return 'avatars/' + this.avatar;
+// });
 
 
 UserSchema.virtual('age').get(function() {
