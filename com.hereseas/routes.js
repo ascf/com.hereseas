@@ -40,7 +40,7 @@ module.exports = function(app) {
     app.get('/logout', sign.ensureAuthenticated, sign.logout);
 
     app.post('/user/active',sign.ensureAuthenticated, userRoute.activeUserSendEmail);
-    app.post('/verify', userRoute.activeUserVerifyLink);
+    app.post('/user/verify', userRoute.activeUserVerifyLink);
 
     app.put('/user', sign.ensureAuthenticated, userRoute.editUser);
 

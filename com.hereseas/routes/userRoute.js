@@ -325,9 +325,8 @@ exports.activeUserVerifyLink = function(req, res, next) {
 
 
     var reqData = {
-        uid: req.query.uid,
-        action: req.query.action,
-        code: req.query.code
+        uid: req.body.uid, 
+        code: req.body.code
     };
 
     console.log(reqData);
