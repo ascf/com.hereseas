@@ -10,6 +10,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 var md5 = require('MD5');
+var cors = require('cors')
 
 
 //var routes = require('./routes/index');
@@ -17,8 +18,6 @@ var md5 = require('MD5');
 
 var config = require('./config');
 var _ = require('lodash');
-
-
 
 
 var app = express();
@@ -32,7 +31,7 @@ var multer = require('multer');
 
 require('./common/dateformat.js');
 
-// view engine setup
+// view eƒƒngine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs-mate'));
@@ -54,10 +53,39 @@ app.use(session({
     store: new MongoStore({
         url: config.db
     }),
+    // cookie: { maxAge: 60000,secure: true },
+    cookie: {
+        maxAge: 3600000
+    },
     resave: true,
     saveUninitialized: true,
 }));
 
+
+
+// app.use(cors());
+
+var allowCrossDomain = function(req, res, next) {
+        res.header("Access-Control-Allow-Credentials", true);
+        //   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+        // if ('OPTIONS' == req.method) {
+        //       res.send(200);
+        //     }
+        //     else {
+        //       next();
+        //     }
+
+    }
+    // app.use(allowCrossDomain);
+
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization,X-Prototype-Version,Allow,*, Content-Length");
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+    next();
+});
 
 
 
@@ -70,21 +98,18 @@ app.use(passport.session());
 
 
 
-
-
-
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
 //   serialize users into and deserialize users out of the session.  Typically,
 //   this will be as simple as storing the user ID when serializing, and finding
 //   the user by ID when deserializing.
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function(user, done) {
     //res.locals.current_user
     done(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
-    User.findById(id, function (err, user) {
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
         done(err, user);
     });
 });
@@ -96,32 +121,41 @@ passport.deserializeUser(function (id, done) {
 //   however, in this example we are using a baked-in set of users.
 var User = require('./models').User;
 passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password',
+        usernameField: 'email',
+        passwordField: 'password',
         badRequestMessage: 'ERR_MISSING_CREDENTIALS'
-},
-    function (email, password, done) {
+    },
+    function(email, password, done) {
         // asynchronous verification, for effect...
-        process.nextTick(function () {
+        process.nextTick(function() {
 
             // Find the user by username.  If there is no user with the given
             // username, or the password is not correct, set the user to `false` to
             // indicate failure and set a flash message.  Otherwise, return the
             // authenticated `user`.
-            User.findOne( {email:email}, function(err, user){
+            User.findOne({
+                email: email
+            }, function(err, user) {
                 if (err) {
+                    console.log(err);
                     return done(err);
                 }
                 if (!user) {
-                    return done(null, false,'ERR_INVALID_USER');
+                    return done(null, false, 'ERR_INVALID_USER');
                 }
                 if (user.password != md5(password)) {
-                    return done(null, false,'ERR_INVALID_PASSWORD');
+                    return done(null, false, 'ERR_INVALID_PASSWORD');
                 }
 
                 user.last_login = new Date();
                 user.save();
 
+                // var auth_token = encrypt(user._id + '\t' + user.pass + '\t' + user.email, config.session_secret);
+
+                // res.cookie(config.auth_cookie_name, auth_token, {
+                //     path: '/',
+                //     maxAge: 1000 * 60 * 60 * 24
+                // }); //cookie 有效期1天
 
                 return done(null, user);
             })
@@ -130,9 +164,9 @@ passport.use(new LocalStrategy({
 ));
 
 
-app.use(multer({
-    dest: './public/upload'
-}));
+// app.use(multer({
+//     dest: './public/upload'
+// }));
 
 // routes
 routes(app);
@@ -141,7 +175,7 @@ routes(app);
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
+    app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -153,7 +187,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
     res.json({
         result: false,
         err: 'ERR_SERVICE_ERROR',
@@ -162,7 +196,7 @@ app.use(function (err, req, res, next) {
 });
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     res.json({
         result: false,
         err: 'ERR_SERVICE_NOT_FOUND'

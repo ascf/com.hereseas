@@ -1,9 +1,13 @@
-hereseasApp.factory('userService', function ($http, $cookies, $cookieStore) {
+hereseasApp.factory('userService', function ($http, $cookies, $state) {
 
 
     var userService = this;
-    var host = "";
-
+//    var host = "http://52.25.82.212:8080";
+    
+    var host = "http://localhost:8080";
+    
+    var toSignup = false;
+    var toLogin = false;
     /**
      *
      * @type {{}}
@@ -15,14 +19,35 @@ hereseasApp.factory('userService', function ($http, $cookies, $cookieStore) {
         this.userInfo = userInfo;
     };
     this.getStoredUser = function(){
-        var userInfoCoookie = $cookieStore.get('hereseas.user');
+        var userInfoCoookie = $cookies.hereseasUser;
         if(userInfoCoookie){
-            console.log("userInfoCoookie",userInfoCoookie);
+            //console.log("userInfoCoookie",userInfoCoookie);
             this.userInfo = JSON.parse(userInfoCoookie);
         }
+        return userInfoCoookie;
     };
-
-    this.getUser = function(){
+    
+    this.getToLogin = function() {
+        return toLogin;
+    };
+    this.changeToLogin = function() {
+        toLogin = !toLogin;
+    };
+    
+    
+    
+    this.getToSignup = function() {
+        return toSignup;
+    };
+    this.changeToSignup = function() {
+        toSignup = !toSignup;
+    };
+    
+    this.logOut = function() {
+        delete $cookies.hereseasUser;
+    };
+    
+    /*this.getUser = function(){
 
         //console.log('cookie:',JSON.parse($cookieStore.get('hereseas.user')));
 
@@ -36,7 +61,7 @@ hereseasApp.factory('userService', function ($http, $cookies, $cookieStore) {
                 }else
                     return {result:false,err:res.err};
             },errResponseHandler);
-    };
+    };*/
 
     this.setUser = function(newUser){
         userService.user = newUser;
@@ -53,10 +78,10 @@ hereseasApp.factory('userService', function ($http, $cookies, $cookieStore) {
 
     }
     this.login = function (data){
-        return $http.post(host+'/login',data)
+        return $http.post(host+'/login', data)
             .then(function(res){
                 if(res.data.result){
-
+                    
                     console.log('login',res);
                     userService.setUserInfo({
                         username : data.username,
@@ -64,13 +89,13 @@ hereseasApp.factory('userService', function ($http, $cookies, $cookieStore) {
                         id : res.data.id
                     });
                     if(data.save && userService.userInfo){
-                        $cookieStore.put('hereseas.user',JSON.stringify(userService.userInfo));
+                        //$cookies.put('hereseas.user',JSON.stringify(userService.userInfo));
+                        $cookies.hereseasUser = JSON.stringify(userService.userInfo);
                     };
                 }
                 return commonResponseHandler(res);
             },errResponseHandler);
     };
-
 
     return userService;
 });

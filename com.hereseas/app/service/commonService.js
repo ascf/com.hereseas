@@ -15,6 +15,7 @@ hereseasApp.factory('alertService', function ($http,$mdDialog) {
 
     return {
         alert: function (msg, $event) {
+            console.log("$event",$event);
             var mAlert = $mdDialog.alert()
                 .parent(angular.element(document.body))
                 .title('This is an alert title')

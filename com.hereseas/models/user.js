@@ -4,12 +4,7 @@ var utility = require('utility');
 
 
 var UserSchema = new Schema({
-    username: {
-        type: String,
-        index: {
-            unique: true
-        }
-    },
+
     email: {
         type: String,
         index: {
@@ -19,33 +14,30 @@ var UserSchema = new Schema({
     password: {
         type: String
     },
-    salt: {
-        type: String
-    },
-    first_name: {
-        type: String
-    },
-    last_name: {
-        type: String
-    },
-    gender: {
+
+    username: {
         type: String,
-        default: 'male'
-    },
-    school: {
-        type: String
-    },
-    avatar: {
-        type: String,
-        default: 'default.png'
-    },
-    birthday: {
-        type: Date
+        default: ''
     },
 
-    role: {
+    schoolId: {
+        type: Schema.ObjectId,
+        ref: 'School'
+    },
+
+    enrollYear:{
         type: String
     },
+    enrollSeason:{
+        type: String
+    },
+
+    avatar: {
+        type: String,
+        default: 'avatar/default.png'
+    },
+
+    address: Schema.Types.Mixed,
 
     description: {
         type: String
@@ -55,44 +47,61 @@ var UserSchema = new Schema({
 
     favorite: [Schema.ObjectId],
 
-    last_contact: [Schema.Types.Mixed],
-
-    last_location: Schema.Types.Mixed,
+    lastLocation: [Schema.Types.Mixed],
 
     verified: {
         type: Boolean,
         default: false
     },
 
-    create_at: {
+    eduEmail: {
+        type: String,
+        index: {
+            unique: true,
+            sparse: true
+        }
+    },
+    eduEmailTemp: {
+        type: String
+    },
+
+
+    status: {
+        type: Number,
+        default: 1
+    },
+
+    createAt: {
         type: Date,
         default: Date.now
     },
-    update_at: {
+    updateAt: {
         type: Date,
         default: Date.now
     },
-    last_login: {
+    lastLogin: {
         type: Date,
         default: Date.now
+    },
+    activecode: {
+        type: String
     }
 
 
 });
 
-UserSchema.virtual('avatar_url').get(function () {
-    return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
-    //return 'avatars/' + this.avatar;
-});
+// UserSchema.virtual('avatar_url').get(function() {
+//     return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
+//     //return 'avatars/' + this.avatar;
+// });
 
 
-UserSchema.virtual('age').get(function () {
+UserSchema.virtual('age').get(function() {
     return 18;
 });
 
 
 UserSchema.index({
-    username: 1,
     email: 1
 }, {
     unique: true
