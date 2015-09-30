@@ -170,7 +170,7 @@ exports.getUser = function(req, res, next) {
                         result: true,
                         data: {
                             id: user.id,
-                            email: user.email,
+                            //email: user.email,
                             username: user.username,
                             schoolId: user.schoolId,
                             avatar: user.avatar,
@@ -197,7 +197,20 @@ exports.getSelfInfo = function(req, res, next) {
                 } else {
                     res.json({
                         result: true,
-                        data: user
+                        data: {
+                            id: user.id,
+                            email: user.email,
+                            username: user.username,
+                            schoolId: user.schoolId,
+                            avatar: user.avatar,
+                            description: user.description,
+                            tags: user.tags,
+                            favorite: user.favorite,
+                            verified: user.verified,
+                            lastLocation: user.lastLocation
+
+
+                        }
                     });
                 }
             });

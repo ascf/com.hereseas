@@ -70,12 +70,12 @@ function deleteTempImage(path) {
 
 
     fs.unlink(path, function(err) {
-  
+
         if (err) {
             console.log(err);
             throw err;
         } else {
-          
+
         }
 
     });
