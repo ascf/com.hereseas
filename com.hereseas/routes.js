@@ -34,7 +34,8 @@ module.exports = function(app) {
     /*   user */
     app.get('/users', userRoute.getUserList);
     app.get('/user/:id', userRoute.getUser);
- 
+    app.get('/userself', sign.ensureAuthenticated, userRoute.getSelfInfo);
+
     app.post('/user', userRoute.createUser);
     app.post('/login', userRoute.login);
     app.get('/logout', sign.ensureAuthenticated, sign.logout);

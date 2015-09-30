@@ -25,11 +25,19 @@ var UserSchema = new Schema({
         ref: 'School'
     },
 
+    enrollYear:{
+        type: String
+    },
+    enrollSeason:{
+        type: String
+    },
+
     avatar: {
         type: String,
         default: 'avatar/default.png'
     },
 
+    address: Schema.Types.Mixed,
 
     description: {
         type: String

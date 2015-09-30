@@ -145,7 +145,7 @@ exports.getUserList = function(req, res, next) {
 
     User.find(
         query,
-        'firstName lastName email schoolId avatar description tags last_login',
+        'username email schoolId avatar description tags last_login',
         function(err, users) {
             if (err) {
                 res.json(Results.ERR_DB_ERR);
@@ -171,8 +171,7 @@ exports.getUser = function(req, res, next) {
                         data: {
                             id: user.id,
                             email: user.email,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
+                            username: user.username,
                             schoolId: user.schoolId,
                             avatar: user.avatar,
                             description: user.description,
@@ -187,9 +186,64 @@ exports.getUser = function(req, res, next) {
     }
 };
 
+
+exports.getSelfInfo = function(req, res, next) {
+    var userId = req.user.id;
+    if (userId) {
+        User.findById(userId,
+            function(err, user) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                } else {
+                    res.json({
+                        result: true,
+                        data: user
+                    });
+                }
+            });
+    } else {
+        res.json(Results.ERR_URL_ERR);
+    }
+};
+
+
+
 exports.editUser = function(req, res, next) {
 
     var epUser = new EventProxy();
+
+
+    if (!req.query.step) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    if (req.query.step == 1) {
+        reqData = {
+            username: req.body.username,
+            schoolId: req.body.schoolId,
+            enrollYear: req.body.enrollYear,
+            enrollSeason: req.body.enrollSeason
+        }
+    } else if (req.query.step == 2) {
+        reqData = {
+            address: req.body.address
+        }
+    } else if (req.query.step == 3) {
+        reqData = {
+            avatar: req.body.avatar
+        }
+    } else {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    if (tools.hasNull(reqData)) {
+
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
 
     User.findById(req.user.id,
         function(err, user) {
@@ -203,33 +257,9 @@ exports.editUser = function(req, res, next) {
 
     epUser.all("findUser", function(user) {
 
-        console.log("user", user);
-
-        var reqData = {
-            userName: req.body.userName,
-            schoolId: req.body.schoolId
-        };
-
-        if (tools.hasNull(reqData)) {
-
-            res.json(Results.ERR_PARAM_ERR);
-            return;
-        }
-
-        if (req.body.avatar) {
-            reqData.avatar = req.body.avatar;
-        }
-
-        if (req.body.description) {
-            reqData.description = req.body.description;
-        }
-
-
         for (var key in reqData) {
             user[key] = reqData[key];
         }
-
-        user['status'] = 1;
 
         user.save(function(err, user) {
 
@@ -240,7 +270,19 @@ exports.editUser = function(req, res, next) {
 
                 res.json({
                     result: true,
-                    data: user
+                    data: {
+                        id: user.id,
+                        email: user.email,
+                        username: user.username,
+                        schoolId: user.schoolId,
+                        avatar: user.avatar,
+                        description: user.description,
+                        tags: user.tags,
+                        favorite: user.favorite,
+                        enrollYear: user.enrollYear,
+                        enrollSeason: user.enrollSeason,
+                        address: user.address
+                    }
                 });
 
 
@@ -312,8 +354,6 @@ exports.activeUserSendEmail = function(req, res, next) {
                     }
                 });
 
-
-
         }
     });
 
@@ -325,7 +365,7 @@ exports.activeUserVerifyLink = function(req, res, next) {
 
 
     var reqData = {
-        uid: req.body.uid, 
+        uid: req.body.uid,
         code: req.body.code
     };
 
@@ -484,8 +524,6 @@ exports.tempUser = function(req, res, next) {
 
 
 };
-
-
 
 
 
