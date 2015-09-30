@@ -78,6 +78,10 @@ module.exports = function(app) {
     app.put('/car/post/:id', sign.ensureAuthenticated, carRoute.postCarById);
 
 
+
+    //admin calls
+
+    app.get('/admin/user/:id', userRoute.getUserAllInfo);
     app.post('/temp/user/:id', userRoute.tempUser);
 
 
