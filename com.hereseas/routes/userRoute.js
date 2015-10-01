@@ -18,7 +18,7 @@ var passport = require('passport');
 var md5 = require('MD5');
 var AWS = require('aws-sdk');
 
-var APIHOST = "http://localhost:8080";
+var APIHOST = "http://dev.hereseas.com/#";
 
 
 
@@ -57,12 +57,8 @@ exports.login = function(req, res, next) {
             var user = {};
             user.id = req.user._id;
             user.username = req.user.username;
-            user.firstname = req.user.firstname;
-            user.lastname = req.user.lastname;
             user.gender = req.user.gender;
             user.avatar = req.user.avatar;
-
-
 
             return res.json({
                 id: user.id,
@@ -91,14 +87,14 @@ exports.createUser = function(req, res, next) {
         return res.json(Results.ERR_DATAFORMAT_ERR);
     }
 
-
+    user.username = req.body.username;
     user.password = req.body.password;
+
     var randomstring = require("randomstring");
-    //console.log(randomstring.generate());
     user.activecode = randomstring.generate();
 
 
-    if (tools.isEmpty(user.email) || tools.isEmpty(user.password)) {
+    if (tools.isEmpty(user.email) || tools.isEmpty(user.password) || tools.isEmpty(user.username)) {
         return res.json(Results.ERR_PARAM_ERR);
     }
 
@@ -149,7 +145,7 @@ exports.getUserList = function(req, res, next) {
 
     User.find(
         query,
-        'firstName lastName email schoolId avatar description tags last_login',
+        'username email schoolId avatar description tags last_login',
         function(err, users) {
             if (err) {
                 res.json(Results.ERR_DB_ERR);
@@ -174,11 +170,10 @@ exports.getUser = function(req, res, next) {
                         result: true,
                         data: {
                             id: user.id,
-                            email: user.email,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
+                            //email: user.email,
+                            username: user.username,
                             schoolId: user.schoolId,
-                            avatar: user.avatar_url,
+                            avatar: user.avatar,
                             description: user.description,
                             tags: user.tags,
                             favorite: user.favorite
@@ -191,9 +186,77 @@ exports.getUser = function(req, res, next) {
     }
 };
 
+
+exports.getSelfInfo = function(req, res, next) {
+    var userId = req.user.id;
+    if (userId) {
+        User.findById(userId,
+            function(err, user) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                } else {
+                    res.json({
+                        result: true,
+                        data: {
+                            id: user.id,
+                            email: user.email,
+                            username: user.username,
+                            schoolId: user.schoolId,
+                            avatar: user.avatar,
+                            description: user.description,
+                            tags: user.tags,
+                            favorite: user.favorite,
+                            verified: user.verified,
+                            lastLocation: user.lastLocation
+
+
+                        }
+                    });
+                }
+            });
+    } else {
+        res.json(Results.ERR_URL_ERR);
+    }
+};
+
+
+
 exports.editUser = function(req, res, next) {
 
     var epUser = new EventProxy();
+
+
+    if (!req.query.step) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    if (req.query.step == 1) {
+        reqData = {
+            username: req.body.username,
+            schoolId: req.body.schoolId,
+            enrollYear: req.body.enrollYear,
+            enrollSeason: req.body.enrollSeason
+        }
+    } else if (req.query.step == 2) {
+        reqData = {
+            address: req.body.address
+        }
+    } else if (req.query.step == 3) {
+        reqData = {
+            avatar: req.body.avatar
+        }
+    } else {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    if (tools.hasNull(reqData)) {
+
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
 
     User.findById(req.user.id,
         function(err, user) {
@@ -207,34 +270,9 @@ exports.editUser = function(req, res, next) {
 
     epUser.all("findUser", function(user) {
 
-        console.log("user", user);
-
-        var reqData = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            schoolId: req.body.schoolId,
-        };
-
-        if (tools.hasNull(reqData)) {
-
-            res.json(Results.ERR_PARAM_ERR);
-            return;
-        }
-
-        if (req.body.avatar) {
-            reqData.avatar = req.body.avatar;
-        }
-
-        if (req.body.description) {
-            reqData.description = req.body.description;
-        }
-
-
         for (var key in reqData) {
             user[key] = reqData[key];
         }
-
-        user['status'] = 1;
 
         user.save(function(err, user) {
 
@@ -245,7 +283,19 @@ exports.editUser = function(req, res, next) {
 
                 res.json({
                     result: true,
-                    data: user
+                    data: {
+                        id: user.id,
+                        email: user.email,
+                        username: user.username,
+                        schoolId: user.schoolId,
+                        avatar: user.avatar,
+                        description: user.description,
+                        tags: user.tags,
+                        favorite: user.favorite,
+                        enrollYear: user.enrollYear,
+                        enrollSeason: user.enrollSeason,
+                        address: user.address
+                    }
                 });
 
 
@@ -272,7 +322,7 @@ exports.activeUserSendEmail = function(req, res, next) {
         return;
     }
 
-
+    console.log(eduEmail)
 
     User.findOne({
         eduEmail: eduEmail
@@ -303,7 +353,7 @@ exports.activeUserSendEmail = function(req, res, next) {
                                 return next();
                             } else {
                                 var url = APIHOST + '/verify' + '?uid=' + user.id + '&action=activate&code=' + user.activecode;
-                                // sendEmail(url)
+                                sendEmail(eduEmail, url)
 
                                 res.json({
                                     result: true,
@@ -314,12 +364,8 @@ exports.activeUserSendEmail = function(req, res, next) {
                             }
                         });
 
-
-
                     }
                 });
-
-
 
         }
     });
@@ -332,9 +378,8 @@ exports.activeUserVerifyLink = function(req, res, next) {
 
 
     var reqData = {
-        uid: req.query.uid,
-        action: req.query.action,
-        code: req.query.code
+        uid: req.body.uid,
+        code: req.body.code
     };
 
     console.log(reqData);
@@ -382,17 +427,9 @@ exports.activeUserVerifyLink = function(req, res, next) {
                                 id: user.id
                             });
                     });
-
-
                 }
-
-
             });
-
-
         }
-
-
     });
 
 
@@ -431,6 +468,7 @@ function sendEmail(email, url) {
         Source: "'Hereseas account activation' <" + emailHereseas + ">'"
     };
 
+
     ses.sendRawEmail(params, function(err, data) {
         if (err) {
             throw (err);
@@ -454,3 +492,69 @@ function eduChecker(email) {
 
 
 }
+
+
+
+exports.tempUser = function(req, res, next) {
+
+
+    var userId = req.param('id');
+
+    if (userId) {
+        User.findById(userId,
+            function(err, user) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                } else {
+                    user.verified = true;
+
+                    user['status'] = 1;
+
+                    user.save(function(err, user) {
+
+                        if (err) {
+                            console.log(err);
+                            return next();
+                        } else {
+
+                            res.json({
+                                result: true,
+                                data: user
+                            });
+
+
+                        }
+                    });
+
+
+
+                }
+            });
+    } else {
+        res.json(Results.ERR_URL_ERR);
+    }
+
+
+
+};
+
+
+
+exports.getUserAllInfo = function(req, res, next) {
+    var userId = req.param('id');
+    if (userId) {
+        User.findById(userId,
+            function(err, user) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                } else {
+                    res.json({
+                        result: true,
+                        data: user
+                    });
+                }
+            });
+    } else {
+        res.json(Results.ERR_URL_ERR);
+    }
+};

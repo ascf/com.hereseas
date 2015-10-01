@@ -41,6 +41,35 @@ exports.getSchoolList = function(req, res, next) {
 
 };
 
+exports.getSchoolListThree = function(req, res, next) {
+
+    var query = {
+        'status': 1
+    };
+
+    console.log();
+
+    School.find(
+        query,
+        'id name avatar').
+    limit(3).exec(
+        function(err, schools) {
+            if (err) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: schools
+                });
+                return;
+            }
+        });
+
+};
+
+
+
 exports.getSchoolById = function(req, res, next) {
 
 

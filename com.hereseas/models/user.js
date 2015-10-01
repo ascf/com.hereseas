@@ -25,11 +25,19 @@ var UserSchema = new Schema({
         ref: 'School'
     },
 
-    avatar: {
-        type: String,
-        default: 'default.png'
+    enrollYear:{
+        type: String
+    },
+    enrollSeason:{
+        type: String
     },
 
+    avatar: {
+        type: String,
+        default: 'avatar/default.png'
+    },
+
+    address: Schema.Types.Mixed,
 
     description: {
         type: String
@@ -82,10 +90,10 @@ var UserSchema = new Schema({
 
 });
 
-UserSchema.virtual('avatar_url').get(function() {
-    return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
-    //return 'avatars/' + this.avatar;
-});
+// UserSchema.virtual('avatar_url').get(function() {
+//     return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
+//     //return 'avatars/' + this.avatar;
+// });
 
 
 UserSchema.virtual('age').get(function() {
