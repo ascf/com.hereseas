@@ -3,6 +3,7 @@ var apartmentRoute = require('./routes/apartmentRoute');
 var schoolRoute = require('./routes/schoolRoute');
 var carRoute = require('./routes/carRoute');
 var imageUploadRoute = require('./routes/imageUploadRoute');
+var adminRoute = require('./routes/adminRoute');
 
 
 var multer = require('multer');
@@ -73,6 +74,10 @@ module.exports = function(app) {
     app.post('/car', sign.ensureAuthenticated, carRoute.createCar);
     app.put('/car/:id', sign.ensureAuthenticated, carRoute.editCarById);
     app.put('/car/post/:id', sign.ensureAuthenticated, carRoute.postCarById);
+
+    //admin
+    app.post('/admin', adminRoute.createAdmin);
+    app.get('/admin/test', sign.ensureAuthenticated, adminRoute.test);
 
     app.get('/', function(req, res) {
         res.render('index');
