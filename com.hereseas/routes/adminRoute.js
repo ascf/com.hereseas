@@ -11,6 +11,7 @@ var flash = require('connect-flash'),
     LocalStrategy = require('passport-local').Strategy;
 var passport = require('passport');
 var Apartment = require('../models').Apartment;
+var School = require('../models').School;
 
 exports.createAdmin = function(req, res, next) {
 	var admin = new Admin();
@@ -118,6 +119,35 @@ exports.getApartmentList = function(req, res, next) {
     });
 };
 
+exports.getSchoolList = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var query = {
+            'status': 1
+        };
+        School.find(query, 'id name avatar', function(err, schools) {
+            if (err) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: schools
+                });
+                return;
+            }
+        });
+    });
+};
 
 function isAdmin(userEmail, callback) {
     //check if admins collections contains userEmail
