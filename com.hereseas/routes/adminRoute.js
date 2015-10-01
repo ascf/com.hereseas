@@ -149,6 +149,52 @@ exports.getSchoolList = function(req, res, next) {
     });
 };
 
+exports.addSchool = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var reqData = {
+            name: req.body.name,
+            description: req.body.description,
+            avatar: req.body.avatar,
+            image: req.body.image,
+            address: req.body.address,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude
+        };
+        if (tools.hasNull(reqData)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        var school = new School();
+        for (var key in reqData) {
+            school[key] = reqData[key];
+        }
+        school.save(function(err, schoolSave) {
+            if (err) {
+                console.log(err);
+                return next();
+            } else {
+                res.json({
+                    result: true,
+                    data: {
+                        'id': schoolSave.id
+                    }
+                });
+            }
+        });
+    });
+};
+
+
 function isAdmin(userEmail, callback) {
     //check if admins collections contains userEmail
     var result = null;
