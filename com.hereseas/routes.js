@@ -82,7 +82,7 @@ module.exports = function(app) {
     //admin
     app.post('/admin', adminRoute.createAdmin);
     app.get('/admin/test', sign.ensureAuthenticated, adminRoute.test);
-
+    app.get('/admin/apartments', sign.ensureAuthenticated, adminRoute.getApartmentList);
 
     //admin calls
 
