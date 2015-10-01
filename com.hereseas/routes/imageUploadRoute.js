@@ -10,58 +10,86 @@ var uuid = require('node-uuid');
 var easyimg = require('easyimage');
 var AWS = require('aws-sdk');
 
+var photoType = ["bmp", "jpg", "jpeg", "png", "psd"]
+
+
 exports.image_upload = function(req, res, next) {
 
-    console.log(req.files)
+    //  console.log(req.files)
     var category = req.files[0].fieldname;
     var tmp_path = req.files[0].path;
     var fileName = uuid.v4() + '.jpeg';
 
-    easyimg.convert({
-        src: tmp_path,
-        dst: './convert/' + fileName,
-        quality: 100
-    }).then(function(file) {
 
-        deleteTempImage(tmp_path);
+    easyimg.info(tmp_path).then(
 
-        if (file.type != 'jpeg' || file.path == undefined) {
-            res.json({
-                result: false
-            });
-        }
-        var s3 = new AWS.S3();
+        // function(err) {
+        //     console.log(err);
 
-        var image = require('fs').createReadStream(file.path);
+        //     res.json({
+        //         result: false,
+        //         err: err
+        //     });
 
-        var params = {
-            Bucket: 'hereseas-public-images',
-            Key: category + '/' + file.name,
-            Body: image,
-            ACL: "public-read",
-            ContentType: "image/jpeg"
-        };
+        // },
+        function(file) {
 
-        s3.putObject(params, function(err, data) {
-
-            deleteTempImage(file.path);
-
-            if (err) {
-                console.log(err)
+            if (photoType.indexOf(file.type.toLowerCase()) <= -1) {
+                deleteTempImage(tmp_path);
                 res.json({
-                    result: false
+                    result: false,
+                    err: "ERR_TYPE_ERR"
                 });
 
             } else {
 
-                res.json({
-                    data: category + '/' + file.name,
-                    result: true
+                easyimg.convert({
+                    src: tmp_path,
+                    dst: './convert/' + fileName,
+                    quality: 100
+                }).then(function(file) {
+
+                    deleteTempImage(tmp_path);
+
+                    if (file.type != 'jpeg' || file.path == undefined) {
+                        res.json({
+                            result: false
+                        });
+                    }
+                    var s3 = new AWS.S3();
+
+                    var image = require('fs').createReadStream(file.path);
+
+                    var params = {
+                        Bucket: 'hereseas-public-images',
+                        Key: category + '/' + file.name,
+                        Body: image,
+                        ACL: "public-read",
+                        ContentType: "image/jpeg"
+                    };
+
+                    s3.putObject(params, function(err, data) {
+
+                        deleteTempImage(file.path);
+
+                        if (err) {
+                            console.log(err)
+                            res.json({
+                                result: false
+                            });
+
+                        } else {
+
+                            res.json({
+                                data: category + '/' + file.name,
+                                result: true
+                            });
+                        }
+                    });
                 });
             }
-        });
-    });
-
+        }
+    );
 
 };
 
