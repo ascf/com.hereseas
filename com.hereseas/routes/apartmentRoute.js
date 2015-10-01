@@ -14,7 +14,7 @@ var Room = require('../models').Room;
 var User = require('../models').User;
 
 var fs = require('fs');
-
+var adminRoute = require('./adminRoute');
 
 
 exports.getThreeApartments = function(req, res, next) {
@@ -670,5 +670,52 @@ function saveImage(file, path, newName, callback) {
     fs.rename(tmp_path, target_path, function(err) {
         // 删除临时文件夹文件, 
         fs.unlink(tmp_path, callback(err));
+    });
+};
+
+
+
+exports.adminGetApartmentList = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var schoolId = req.query.schoolId;
+        if (!schoolId) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        var query = {
+            'status': 1,
+            'schoolId': schoolId
+        };
+        Apartment.find(
+            query,
+            'id userId username userAvatar schoolId title cover type longitude latitude createAt updateAt')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, apartments) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else if (!apartments.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: apartments
+                });
+                return;
+            }
+        })
     });
 };

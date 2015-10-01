@@ -12,7 +12,7 @@ var Results = require('./commonResult');
 var School = require('../models').School;
 
 var fs = require('fs');
-
+var adminRoute = require('./adminRoute');
 
 
 exports.getSchoolList = function(req, res, next) {
@@ -240,4 +240,80 @@ exports.updateSchoolById = function(req, res, next) {
     });
 
 
+};
+
+//admin functions
+exports.adminGetSchoolList = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var query = {
+            'status': 1
+        };
+        School.find(query, 'id name avatar', function(err, schools) {
+            if (err) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: schools
+                });
+                return;
+            }
+        });
+    });
+};
+
+exports.adminAddSchool = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var reqData = {
+            name: req.body.name,
+            description: req.body.description,
+            avatar: req.body.avatar,
+            image: req.body.image,
+            address: req.body.address,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude
+        };
+        if (tools.hasNull(reqData)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        var school = new School();
+        for (var key in reqData) {
+            school[key] = reqData[key];
+        }
+        school.save(function(err, schoolSave) {
+            if (err) {
+                console.log(err);
+                return next();
+            } else {
+                res.json({
+                    result: true,
+                    data: {
+                        'id': schoolSave.id
+                    }
+                });
+            }
+        });
+    });
 };

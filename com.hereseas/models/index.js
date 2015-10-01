@@ -14,7 +14,7 @@ require('./apartment.js');
 require('./room.js');
 require('./school.js');
 require('./car.js');
-
+require('./admin.js');
 
 
 exports.User = mongoose.model('User');
@@ -22,3 +22,4 @@ exports.Apartment = mongoose.model('Apartment');
 exports.Room = mongoose.model('Room');
 exports.School = mongoose.model('School');
 exports.Car = mongoose.model('Car');
+exports.Admin = mongoose.model('Admin');

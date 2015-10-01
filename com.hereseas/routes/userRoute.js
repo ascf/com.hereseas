@@ -21,7 +21,6 @@ var AWS = require('aws-sdk');
 var APIHOST = "http://dev.hereseas.com/#";
 
 
-
 exports.test = function(req, res, next) {
     res.json(Results.ERR_DB_ERR);
 };
