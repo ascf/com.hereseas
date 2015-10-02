@@ -363,7 +363,6 @@ exports.adminEditSchoolStatus = function(req, res, next) {
         var reqData = {
             status: req.body.status
         };
-        console.log(reqData)
         if (tools.isEmpty(schoolId)) {
             res.json(Results.ERR_PARAM_ERR);
             return;
@@ -390,7 +389,6 @@ exports.adminEditSchoolStatus = function(req, res, next) {
                         console.log(err);
                         return next();
                     } else {
-                        console.log(schoolSave)
                         res.json({
                             result: true,
                             data: {

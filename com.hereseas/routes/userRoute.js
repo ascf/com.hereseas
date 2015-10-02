@@ -597,3 +597,64 @@ exports.adminGetUserAllInfo = function(req, res, next) {
         }
     });
 };
+
+exports.adminEditUserStatus = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var userId = req.param('id');
+        var reqData = {
+            status: req.body.status
+        };
+        if (tools.isEmpty(userId)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        if (tools.hasNull(reqData)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        var query = {
+            id: userId
+        };
+        User.findById(userId, function(err, user) {
+            if (err) {
+                console.log(err);
+                return next();
+            } else if (!user) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+            } else {
+                for (var key in reqData) {
+                    user[key] = reqData[key];
+                }
+                user.save(function(err, userSave) {
+                    if (err) {
+                        console.log(err);
+                        return next();
+                    } else {
+                        console.log(userSave)
+                        res.json({
+                            result: true,
+                            data: {
+                                'id': userSave.id,
+                                'username': userSave.username,
+                                'email': userSave.email,
+                                'status': userSave.status
+                            }
+                        });
+                    }
+                });
+
+            }
+
+        });
+    });
+};
