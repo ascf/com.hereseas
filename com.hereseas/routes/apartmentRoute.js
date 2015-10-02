@@ -375,11 +375,11 @@ function calculatePrice(rooms) {
     }
     return price;
 }
-
+//type needs to be checked. There are total three types: 卧室、客厅、其它
 function getType(rooms) {
     var filter = [false, false, false];
     for (var i = 0; i < rooms.length; i++) {
-        if (rooms[i].type === "小卧")
+        if (rooms[i].type === "卧室")
             filter[0] = true;
         if (rooms[i].type === "客厅")
             filter[1] = true; 
@@ -387,7 +387,7 @@ function getType(rooms) {
             filter[2] = true;
     }
     var type = []
-    if (filter[0]) type.push("小卧");
+    if (filter[0]) type.push("卧室");
     if (filter[1]) type.push("客厅");
     if (filter[2]) type.push("其它");
     return type;
