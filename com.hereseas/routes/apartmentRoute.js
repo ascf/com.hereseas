@@ -744,3 +744,62 @@ exports.adminGetApartmentAllInfo = function(req, res, next) {
         }
     });
 };
+
+exports.adminEditApartmentStatus = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var apartmentId = req.param('id');
+        var reqData = {
+            status: req.body.status
+        };
+        if (tools.isEmpty(apartmentId)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        if (tools.hasNull(reqData)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        var query = {
+            id: apartmentId
+        };
+        Apartment.findById(apartmentId, function(err, apartment) {
+            if (err) {
+                console.log(err);
+                return next();
+            } else if (!apartment) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+            } else {
+                for (var key in reqData) {
+                    apartment[key] = reqData[key];
+                }
+                apartment.save(function(err, apartmentSave) {
+                    if (err) {
+                        console.log(err);
+                        return next();
+                    } else {
+                        res.json({
+                            result: true,
+                            data: {
+                                'id': apartmentSave.id,
+                                'username': apartmentSave.username,
+                                'status': apartmentSave.status
+                            }
+                        });
+                    }
+                });
+
+            }
+
+        });
+    });
+};
