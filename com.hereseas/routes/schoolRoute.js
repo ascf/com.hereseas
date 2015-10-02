@@ -346,3 +346,64 @@ exports.adminGetSchoolAllInfo = function(req, res, next) {
         }
     });
 };
+
+exports.adminEditSchoolStatus = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var schoolId = req.param('id');
+        var reqData = {
+            status: req.body.status
+        };
+        console.log(reqData)
+        if (tools.isEmpty(schoolId)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        if (tools.hasNull(reqData)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        var query = {
+            id: schoolId
+        };
+        School.findById(schoolId, function(err, school) {
+            if (err) {
+                console.log(err);
+                return next();
+            } else if (!school) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+            } else {
+                for (var key in reqData) {
+                    school[key] = reqData[key];
+                }
+                school.save(function(err, schoolSave) {
+                    if (err) {
+                        console.log(err);
+                        return next();
+                    } else {
+                        console.log(schoolSave)
+                        res.json({
+                            result: true,
+                            data: {
+                                'id': schoolSave.id,
+                                'name': schoolSave.name,
+                                'status': schoolSave.status
+                            }
+                        });
+                    }
+                });
+
+            }
+
+        });
+    });
+};

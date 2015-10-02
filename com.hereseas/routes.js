@@ -88,6 +88,7 @@ module.exports = function(app) {
     app.post('/admin/school', sign.ensureAuthenticated, schoolRoute.adminAddSchool);
     app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
     app.get('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminGetSchoolAllInfo);
+    app.put('/admin/editschool/:id', sign.ensureAuthenticated, schoolRoute.adminEditSchoolStatus);
 
     app.get('/admin/userid', userRoute.adminGetUserId);
     app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);
