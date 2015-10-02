@@ -243,36 +243,6 @@ exports.updateSchoolById = function(req, res, next) {
 };
 
 //admin functions
-exports.adminGetSchoolList = function(req, res, next) {
-    var ep = new EventProxy();
-    //check admin
-    adminRoute.isAdmin(req.user.email, function(result) {
-        if (result) {
-             ep.emit('checkAdmin');
-        } else {
-            res.json(Results.ERR_PERMISSION_ERR);
-        }
-    });
-    ep.all('checkAdmin', function() {
-        // execute admin function
-        var query = {
-            'status': 1
-        };
-        School.find(query, 'id name avatar', function(err, schools) {
-            if (err) {
-                res.json(Results.ERR_NOTFOUND_ERR);
-                return;
-            } else {
-                res.json({
-                    result: true,
-                    data: schools
-                });
-                return;
-            }
-        });
-    });
-};
-
 exports.adminAddSchool = function(req, res, next) {
     var ep = new EventProxy();
     //check admin
@@ -315,5 +285,64 @@ exports.adminAddSchool = function(req, res, next) {
                 });
             }
         });
+    });
+};
+
+exports.adminGetSchoolId = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var query = {};
+        School.find(query, 'id', function(err, schoolIds) {
+            if (err) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: schoolIds
+                });
+                return;
+            }
+        });
+    });
+};
+
+exports.adminGetSchoolAllInfo = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var schoolId = req.param('id');
+        if (schoolId) {
+            School.findById(schoolId,
+                function(err, school) {
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                    } else {
+                        res.json({
+                            result: true,
+                            data: school
+                        });
+                    }
+                });
+        } else {
+            res.json(Results.ERR_URL_ERR);
+        }
     });
 };

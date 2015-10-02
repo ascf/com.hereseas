@@ -674,8 +674,8 @@ function saveImage(file, path, newName, callback) {
 };
 
 
-
-exports.adminGetApartmentList = function(req, res, next) {
+//admin functions
+exports.adminGetApartmentId = function(req, res, next) {
     var ep = new EventProxy();
     //check admin
     adminRoute.isAdmin(req.user.email, function(result) {
@@ -687,21 +687,15 @@ exports.adminGetApartmentList = function(req, res, next) {
     });
     ep.all('checkAdmin', function() {
         // execute admin function
-        var schoolId = req.query.schoolId;
+        var schoolId = req.param('schoolid');
         if (!schoolId) {
             res.json(Results.ERR_PARAM_ERR);
             return;
         }
         var query = {
-            'status': 1,
             'schoolId': schoolId
         };
-        Apartment.find(
-            query,
-            'id userId username userAvatar schoolId title cover type longitude latitude createAt updateAt')
-        .sort({
-            createAt: 'desc'
-        }).exec(function(err, apartments) {
+        Apartment.find(query, 'id').sort({createAt: 'desc'}).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
                 res.json(Results.ERR_NOTFOUND_ERR);
@@ -717,5 +711,36 @@ exports.adminGetApartmentList = function(req, res, next) {
                 return;
             }
         })
+    });
+};
+
+exports.adminGetApartmentAllInfo = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var apartmentId = req.param('id');
+        if (apartmentId) {
+            Apartment.findById(apartmentId,
+                function(err, apartment) {
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                    } else {
+                        res.json({
+                            result: true,
+                            data: apartment
+                        });
+                    }
+                });
+        } else {
+            res.json(Results.ERR_URL_ERR);
+        }
     });
 };

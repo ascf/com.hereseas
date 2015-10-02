@@ -81,12 +81,16 @@ module.exports = function(app) {
 
     //admin
     app.post('/admin', adminRoute.createAdmin);
-    app.get('/admin/apartments', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentList);
-    app.get('/admin/schools', sign.ensureAuthenticated, schoolRoute.adminGetSchoolList);
-    app.post('/admin/school', sign.ensureAuthenticated, schoolRoute.adminAddSchool);
-    //admin calls
 
-    app.get('/admin/user/:id', userRoute.getUserAllInfo);
+    app.get('/admin/apartmentid/:schoolid', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentId);
+    app.get('/admin/apartment/:id', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentAllInfo);
+
+    app.post('/admin/school', sign.ensureAuthenticated, schoolRoute.adminAddSchool);
+    app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
+    app.get('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminGetSchoolAllInfo);
+
+    app.get('/admin/userid', userRoute.adminGetUserId);
+    app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);
     app.post('/temp/user/:id', userRoute.tempUser);
 
 

@@ -10,7 +10,7 @@ var tools = require('../common/tools');
 var Results = require('./commonResult');
 
 var User = require('../models').User;
-
+var adminRoute = require('./adminRoute');
 var fs = require('fs');
 
 var passport = require('passport');
@@ -537,9 +537,38 @@ exports.tempUser = function(req, res, next) {
 
 };
 
+//admin functions
+
+exports.adminGetUserId = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var query = {};
+        User.find(query, 'id', function(err, userIds) {
+            if (err) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: userIds
+                });
+                return;
+            }
+        });
+    });
+};
 
 
-exports.getUserAllInfo = function(req, res, next) {
+exports.getUserAllInfoxxxx = function(req, res, next) {
     var userId = req.param('id');
     if (userId) {
         User.findById(userId,
@@ -556,4 +585,35 @@ exports.getUserAllInfo = function(req, res, next) {
     } else {
         res.json(Results.ERR_URL_ERR);
     }
+};
+
+exports.adminGetUserAllInfo = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+             ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var userId = req.param('id');
+        if (userId) {
+            User.findById(userId,
+                function(err, user) {
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                    } else {
+                        res.json({
+                            result: true,
+                            data: user
+                        });
+                    }
+                });
+        } else {
+            res.json(Results.ERR_URL_ERR);
+        }
+    });
 };
