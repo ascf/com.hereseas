@@ -567,26 +567,6 @@ exports.adminGetUserId = function(req, res, next) {
     });
 };
 
-
-exports.getUserAllInfoxxxx = function(req, res, next) {
-    var userId = req.param('id');
-    if (userId) {
-        User.findById(userId,
-            function(err, user) {
-                if (err) {
-                    res.json(Results.ERR_DB_ERR);
-                } else {
-                    res.json({
-                        result: true,
-                        data: user
-                    });
-                }
-            });
-    } else {
-        res.json(Results.ERR_URL_ERR);
-    }
-};
-
 exports.adminGetUserAllInfo = function(req, res, next) {
     var ep = new EventProxy();
     //check admin
