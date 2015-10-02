@@ -296,7 +296,7 @@ exports.searchApartment = function(req, res, next) {
 
     console.log("aptQuery", aptQuery);
 
-
+/*
     Apartment.find(
             aptQuery,
             'userId username userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at', pagination)
@@ -318,9 +318,80 @@ exports.searchApartment = function(req, res, next) {
                 return;
             }
         })
-
+*/
+    var resData = [];
+    Apartment.find(aptQuery, 'username schoolId cover rooms longitude latitude create_at', pagination)
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, apartments) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else if (!apartments.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                for (var i = 0; i < apartments.length; i++) {
+                    var apartment = apartments[i];
+                    var price = {
+                        maxPrice: calculatePrice(apartments[0].rooms).maxPrice,
+                        minPrice: calculatePrice(apartments[0].rooms).minPrice
+                    }
+                    var type = getType(apartment.rooms);
+                    resData.push({
+                        "id": apartment.id,
+                        "schoolId": apartment.schoolId,
+                        "username": apartment.username,
+                        "latitude": apartment.latitude,
+                        "longitude": apartment.longitude,
+                        "cover": apartment.cover,
+                        "price": price,
+                        "type": type
+                    });
+                }
+                res.json({
+                    result: true,
+                    data: resData
+                });
+                return;
+            }
+        })
 }
 
+
+function calculatePrice(rooms) {
+    var max = 0
+    var min = Number.MAX_VALUE
+    for (var i = 0; i < rooms.length; i++) {
+        if (max < rooms[i].price)
+            max = rooms[i].price;
+        if (min > rooms[i].price)
+            min = rooms[i].price;
+    }
+    var price = {
+        maxPrice: max,
+        minPrice: min
+    }
+    return price;
+}
+
+function getType(rooms) {
+    var filter = [false, false, false];
+    for (var i = 0; i < rooms.length; i++) {
+        if (rooms[i].type === "小卧")
+            filter[0] = true;
+        if (rooms[i].type === "客厅")
+            filter[1] = true; 
+        if (rooms[i].type === "其它")
+            filter[2] = true;
+    }
+    var type = []
+    if (filter[0]) type.push("小卧");
+    if (filter[1]) type.push("客厅");
+    if (filter[2]) type.push("其它");
+    return type;
+}
 
 exports.createApartment = function(req, res, next) {
 
