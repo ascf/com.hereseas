@@ -480,9 +480,12 @@ exports.editApartmentById = function(req, res, next) {
         }
 
         var rooms = [];
-
+        
         for (var i = 0; i < req.body.rooms.length; i++) {
-
+            if (!tools.checkPrice(req.body.rooms[i].price)) {
+                res.json(Results.ERR_PARAM_ERR);
+                return;
+            }
             var room = {
                 share: req.body.rooms[i].share,
                 type: req.body.rooms[i].type,

@@ -47,6 +47,11 @@ exports.hasNull = function (data){
     return false;
 };
 
+//check if price is number
+exports.checkPrice = function (price){;
+    return !isNaN(price);
+}
+
 
 Array.prototype.remove = function (item) {
     if (item == null)
