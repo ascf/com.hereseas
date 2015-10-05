@@ -52,6 +52,12 @@ exports.checkPrice = function (price){;
     return !isNaN(price);
 }
 
+//check if room type is 卧室 客厅 其它
+exports.checkRoomType = function (type){
+    if (type === "卧室" || type === "客厅" || type === "其它")
+        return true;
+    return false;
+} 
 
 Array.prototype.remove = function (item) {
     if (item == null)

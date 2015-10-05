@@ -486,6 +486,10 @@ exports.editApartmentById = function(req, res, next) {
                 res.json(Results.ERR_PARAM_ERR);
                 return;
             }
+            if (!tools.checkRoomType(req.body.rooms[i].type)) {
+                res.json(Results.ERR_PARAM_ERR);
+                return;
+            }
             var room = {
                 share: req.body.rooms[i].share,
                 type: req.body.rooms[i].type,
