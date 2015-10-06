@@ -494,46 +494,56 @@ function eduChecker(email) {
 
 
 
-exports.tempUser = function(req, res, next) {
+exports.adminActiveUser = function(req, res, next) {
 
 
-    var userId = req.param('id');
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+            ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
 
-    if (userId) {
-        User.findById(userId,
-            function(err, user) {
-                if (err) {
-                    res.json(Results.ERR_DB_ERR);
-                } else {
-                    user.verified = true;
+    ep.all('checkAdmin', function() {
 
-                    user['status'] = 1;
+        var userId = req.param('id');
 
-                    user.save(function(err, user) {
+        if (userId) {
+            User.findById(userId,
+                function(err, user) {
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                    } else {
+                        user.verified = true;
+                        user['status'] = 1;
+                        user.save(function(err, user) {
 
-                        if (err) {
-                            console.log(err);
-                            return next();
-                        } else {
+                            if (err) {
+                                console.log(err);
+                                return next();
+                            } else {
 
-                            res.json({
-                                result: true,
-                                data: user
-                            });
-
-
-                        }
-                    });
-
-
-
-                }
-            });
-    } else {
-        res.json(Results.ERR_URL_ERR);
-    }
+                                res.json({
+                                    result: true,
+                                    data: user
+                                });
 
 
+                            }
+                        });
+
+
+
+                    }
+                });
+        } else {
+            res.json(Results.ERR_URL_ERR);
+        }
+
+    });
 
 };
 

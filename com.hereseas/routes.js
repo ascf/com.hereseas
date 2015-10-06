@@ -48,7 +48,6 @@ module.exports = function(app) {
 
     app.post('/avatar/m_upload_image', sign.ensureAuthenticated, upload.array("avatar", 1), imageUploadRoute.image_upload);
 
-
     /*  apartment */
     app.get('/apartments/three', apartmentRoute.getThreeApartments);
     app.get('/apartment/:id', apartmentRoute.getApartmentById);
@@ -85,11 +84,14 @@ module.exports = function(app) {
     app.post('/admin/school', sign.ensureAuthenticated, schoolRoute.adminAddSchool);
     app.put('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolById);
     app.put('/admin/school/:id/status', sign.ensureAuthenticated, schoolRoute.adminEditSchoolStatus);
+    app.put('/admin/school/:id/connection', sign.ensureAuthenticated, schoolRoute.adminSetSchoolConnectionById);
 
     app.get('/admin/userid', userRoute.adminGetUserId);
     app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);
     app.put('/admin/edituser/:id', sign.ensureAuthenticated, userRoute.adminEditUserStatus);
-    app.post('/temp/user/:id', userRoute.tempUser);
+
+
+    app.post('/admin/user/:id/active', userRoute.tempUser);
 
 
     app.get('/', function(req, res) {
