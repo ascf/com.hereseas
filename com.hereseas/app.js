@@ -134,7 +134,7 @@ passport.use(new LocalStrategy({
             // indicate failure and set a flash message.  Otherwise, return the
             // authenticated `user`.
             User.findOne({
-                email: email
+                email: email.toLowerCase()
             }, function(err, user) {
                 if (err) {
                     console.log(err);

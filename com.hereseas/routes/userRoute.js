@@ -79,7 +79,7 @@ exports.createUser = function(req, res, next) {
 
 
     var user = new User();
-    user.email = req.body.email;
+    user.email = req.body.email.toLowerCase();
 
     var validator = require("email-validator");
     if (!validator.validate(user.email)) {
@@ -544,7 +544,7 @@ exports.adminGetUserId = function(req, res, next) {
     //check admin
     adminRoute.isAdmin(req.user.email, function(result) {
         if (result) {
-             ep.emit('checkAdmin');
+            ep.emit('checkAdmin');
         } else {
             res.json(Results.ERR_PERMISSION_ERR);
         }
@@ -572,7 +572,7 @@ exports.adminGetUserAllInfo = function(req, res, next) {
     //check admin
     adminRoute.isAdmin(req.user.email, function(result) {
         if (result) {
-             ep.emit('checkAdmin');
+            ep.emit('checkAdmin');
         } else {
             res.json(Results.ERR_PERMISSION_ERR);
         }
@@ -603,7 +603,7 @@ exports.adminEditUserStatus = function(req, res, next) {
     //check admin
     adminRoute.isAdmin(req.user.email, function(result) {
         if (result) {
-             ep.emit('checkAdmin');
+            ep.emit('checkAdmin');
         } else {
             res.json(Results.ERR_PERMISSION_ERR);
         }
