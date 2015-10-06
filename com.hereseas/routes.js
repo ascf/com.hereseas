@@ -41,55 +41,50 @@ module.exports = function(app) {
     app.post('/login', userRoute.login);
     app.get('/logout', sign.ensureAuthenticated, sign.logout);
 
-    app.post('/user/active',sign.ensureAuthenticated, userRoute.activeUserSendEmail);
+    app.post('/user/active', sign.ensureAuthenticated, userRoute.activeUserSendEmail);
     app.post('/user/verify', userRoute.activeUserVerifyLink);
 
     app.put('/user', sign.ensureAuthenticated, userRoute.editUser);
 
-    app.post('/avatar/m_upload_image',sign.ensureAuthenticated,upload.array("avatar", 1), imageUploadRoute.image_upload);
+    app.post('/avatar/m_upload_image', sign.ensureAuthenticated, upload.array("avatar", 1), imageUploadRoute.image_upload);
 
 
     /*  apartment */
-    app.get('/apartments', apartmentRoute.getApartmentList);
     app.get('/apartments/three', apartmentRoute.getThreeApartments);
     app.get('/apartment/:id', apartmentRoute.getApartmentById);
     app.get('/apartments/draft', sign.ensureAuthenticated, apartmentRoute.getApartmentDraftList);
     app.get('/apartment/draft/:id', apartmentRoute.getApartmentDraftById);
     app.get('/apartments/:schoolId/search', apartmentRoute.searchApartment);
-
+    app.get('/apartments', sign.ensureAuthenticated, apartmentRoute.getApartmentList);
     app.post('/apartment', sign.ensureAuthenticated, apartmentRoute.createApartment);
 
     app.put('/apartment/:id', sign.ensureAuthenticated, apartmentRoute.editApartmentById);
     app.put('/apartment/post/:id', sign.ensureAuthenticated, apartmentRoute.postApartmentById);
 
-    app.post('/apartment/m_upload_image',sign.ensureAuthenticated,upload.array("apartment", 1), imageUploadRoute.image_upload);
+    app.post('/apartment/m_upload_image', sign.ensureAuthenticated, upload.array("apartment", 1), imageUploadRoute.image_upload);
 
     /*  school */
     app.get('/school/:id', schoolRoute.getSchoolById);
     app.get('/schools', schoolRoute.getSchoolList);
     app.get('/schools/three', schoolRoute.getSchoolListThree);
 
-    
-    app.post('/school', schoolRoute.addSchool);
-    app.put('/school/:id', schoolRoute.updateSchoolById);
-
-
-    //APIs for cars
+    /*  car */
     app.post('/car', sign.ensureAuthenticated, carRoute.createCar);
     app.put('/car/:id', sign.ensureAuthenticated, carRoute.editCarById);
     app.put('/car/post/:id', sign.ensureAuthenticated, carRoute.postCarById);
 
-    //admin
-    app.post('/admin', adminRoute.createAdmin);
+    /*  admin */
+    app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
 
     app.get('/admin/apartmentid/:schoolid', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentId);
     app.get('/admin/apartment/:id', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentAllInfo);
     app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
 
-    app.post('/admin/school', sign.ensureAuthenticated, schoolRoute.adminAddSchool);
     app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
     app.get('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminGetSchoolAllInfo);
-    app.put('/admin/editschool/:id', sign.ensureAuthenticated, schoolRoute.adminEditSchoolStatus);
+    app.post('/admin/school', sign.ensureAuthenticated, schoolRoute.adminAddSchool);
+    app.put('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolById);
+    app.put('/admin/school/:id/status', sign.ensureAuthenticated, schoolRoute.adminEditSchoolStatus);
 
     app.get('/admin/userid', userRoute.adminGetUserId);
     app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);

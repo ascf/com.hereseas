@@ -36,6 +36,8 @@ var SchoolSchema = new Schema({
 		default: 0
 	},
 
+	connection: [Schema.ObjectId],
+
 	status: {
 		type: Number,
 		default: 1
