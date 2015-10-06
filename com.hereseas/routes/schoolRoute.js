@@ -144,6 +144,9 @@ exports.adminGetSchoolInfoList = function(req, res, next) {
 
 
 exports.adminGetSchoolId = function(req, res, next) {
+   
+    console.log(req.user);
+
     var ep = new EventProxy();
     //check admin
     adminRoute.isAdmin(req.user.email, function(result) {

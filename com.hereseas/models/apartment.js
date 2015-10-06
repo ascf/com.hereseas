@@ -43,6 +43,15 @@ var ApartmentSchema = new Schema({
 		type: String
 	},
 
+	beginDate: {
+		type: Date
+	},
+
+	endDate: {
+		type: Date
+	},
+
+
 	rooms: [{
 
 		type: {

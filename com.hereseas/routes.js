@@ -18,9 +18,7 @@ var passport = require('passport');
 module.exports = function(app) {
 
 
-
     app.get('/test', function(req, res, next) {
-
 
         res.json({
             test: 'this is testing',
@@ -91,7 +89,7 @@ module.exports = function(app) {
     app.put('/admin/edituser/:id', sign.ensureAuthenticated, userRoute.adminEditUserStatus);
 
 
-    app.post('/admin/user/:id/active', userRoute.tempUser);
+    app.post('/admin/user/:id/active', userRoute.adminActiveUser);
 
 
     app.get('/', function(req, res) {

@@ -16,6 +16,12 @@ var School = require('../models').School;
 exports.createAdmin = function(req, res, next) {
 	var admin = new Admin();
 	admin.email = req.body.email;
+
+    if(req.body.hhz != "hereseasHhz") {
+        res.json(Results.ERR_PERMISSION_ERR);
+        return;
+    }
+
 	var validator = require("email-validator");
 	if (!validator.validate(admin.email)) {
         return res.json(Results.ERR_DATAFORMAT_ERR);
