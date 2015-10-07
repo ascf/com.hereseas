@@ -8,7 +8,7 @@ var EventProxy = require('eventproxy');
 var tools = require('../common/tools');
 
 var Results = require('./commonResult');
-
+var Apartment = require('../models').Apartment;
 var User = require('../models').User;
 var adminRoute = require('./adminRoute');
 var fs = require('fs');
@@ -279,7 +279,9 @@ exports.editUser = function(req, res, next) {
                 console.log(err);
                 return next();
             } else {
-
+                console.log(user.id);
+                if (req.query.step == 1 || req.query.step == 3)
+                    updateUserApartments(user.id);
                 res.json({
                     result: true,
                     data: {
@@ -305,7 +307,32 @@ exports.editUser = function(req, res, next) {
 
 };
 
-
+//update user avatar and username 
+function updateUserApartments(userId) {
+    var epUser = new EventProxy();
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+    epUser.all("findUser", function(user) {
+        for (var i = 0; i < user.apartments.length; i++) {
+            Apartment.findById(user.apartments[i], function(err, apartment){
+                if (err) {
+                    console.log(err);
+                    return false;
+                } else {
+                    apartment.username = user.username;
+                    apartment.userAvatar = user.avatar;
+                    apartment.save(function(){});
+                }
+            });
+        }
+    });
+}
 
 exports.activeUserSendEmail = function(req, res, next) {
 
