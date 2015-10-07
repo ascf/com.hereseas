@@ -762,6 +762,69 @@ exports.postApartmentById = function(req, res, next) {
 
 }
 
+exports.deleteApartmentById = function(req, res, next) {
+
+    var apartmentId = req.param('id');
+    var reqData = {};
+    var userId = req.user.id;
+
+    var epUser = new EventProxy();
+
+    User.findById(req.user.id,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                if (user.status != 1 || user.verified != true) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                }
+
+                epUser.emit("findUser", user);
+            }
+        });
+
+    epUser.all("findUser", function(user) {
+
+        Apartment.findById(apartmentId, function(err, apartment) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!apartment) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                if (apartment.userId != userId) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                }
+
+                apartment['available'] = false;
+                apartment.update_at = new Date();
+
+                apartment.save(function(err, apartment) {
+                    if (err) {
+                        console.log(err);
+                        return next();
+                    } else {
+                        res.json({
+                            result: true,
+                            data: apartment
+                        });
+
+                    }
+                });
+
+            }
+
+        });
+
+    });
+
+}
+
 
 
 exports.image_upload = function(req, res, next) {

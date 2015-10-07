@@ -60,6 +60,9 @@ module.exports = function(app) {
 
     app.post('/apartment/m_upload_image', sign.ensureAuthenticated, upload.array("apartment", 1), imageUploadRoute.image_upload);
 
+    app.delete('/apartment/:id', sign.ensureAuthenticated, apartmentRoute.deleteApartmentById)
+
+
     /*  school */
     app.get('/school/:id', schoolRoute.getSchoolById);
     app.get('/schools', schoolRoute.getSchoolList);
