@@ -85,8 +85,9 @@ var UserSchema = new Schema({
     },
     activecode: {
         type: String
-    }
+    },
 
+    apartments: [Schema.ObjectId]
 
 });
 

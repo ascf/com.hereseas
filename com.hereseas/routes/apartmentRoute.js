@@ -479,7 +479,7 @@ exports.createApartment = function(req, res, next) {
 
     epUser.all("findUser", function(user) {
 
-        console.log("user", user);
+        //console.log("user", user);
 
         var reqData = {
             userId: user.id,
@@ -488,7 +488,7 @@ exports.createApartment = function(req, res, next) {
             schoolId: req.body.schoolId,
             type: req.body.type,
             beginDate: req.body.beginDate,
-            endDate: req.body.endDate
+            endDate: req.body.endDate,
         };
 
         if (tools.hasNull(reqData)) {
@@ -511,17 +511,34 @@ exports.createApartment = function(req, res, next) {
                 console.log(err);
                 return next();
             } else {
-
+                updateUserApartments(apartment._id, req.user.id);
                 res.json({
                     result: true,
                     data: apartment
-                });
-
-
+                 });
             }
         });
     });
 }
+
+//insert apartmentId into user.apartments after create apartment
+function updateUserApartments(apartmentId, userId) {
+    var epUser = new EventProxy();
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+    epUser.all("findUser", function(user) {
+        user.apartments.push(apartmentId);
+        user.save(function(){});
+    });
+    return;
+}
+
 
 
 exports.editApartmentById = function(req, res, next) {
