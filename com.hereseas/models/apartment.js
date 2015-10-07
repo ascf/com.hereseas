@@ -15,7 +15,6 @@ var ApartmentSchema = new Schema({
 		type: String
 	},
 
-
 	userAvatar: {
 		type: String
 	},
