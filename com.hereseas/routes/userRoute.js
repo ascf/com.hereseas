@@ -203,6 +203,8 @@ exports.getSelfInfo = function(req, res, next) {
                             schoolId: user.schoolId,
                             avatar: user.avatar,
                             description: user.description,
+                            enrollYear: user.enrollYear,
+                            enrollSeason: user.enrollSeason,
                             tags: user.tags,
                             favorite: user.favorite,
                             verified: user.verified,
@@ -320,14 +322,14 @@ function updateUserApartments(userId) {
     });
     epUser.all("findUser", function(user) {
         for (var i = 0; i < user.apartments.length; i++) {
-            Apartment.findById(user.apartments[i], function(err, apartment){
+            Apartment.findById(user.apartments[i], function(err, apartment) {
                 if (err) {
                     console.log(err);
                     return false;
                 } else {
                     apartment.username = user.username;
                     apartment.userAvatar = user.avatar;
-                    apartment.save(function(){});
+                    apartment.save(function() {});
                 }
             });
         }
