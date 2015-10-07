@@ -348,7 +348,7 @@ exports.searchApartment = function(req, res, next) {
             aptQuery['beginDate'] = subQuery2;
         }
 
-
+        query['available'] = true;
         query['status'] = 1;
 
         var prepareQuery = {};
@@ -356,6 +356,7 @@ exports.searchApartment = function(req, res, next) {
         aptQuery['rooms'] = prepareQuery;
 
         aptQuery['status'] = 1;
+        aptQuery['available'] = true;
 
         // console.log("aptQuery", aptQuery);
 
