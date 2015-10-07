@@ -279,7 +279,6 @@ exports.editUser = function(req, res, next) {
                 console.log(err);
                 return next();
             } else {
-                console.log(user.id);
                 if (req.query.step == 1 || req.query.step == 3)
                     updateUserApartments(user.id);
                 res.json({
