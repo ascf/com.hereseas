@@ -33,7 +33,7 @@ exports.getThreeApartments = function(req, res, next) {
     School.findById(schoolId, function(err, school) {
         if (err) {
             console.log(err);
-            res.json(Results.ERR_NOTFOUND_ERR);
+            res.json(Results.ERR_DB_ERR);
             return;
 
         } else if (school) {
@@ -65,15 +65,14 @@ exports.getThreeApartments = function(req, res, next) {
 
         Apartment.find(
                 query,
-                'id userId userName userAvatar schoolId title cover type createAt updateAt')
+                'id userId userName userAvatar schoolId title cover type')
             .sort({
                 create_at: 'desc'
             }).
         limit(3).
         exec(function(err, apartments) {
             if (err) {
-                res.json(Results.ERR_NOTFOUND_ERR);
-
+                res.json(Results.ERR_DB_ERR);
                 console.log(err);
                 return;
             } else if (!apartments.length) {
@@ -115,7 +114,7 @@ exports.getApartmentList = function(req, res, next) {
         }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
-                res.json(Results.ERR_NOTFOUND_ERR);
+                res.json(Results.ERR_DB_ERR);
                 return;
             } else if (!apartments.length) {
                 res.json(Results.ERR_NOTFOUND_ERR);
@@ -140,8 +139,17 @@ exports.getApartmentById = function(req, res, next) {
 
     var query = {
         '_id': apartmentId,
-        'status': 1
+        'status': 1,
+        'available': true
     };
+
+    var roomQuery = {};
+    roomQuery['available'] = true;
+    roomQuery['status'] = 1;
+
+    var prepareQuery = {};
+    prepareQuery['$elemMatch'] = roomQuery;
+    query['rooms'] = prepareQuery;
 
     Apartment.find(
             query,
@@ -151,7 +159,7 @@ exports.getApartmentById = function(req, res, next) {
         }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
-                res.json(Results.ERR_NOTFOUND_ERR);
+                res.json(Results.ERR_DB_ERR);
                 return;
             } else if (!apartments.length) {
                 res.json(Results.ERR_NOTFOUND_ERR);
@@ -179,13 +187,13 @@ exports.getApartmentDraftList = function(req, res, next) {
 
     Apartment.find(
             query,
-            'id userId username userAvatar schoolId title cover type longitude latitude createAt updateAt')
+            'id userId schoolId title cover type longitude latitude createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
-                res.json(Results.ERR_NOTFOUND_ERR);
+                res.json(Results.ERR_DB_ERR);
                 return;
             } else if (!apartments.length) {
                 res.json(Results.ERR_NOTFOUND_ERR);
@@ -212,25 +220,41 @@ exports.getApartmentDraftById = function(req, res, next) {
         'status': 2
     };
 
-    Apartment.find(
-            query,
-            'userId username userAvatar schoolId title description cover images type beginDate endDate rooms description favorite available fees facilities address longitude latitude create_at update_at')
-        .sort({
-            createAt: 'desc'
-        }).exec(function(err, apartments) {
+    User.findById(req.user.id,
+        function(err, user) {
             if (err) {
-                console.log(err);
-                res.json(Results.ERR_NOTFOUND_ERR);
+                res.json(Results.ERR_DB_ERR);
                 return;
-            } else if (!apartments.length) {
-                res.json(Results.ERR_NOTFOUND_ERR);
+            } else if (user.status != 1 || user.verified != true) {
+                res.json(Results.ERR_PERMISSION_ERR);
                 return;
             } else {
-                res.json({
-                    result: true,
-                    data: apartments
-                });
-                return;
+
+                Apartment.find(
+                        query,
+                        'userId username userAvatar schoolId title description cover images type beginDate endDate rooms description favorite available fees facilities address longitude latitude create_at update_at')
+                    .sort({
+                        createAt: 'desc'
+                    }).exec(function(err, apartments) {
+                        if (err) {
+                            console.log(err);
+                            res.json(Results.ERR_DB_ERR);
+                            return;
+                        } else if (!apartments.length) {
+                            res.json(Results.ERR_NOTFOUND_ERR);
+                            return;
+                        } else if (apartment.userId != userId) {
+                            res.json(Results.ERR_PERMISSION_ERR);
+                            return;
+                        } else {
+                            res.json({
+                                result: true,
+                                data: apartments
+                            });
+                            return;
+                        }
+                    });
+
             }
         })
 
@@ -516,7 +540,7 @@ exports.createApartment = function(req, res, next) {
                 res.json({
                     result: true,
                     data: apartment
-                 });
+                });
             }
         });
     });
@@ -535,7 +559,7 @@ function updateUserApartments(apartmentId, userId) {
     });
     epUser.all("findUser", function(user) {
         user.apartments.push(apartmentId);
-        user.save(function(){});
+        user.save(function() {});
     });
     return;
 }
@@ -914,14 +938,9 @@ exports.adminGetApartmentId = function(req, res, next) {
     });
     ep.all('checkAdmin', function() {
         // execute admin function
-        var schoolId = req.param('schoolid');
-        if (!schoolId) {
-            res.json(Results.ERR_PARAM_ERR);
-            return;
-        }
-        var query = {
-            'schoolId': schoolId
-        };
+
+        var query = {};
+
         Apartment.find(query, 'id').sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {

@@ -50,7 +50,9 @@ module.exports = function(app) {
     app.get('/apartments/three', apartmentRoute.getThreeApartments);
     app.get('/apartment/:id', apartmentRoute.getApartmentById);
     app.get('/apartments/draft', sign.ensureAuthenticated, apartmentRoute.getApartmentDraftList);
-    app.get('/apartment/draft/:id', apartmentRoute.getApartmentDraftById);
+    app.get('/apartment/draft/:id', sign.ensureAuthenticated, apartmentRoute.getApartmentDraftById);
+
+
     app.get('/apartments/:schoolId/search', apartmentRoute.searchApartment);
     app.get('/apartments', sign.ensureAuthenticated, apartmentRoute.getApartmentList);
     app.post('/apartment', sign.ensureAuthenticated, apartmentRoute.createApartment);
@@ -76,7 +78,7 @@ module.exports = function(app) {
     /*  admin */
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
 
-    app.get('/admin/apartmentid/:schoolid', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentId);
+    app.get('/admin/apartments', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentId);
     app.get('/admin/apartment/:id', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentAllInfo);
     app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
 
