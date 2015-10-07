@@ -309,7 +309,7 @@ exports.editUser = function(req, res, next) {
 
 exports.activeUserSendEmail = function(req, res, next) {
 
-    eduEmail = req.body.eduEmail;
+    eduEmail = req.body.eduEmail.toLowerCase();
 
     console.log(eduEmail)
 
@@ -357,8 +357,6 @@ exports.activeUserSendEmail = function(req, res, next) {
                                 res.json({
                                     result: true,
                                 });
-
-
 
                             }
                         });
@@ -480,18 +478,6 @@ function sendEmail(email, url) {
 
 
 }
-
-function eduChecker(email) {
-
-    var str = email.substring(email.indexOf('@') + 1);
-
-    console.log(str);
-
-    return str.indexOf(".edu") > -1
-
-
-}
-
 
 
 exports.adminActiveUser = function(req, res, next) {
@@ -667,4 +653,14 @@ exports.adminEditUserStatus = function(req, res, next) {
 
         });
     });
-};
+}
+
+function eduChecker(email) {
+
+    var str = email.substring(email.indexOf('@') + 1);
+
+    console.log(str);
+
+    return str.indexOf(".edu") > -1
+
+}

@@ -60,6 +60,9 @@ module.exports = function(app) {
 
     app.post('/apartment/m_upload_image', sign.ensureAuthenticated, upload.array("apartment", 1), imageUploadRoute.image_upload);
 
+    app.delete('/apartment/:id', sign.ensureAuthenticated, apartmentRoute.deleteApartmentById)
+
+
     /*  school */
     app.get('/school/:id', schoolRoute.getSchoolById);
     app.get('/schools', schoolRoute.getSchoolList);
@@ -78,6 +81,9 @@ module.exports = function(app) {
     app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
 
     app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
+
+    app.get('/admin/schools', sign.ensureAuthenticated, schoolRoute.adminGetSchoolInfoList);
+
     app.get('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminGetSchoolAllInfo);
     app.post('/admin/school', sign.ensureAuthenticated, schoolRoute.adminAddSchool);
     app.put('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolById);

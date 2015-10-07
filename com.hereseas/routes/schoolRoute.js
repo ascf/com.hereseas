@@ -72,7 +72,6 @@ exports.getSchoolListThree = function(req, res, next) {
 
 exports.getSchoolById = function(req, res, next) {
 
-
     var schoolId = req.param('id');
     var query = {};
     var resData = {};
@@ -124,8 +123,9 @@ exports.adminGetSchoolInfoList = function(req, res, next) {
         }
     });
 
+    var query = {};
     ep.all('checkAdmin', function() {
-        School.findAll(function(err, schools) {
+        School.find(query, function(err, schools) {
             if (err) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
@@ -144,8 +144,8 @@ exports.adminGetSchoolInfoList = function(req, res, next) {
 
 
 exports.adminGetSchoolId = function(req, res, next) {
-   
-    console.log(req.user);
+
+    //console.log(req.user);
 
     var ep = new EventProxy();
     //check admin
