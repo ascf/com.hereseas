@@ -245,7 +245,7 @@ exports.getApartmentDraftById = function(req, res, next) {
                         } else if (!apartments.length) {
                             res.json(Results.ERR_NOTFOUND_ERR);
                             return;
-                        } else if (apartment.userId != userId) {
+                        } else if (apartments[0].userId != userId) {
                             res.json(Results.ERR_PERMISSION_ERR);
                             return;
                         } else {
