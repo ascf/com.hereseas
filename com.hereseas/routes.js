@@ -4,7 +4,7 @@ var schoolRoute = require('./routes/schoolRoute');
 var carRoute = require('./routes/carRoute');
 var imageUploadRoute = require('./routes/imageUploadRoute');
 var adminRoute = require('./routes/adminRoute');
-
+var forgetterRoute = require('./routes/forgetterRoute');
 
 var multer = require('multer');
 var upload = multer({
@@ -96,8 +96,13 @@ module.exports = function(app) {
     app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);
     app.put('/admin/edituser/:id', sign.ensureAuthenticated, userRoute.adminEditUserStatus);
 
-
     app.post('/admin/user/:id/active', userRoute.adminActiveUser);
+
+
+    /*reset password*/
+    app.post('/beforereset', forgetterRoute.createForgetter);
+    app.post('/checkreset', forgetterRoute.checkForgetter);
+    app.put('/reset', forgetterRoute.resetForgetter);
 
 
     app.get('/', function(req, res) {
