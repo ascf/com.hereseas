@@ -67,7 +67,7 @@ exports.getThreeApartments = function(req, res, next) {
                 query,
                 'id userId userName userAvatar schoolId title cover type')
             .sort({
-                create_at: 'asc'
+                createAt: 'desc'
             }).
         limit(3).
         exec(function(err, apartments) {
@@ -103,14 +103,15 @@ exports.getApartmentList = function(req, res, next) {
 
     var query = {
         'status': 1,
-        'userId': userId
+        'userId': userId,
+        'available' : true
     };
 
     Apartment.find(
             query,
             'id schoolId title cover type longitude latitude createAt updateAt')
         .sort({
-            createAt: 'asc'
+            createAt: 'desc'
         }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
@@ -155,7 +156,7 @@ exports.getApartmentById = function(req, res, next) {
             query,
             'userId username userAvatar schoolId title description cover images type beginDate endDate rooms description favorite available fees facilities address longitude latitude create_at update_at')
         .sort({
-            createAt: 'asc'
+            createAt: 'desc'
         }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
@@ -190,7 +191,7 @@ exports.getApartmentDraftList = function(req, res, next) {
             query,
             'id userId schoolId title cover type longitude latitude createAt updateAt')
         .sort({
-            createAt: 'asc'
+            createAt: 'desc'
         }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
@@ -235,7 +236,7 @@ exports.getApartmentDraftById = function(req, res, next) {
                         query,
                         'userId username userAvatar schoolId title description cover images type beginDate endDate rooms description favorite available fees facilities address longitude latitude create_at update_at')
                     .sort({
-                        createAt: 'asc'
+                        createAt: 'desc'
                     }).exec(function(err, apartments) {
                         if (err) {
                             console.log(err);
@@ -411,7 +412,7 @@ exports.searchApartment = function(req, res, next) {
         var resData = [];
         Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude create_at', pagination)
             .sort({
-                createAt: 'asc'
+                createAt: 'desc'
             }).exec(function(err, apartments) {
                 if (err) {
                     console.log(err);
@@ -962,7 +963,7 @@ exports.adminGetApartmentId = function(req, res, next) {
         var query = {};
 
         Apartment.find(query, 'id').sort({
-            createAt: 'asc'
+            createAt: 'desc'
         }).exec(function(err, apartments) {
             if (err) {
                 console.log(err);
