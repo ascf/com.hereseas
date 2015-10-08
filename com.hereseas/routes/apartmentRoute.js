@@ -67,7 +67,7 @@ exports.getThreeApartments = function(req, res, next) {
                 query,
                 'id userId userName userAvatar schoolId title cover type')
             .sort({
-                create_at: 'desc'
+                createAt: 'desc'
             }).
         limit(3).
         exec(function(err, apartments) {
@@ -103,12 +103,13 @@ exports.getApartmentList = function(req, res, next) {
 
     var query = {
         'status': 1,
-        'userId': userId
+        'userId': userId,
+        'available' : true
     };
 
     Apartment.find(
             query,
-            'id userId username userAvatar schoolId title cover type longitude latitude createAt updateAt')
+            'id schoolId title cover type longitude latitude createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
@@ -180,7 +181,8 @@ exports.getApartmentById = function(req, res, next) {
 exports.getApartmentDraftList = function(req, res, next) {
 
     var query = {
-        'status': 2
+        'status': 2,
+        'available': true
     };
 
     query['userId'] = req.user.id;
@@ -243,7 +245,7 @@ exports.getApartmentDraftById = function(req, res, next) {
                         } else if (!apartments.length) {
                             res.json(Results.ERR_NOTFOUND_ERR);
                             return;
-                        } else if (apartment.userId != userId) {
+                        } else if (apartments[0].userId != userId) {
                             res.json(Results.ERR_PERMISSION_ERR);
                             return;
                         } else {
@@ -283,7 +285,7 @@ exports.searchApartment = function(req, res, next) {
     School.findById(schoolId, function(err, school) {
         if (err) {
             console.log(err);
-            res.json(Results.ERR_NOTFOUND_ERR);
+            res.json(Results.ERR_DB_ERR);
             return;
 
         } else if (school) {
@@ -408,13 +410,13 @@ exports.searchApartment = function(req, res, next) {
                 })
         */
         var resData = [];
-        Apartment.find(aptQuery, 'username schoolId cover rooms longitude latitude create_at', pagination)
+        Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude create_at', pagination)
             .sort({
                 createAt: 'desc'
             }).exec(function(err, apartments) {
                 if (err) {
                     console.log(err);
-                    res.json(Results.ERR_NOTFOUND_ERR);
+                    res.json(Results.ERR_DB_ERR);
                     return;
                 } else if (!apartments.length) {
                     res.json(Results.ERR_NOTFOUND_ERR);
@@ -539,7 +541,13 @@ exports.createApartment = function(req, res, next) {
                 updateUserApartments(apartment._id, req.user.id);
                 res.json({
                     result: true,
-                    data: apartment
+                    data: {
+                        "_id": apartment.id,
+                        "schoolId": apartment.schoolId,
+                        "type": apartment.type,
+                        "beginDate": apartment.beginDate,
+                        "endDate": apartment.endDate
+                    }
                 });
             }
         });
@@ -720,6 +728,11 @@ exports.postApartmentById = function(req, res, next) {
 
     var epUser = new EventProxy();
 
+    if (!apartmentId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
     User.findById(req.user.id,
         function(err, user) {
             if (err) {
@@ -790,7 +803,10 @@ exports.postApartmentById = function(req, res, next) {
                     } else {
                         res.json({
                             result: true,
-                            data: apartment
+                            data: {
+                                "_id": apartment.id,
+                                "schoolId": apartment.schoolId
+                            }
                         });
 
                     }
@@ -809,6 +825,11 @@ exports.deleteApartmentById = function(req, res, next) {
     var apartmentId = req.param('id');
     var reqData = {};
     var userId = req.user.id;
+
+    if (!apartmentId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
 
     var epUser = new EventProxy();
 
@@ -853,7 +874,7 @@ exports.deleteApartmentById = function(req, res, next) {
                     } else {
                         res.json({
                             result: true,
-                            data: apartment
+                            data: {}
                         });
 
                     }
