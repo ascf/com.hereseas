@@ -94,6 +94,9 @@ module.exports = function(app) {
 
     app.get('/admin/userid', userRoute.adminGetUserId);
     app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);
+    app.get('/admin/users', userRoute.adminGetUsers);
+
+
     app.put('/admin/edituser/:id', sign.ensureAuthenticated, userRoute.adminEditUserStatus);
 
     app.post('/admin/user/:id/active', userRoute.adminActiveUser);

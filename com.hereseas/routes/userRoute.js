@@ -622,6 +622,37 @@ exports.adminGetUserAllInfo = function(req, res, next) {
     });
 };
 
+
+exports.adminGetUsers = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+            ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var query = {};
+        User.find(query, function(err, users) {
+            if (err) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: users
+                });
+                return;
+            }
+        });
+    });
+};
+
+
+
 exports.adminEditUserStatus = function(req, res, next) {
     var ep = new EventProxy();
     //check admin
