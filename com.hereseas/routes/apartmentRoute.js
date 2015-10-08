@@ -104,7 +104,7 @@ exports.getApartmentList = function(req, res, next) {
     var query = {
         'status': 1,
         'userId': userId,
-        'available' : true
+        'available': true
     };
 
     Apartment.find(
@@ -269,8 +269,13 @@ exports.searchApartment = function(req, res, next) {
     var aptQuery = {};
     var pagination = {};
 
+    var currentPage = 1;
+    var totalPage;
+    var pageSize = 6;
+
+
     console.log(req.query);
-    var page = false;
+    // var page = false;
 
     var schoolId = req.param('schoolId');
 
@@ -314,10 +319,14 @@ exports.searchApartment = function(req, res, next) {
         subQuery['$in'] = connection;
         aptQuery['schoolId'] = subQuery;
 
-        if (req.query.page && req.query.pageSize) {
-            pagination['skip'] = (req.query.page - 1) * req.query.pageSize;
-            pagination['limit'] = req.query.pageSize;
+
+        if (req.query.pageSize > 0 && req.query.page > 0) {
+            pageSize = req.query.pageSize;
+            currentPage = req.query.page;
         }
+
+        pagination['skip'] = (currentPage - 1) * pageSize;
+        pagination['limit'] = pageSize;
 
         if (req.query.car) {
             var subQuery = {};
@@ -409,45 +418,70 @@ exports.searchApartment = function(req, res, next) {
                     }
                 })
         */
-        var resData = [];
-        Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude create_at', pagination)
-            .sort({
-                createAt: 'desc'
-            }).exec(function(err, apartments) {
-                if (err) {
-                    console.log(err);
-                    res.json(Results.ERR_DB_ERR);
-                    return;
-                } else if (!apartments.length) {
-                    res.json(Results.ERR_NOTFOUND_ERR);
-                    return;
-                } else {
-                    for (var i = 0; i < apartments.length; i++) {
-                        var apartment = apartments[i];
-                        var price = {
-                            maxPrice: calculatePrice(apartments[0].rooms).maxPrice,
-                            minPrice: calculatePrice(apartments[0].rooms).minPrice
+
+        Apartment.count(aptQuery, function(err, count) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (count == 0) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+
+                totalPage = Math.ceil(count / pageSize);
+
+                var resData = [];
+                Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude create_at', pagination)
+                    .sort({
+                        createAt: 'desc'
+                    }).exec(function(err, apartments) {
+                        if (err) {
+                            console.log(err);
+                            res.json(Results.ERR_DB_ERR);
+                            return;
+                        } else if (!apartments.length) {
+                            res.json(Results.ERR_NOTFOUND_ERR);
+                            return;
+                        } else {
+                            for (var i = 0; i < apartments.length; i++) {
+                                var apartment = apartments[i];
+                                var price = {
+                                    maxPrice: calculatePrice(apartments[0].rooms).maxPrice,
+                                    minPrice: calculatePrice(apartments[0].rooms).minPrice
+                                }
+                                var type = getType(apartment.rooms);
+                                resData.push({
+                                    "id": apartment.id,
+                                    "schoolId": apartment.schoolId,
+                                    "username": apartment.username,
+                                    "latitude": apartment.latitude,
+                                    "longitude": apartment.longitude,
+                                    "cover": apartment.cover,
+                                    "price": price,
+                                    "type": type
+                                });
+                            }
+                            res.json({
+                                result: true,
+                                data: {
+                                    "apartments": resData,
+                                    "totalPage": totalPage,
+                                    "currentPage": currentPage
+                                }
+                            });
+                            return;
                         }
-                        var type = getType(apartment.rooms);
-                        resData.push({
-                            "id": apartment.id,
-                            "schoolId": apartment.schoolId,
-                            "username": apartment.username,
-                            "latitude": apartment.latitude,
-                            "longitude": apartment.longitude,
-                            "cover": apartment.cover,
-                            "price": price,
-                            "type": type
-                        });
-                    }
-                    res.json({
-                        result: true,
-                        data: resData
                     });
-                    return;
-                }
-            });
+            }
+        });
+
+
+
     });
+
+
+
 }
 
 
