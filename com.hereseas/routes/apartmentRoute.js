@@ -455,6 +455,7 @@ exports.searchApartment = function(req, res, next) {
                                     "id": apartment.id,
                                     "schoolId": apartment.schoolId,
                                     "username": apartment.username,
+                                    "userAvatar": apartment.userAvatar,
                                     "latitude": apartment.latitude,
                                     "longitude": apartment.longitude,
                                     "cover": apartment.cover,
