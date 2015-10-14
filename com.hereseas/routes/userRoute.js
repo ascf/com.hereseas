@@ -615,6 +615,10 @@ exports.getUserMessage = function(req, res, next) {
     });
 
     ep.all('Finish', function(){
+        //sort userMessages by createAt in ascending order
+        userMessages.sort(function(a, b) {
+            return a.createAt.valueOf() - b.createAt.valueOf() ;
+        });
         res.json({
             result: true,
             data: userMessages
