@@ -46,6 +46,8 @@ module.exports = function(app) {
 
     app.post('/avatar/m_upload_image', sign.ensureAuthenticated, upload.array("avatar", 1), imageUploadRoute.image_upload);
 
+    app.post('/sendmessage', sign.ensureAuthenticated, userRoute.sendMessage);
+
     /*  apartment */
     app.get('/apartments/three', apartmentRoute.getThreeApartments);
     app.get('/apartment/:id', apartmentRoute.getApartmentById);
@@ -102,7 +104,7 @@ module.exports = function(app) {
     app.post('/admin/user/:id/active', userRoute.adminActiveUser);
 
 
-    /*reset password*/
+    /* reset password */
     app.post('/beforereset', forgetterRoute.createForgetter);
     app.post('/checkreset', forgetterRoute.checkForgetter);
     app.put('/reset', forgetterRoute.resetForgetter);

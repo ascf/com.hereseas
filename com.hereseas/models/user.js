@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var utility = require('utility');
 
-
 var UserSchema = new Schema({
 
     email: {
@@ -87,7 +86,9 @@ var UserSchema = new Schema({
         type: String
     },
 
-    apartments: [Schema.ObjectId]
+    apartments: [Schema.ObjectId],
+
+    chats: [Schema.ObjectId]
 
 });
 

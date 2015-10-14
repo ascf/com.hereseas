@@ -6,7 +6,7 @@ var flash = require('connect-flash'),
 var validator = require('validator');
 var EventProxy = require('eventproxy');
 var tools = require('../common/tools');
-
+var Message = require('../models').Message;
 var Results = require('./commonResult');
 var Apartment = require('../models').Apartment;
 var User = require('../models').User;
@@ -508,6 +508,88 @@ function sendEmail(email, url) {
 }
 
 
+exports.sendMessage = function(req, res, next) {
+    var sender = req.user.id;
+    var receiver = req.body.id;
+    var ep = new EventProxy();
+    User.findById(sender, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            var exist = false;
+            //check if this receiver is already exist
+            for (var i = 0; i < user.chats.length; i++) {
+                if (user.chats[i] == receiver) {
+                    exist = true;
+                }
+            }
+            if (exist == false) {
+                console.log("zai");
+                user.chats.push(receiver);
+            }
+            user.save(function(err, userS) {
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else {
+                    ep.emit("findSender", userS);
+                }
+            });
+        }
+    });
+
+    User.findById(receiver, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            var exist = false;
+            //check if this sender is already exist
+            for (var i = 0; i < user.chats.length; i++) {
+                if (user.chats[i] == sender) {
+                    exist = true;
+                }
+            }
+            if (exist == false) {
+                user.chats.push(sender);
+            }
+            user.save(function(err, userR) {
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else {
+                    ep.emit("findReceiver", userR);
+                }
+            });
+        }
+    });
+
+    ep.all("findSender", "findReceiver", function(userS, userR) {
+        console.log(userS.id);
+        console.log(userR.id);
+        var message = new Message();
+        message.sender = sender;
+        message.receiver = receiver;
+        message.read = false;
+        message.content = req.body.content;
+        console.log(message);
+        message.save(function(err, message) {
+            if (err) {
+                console.log(err);
+                return next();
+            } else {
+                res.json({
+                    result: true,
+                    id: message.id
+                });
+            }
+        });
+    });
+
+}
+
+
 exports.adminActiveUser = function(req, res, next) {
 
 
@@ -560,6 +642,7 @@ exports.adminActiveUser = function(req, res, next) {
     });
 
 };
+
 
 //admin functions
 
