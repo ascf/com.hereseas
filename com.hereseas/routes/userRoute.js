@@ -517,17 +517,7 @@ exports.sendMessage = function(req, res, next) {
             res.json(Results.ERR_DB_ERR);
             return;
         } else {
-            var exist = false;
-            //check if this receiver is already exist
-            for (var i = 0; i < user.chats.length; i++) {
-                if (user.chats[i] == receiver) {
-                    exist = true;
-                }
-            }
-            if (exist == false) {
-                console.log("zai");
-                user.chats.push(receiver);
-            }
+            user.chats.addToSet(receiver);
             user.save(function(err, userS) {
                 if (err) {
                     console.log(err);
@@ -544,16 +534,7 @@ exports.sendMessage = function(req, res, next) {
             res.json(Results.ERR_DB_ERR);
             return;
         } else {
-            var exist = false;
-            //check if this sender is already exist
-            for (var i = 0; i < user.chats.length; i++) {
-                if (user.chats[i] == sender) {
-                    exist = true;
-                }
-            }
-            if (exist == false) {
-                user.chats.push(sender);
-            }
+            user.chats.addToSet(sender);
             user.save(function(err, userR) {
                 if (err) {
                     console.log(err);
@@ -566,14 +547,11 @@ exports.sendMessage = function(req, res, next) {
     });
 
     ep.all("findSender", "findReceiver", function(userS, userR) {
-        console.log(userS.id);
-        console.log(userR.id);
         var message = new Message();
         message.sender = sender;
         message.receiver = receiver;
         message.read = false;
         message.content = req.body.content;
-        console.log(message);
         message.save(function(err, message) {
             if (err) {
                 console.log(err);
