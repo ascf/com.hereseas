@@ -568,6 +568,17 @@ exports.sendMessage = function(req, res, next) {
 }
 
 
+exports.getUserContact = function(req, res, next) {
+    var contacts = [];
+    for (var i = 0; i < req.user.chats.length; i++) {
+        contacts.push(req.user.chats[i]);
+    }
+    res.json({
+        result: true,
+        contacts: contacts
+    });
+}
+
 exports.adminActiveUser = function(req, res, next) {
 
 

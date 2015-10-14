@@ -47,6 +47,7 @@ module.exports = function(app) {
     app.post('/avatar/m_upload_image', sign.ensureAuthenticated, upload.array("avatar", 1), imageUploadRoute.image_upload);
 
     app.post('/sendmessage', sign.ensureAuthenticated, userRoute.sendMessage);
+    app.get('/contact', sign.ensureAuthenticated, userRoute.getUserContact);
 
     /*  apartment */
     app.get('/apartments/three', apartmentRoute.getThreeApartments);
