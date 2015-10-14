@@ -10,6 +10,8 @@ var uuid = require('node-uuid');
 var easyimg = require('easyimage');
 var AWS = require('aws-sdk');
 var EventProxy = require('eventproxy');
+var Results = require('./commonResult');
+
 
 var User = require('../models').User;
 
