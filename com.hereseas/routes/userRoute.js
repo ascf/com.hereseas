@@ -208,7 +208,8 @@ exports.getSelfInfo = function(req, res, next) {
                             tags: user.tags,
                             favorite: user.favorite,
                             verified: user.verified,
-                            lastLocation: user.lastLocation
+                            lastLocation: user.lastLocation,
+                            address: user.address
 
 
                         }
