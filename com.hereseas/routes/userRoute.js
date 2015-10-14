@@ -626,6 +626,27 @@ exports.getUserMessage = function(req, res, next) {
     });
 }
 
+exports.readMessage = function(req, res, next) {
+    Message.findById(req.body.id, function(err, message) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            message.read = true;
+            message.save(function(err, message) {
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else {
+                    res.json({
+                        result: true,
+                        id: message.id
+                    });
+                }
+            });
+        }
+    });
+}
 
 exports.adminActiveUser = function(req, res, next) {
 
