@@ -225,7 +225,7 @@ exports.getSelfInfo = function(req, res, next) {
 };
 
 
-exports.getFavorites = function(req, res, next) {
+exports.getFavoriteList = function(req, res, next) {
     var userId = req.user.id;
     if (userId) {
         User.findById(userId,
@@ -248,12 +248,78 @@ exports.getFavorites = function(req, res, next) {
 };
 
 
-exports.addFavorites = function(req, res, next) {
+exports.getFavorite = function(req, res, next) {
+
+    var userId = req.user.id;
+    var ep = new EventProxy();
+
+    if (!userId) {
+        res.json(Results.ERR_URL_ERR);
+        return;
+    }
+
+
+    User.findById(userId,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+
+                var apartmentCount = 0;
+                var carCount = 0;
+                var itemCount = 0;
+
+
+                for (var i = 0; i < user.favorite.length; i++) {
+                    if (user.favorite[i].category == "apartment") {
+                        apartmentCount++;
+                    }
+
+                    if (user.favorite[i].category == "car") {
+                        carCount++;
+                    }
+
+                    if (user.favorite[i].category == "item") {
+                        itemCount++;
+                    }
+                }
+
+                for (var i = 0; i < user.favorite.length; i++) {
+
+                    if (user.favorite[i].category == "apartment") {
+                        Apartment.findById(user.favorite[i].id, '_id userId username userAvatar schoolId cover rooms longitude latitude create_at', function(err, apartment) {
+                            ep.emit("findApartment", apartment);
+                        })
+                    }
+                }
+
+                ep.after("findApartment", apartmentCount, function(apartmentList) {
+
+                    res.json({
+                        result: true,
+                        data: apartmentList
+                    });
+                    return;
+
+                })
+
+
+
+            }
+        });
+
+};
+
+
+
+exports.addFavorite = function(req, res, next) {
     var userId = req.user.id;
     var reqData = {};
 
     reqData = {
-        id: req.body.id
+        id: req.body.id,
+        category: req.body.category
     }
 
     if (tools.hasNull(reqData)) {
@@ -269,7 +335,7 @@ exports.addFavorites = function(req, res, next) {
                     res.json(Results.ERR_DB_ERR);
                     return;
                 } else {
-                    user.favorite.addToSet(reqData.id);
+                    user.favorite.addToSet(reqData);
 
                     user.save(function(err, user) {
 

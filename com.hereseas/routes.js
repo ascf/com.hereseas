@@ -51,6 +51,11 @@ module.exports = function(app) {
     app.get('/message', sign.ensureAuthenticated, userRoute.getUserMessage);
     app.put('/readmessage', sign.ensureAuthenticated, userRoute.readMessage);
 
+    app.get('/favorite', sign.ensureAuthenticated, userRoute.getFavorite);
+    app.get('/favorite/list', sign.ensureAuthenticated, userRoute.getFavoriteList);
+    app.post('/favorite', sign.ensureAuthenticated, userRoute.addFavorite);
+
+
     /*  apartment */
     app.get('/apartments/three', apartmentRoute.getThreeApartments);
     app.get('/apartment/:id', apartmentRoute.getApartmentById);

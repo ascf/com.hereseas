@@ -24,10 +24,10 @@ var UserSchema = new Schema({
         ref: 'School'
     },
 
-    enrollYear:{
+    enrollYear: {
         type: String
     },
-    enrollSeason:{
+    enrollSeason: {
         type: String
     },
 
@@ -44,7 +44,15 @@ var UserSchema = new Schema({
 
     tags: [String],
 
-    favorite: [Schema.ObjectId],
+    favorite: [{
+        id: {
+            type: Schema.ObjectId
+        },
+        category: {
+            type: String
+        },
+        _id: false
+    }],
 
     lastLocation: [Schema.Types.Mixed],
 
