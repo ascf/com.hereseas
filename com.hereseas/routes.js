@@ -48,6 +48,8 @@ module.exports = function(app) {
 
     app.post('/sendmessage', sign.ensureAuthenticated, userRoute.sendMessage);
     app.get('/contact', sign.ensureAuthenticated, userRoute.getUserContact);
+    app.get('/message', sign.ensureAuthenticated, userRoute.getUserMessage);
+    app.put('/readmessage', sign.ensureAuthenticated, userRoute.readMessage);
 
     /*  apartment */
     app.get('/apartments/three', apartmentRoute.getThreeApartments);

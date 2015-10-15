@@ -580,6 +580,74 @@ exports.getUserContact = function(req, res, next) {
     });
 }
 
+exports.getUserMessage = function(req, res, next) {
+    var contact = req.query.userid;
+    var user = req.user.id;
+    var userMessages = [];
+    var query = {};
+    var ep = new EventProxy();
+    query.sender = user;
+    query.receiver = contact;
+    Message.find(query, function(err, messages) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+        } else {
+            for (var i = 0; i < messages.length; i++) {              
+                userMessages.push(messages[i]);
+            }
+            ep.emit('findMessage')
+        }
+    });
+
+    ep.all('findMessage', function(){
+        query.sender = contact;
+        query.receiver = user;
+        Message.find(query, function(err, messages) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+            } else {
+                for (var i = 0; i < messages.length; i++) {              
+                    userMessages.push(messages[i]);
+                }
+                ep.emit('Finish');
+            }
+        });
+    });
+
+    ep.all('Finish', function(){
+        //sort userMessages by createAt in ascending order
+        userMessages.sort(function(a, b) {
+            return a.createAt.valueOf() - b.createAt.valueOf() ;
+        });
+        res.json({
+            result: true,
+            data: userMessages
+        });
+    });
+}
+
+exports.readMessage = function(req, res, next) {
+    Message.findById(req.body.id, function(err, message) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            message.read = true;
+            message.save(function(err, message) {
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else {
+                    res.json({
+                        result: true,
+                        id: message.id
+                    });
+                }
+            });
+        }
+    });
+}
+
 exports.adminActiveUser = function(req, res, next) {
 
 
