@@ -164,6 +164,7 @@ exports.getUser = function(req, res, next) {
             function(err, user) {
                 if (err) {
                     res.json(Results.ERR_DB_ERR);
+                    return;
                 } else {
                     res.json({
                         result: true,
@@ -178,10 +179,12 @@ exports.getUser = function(req, res, next) {
                             favorite: user.favorite
                         }
                     });
+                    return;
                 }
             });
     } else {
         res.json(Results.ERR_URL_ERR);
+        return;
     }
 };
 
@@ -193,6 +196,7 @@ exports.getSelfInfo = function(req, res, next) {
             function(err, user) {
                 if (err) {
                     res.json(Results.ERR_DB_ERR);
+                    return;
                 } else {
                     res.json({
                         result: true,
@@ -206,18 +210,87 @@ exports.getSelfInfo = function(req, res, next) {
                             enrollYear: user.enrollYear,
                             enrollSeason: user.enrollSeason,
                             tags: user.tags,
-                            favorite: user.favorite,
                             verified: user.verified,
                             lastLocation: user.lastLocation,
                             address: user.address
-
-
                         }
                     });
+                    return;
                 }
             });
     } else {
         res.json(Results.ERR_URL_ERR);
+        return;
+    }
+};
+
+
+exports.getFavorites = function(req, res, next) {
+    var userId = req.user.id;
+    if (userId) {
+        User.findById(userId,
+            function(err, user) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                    return;
+                } else {
+                    res.json({
+                        result: true,
+                        data: user.favorite
+                    });
+                    return;
+                }
+            });
+    } else {
+        res.json(Results.ERR_URL_ERR);
+        return;
+    }
+};
+
+
+exports.addFavorites = function(req, res, next) {
+    var userId = req.user.id;
+    var reqData = {};
+
+    reqData = {
+        id: req.body.id
+    }
+
+    if (tools.hasNull(reqData)) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+
+    if (userId) {
+        User.findById(userId,
+            function(err, user) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                    return;
+                } else {
+                    user.favorite.addToSet(reqData.id);
+
+                    user.save(function(err, user) {
+
+                        if (err) {
+                            console.log(err);
+                            return next();
+                        } else {
+                            res.json({
+                                result: true,
+                                data: user.favorite
+                            });
+
+                        }
+                    });
+
+
+                }
+            });
+    } else {
+        res.json(Results.ERR_URL_ERR);
+        return;
     }
 };
 
@@ -592,21 +665,21 @@ exports.getUserMessage = function(req, res, next) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
         } else {
-            for (var i = 0; i < messages.length; i++) {              
+            for (var i = 0; i < messages.length; i++) {
                 userMessages.push(messages[i]);
             }
             ep.emit('findMessage')
         }
     });
 
-    ep.all('findMessage', function(){
+    ep.all('findMessage', function() {
         query.sender = contact;
         query.receiver = user;
         Message.find(query, function(err, messages) {
             if (err) {
                 res.json(Results.ERR_DB_ERR);
             } else {
-                for (var i = 0; i < messages.length; i++) {              
+                for (var i = 0; i < messages.length; i++) {
                     userMessages.push(messages[i]);
                 }
                 ep.emit('Finish');
@@ -614,10 +687,10 @@ exports.getUserMessage = function(req, res, next) {
         });
     });
 
-    ep.all('Finish', function(){
+    ep.all('Finish', function() {
         //sort userMessages by createAt in ascending order
         userMessages.sort(function(a, b) {
-            return a.createAt.valueOf() - b.createAt.valueOf() ;
+            return a.createAt.valueOf() - b.createAt.valueOf();
         });
         res.json({
             result: true,
