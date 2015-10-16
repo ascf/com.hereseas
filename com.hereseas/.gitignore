@@ -1,0 +1,13 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+node_modules/
+platforms/
+resources/
+plugins/
+.brackets.json
+.idea/
+www/js/*.html
+tests/coverage/
+public/angular/docs/
+public/angular/i18n/
