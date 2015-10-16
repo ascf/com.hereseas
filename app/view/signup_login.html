@@ -1,0 +1,41 @@
+<md-dialog style="width:420px;">
+    <div class="block block-themed animated fadeIn accountForm" ng-controller="AccountCtrl" style="margin-bottom:0px;">
+        <div style="text-align:center;">
+            <h3 style="color:rgb(121,122,118);">hereseas</h3>
+        </div>
+            <div class="block-content block-content-full block-content-narrow" style="padding:0 20 0 20; margin-bottom:0px;">
+                    <!-- Login Title -->              
+                    <div ng-show="state==1" class="sign_form_row input-group input-group-lg" >
+                        <input style="border-radius:3px;" class="form-control" type="email" placeholder="Email" ng-model="user.email" id="login-username" name="login-username">
+                    </div>
+                    
+                    <div ng-show="state==2" class="sign_form_row input-group input-group-lg" >
+                        <input style="border-radius:3px;" class="form-control withBorderRdius" type="email" placeholder="Email" ng-model="signUpData.email" id="login-username" name="login-username">
+                    </div>
+                        
+                    <div ng-show="state==1" class="sign_form_row input-group input-group-lg">
+                        <input style="border-radius:3px;" class="form-control" type="password"  placeholder="Password" id="login-password"  ng-model="user.password" name="login-password">
+                    </div>
+                    
+                    <div ng-show="state==2" class="sign_form_row input-group input-group-lg">
+                        <input style="border-radius:3px;" class="form-control" type="password"  placeholder="Password" id="login-password"  ng-model="signUpData.password" name="login-password">
+                    </div>
+                    
+                    <div ng-show="state==2" class="sign_form_row input-group input-group-lg">
+                    <input style="border-radius:3px;" class="form-control" type="text" placeholder="Username" data-required="required" maxlength="32" autocorrect="off" autocapitalize="off" ng-model="signUpData.username">
+                    </div>
+                    
+                     <div ng-show="state==1" class="withBorderRdius sign_form_row sign_log_botton"  style="background-color:rgb(222,89,81);outline:none;" ng-click="loginClick()"><h3 style="padding-top:7px;">Log in</h3></div> 
+                    
+                    <div ng-show="state==2" class="withBorderRdius sign_form_row sign_log_botton" style="background-color:rgb(95,168,185);outline:none;" ng-click="signUpSubmit()"><h3 style="padding-top:7px;">Sing up</h3></div> 
+                    
+                    <div class="sign_form_row" flex="100" layout="row">
+                        <input type="checkbox" id="saveme" ng-show="state==1" ng-model="user.save" style="outline:none;margin-top:15px;"><label for="saveme" style="margin-left:5px;font-size:10px;margin-top:15px;" ng-show="state==1">记住我</label>
+                        <a href="app/view/beforereset.html" ng-click="hide()" class="sl_font sign a">忘记密码？</a>
+                        <p class="sl_font sign" ng-show="state==1" ng-click="goSignup()">还未注册？</p>
+                        <div ng-show="state==2" flex="70"></div>
+                        <p class="sl_font" ng-show="state==2" ng-click="goLogin()">已有账号？</p>
+                    </div> 
+            </div>
+    </div>
+</md-dialog>

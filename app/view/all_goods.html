@@ -1,0 +1,82 @@
+<div style="background-color:rgb(248,248,249);min-width:1000px">
+    <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div top-bar></div>
+    
+    <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
+        <div layout="row">
+            <div style="width:165px;text-align:center" layout="column">
+                <div class="center-block left-menu">所有</div>
+                <div class="center-block left-menu">家具</div>
+                <div class="center-block left-menu">电器</div>
+                <div class="center-block left-menu">电子产品</div>
+                <div class="center-block left-menu">书籍</div>
+                <div class="center-block left-menu">生活用品</div>
+                <div class="center-block left-menu-last">其他</div>
+            </div>
+            <div layout="row">
+                <div ng-show="aptResult.length==0">没有结果</div>
+
+                    <div id="apts_panel" style="overflow-y:scroll;height:530px;width:485px;margin-left:10px;margin-right:10px;" layout="row">
+                        <div layout="column">
+                            <a href="#/goods/1" ng-repeat="good in goods">
+                            <div style="width:210px;height:160px;background-size:cover;background-repeat:no-repeat;margin-left:10px;margin-right:10px;margin-bottom:35px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+good.cover+')'} "  ng-hide="good.isfavor">
+                                <div layout="row">
+                                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;"  src="/app/view/img/profile/favorite1.png"/>
+                                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
+                                        <div class="rotate" style="font-size:9px;padding-top:5px;padding-left:30px">{{good.price}}</div>
+
+                                    </div>
+                                </div>
+                                <div layout="row" style="margin-top:80px;margin-left:10px;">
+                                    <img style="height:52px;width:52px;" class="img-circle" ng-src="{{good.userAvatar}}"/>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+                        <div layout="column">
+                            <a href="#/goods/1" ng-repeat="good in goods">
+                            <div style="width:210px;height:210px;background-size:cover;background-repeat:no-repeat;margin-left:10px;margin-right:10px;margin-bottom:35px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+good.cover+')'}" ng-show="good.isfavor" >
+                                <div layout="row">
+                                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
+                                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
+                                        <div class="rotate" style="font-size:9px;padding-top:5px;padding-left:30px">{{good.price}}</div>
+                                    </div>
+                                </div>
+                                <div layout="row" style="margin-top:130px;margin-left:10px;">
+                                    <img style="height:52px;width:52px;" class="img-circle" ng-src="{{good.userAvatar}}"/>
+                                </div>
+                            </div> 
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <div id="goodsMap" class="application" style="height:530px;width:320px;"> </div>
+        </div>
+    </div>
+    
+<div footer></div>
+</div>
+
+<style>
+    .labels {
+      color: white;
+      font-size: 2px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .left-menu{
+        width:58px;
+        padding-top:8px;
+        padding-bottom:8px;
+        border-bottom:2px solid #858280;
+        color:#6A6966
+    }
+    .left-menu-last{
+        width:58px;
+        padding-top:8px;
+        padding-bottom:8px;
+        color:#6A6966
+    }
+</style>
+
+

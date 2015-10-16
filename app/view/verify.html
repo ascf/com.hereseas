@@ -1,0 +1,30 @@
+<div header></div>
+<div>
+    <header ng-include="'app/view/partials/_header-one.html'" ></header>
+    <div layout="row" >
+        <div flex = "30" style="background-color:#EA5743;height:100%;"></div>
+        <div flex = "70" style="height:100%;padding-top:20%">
+            <div class="activate-your-account text-center">
+                    <div class="envelope">
+                        <i class="fa fa-refresh fa-spin" ng-if="!brokenLink&&activating"></i>
+                        <i class="fa fa-chain-broken" ng-if="brokenLink"></i>
+                        <i class="fa fa-check-circle" ng-if="!brokenLink&&activated&&!activating"></i>
+                        <i class="fa fa-exclamation-triangle" ng-if="!brokenLink&&!activated&&!activating"></i>
+                    </div>
+                    <p><a href="javascript:;">
+                        {{brokenLink?'Invalid verify code, please check your email!':''}}
+                        {{!brokenLink && activating?'Activating your account':''}}
+                        {{!brokenLink && activated && !activating?'Your account has been activated!':''}}
+                        {{!brokenLink && !activated && !activating?'Something happened, failed to activate your account!':''}}
+                        more info:{{errInfo}}
+                    </a></p>
+                    <div class="activate-your-account-buttons" ng-if="!brokenLink&&activated&&!activating">
+                        <button type="submit" class="btn btn-primary" ui-sref="user.home">Sign In</button>
+                    </div>
+                    <div class="activate-your-account-buttons" ng-if="brokenLink||!activated||activating">
+                        <button type="submit" class="btn btn-primary" ui-sref="login">Sign In</button>
+                    </div>
+                </div>      
+        </div>
+    </div>
+</div>

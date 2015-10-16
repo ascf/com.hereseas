@@ -1,0 +1,13 @@
+<div>
+	<p>if user can change password: {{activated}}<p>
+</div>
+
+<div ng-show="activated">
+	<p>enter your new password</p>
+	<input class="" type="password"  placeholder="Password" ng-model="userData.password" name="password">
+	<div class="" ng-click="resetPassword()"><h3>Reset password</h3></div> 
+</div>
+
+<div ng-hide="activated">
+	<p>this url is err</p>
+</div>

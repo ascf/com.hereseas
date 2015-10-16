@@ -1,0 +1,575 @@
+/*--begin of login singup--*/
+.sign_form_row{
+    width: 90%;
+    margin: 15px 50px 5px 15px;
+    border-radius:3px;
+}
+.accountForm{
+    color:rgb(121,122,118);
+}
+
+.sign_log_botton{
+    height: 44px;
+    color: white;
+    text-align: center;
+}
+
+.sign_form_row input{
+    background-color: rgb(230,230,230);
+    border-radius:3px;
+}
+
+.sl_font{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: RGB(121,122,118);
+    outline: none;
+}
+
+.sl_font.sign{
+    margin-left: 20%;
+    outline: none;
+}
+
+.sl_font.sign.a:hover{
+    color: RGB(121,122,118);
+}
+
+a, h4{ 
+    color: #ff7f24;
+    text-decoration: none;
+}
+
+/*--end of login singup--*/
+
+/*--begin of rooms--*/
+
+.hs_frame{
+    background-color: white;
+    border: 1px solid;
+    border-color: rgb(196, 196, 196);
+}
+
+.roomsBotton{
+    margin-top: 15px;
+    height: 38px;
+    text-align: center;
+    color: white;
+}
+
+.roomTypeBottonBedroom{
+    height: 35px;
+    text-align: center;
+    color: white;
+    background-color: rgb(231,132,110);
+}
+
+.roomTypeBottonLivingroom{
+    height: 35px;
+    text-align: center;
+    color: white;
+    background-color: rgb(71,175,150);
+}
+
+.roomTypeBottonOthers{
+    height: 35px;
+    text-align: center;
+    color: white;
+    background-color: rgb(88,93,151);
+}
+
+.affix {
+    top: 10px;
+    width: 291px;
+}
+
+.affix-bottom {
+  position: absolute;
+  width: 291px;
+}
+
+/*--end of rooms--*/
+
+
+/*--begin of header--*/
+.hd.nav-li-a{
+    height:55px;
+    color:#000000;
+    padding: 20px 10px 10px 10px;
+    margin-left: 10;
+    margin-right: 10;
+}
+.hd_div_post{
+    text-align:center;
+    width:100;
+    height:33;
+    background-color:rgb(99,172,197);
+    margin: 12px 15px 13px 15px;
+    padding-top:3px;
+    border-radius: 3px;
+}
+.hd_search{
+    margin-top: 8px;
+    margin-left:0px;
+    margin-bottom:12px;
+    width:285px;
+    border:none;
+    font-size:18px;
+    outline:none;
+    color:rgb(182,182,182);
+}
+/*--end of header--*/
+
+.avatar-drop{
+    background-image: url(/app/view/img/profile/drag.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 372px;
+    height: 205px;
+    text-align: center;
+    padding-top: 25px;
+    margin: 10px;
+}
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 200px;
+    height: 100px;
+    text-align: center;
+    padding-top: 25px;
+    margin: 10px;
+}
+.dragover {
+    border: 5px dashed blue;
+}
+
+.angular-google-map-container { height: 600px; }
+#map-canvas {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+#s_school_d{
+    background-color : #FFFFFF;
+}
+
+#icons1{
+    height:100px;
+    width:100px;
+    margin-top:40px;
+    margin-right:20px;
+    margin-left:20px;
+    background-size:100%;
+    background-repeat:no-repeat;
+}
+
+#headBtn{
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.filter-bar{
+    background-image: url(/app/view/img/buttons/filter.png);
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    text-align:center;
+    line-height:45px; 
+    height: 45px;
+    width: 165px;
+    color:white;
+}
+.user-page-button{
+    background-image: url(/app/view/img/buttons/btn1.png);
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    text-align:center;
+    line-height:45px; 
+    margin-left:45px; 
+    margin-top:65px;
+    width: 152px;
+    height: 45px;
+    color:#E15948;
+}
+
+.user-page-button-click{
+    background-image: url(/app/view/img/buttons/btn2.png);
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    text-align:center;
+    line-height:45px; 
+    margin-left:45px; 
+    margin-top:65px;
+    width: 152px;
+    height: 45px;
+    color:white;
+}
+
+
+
+.showMoreButton{
+    background-size:100%;
+    background-repeat:no-repeat;
+    text-align:center;
+    line-height:50px; 
+    margin-left:auto; 
+    margin-right:auto; 
+    margin-top:30px;
+}
+
+
+.img-padding{
+    padding-right:10px;
+    padding-left:20px;
+}
+
+.img-three{
+    height: 240px; 
+    width: 350px;
+}
+
+.img-two{
+    height: 288px; 
+    width: 420px;
+}
+
+.img-one{
+    height: 410px; 
+    width: 600px;
+}
+
+
+
+md-sidenav.md-locked-open{
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.docs-menu, .docs-menu ul{
+    list-style: none;
+    padding: 0px;
+}
+
+.docs-menu .md-button {
+  border-radius: 0;
+  color: white;
+  cursor: pointer;
+  display: block;
+  line-height: 40px;
+  margin: 0;
+  max-height: 40px;
+  overflow: hidden;
+  padding: 0px 16px;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  width: 100%;
+}
+
+.site-sidenav {
+  background: #EA5743;
+}
+
+.site-sidenav md-content {
+  background: transparent;
+}
+
+.text-muted{
+    color: #82888a;
+}
+
+md-select{
+    padding: 0px;
+}
+
+
+
+<!--自建CSS-->
+.nav_icon{
+    padding-top: 8px;
+    height: 24px;
+}
+
+.room_post{
+    height: 540px;
+}
+
+.room_post_listing_content{
+    background-color: #fff;
+    padding: 0px 0px 20px 20px;
+    float: none;
+    width: 740px;
+    height: auto;
+}
+
+.room_post_hr{
+    max-width: 550px;
+    margin-left: 0px;
+}
+
+.room_post_div_content{
+    margin-top: 20px;
+    margin-bottom: 0px;
+    max-width: 530px;
+    min-width: 530px;
+    height: 30px;
+}
+
+.room_post_div{
+    max-width: 530px;
+    min-width: 530px;
+}
+.adr{
+    margin-left: 0px;
+}
+
+.room_post_font_content{
+    font-size: 18px;
+    margin: 0px;
+}
+.room_post_font_content.err{
+    color: red;
+}
+.rp_font_steps{
+    font-size: 18px;
+    float:  left;
+}
+.rp_font_steps.steps{
+    color: #E15948;
+    font-size: 18px;
+}
+.room_post_input{
+    padding: 0px;
+    width: 135px;
+    margin-bottom: 0px;
+}
+
+.room_post_input.text_input{
+    width:80px;
+}
+
+.room_post_input.fees{
+    width:160px;
+}
+.room_post_input.title{
+    width:100%;
+}
+.room_post_input.addNum{
+    width:10%;
+}
+.room_post_input.addAdd{
+    width:35%;
+}
+.room_post_input.addCity{
+    width:20%;
+}
+.room_post_input.addSta{
+    width:5%;
+}
+.room_post_input.addZip{
+    width:10%;
+}
+.rp_icon.icon_delete{
+    color: orangered;
+}
+
+
+.rp_select{
+    width: 80px;
+}
+
+.rp_checkbox{
+    margin: 0px;
+}
+
+body{
+    height: 100%;
+    position: relative;
+}
+
+.hs_subtitle{
+    font-family: Hiragino Sans GB;
+    font-size:20px;
+    color:black;
+}
+
+
+
+body a :focus {
+    outline: none;  
+}
+
+body a:hover{
+    text-decoration: none;
+}
+
+body a:link{
+    text-decoration: none;
+}
+
+body a:acitve{
+    text-decoration: none;
+}
+
+body a:visited{
+    text-decoration: none;
+}
+
+
+
+.verify-input{
+    width:180px;
+    height:22px;
+    border-top:0px;
+    border-left:0px;
+    border-right:0px;
+    border-bottom:0px;
+    text-align:left;
+}
+
+.bg-input{
+    background-image:url(/app/view/img/profile/bg_input.png);
+    background-size:100% 100%;
+    background-repeat: no-repeat;
+    height:22px;
+    width:82px;
+    font-size:12px;
+    text-align:center;
+}
+
+input[type="radio"]{
+    -webkit-appearance: none;
+    background: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border:1px solid grey;
+}
+input[type=radio]:checked{
+    background-image: url(/app/view/img/profile/verified.png);
+    background-size: 100% 100%;
+    border:0;
+}
+input[type="checkbox"]{
+    -webkit-appearance: none;
+    background: white;
+    margin-top: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border:1px solid grey;
+}
+input[type=checkbox]:checked{
+    background-image: url(/app/view/img/profile/verified.png);
+    background-size: 100% 100%;
+    border:0;
+    margin-top: 2px;
+
+}
+
+.form-control .text-left{
+    text-align:left;
+}
+
+.div-vertical-center{
+    height:34px;
+    line-height:34px;
+}
+
+.profile-page{
+    height:410px;
+    width:900px;
+    margin-top:20px;
+}
+
+.post-item-div{
+    margin-left:40px;
+    margin-bottom:10px;
+    margin-top:10px;
+    height: 72px;
+    line-height:72px;
+}
+
+.msg-icon{
+    margin-left:35px;
+    margin-top:18px;
+    height:44px;
+    line-height:44px;
+    text-align:center;
+    width:44px;
+    background-size:100% 100%;
+    color:white;
+}
+
+.rotate{
+    transform:rotate(45deg);
+    -ms-transform:rotate(45deg); /* Internet Explorer */
+    -moz-transform:rotate(45deg); /* Firefox */
+    -webkit-transform:rotate(45deg); /* Safari 和 Chrome */
+    -o-transform:rotate(45deg); /* Opera */
+    color: white;
+    padding-top:15px;
+    padding-left:3px;
+}
+
+.ft{
+    height:300px;
+    background:rgb(222,89,81);
+}
+.footer_div{
+    margin-top: 38px;
+}
+.footer_div.select{
+    padding-left: 90px;
+}
+.footer_select{
+    background:#EEEEED;
+    width:95px;
+    height: 30px;
+    color:#82888a;
+}
+.slct_div{
+    margin-top:20px;
+}
+.footer_content{
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 582px;
+}
+.footer_content.logos{
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.footer_content.hr{
+    margin-bottom: 0px;
+    width: 582px;
+    margin-top: 0px;
+}
+
+.footer_img{
+    height: 25px;
+    float: left;
+}
+
+.footer_font{
+    display: inline;
+    color: aliceblue;
+}
+
+.ft_wchat{
+    height: 135px;
+}
+
+.withBorderRdius{
+    border-radius:3px;
+}
+
+.dropup:hover .dropdown-menu {
+    display: block;
+}

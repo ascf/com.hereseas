@@ -1,0 +1,694 @@
+<md-dialog>
+
+<div layout="row" class="room_post" ng-controller="CarPostController">
+    <!--Begin of left side nav_bar-->
+    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" >
+        <md-content role="navigation" class="md-default-theme">
+            <ul class="docs-menu">
+                <li>
+                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(1)">
+                        <a class="md-button md-default-theme" tabindex="0">
+                            <div layout="row" layout-align="center center">
+                                <span class="ng-binding ng-scope">
+                                    车辆信息
+                                </span>
+                                <span flex></span>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[0].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[0].filled'>check</i>
+                            </div>
+                        </a>
+                    </menu-link>
+                </li>
+                <li>
+                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(2)">
+                        <a class="md-button md-default-theme" tabindex="0">
+                            <div layout="row" layout-align="center center">
+                                <span class="ng-binding ng-scope">
+                                    外观动力
+                                </span>
+                                <span flex></span>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[1].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[1].filled'>check</i>
+                            </div>
+                        </a>
+                    </menu-link>
+                </li>
+                
+                <li>
+                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(3)">
+                        <a class="md-button md-default-theme" tabindex="0">
+                            <div layout="row" layout-align="center center">
+                                <span class="ng-binding ng-scope">
+                                    配置参数
+                                </span>
+                                <span flex></span>
+                            </div>
+                        </a>
+                    </menu-link>
+                </li>
+                <li>
+                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(4)">
+                        <a class="md-button md-default-theme" tabindex="0">
+                            <div layout="row" layout-align="center center">
+                                <span class="ng-binding ng-scope">
+                                    详细描述
+                                </span>
+                                <span flex></span>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[4].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[4].filled'>check</i>
+                            </div>
+                        </a>
+                    </menu-link>
+                </li>
+                <li>
+                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(5)">
+                        <a class="md-button md-default-theme" tabindex="0">
+                            <div layout="row" layout-align="center center">
+                                <span class="ng-binding ng-scope">
+                                    地址
+                                </span>
+                                <span flex></span>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[5].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[5].filled'>check</i>
+                            </div>
+                        </a>
+                    </menu-link>
+                </li>
+                <li>
+                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(6)">
+                        <a class="md-button md-default-theme" tabindex="0">
+                            <div layout="row" layout-align="center center">
+                                <span class="ng-binding ng-scope">
+                                    图片
+                                </span>
+                                <span flex></span>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[6].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[6].filled'>check</i>
+                            </div>
+                        </a>
+                    </menu-link>
+                </li>
+                <md-button class="md-primary" ng-click="hide()">关闭</md-button>
+            </ul>
+        </md-content>
+    </md-sidenav>
+    <!--End of side nav bar-->
+    <md-dialog-content>
+    <div layout="column" flex>
+        <!--Begin of 车辆信息 Page-->
+        <div ng-show="activePage == 1" class="room_post_listing_content">
+            <div>
+                <div layout="row">
+                    <h4 class="text-muted">您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校页面中</h4>
+                </div>
+            </div>
+            <div>
+                <hr class="room_post_hr">
+            </div>
+            <!--Begin of room information-->
+            <div layout="column">
+                <div>
+                    <p class="room_post_font_content">车辆信息</p>
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end">
+                    <div flex="20">
+                        <p class="room_post_font_content">年款</p>
+                    </div>
+                    <div flex="30" layout="row" layout-align="start end">
+                            <md-select name="car_year" placeholder="" ng-model="steps[0].year" required class="rp_select">
+                            <md-option value="2005" >2005</md-option>
+                            <md-option value="2006" >2006</md-option>
+                            <md-option value="2007" >2007</md-option>
+                            <md-option value="2008" >2008</md-option>
+                            <md-option value="2009" >2009</md-option>
+                            <md-option value="2010" >2010</md-option>
+                            <md-option value="2011" >2011</md-option>
+                            <md-option value="2012" >2012</md-option>
+                            <md-option value="2013" >2013</md-option>
+                            <md-option value="2014" >2014</md-option>
+                            <md-option value="2015">2015</md-option>
+                            <md-option value="2016">2016</md-option>
+                            </md-select>
+                    </div>
+                    <div flex="20">
+                        <p class="room_post_font_content">车型</p>
+                    </div>
+                    <div flex="30" layout="row" layout-align="start end">
+                        <div>
+                            <md-select name="car_style" placeholder="" ng-model="steps[0].style" required class="rp_select">
+                            <md-option value="SUV">SUV</md-option>
+                            <md-option value="Sedan">Sedan</md-option>
+                            <md-option value="Coupe">Coupe</md-option>
+                            <md-option value="Convertible">Convertible</md-option>
+                            <md-option value="Hatchback">Hatchback</md-option>
+                            <md-option value="Minivan">Minivan</md-option>
+                            <md-option value="Wagon">Wagon</md-option>
+                            </md-select>
+                        </div>
+                    </div>
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end">
+                    <div flex="20">
+                        <p class="room_post_font_content">制造商</p>
+                    </div>
+                    <div flex="30" layout="row" layout-align="start end">
+                        <md-input-container class="room_post_input text_input">
+                            <input required type="text" name="car_make" ng-model="steps[0].make" aria-label="make">
+                        </md-input-container>
+                    </div>
+                    <div flex="20">
+                        <p class="room_post_font_content">车系</p>
+                    </div>
+                    <div flex="30" layout="row" layout-align="start end">
+                        <md-input-container class="room_post_input text_input" style="width:135px">
+                            <input required type="text" name="car_model" ng-model="steps[0].model" aria-label="model">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end">
+                    <div flex="20">
+                        <p class="room_post_font_content">里程</p>
+                    </div>
+                    <div flex="30" layout="row" layout-align="start end">
+                        <md-input-container class="room_post_input text_input">
+                            <input required type="text" name="car_mileage" ng-model="mileage" aria-label="mileage">
+                        </md-input-container>&nbsp;&nbsp;
+                        <md-select name="m_units" placeholder="" ng-model="mUnits" required class="rp_select">
+                            <md-option value="miles">miles</md-option>
+                            <md-option value="km">km</md-option>
+                        </md-select>
+                    </div>
+                    <div flex="20">
+                        <p class="room_post_font_content">购买日期</p>
+                    </div>
+                    <div flex="30" layout="row" layout-align="start end">
+                        <md-input-container class="room_post_input">
+                          <input ng-model="steps[0].boughtDate" type="date" name="invoiceDate"  aria-label="boughtDate"/>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end">
+                    <div flex="20">
+                        <p class="room_post_font_content">型号</p>
+                    </div>
+                    <div flex="80" layout="row" layout-align="start end">
+                        <md-input-container class="room_post_input text_input" style="width:350px">
+                            <input type="text" name="car_category" ng-model="step[0].category" aria-label="category" >
+                        </md-input-container>
+                        <div style="padding-left:10px">
+                            (optional)
+                        </div>
+                    </div>
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end">
+                    <div flex="20">
+                        <div class="room_post_font_content">价格<div style="float:right;padding-right:10px">$</div></div>
+                    </div>
+                    <div flex="30" layout="row" layout-align="start end">
+                        <md-input-container class="room_post_input text_input" style="width:135px">
+                            <input required type="text" name="car_price" ng-model="step[0].price" aria-label="category">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <!--End of room infomation-->
+            
+            
+            
+            <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
+                <!--Begin of next step button-->
+                <div></div>
+                <div>
+                    <md-button class="md-raised" ng-click="nextPage()">
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                下一步
+                            </div>
+                            <div>
+                                <i class="material-icons">navigate_next</i>
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+                <!--End of next step button-->
+            </div>
+        </div>
+        <!--End of 车辆信息 Page-->
+        <!--Begin of 外观动力 Page-->
+        <div ng-show="activePage == 2" class="room_post_listing_content" >
+             <div layout="column">
+                <div>
+                    <p class="room_post_font_content">外观动力</p>
+                </div>
+                <div layout="row">
+                    <div flex="10" style="margin-top:15px;margin-left:50px;">
+                        <p class="room_post_font_content">颜色</p>
+                    </div>
+                    <div class="room_post_div">
+                        <div layout="row" layout-wrap>
+                            <md-radio-group required ng-model="step[1].color" layout="column" >
+                                <div layout-align="start center" layout="row">
+                                    <md-radio-button value="白色">
+                                        <p class="room_post_font_content">白色</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="银色">
+                                        <p class="room_post_font_content">银色</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="灰色">
+                                        <p class="room_post_font_content">灰色</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="黄色">
+                                        <p class="room_post_font_content">黄色</p>
+                                    </md-radio-button>
+                                </div>
+                                <div layout-align="start center" layout="row">
+                                    <md-radio-button value="绿色">
+                                        <p class="room_post_font_content">绿色</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="蓝色">
+                                        <p class="room_post_font_content">蓝色</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="红色">
+                                        <p class="room_post_font_content">红色</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="黑色">
+                                        <p class="room_post_font_content">黑色</p>
+                                    </md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex="10" style="margin-top:15px;margin-left:50px;">
+                        <p class="room_post_font_content">无事故</p>
+                    </div>
+                    <div class="room_post_div">
+                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[1].noAccident">
+                        </md-checkbox>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div style="margin-top:15px;margin-left:50px;">
+                        <p class="room_post_font_content">驱动系统</p>
+                    </div>
+                    <div class="room_post_div">
+                        <div layout="row" layout-wrap>
+                            <md-radio-group required ng-model="step[1].driveSystem"layout="column" >
+                                <div layout-align="start center" layout="row">
+                                    <md-radio-button value="FWD">
+                                        <p class="room_post_font_content">FWD</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="BWD">
+                                        <p class="room_post_font_content">BWD</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="AWD">
+                                        <p class="room_post_font_content">AWD</p>
+                                    </md-radio-button>
+                                </div>
+                            </md-radio-group>
+                        </div>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div style="margin-top:15px;margin-left:50px;">
+                        <p class="room_post_font_content">传动系统</p>
+                    </div>
+                    <div class="room_post_div">
+                        <div layout="row" layout-wrap>
+                            <md-radio-group required ng-model="step[1].transSystem"layout="column" >
+                                <div layout-align="start center" layout="row">
+                                    <md-radio-button value="手动">
+                                        <p class="room_post_font_content">手动</p>
+                                    </md-radio-button>
+                                    <md-radio-button value="自动">
+                                        <p class="room_post_font_content">自动</p>
+                                    </md-radio-button>
+                                </div>
+                            </md-radio-group>
+                        </div>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div style="margin-top:15px;margin-left:50px;margin-bottom:20px">
+                        <p class="room_post_font_content">排量</p>
+                    </div>
+                    <div class="room_post_div">
+                        <div layout="row" style="margin-top:12px">
+                            <md-select name="car_output" placeholder="" ng-model="steps[1].output" required class="rp_select">
+                                <md-option value="1.5">1.5</md-option>
+                                <md-option value="1.8">1.8</md-option>
+                                <md-option value="2.0">2.0</md-option>
+                                <md-option value="2.5">2.5</md-option>
+                                <md-option value="3.0">3.0</md-option>
+                                <md-option value="3.5">3.5</md-option>
+                            </md-select>
+                            <div style="padding-left:10px;padding-top:10px">
+                            L
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="room_post_div_content" layout="row" layout-align="space-between center">
+                    <div>
+                        <md-button class="md-raised" ng-click="lastPage()">
+                            <div layout="row" layout-align="center center">
+                                <div>
+                                    <i class="material-icons">navigate_before</i>
+                                </div>
+                                <div>
+                                    上一步
+                                </div>
+                            </div>
+                        </md-button>
+                    </div>
+                    <div>
+                        <md-button class="md-raised" ng-click="nextPage()">
+                            <div layout="row" layout-align="center center">
+                                <div>
+                                    下一步
+                                </div>
+                                <div>
+                                    <i class="material-icons">navigate_next</i>
+                                </div>
+                            </div>
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End of 外观动力 Page-->
+        <!--Begin of 配置参数 Page-->
+        <div ng-show="activePage == 3" class="room_post_listing_content" >
+             <div layout="column">
+                <div>
+                    <p class="room_post_font_content">配置参数</p>
+                </div>
+                <div layout="row">
+                    <div flex="15" style="margin-top:15px;margin-left:50px;">
+                        <p class="room_post_font_content">刹车与转向</p>
+                    </div>
+                    <div class="room_post_div" layout="row">
+                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].brake_turn.ABS">
+                            <p class="room_post_font_content">ABS</p>
+                        </md-checkbox>
+                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].brake_turn.ESC">
+                            <p class="room_post_font_content">ESC</p>
+                        </md-checkbox>
+                    </div>
+                </div>
+                 <div layout="row">
+                    <div flex="15" style="margin-top:15px;margin-left:50px;">
+                        <p class="room_post_font_content">安全</p>
+                    </div>
+                    <div class="room_post_div" layout="row">
+                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].safe.double_airbag">
+                            <p class="room_post_font_content">双安全气囊</p>
+                        </md-checkbox>
+                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].safe.side_airbag">
+                            <p class="room_post_font_content">侧安全气囊</p>
+                        </md-checkbox>
+                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].safe.airbag">
+                            <p class="room_post_font_content">安全气帘</p>
+                        </md-checkbox>
+                    </div>
+                </div>
+                 <div layout="row">
+                    <div flex="15" style="margin-top:15px;margin-left:50px;">
+                        <p class="room_post_font_content">舒适与娱乐</p>
+                    </div>
+                    <div class="room_post_div" layout="row">
+                        <div layout="row" layout-wrap style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                            <div flex="30" ng-repeat="(key,value) in steps[2].comft_entn">
+                                <md-checkbox class="rp_checkbox" ng-model="steps[2].comft_entn[key]" >
+                                    <p class="room_post_font_content">{{name(key)}}</p>
+                                </md-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
+                    <div>
+                        <md-button class="md-raised" ng-click="lastPage()">
+                            <div layout="row" layout-align="center center">
+                                <div>
+                                    <i class="material-icons">navigate_before</i>
+                                </div>
+                                <div>
+                                    上一步
+                                </div>
+                            </div>
+                        </md-button>
+                    </div>
+                    <div>
+                        <md-button class="md-raised" ng-click="nextPage()">
+                            <div layout="row" layout-align="center center">
+                                <div>
+                                    下一步
+                                </div>
+                                <div>
+                                    <i class="material-icons">navigate_next</i>
+                                </div>
+                            </div>
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End of 配置参数 Page-->
+        <!--Begin of 描述 Page-->
+        <div ng-show="activePage == 4" class="room_post_listing_content" layout="column">
+            <div layout="column">
+                <div class="room_post_div" layout="row">
+                    <div flex="15">
+                        <p class="room_post_font_content">标题：</p>
+                    </div>
+                    <div flex>
+                        <p class="room_post_font_content">这将是其他用户看到的第一条信息</p>
+                    </div>
+                </div>
+                <div class="room_post_div">
+                    <md-input-container class="rp_title">
+                    <input type="text" name="title" ng-model="steps[4].title" md-maxlength="35" aria-label="title">
+                    </md-input-container>
+                    <br>
+                    <br>
+                </div>
+                <div class="room_post_div" layout="row">
+                    <div flex="15">
+                        <p class="room_post_font_content">描述：</p>
+                    </div>
+                    <div>
+                        <p class="room_post_font_content">向其他用户介绍任何您需要补充的信息，如距学校距离、交通信息、周边、现有室友等。</p>
+                    </div>
+                </div>
+                <div class="room_post_div">
+                    <md-input-container>
+                    <textarea ng-model="steps[4].description" columns="1" md-maxlength="300" aria-label="description"></textarea>
+                    </md-input-container>
+                </div>
+            </div>
+            <!--Begin of step buttons-->
+            <div class="room_post_div_content" layout="row" layout-align="space-between center">
+                <div>
+                    <md-button class="md-raised" ng-click="lastPage()">
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                <i class="material-icons">navigate_before</i>
+                            </div>
+                            <div>
+                                上一步
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+                <div>
+                    <md-button class="md-raised" ng-click="nextPage()">
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                下一步
+                            </div>
+                            <div>
+                                <i class="material-icons">navigate_next</i>
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+            </div>
+            <!--End of step buttons-->
+        </div>
+        <!--End of 描述 Page-->
+        <!--Begin of 地址页 Page-->
+        <div ng-show="activePage == 5" class="room_post_listing_content" layout="column">
+            <div layout="column">
+                <div>
+                    <p class="room_post_font_content">地址</p>
+                </div>
+                <div class="room_post_div" layout="row">
+                    <div flex="10">
+                    </div>
+                    <div flex layout="column">
+                        <div>
+                        <md-button class="md-raised adr" ng-click="">
+                            <div layout="row" layout-align="center center">
+                                <div>
+                                    <i class="material-icons">cloud_download</i>
+                                </div>
+                                <div>
+                                    &nbsp;同个人资料一致
+                                </div>
+                            </div>
+                        </md-button>
+                        <input type="text" id="Autocomplete" class="form-control" ng-model="steps[5].address.full" ng-autocomplete="steps[5].address.full" details="details1" options="options1" style="text-align:left;"/>
+                        <div ng-show="addressGot && addressCorrect">
+                            <div layout="row">
+                                <p class="room_post_font_content">Street Address</p>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addNum">
+                                <input type="text" ng-model="addresses[0]" disabled="disabled"/>
+                                </md-input-container>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addAdd">
+                                <input type="text" ng-model="addresses[1]" disabled="disabled"/>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <p class="room_post_font_content">City</p>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addCity">
+                                <input type="text" ng-model="addresses[2]" disabled="disabled"/>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <p class="room_post_font_content">State</p>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addSta">
+                                <input type="text" ng-model="addresses[3]" disabled="disabled"/>
+                                </md-input-container>
+                                <div flex="5"></div>
+                                <p class="room_post_font_content">Zipcode</p>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addZip">
+                                <input type="text" ng-model="addresses[4]" disabled="disabled"/>
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <div>
+                           <p ng-hide="addressCorrect" class="room_post_font_content err">输入地址错误，请输入正确地址。</p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Begin of step buttons-->
+            <div class="room_post_div_content" layout="row" layout-align="space-between center">
+                <div>
+                    <md-button class="md-raised" ng-click="lastPage()">
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                <i class="material-icons">navigate_before</i>
+                            </div>
+                            <div>
+                                上一步
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+                <div>
+                    <md-button class="md-raised" ng-click="nextPage()">
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                下一步
+                            </div>
+                            <div>
+                                <i class="material-icons">navigate_next</i>
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+            </div>
+            <!--End of step buttons-->
+        </div>
+        <!--End of 地址页 Page-->
+        <!--Begin of 图片页 Page-->
+        <div ng-show="activePage == 6" class="room_post_listing_content" >
+            <div layout="column" flex>
+                <div>
+                    <p class="room_post_font_content">图片</p>
+                    <div ngf-drop ngf-select ng-model="files" class="drop-box"  ngf-keep="true" ngf-keep-distinct="true"
+                        ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
+                        accept="image/*">拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片</div>
+                    
+                    
+                    
+                    
+                    <div layout="column" ng-repeat="img in arrUploads"> 
+                        <div ng-show="img.prog > 0">{{img.prog}}%</div>
+                        <progress ng-show="img.prog > 0" value="{{img.prog/100}}">{{img.prog}}%</progress>
+                        <div ng-show="img.prog==100">上传成功！</div>
+                        <img style="width:300px;height:300px"  ng-src="{{img.content}}"/>
+                        <div ng-click="img.cancel()">取消</div>
+                    </div>
+                    <div layout="column" ng-repeat="pic in steps[6].images">
+                        <img style="width:300px;height:300px;"  ng-src="{{pic}}">
+                        <p ng-click="removeImage($index)">删除</p>
+                    </div>
+                </div>
+            </div>
+            <!--Begin of step buttons-->
+            
+            
+            
+            <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
+                <div>
+                    <md-button class="md-raised" ng-click="lastPage()">
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                <i class="material-icons">navigate_before</i>
+                            </div>
+                            <div>
+                                上一步
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+                <div>
+                    <md-button class="md-raised" ng-click="saveImages()">
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                保存
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+                <div  ng-show="canPost">
+                    <md-button class="md-raised" ng-click="doPost()">
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                提交
+                            </div>
+                            <div>
+                                <i class="material-icons">navigate_next</i>
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+                <div ng-hide="canPost" style="content-float:left">
+                    <p class="rp_font_steps">还剩&nbsp;</p>
+                    <p class="rp_font_steps steps"><strong >{{sn}}</strong></p>
+                    <p class="rp_font_steps">&nbsp;步骤未填写</p>
+                </div>
+            </div>
+            <!--End of step buttons-->
+        </div>
+        <!--End of 图片页 Page-->
+    
+        
+        </div>
+        
+</md-dialog-content>
+</div>
+</md-dialog>

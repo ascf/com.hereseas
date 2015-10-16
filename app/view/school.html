@@ -1,0 +1,200 @@
+
+<div autoscroll="true"; style="background-color:rgb(248,248,249);min-width:1000px">
+    <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div top-bar></div>
+    <div class="container" style="padding-top:27.7px;padding-bottom:19.5px;width:1000px">
+            <div layout="row">
+                <div style="width:650px;border-right:1px solid #D4D4D2;padding-right:auto;padding-left:15px;padding-right:20px;">
+                    <div style="background-repeat:no-repeat;background-size:cover;width:615px;height:250px" ng-style="{'background-image':'url('+schlImg+')'}"></div>
+                </div>
+                <div style="width:320px;padding-left:20px;padding-right:10px;">
+                    <p style="font-size:22px">为何选择乔治华盛顿大学？</p>
+                    <p style="font-size:14px;">于1821年建校，以美國開國第一任總統乔治·华盛顿命名，是一所著名的私立综合性大学。于1821年建校，以美國開國第一任總統乔治·华盛顿命名，是一所著名的私立综合性大学。于1821年建校，以美國開國第一任總統乔治·华盛顿命名，是一所著名的私立综合性大学。于1821年建校，以美國開國第一任總統乔治·华盛顿命名，是一所著名的私立综合性大学。</p>
+                </div>
+            </div>
+            <div layout="row">
+                <div style="padding-left:15px;width:650px;border-right:1px solid #D4D4D2;padding-right:15px;margin-right:0px">
+                    <div layout="row" style="width:615px;">
+                        <div style="padding-top:38.51px;font-size:18px;color:#EA5743">
+                            新成员
+                        </div>
+                        <div ng-repeat="new_user in new_users" style="padding-top:27.29px;padding-left:16.63px;padding-right:16.63px">
+                            <img style="width:59.73px;height:59.73px;"src="{{new_user.img}}" class="img-circle"></img>
+                        </div>
+                    </div>
+                    <div class="text-right" style="padding-top:15.62px;">
+                        <a style="font-size:12px">浏览所有校友(2407)>></a>
+                    </div>
+                </div>
+                <div style="width:320px;padding-left:20px">
+                    <div class="well pre-scrollable" style="background-color:#FFFFFF;width:290px;height:110.9px;padding-top:8px;padding-left:8px;padding-right:8px">
+                        <p style="font-size:12px;">周边动态<span style="margin-left:5px;background-color:#EA5743;color:#FFFFFF">more</span></p>
+                        <p style="font-size:10px;"><h5>于1821年建校，以美國開國第一任總統乔治·华盛顿命名，是一所著名的私立综合性大学。于1821年建校，以美國開國第一任總統乔治·华盛顿命名，是一所著名的私立综合性大学。于1821年建校，以美國開國第一任總統乔治·华盛顿命名，是一所著名的私立综合性大学。于1821年建校，以美國開國第一任總統乔治·华盛顿命名，是一所著名的私立综合性大学。</h5></p>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
+        <div class="container" style="padding-top:17.72px;width:900px;">
+            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >吉屋</div>
+            <div style="margin-top:15px;" layout="row">
+                <a href="#/rooms/{{aptId1}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
+                    </div>
+                </a>
+                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>-->
+                <a href="#/rooms/{{aptId2}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
+                    </div>
+                </a>
+                <a href="#/rooms/{{aptId3}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg3+')'}">
+                    </div>
+                </a>
+            </div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
+        </div>
+    </div>
+
+    <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
+        <div class="container" style="padding-top:17.72px;width:900px;">
+            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >车行</div>
+            <div style="margin-top:15px;" layout="row">
+                <a href="#/rooms/{{aptId1}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+carImg1+')'}">
+                    </div>
+                </a>
+                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>-->
+                <a href="#/rooms/{{aptId2}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+carImg2+')'}">
+                    </div>
+                </a>
+                <a href="#/rooms/{{aptId3}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+carImg3+')'}">
+                    </div>
+                </a>
+            </div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
+        </div>
+    </div>
+
+    <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
+        <div class="container" style="padding-top:17.72px;width:900px;">
+            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >集市</div>
+            <div style="margin-top:15px;" layout="row">
+                <a href="#/goods/{{aptId1}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+goodImg1+')'}">
+                    </div>
+                </a>
+                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>-->
+                <a href="#/goods/{{aptId2}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+goodImg2+')'}">
+                    </div>
+                </a>
+                <a href="#/goods/{{aptId3}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+goodImg3+')'}">
+                    </div>
+                </a>
+            </div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllGoods()">寻找更多</div>
+        </div>
+    </div>
+
+    <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
+        <div class="container" style="padding-top:17.72px;width:900px;">
+            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >活动</div>
+            <div style="margin-top:15px;" layout="row">
+                <a href="#/rooms/{{aptId1}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
+                    </div>
+                </a>
+                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>-->
+                <a href="#/rooms/{{aptId2}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
+                    </div>
+                </a>
+                <a href="#/rooms/{{aptId3}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg3+')'}">
+                    </div>
+                </a>
+            </div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
+        </div>
+    </div>
+
+    <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
+        <div class="container" style="padding-top:17.72px;width:900px;">
+            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >学习</div>
+            <div style="margin-top:15px;" layout="row">
+                <a href="#/rooms/{{aptId1}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
+                    </div>
+                </a>
+                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>-->
+                <a href="#/rooms/{{aptId2}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
+                    </div>
+                </a>
+                <a href="#/rooms/{{aptId3}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg3+')'}">
+                    </div>
+                </a>
+            </div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
+        </div>
+    </div>
+
+    <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
+        <div class="container" style="padding-top:17.72px;width:900px;">
+            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >生活</div>
+            <div style="margin-top:15px;" layout="row">
+                <a href="#/rooms/{{aptId1}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
+                    </div>
+                </a>
+                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>-->
+                <a href="#/rooms/{{aptId2}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
+                    </div>
+                </a>
+                <a href="#/rooms/{{aptId3}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg3+')'}">
+                    </div>
+                </a>
+            </div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
+        </div>
+    </div>
+
+    <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
+        <div class="container" style="padding-top:17.72px;width:900px;">
+            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >工作</div>
+            <div style="margin-top:15px;" layout="row">
+                <a href="#/rooms/{{aptId1}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
+                    </div>
+                </a>
+                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>-->
+                <a href="#/rooms/{{aptId2}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
+                    </div>
+                </a>
+                <a href="#/rooms/{{aptId3}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg3+')'}">
+                    </div>
+                </a>
+            </div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
+        </div>
+    </div>
+</div>
+<div footer></div>
+</div>

@@ -1,0 +1,124 @@
+<div style="background-color:rgb(248,248,249);min-width:1000px">
+    <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div top-bar></div>
+    
+    <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
+        <div layout="row">
+            <div style="width:165px" layout="column">
+                <div class="filter-bar" style="width:165px">筛选栏</div>
+                <div layout="column" style="margin-top:20px;width:165px;">
+                    <div layout="row">
+                        <img style="width:22px;height:22px;" src="/app/view/img/apts/price.png"/>
+                        <span flex></span>
+                        <span>价格</span>
+                    </div>
+                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="price" ngChange="updatePage()">
+                        <option value="0">All</option>
+                        <option value="1">$500-$1000</option>
+                        <option value="2">$1000-$1500</option>
+                    </select>
+                </div>
+
+                <div layout="column" style="margin-top:20px;width:165px;">
+                    <div layout="row">
+                        <img style="width:22px;height:22px;" src="/app/view/img/apts/aptType.png"/>
+                        <span flex></span>
+                        <span>户型</span>
+                    </div>
+                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="selectData.apartmentType" ngChange="updatePage()">
+                        <option value="">All</option>
+                        <option value="1B1B">1B1B</option>
+                        <option value="2B2B">2B2B</option>
+                    </select>
+                </div>
+
+                <div layout="column" style="margin-top:20px;width:165px;">
+                    <div layout="row">
+                        <img style="width:22px;height:22px;" src="/app/view/img/apts/roomType.png"/>
+                        <span flex></span>
+                        <span>房间</span>
+                    </div>
+                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="selectData.roomType" ngChange="updatePage()">
+                        <option value="">All</option>
+                        <option value="客厅">客厅</option>
+                        <option value="卧室">卧室</option>
+                        <option value="其它">其它</option>
+                    </select>
+                </div>
+
+                <div layout="column" style="margin-top:20px;width:165px;">
+                    <div layout="row">
+                        <img style="width:22px;height:22px;" src="/app/view/img/apts/moveInTime.png"/>
+                        <span flex></span>
+                        <span>入住时间</span>
+                    </div>
+                    <input style="margin-top:10px;background:#A19F9B;color:white;height:25px;" ng-model="selectData.date" type="date" ngChange="updatePage()"/>
+                </div>
+                <div layout="row" style="margin-top:20px;width:165px;">
+                    <input style="outline:none" id="share" type="checkbox" value="a" clickme ng-model="selectData.share"/><label for="share" style="margin-left:5px;font-size:10px;">是否合租</label>
+                    <span flex></span>
+                    <input style="outline:none" id="park" type="checkbox" value="b" clickme ng-model="selectData.car"/><label for="park" style="margin-left:5px;font-size:10px;">车位</label>
+                </div>
+                <div layout="row" style="margin-top:5px;width:165px;"> 
+                    <input style="outline:none" id="utility" type="checkbox" value="c" clickme ng-model="selectData.utility"/><label for="utility" style="margin-left:5px;font-size:10px;">包水电</label>
+                    <span flex></span>
+                    <input style="outline:none" id="pets" type="checkbox" value="d" clickme ng-model="selectData.pet"/><label for="pets" style="margin-left:5px;font-size:10px;">宠物</label>
+                </div>
+            </div>
+            
+            <div layout="column" style="">
+                <div id="apts_panel" style="overflow-y:scroll;height:530px;width:485px;margin-left:10px;margin-right:10px;" class="row">
+                    
+                    <div ng-show="aptResult.length==0">没有结果</div>
+                    <div class="col-xs-6 col-sm-6" style="width:210px;height:160px;background-size:cover;background-repeat:no-repeat;margin-left:10px;margin-right:10px;margin-bottom:35px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+apt.cover+')'} " ng-repeat="apt in aptResult">
+                        <div layout="row">
+                            <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
+                            <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
+                                <div class="rotate" style="font-size:9px;">{{apt.price.minPrice}}-{{apt.price.maxPrice}}</div>
+
+                            </div>
+                        </div>
+                        <div layout="row" style="margin-top:80px;margin-left:10px;">
+                            <img style="height:52px;width:52px;" class="img-circle" ng-src="{{apt.userAvatar}}"/>
+                            <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">{{apt.rooms[0].type}}</span>
+                        </div>
+                    </div>                
+                </div>
+                <div layout="row">
+                    <nav>
+                      <ul class="pagination" style="margin-left:10px;">
+                        <li>
+                          <a href="#" aria-label="Previous" ng-click="previous()">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                            <li ng-repeat="page in pages">
+                                <a href="#" ng-click="setPage($index)">{{page.id}}</a>
+                            </li>
+                        <li>
+                          <a href="#" aria-label="Next" ng-click="next()">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                </div>
+            </div>
+            
+            <div id="aptsMap" class="application" style="height:530px;width:320px;"> </div>
+        </div>
+    </div>
+    
+<div footer></div>
+</div>
+
+<style>
+    .labels {
+      color: white;
+      font-size: 2px;
+      text-align: center;
+      white-space: nowrap;
+    }
+</style>
+
+

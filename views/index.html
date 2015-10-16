@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>hereseas</title>
 
-    <title>Hereseas</title>
-
+    <link rel='stylesheet' href='/app/view/css/ngGallery.css'>
+    <link rel='stylesheet' href='/app/view/css/screen.css'>
     <link rel='stylesheet' href='/public/libs/angular-material/angular-material.css'>
     <link rel='stylesheet' href='/public/libs/angular-loading-bar/loading-bar.css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -22,6 +24,8 @@
 
     <link rel="stylesheet" href="/public/libs/select2/select2.css">
     <link rel="stylesheet" href="app/view/css/main.css">
+    <link rel="stylesheet" href="app/view/css/bootstrap-social.css">
+    <link rel="shortcut icon" type="image/x-icon" href="app/view/logo/logo_orange_p(240_92_80).png" media="screen"/>
 
     <!-- angular -->
     <script type="text/javascript" src="/public/libs/jquery/jquery-1.11.3.js"></script>
@@ -41,18 +45,27 @@
     <script type="text/javascript" src="/public/libs/angular/angular-translate-storage-local.js"></script>
     <script type="text/javascript" src="/public/libs/angular-material/angular-material.js"></script>
     <script type="text/javascript" src="/public/libs/angular-loading-bar/loading-bar.js"></script>
+    <script type="text/javascript" src="/public/libs/angular/angular-resource.js"></script>
+    <script type="text/javascript" src="/public/libs/ui-bootstrap/ui-bootstrap-tpls-0.13.4.min.js"></script>
+    <script type="text/javascript" src="/public/libs/ng-file-upload/ng-file-upload.js"></script>
+    <script type="text/javascript" src="/public/libs/ng-file-upload/ng-file-upload-shim.js"></script>
     <!--<script type="text/javascript" src="/public/libs/ui-select/select.js"></script>-->
-
+    
+    <!-- bootstramp -->
+    <link href="public/assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!--<script type="text/javascript" src="/public/libs/angular/angular.js"></script>-->
     <script type="text/javascript" src="/public/libs/angular-ui-select2/src/select2.js"></script>
 
     <script type="text/javascript" src="/app/hereseas.js"></script>
     <script type="text/javascript" src="/app/common/languages.js"></script>
+    
+    
+    <script type="text/javascript" src="/app/ngGallery.js"></script>
 
     <!-- Controllers -->
     <script type="text/javascript" src="/app/service/commonService.js"></script>
-    <script type="text/javascript" src="/app/service/derectives.js"></script>
+    <script type="text/javascript" src="/app/service/directives.js"></script>
     <script type="text/javascript" src="/app/service/userService.js"></script>
     <script type="text/javascript" src="/app/service/roomService.js"></script>
     <script type="text/javascript" src="/app/controller/appCtrl.js"></script>
@@ -60,7 +73,16 @@
     <script type="text/javascript" src="/app/controller/homeController.js"></script>
     <script type="text/javascript" src="/app/controller/roomController.js"></script>
     <script type="text/javascript" src="/app/controller/schoolController.js"></script>
-    <script type="text/javascript" src="/app/controller/loginController.js"></script>
+	<script type="text/javascript" src="/app/controller/aptsController.js"></script>
+    <script type="text/javascript" src="/app/controller/goodsController.js"></script>
+    <script type="text/javascript" src="/app/controller/carsController.js"></script>
+    <script type="text/javascript" src="/app/controller/headerController.js"></script>
+    <script type="text/javascript" src="/app/controller/verifyController.js"></script>
+    <script type="text/javascript" src="/app/controller/errorController.js"></script>
+    <script type="text/javascript" src="/app/controller/accountCtrl.js"></script>
+    <script type="text/javascript" src="/app/controller/resetController.js"></script>
+    <script type="text/javascript" src="/app/controller/beforeresetController.js"></script>
+    <script type="text/javascript" src="/app/controller/messageController.js"></script>
 
 
     <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
@@ -75,10 +97,10 @@
 
     <script src='/app/lodash.js'></script>
     <script src='/app/angular-google-maps.js'></script>
-    <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>  
+    <script src='//maps.googleapis.com/maps/api/js?libraries=places&sensor=false'></script>
+    <script src='/public/assets/js/markerwithlabel.js'></script>
 </head> 
-<body layout="column">
-    <div header></div>
-    <div ui-view></div>
+<body>
+    <div ui-view autoscroll="true"></div>
 </body>
 </html>

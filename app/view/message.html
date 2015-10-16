@@ -1,0 +1,8 @@
+<md-dialog>
+	<div class="block block-themed animated fadeIn accountForm" ng-controller="MessageCtrl" style="margin-bottom:0px;">
+		<p>Please type your message here!</p>
+		<textarea ng-model="userData.content" columns="1" aria-label="description"></textarea>
+		{{userData.content}}
+		<button ng-click="sendmessage()">SEND</button>
+	</div>
+</md-dialog>
