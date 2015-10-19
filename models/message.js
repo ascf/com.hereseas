@@ -6,9 +6,17 @@ var MessageSchema = new Schema({
         type: Schema.ObjectId
     },
 
+    receiverUsername: {
+        type: String
+    },
+
     sender: {
 		type: Schema.ObjectId
 	},
+
+    senderUsername: {
+        type: String
+    },
 
 	createAt: {
         type: Date,

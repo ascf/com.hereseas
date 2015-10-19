@@ -652,12 +652,15 @@ exports.sendMessage = function(req, res, next) {
     var sender = req.user.id;
     var receiver = req.body.id;
     var ep = new EventProxy();
+    var sendUsername = "";
+    var receiverUsername = "";
     User.findById(sender, function(err, user) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
             return;
         } else {
             user.chats.addToSet(receiver);
+            senderUsername = user.username;
             user.save(function(err, userS) {
                 if (err) {
                     console.log(err);
@@ -675,6 +678,7 @@ exports.sendMessage = function(req, res, next) {
             return;
         } else {
             user.chats.addToSet(sender);
+            receiverUsername = user.username;
             user.save(function(err, userR) {
                 if (err) {
                     console.log(err);
@@ -692,6 +696,8 @@ exports.sendMessage = function(req, res, next) {
         message.receiver = receiver;
         message.read = false;
         message.content = req.body.content;
+        message.senderUsername = senderUsername;
+        message.receiverUsername = receiverUsername;
         message.save(function(err, message) {
             if (err) {
                 console.log(err);
@@ -787,6 +793,8 @@ exports.readMessage = function(req, res, next) {
     });
 }
 
+//admin functions
+
 exports.adminActiveUser = function(req, res, next) {
 
 
@@ -840,8 +848,6 @@ exports.adminActiveUser = function(req, res, next) {
 
 };
 
-
-//admin functions
 
 exports.adminGetUserId = function(req, res, next) {
     var ep = new EventProxy();
