@@ -123,7 +123,7 @@ exports.updateFavorite = function(req, res, next) {
 
     ep.all('checkAdmin', function() {
         User.update({
-            'status': 1
+            'email': "hhz1992@gmail.com"
         }, {
             'favorite': query
         }, {}, function(err, numAffected) {
