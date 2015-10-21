@@ -270,7 +270,7 @@ exports.getFavorite = function(req, res, next) {
 
             for (var i = 0; i < apartmentCount; i++) {
 
-                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar schoolId cover longitude latitude create_at available status', function(err, apartment) {
+                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar schoolId title cover longitude latitude create_at available status', function(err, apartment) {
                     if (err) {
                         res.json(Results.ERR_DB_ERR);
                         return;
@@ -327,7 +327,7 @@ exports.addFavorite = function(req, res, next) {
         return;
     }
 
-    if (reqData.category != "apartments" && reqData.category != "cars" && reqData.category != "items" && reqData.category != "activitys") {
+    if (reqData.category != "apartments" && reqData.category != "cars" && reqData.category != "items" && reqData.category != "activities") {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }

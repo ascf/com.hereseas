@@ -101,7 +101,6 @@ exports.isAdmin = function(userEmail, callback) {
 };
 
 
-
 exports.updateFavorite = function(req, res, next) {
 
     var ep = new EventProxy();
@@ -123,11 +122,24 @@ exports.updateFavorite = function(req, res, next) {
 
 
     ep.all('checkAdmin', function() {
-        User.update({}, {
+        User.update({
+            'status': 1
+        }, {
             'favorite': query
         }, {}, function(err, numAffected) {
 
             console.log("numAffected", numAffected);
+
+            if (err) {
+
+                res.json({
+                    result: false,
+                    err: err
+                });
+                return;
+
+            }
+
 
             res.json({
                 result: true,
@@ -139,5 +151,3 @@ exports.updateFavorite = function(req, res, next) {
 
 
 };
-
-
