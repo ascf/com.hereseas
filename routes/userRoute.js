@@ -719,6 +719,9 @@ function sendEmail(email, url) {
 exports.sendMessage = function(req, res, next) {
     var sender = req.user.id;
     var receiver = req.body.id;
+    if (sender == receiver) {
+        res.json(Results.ERR_PARAM_ERR);
+    }
     var ep = new EventProxy();
     var message = new Message();
     User.findById(sender, function(err, user) {
