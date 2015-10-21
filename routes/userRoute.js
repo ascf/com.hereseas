@@ -720,15 +720,15 @@ exports.sendMessage = function(req, res, next) {
     var sender = req.user.id;
     var receiver = req.body.id;
     var ep = new EventProxy();
-    var sendUsername = "";
-    var receiverUsername = "";
+    var message = new Message();
     User.findById(sender, function(err, user) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
             return;
         } else {
             user.chats.addToSet(receiver);
-            senderUsername = user.username;
+            message.senderUsername = user.username;
+            message.senderSchool = user.schoolId;
             user.save(function(err, userS) {
                 if (err) {
                     console.log(err);
@@ -746,7 +746,8 @@ exports.sendMessage = function(req, res, next) {
             return;
         } else {
             user.chats.addToSet(sender);
-            receiverUsername = user.username;
+            message.receiverUsername = user.username;
+            message.receiverSchool = user.schoolId;
             user.save(function(err, userR) {
                 if (err) {
                     console.log(err);
@@ -759,13 +760,10 @@ exports.sendMessage = function(req, res, next) {
     });
 
     ep.all("findSender", "findReceiver", function(userS, userR) {
-        var message = new Message();
         message.sender = sender;
         message.receiver = receiver;
         message.read = false;
         message.content = req.body.content;
-        message.senderUsername = senderUsername;
-        message.receiverUsername = receiverUsername;
         message.save(function(err, message) {
             if (err) {
                 console.log(err);

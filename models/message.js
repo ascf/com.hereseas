@@ -10,12 +10,20 @@ var MessageSchema = new Schema({
         type: String
     },
 
+    receiverSchool: {
+        type: Schema.ObjectId
+    },
+
     sender: {
 		type: Schema.ObjectId
 	},
 
     senderUsername: {
         type: String
+    },
+
+    senderSchool: {
+        type: Schema.ObjectId
     },
 
 	createAt: {
