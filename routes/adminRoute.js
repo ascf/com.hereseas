@@ -114,40 +114,39 @@ exports.updateFavorite = function(req, res, next) {
     });
 
     var query = {
-        apartments: []
-        // cars: [],
-        // items: [],
-        // activities: []
+        apartments: [],
+        cars: [],
+        items: [],
+        activities: []
     }
 
 
     ep.all('checkAdmin', function() {
-        User.update({
-            'email': "hhz1992@gmail.com"
-        }, {
-            'favorite': query
-        }, {}, function(err, numAffected) {
 
-            console.log("numAffected", numAffected);
+        User.find({}, function(err, users) {
 
-            if (err) {
+            for (var i = 0; i < users.length; i++) {
 
-                res.json({
-                    result: false,
-                    err: err
+                User.update({
+                    '_id': users[i].id
+                }, {
+                    'favorite': query
+                }, {}, function(err, numAffected) {
+                    if(err){
+                        console.log("updateFavorite",err);
+
+                    }
+
                 });
-                return;
-
             }
+        })
 
+    })
 
-            res.json({
-                result: true,
-                numAffected: numAffected
-            });
-
-        });
+    res.json({
+        result: true
     });
+
 
 
 };
