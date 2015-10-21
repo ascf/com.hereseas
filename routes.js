@@ -54,7 +54,7 @@ module.exports = function(app) {
     app.get('/favorite', sign.ensureAuthenticated, userRoute.getFavorite);
     app.get('/favorite/list', sign.ensureAuthenticated, userRoute.getFavoriteList);
     app.post('/favorite', sign.ensureAuthenticated, userRoute.addFavorite);
-
+    app.delete('/favorite', sign.ensureAuthenticated, userRoute.deleteFavorite);
 
     /*  apartment */
     app.get('/apartments/three', apartmentRoute.getThreeApartments);
@@ -112,15 +112,13 @@ module.exports = function(app) {
     app.post('/admin/favorite/update',sign.ensureAuthenticated,adminRoute.updateFavorite);
 
 
-
-
     /* reset password */
     app.post('/beforereset', forgetterRoute.createForgetter);
     app.post('/checkreset', forgetterRoute.checkForgetter);
     app.put('/reset', forgetterRoute.resetForgetter);
 
 
-  
+    app.post('/admin/update', adminRoute.updateFavorite);
 
 
     app.get('/', function(req, res) {

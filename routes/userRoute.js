@@ -287,7 +287,7 @@ exports.getFavorite = function(req, res, next) {
 
                     console.log(apartments[i]);
 
-                    if (apartments[i]!= null && apartments[i].status!= null && apartments[i].status == 1) {
+                    if (apartments[i] != null && apartments[i].status != null && apartments[i].status == 1) {
                         apartmentList.push(apartments[i]);
                     }
                 }
@@ -350,6 +350,71 @@ exports.addFavorite = function(req, res, next) {
                                 result: true,
                                 data: user.favorite
                             });
+
+                        }
+                    });
+
+
+                }
+            });
+    } else {
+        res.json(Results.ERR_REQUIRELOGIN_ERR);
+        return;
+    }
+};
+
+
+
+exports.deleteFavorite = function(req, res, next) {
+    var userId = req.user.id;
+    var reqData = {};
+
+    reqData = {
+        id: req.body.id,
+        category: req.body.category
+    }
+
+    if (tools.hasNull(reqData)) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    if (reqData.category != "apartments" && reqData.category != "cars" && reqData.category != "items" && reqData.category != "activities") {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    if (userId) {
+        User.findById(userId,
+            function(err, user) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                    return;
+                } else {
+
+                    var index = user.favorite[reqData.category].indexOf(reqData.id);
+
+                    if (index > -1) {
+                        user.favorite[reqData.category].splice(index, 1);
+                    } else {
+                        res.json({
+                            result: false,
+                            err: Results.ERR_NOTFOUND_ERR
+                        });
+                        return;
+                    }
+
+                    user.save(function(err, user) {
+
+                        if (err) {
+                            console.log(err);
+                            return next();
+                        } else {
+                            res.json({
+                                result: true,
+                                data: user.favorite
+                            });
+                            return;
 
                         }
                     });
