@@ -601,7 +601,8 @@ function updateUserApartments(apartmentId, userId) {
         }
     });
     epUser.all("findUser", function(user) {
-        user.apartments.push(apartmentId);
+
+        user.apartments.addToSet(apartmentId);
         user.save(function() {});
     });
     return;

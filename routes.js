@@ -108,14 +108,19 @@ module.exports = function(app) {
 
 
     app.put('/admin/edituser/:id', sign.ensureAuthenticated, userRoute.adminEditUserStatus);
-
     app.post('/admin/user/:id/active', userRoute.adminActiveUser);
+    app.post('/admin/favorite/update',sign.ensureAuthenticated,adminRoute.updateFavorite);
+
+
 
 
     /* reset password */
     app.post('/beforereset', forgetterRoute.createForgetter);
     app.post('/checkreset', forgetterRoute.checkForgetter);
     app.put('/reset', forgetterRoute.resetForgetter);
+
+
+  
 
 
     app.get('/', function(req, res) {

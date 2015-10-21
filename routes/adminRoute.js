@@ -12,18 +12,21 @@ var flash = require('connect-flash'),
 var passport = require('passport');
 var Apartment = require('../models').Apartment;
 var School = require('../models').School;
+var adminRoute = require('./adminRoute');
+
+var User = require('../models').User;
 
 exports.createAdmin = function(req, res, next) {
-	var admin = new Admin();
-	admin.email = req.body.email;
+    var admin = new Admin();
+    admin.email = req.body.email;
 
-    if(req.body.hhz != "hereseasHhz") {
+    if (req.body.hhz != "hereseasHhz") {
         res.json(Results.ERR_PERMISSION_ERR);
         return;
     }
 
-	var validator = require("email-validator");
-	if (!validator.validate(admin.email)) {
+    var validator = require("email-validator");
+    if (!validator.validate(admin.email)) {
         return res.json(Results.ERR_DATAFORMAT_ERR);
     }
     admin.password = req.body.password;
@@ -68,7 +71,7 @@ exports.test = function(req, res, next) {
     isAdmin(req.user.email, function(result) {
         if (result) {
             console.log("success");
-             ep.emit('checkAdmin');
+            ep.emit('checkAdmin');
         } else {
             res.json(Results.ERR_PERMISSION_ERR);
         }
@@ -79,6 +82,8 @@ exports.test = function(req, res, next) {
 
     });
 };
+
+
 
 exports.isAdmin = function(userEmail, callback) {
     //check if admins collections contains userEmail
@@ -94,3 +99,45 @@ exports.isAdmin = function(userEmail, callback) {
         callback(result);
     });
 };
+
+
+
+exports.updateFavorite = function(req, res, next) {
+
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+            ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+
+    var query = {
+        apartments: [],
+        cars: [],
+        items: [],
+        activities: []
+    }
+
+
+    ep.all('checkAdmin', function() {
+        User.update({}, {
+            'favorite': query
+        }, {}, function(err, numAffected) {
+
+            console.log("numAffected", numAffected);
+
+            res.json({
+                result: true,
+                numAffected: numAffected
+            });
+
+        });
+    });
+
+
+};
+
+

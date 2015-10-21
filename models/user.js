@@ -44,15 +44,13 @@ var UserSchema = new Schema({
 
     tags: [String],
 
-    favorite: [{
-        id: {
-            type: Schema.ObjectId
-        },
-        category: {
-            type: String
-        },
-        _id: false
-    }],
+
+    favorite: {
+        apartments: [Schema.ObjectId],
+        cars: [Schema.ObjectId],
+        items: [Schema.ObjectId],
+        activities: [Schema.ObjectId]
+    },
 
     lastLocation: [Schema.Types.Mixed],
 

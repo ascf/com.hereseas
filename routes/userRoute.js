@@ -183,7 +183,7 @@ exports.getUser = function(req, res, next) {
                 }
             });
     } else {
-        res.json(Results.ERR_URL_ERR);
+        res.json(Results.ERR_REQUIRELOGIN_ERR);
         return;
     }
 };
@@ -219,7 +219,7 @@ exports.getSelfInfo = function(req, res, next) {
                 }
             });
     } else {
-        res.json(Results.ERR_URL_ERR);
+        res.json(Results.ERR_REQUIRELOGIN_ERR);
         return;
     }
 };
@@ -242,7 +242,7 @@ exports.getFavoriteList = function(req, res, next) {
                 }
             });
     } else {
-        res.json(Results.ERR_URL_ERR);
+        res.json(Results.ERR_REQUIRELOGIN_ERR);
         return;
     }
 };
@@ -254,61 +254,61 @@ exports.getFavorite = function(req, res, next) {
     var ep = new EventProxy();
 
     if (!userId) {
-        res.json(Results.ERR_URL_ERR);
+        res.json(Results.ERR_REQUIRELOGIN_ERR);
         return;
     }
 
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
 
-    User.findById(userId,
-        function(err, user) {
-            if (err) {
-                res.json(Results.ERR_DB_ERR);
-                return;
-            } else {
+            var apartmentCount = user.favorite.apartments.length;
+            var carCount = user.favorite.cars.length;
+            var itemCount = user.favorite.items.length;
 
-                var apartmentCount = 0;
-                var carCount = 0;
-                var itemCount = 0;
+            for (var i = 0; i < apartmentCount; i++) {
 
-
-                for (var i = 0; i < user.favorite.length; i++) {
-                    if (user.favorite[i].category == "apartment") {
-                        apartmentCount++;
+                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar schoolId cover longitude latitude create_at available status', function(err, apartment) {
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                        return;
+                    } else {
+                        ep.emit("findApartments", apartment);
                     }
-
-                    if (user.favorite[i].category == "car") {
-                        carCount++;
-                    }
-
-                    if (user.favorite[i].category == "item") {
-                        itemCount++;
-                    }
-                }
-
-                for (var i = 0; i < user.favorite.length; i++) {
-
-                    if (user.favorite[i].category == "apartment") {
-                        Apartment.findById(user.favorite[i].id, '_id userId username userAvatar schoolId cover rooms longitude latitude create_at', function(err, apartment) {
-                            ep.emit("findApartment", apartment);
-                        })
-                    }
-                }
-
-                ep.after("findApartment", apartmentCount, function(apartmentList) {
-
-                    res.json({
-                        result: true,
-                        data: apartmentList
-                    });
-                    return;
-
-                })
-
-
-
+                });
             }
-        });
 
+            ep.after("findApartments", apartmentCount, function(apartments) {
+
+                var apartmentList = [];
+                for (var i = 0; i < apartments.length; i++) {
+
+                    console.log(apartments[i]);
+
+                    if (apartments[i]!= null && apartments[i].status!= null && apartments[i].status == 1) {
+                        apartmentList.push(apartments[i]);
+                    }
+                }
+                ep.emit("ApartmentDone", apartmentList);
+            });
+
+
+            ep.all("ApartmentDone", function(apartmentList) {
+                res.json({
+                    result: true,
+                    data: {
+                        "apartments": apartmentList
+                    }
+                });
+                return;
+
+            });
+
+
+        }
+    });
 };
 
 
@@ -327,6 +327,10 @@ exports.addFavorite = function(req, res, next) {
         return;
     }
 
+    if (reqData.category != "apartments" && reqData.category != "cars" && reqData.category != "items" && reqData.category != "activitys") {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
 
     if (userId) {
         User.findById(userId,
@@ -335,8 +339,7 @@ exports.addFavorite = function(req, res, next) {
                     res.json(Results.ERR_DB_ERR);
                     return;
                 } else {
-                    user.favorite.addToSet(reqData);
-
+                    user.favorite[reqData.category].addToSet(reqData.id);
                     user.save(function(err, user) {
 
                         if (err) {
@@ -355,7 +358,7 @@ exports.addFavorite = function(req, res, next) {
                 }
             });
     } else {
-        res.json(Results.ERR_URL_ERR);
+        res.json(Results.ERR_REQUIRELOGIN_ERR);
         return;
     }
 };
@@ -841,7 +844,7 @@ exports.adminActiveUser = function(req, res, next) {
                     }
                 });
         } else {
-            res.json(Results.ERR_URL_ERR);
+            res.json(Results.ERR_REQUIRELOGIN_ERR);
         }
 
     });
@@ -903,7 +906,7 @@ exports.adminGetUserAllInfo = function(req, res, next) {
                     }
                 });
         } else {
-            res.json(Results.ERR_URL_ERR);
+            res.json(Results.ERR_REQUIRELOGIN_ERR);
         }
     });
 };
