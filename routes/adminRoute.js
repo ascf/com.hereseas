@@ -114,10 +114,10 @@ exports.updateFavorite = function(req, res, next) {
     });
 
     var query = {
-        apartments: [],
-        cars: [],
-        items: [],
-        activities: []
+        apartments: []
+        // cars: [],
+        // items: [],
+        // activities: []
     }
 
 
