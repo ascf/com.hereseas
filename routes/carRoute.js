@@ -81,7 +81,6 @@ exports.editCarById = function(req, res, next) {
 				model: req.body.basicInfo[i].model,
 				price: req.body.basicInfo[i].price,
 				boughtDate: req.body.basicInfo[i].boughtDate,
-				available: req.body.basicInfo[i].available
 			}
 			if (tools.hasNull(basic)) {
 				res.json(Results.ERR_PARAM_ERR);
@@ -214,7 +213,7 @@ exports.postCarById = function(req, res, next) {
 					return;
 				}
 				car['status'] = 1;
-				car.update_at = new Date();
+				car.updateAt = new Date();
 				car.save(function(err, car) {
 					if (err) {
 						consolo.log(err);
@@ -222,7 +221,10 @@ exports.postCarById = function(req, res, next) {
 					} else {
 						res.json({
 							result: true,
-							data: car
+							data: {
+								"_id": car.id,
+                                "schoolId": car.schoolId
+							}
 						});
 					}
 				});
@@ -248,14 +250,14 @@ exports.getCarList = function(req, res, next) {
         'available': true
     };
 
-    console.log(query);
+    //console.log(query);
     Car.find(
             query,
             'id schoolId title cover username longitude latitude createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, cars) {
-        	console.log(cars);
+        	//console.log(cars);
             if (err) {
                 console.log(err);
                 res.json(Results.ERR_DB_ERR);
