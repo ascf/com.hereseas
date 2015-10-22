@@ -124,7 +124,7 @@ exports.getSchoolNewStudents = function(req, res, next) {
     School.findById(schoolId, function(err, school) {
         if (err) {
             console.log(err);
-            res.json(Results.ERR_NOTFOUND_ERR);
+            res.json(Results.ERR_DB_ERR);
             return;
 
         } else if (school) {
@@ -145,7 +145,7 @@ exports.getSchoolNewStudents = function(req, res, next) {
                         if (err) {
                             console.log(err);
                         }
-                        
+
                         ep.emit('findUser', user);
                     });
                 }
@@ -184,7 +184,7 @@ exports.getSchoolStudents = function(req, res, next) {
     School.findById(schoolId, function(err, school) {
         if (err) {
             console.log(err);
-            res.json(Results.ERR_NOTFOUND_ERR);
+            res.json(Results.ERR_DB_ERR);
             return;
 
         } else if (school) {
