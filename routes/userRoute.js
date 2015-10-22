@@ -776,6 +776,10 @@ function sendEmail(email, url) {
 exports.sendMessage = function(req, res, next) {
     var sender = req.user.id;
     var receiver = req.body.id;
+    if (sender == receiver) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
     var ep = new EventProxy();
     var message = new Message();
     User.findById(sender, function(err, user) {
@@ -830,6 +834,7 @@ exports.sendMessage = function(req, res, next) {
                     result: true,
                     id: message.id
                 });
+                return;
             }
         });
     });
@@ -846,6 +851,7 @@ exports.getUserContact = function(req, res, next) {
         result: true,
         contacts: contacts
     });
+    return;
 }
 
 exports.getUserMessage = function(req, res, next) {
@@ -859,6 +865,7 @@ exports.getUserMessage = function(req, res, next) {
     Message.find(query, function(err, messages) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
+            return;
         } else {
             for (var i = 0; i < messages.length; i++) {
                 userMessages.push(messages[i]);
@@ -873,6 +880,7 @@ exports.getUserMessage = function(req, res, next) {
         Message.find(query, function(err, messages) {
             if (err) {
                 res.json(Results.ERR_DB_ERR);
+                return;
             } else {
                 for (var i = 0; i < messages.length; i++) {
                     userMessages.push(messages[i]);
@@ -891,6 +899,7 @@ exports.getUserMessage = function(req, res, next) {
             result: true,
             data: userMessages
         });
+        return;
     });
 }
 
@@ -910,6 +919,7 @@ exports.readMessage = function(req, res, next) {
                         result: true,
                         id: message.id
                     });
+                    return;
                 }
             });
         }

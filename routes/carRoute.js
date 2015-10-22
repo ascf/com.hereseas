@@ -24,8 +24,7 @@ exports.createCar = function(req, res, next) {
 		//console.log("user" , user);
 		var reqData = {
 			userId: user.id,
-			userFirstName: user.firstName,
-			userLastName: user.lastName,
+			username: user.username,
 			userAvatar: user.avatar,
 			schoolId: req.body.schoolId,
 		};
@@ -82,7 +81,6 @@ exports.editCarById = function(req, res, next) {
 				model: req.body.basicInfo[i].model,
 				price: req.body.basicInfo[i].price,
 				boughtDate: req.body.basicInfo[i].boughtDate,
-				available: req.body.basicInfo[i].available
 			}
 			if (tools.hasNull(basic)) {
 				res.json(Results.ERR_PARAM_ERR);
@@ -189,8 +187,7 @@ exports.postCarById = function(req, res, next) {
 				}
 				var reqData = {
 					userId: car.userId,
-                    userFirstName: car.userFirstName,
-                    userLastName: car.userLastName,
+                    username: car.username,
                     userAvatar: car.userAvatar,
                     schoolId: car.schoolId,
                     description: car.description,
@@ -216,7 +213,7 @@ exports.postCarById = function(req, res, next) {
 					return;
 				}
 				car['status'] = 1;
-				car.update_at = new Date();
+				car.updateAt = new Date();
 				car.save(function(err, car) {
 					if (err) {
 						consolo.log(err);
@@ -224,11 +221,56 @@ exports.postCarById = function(req, res, next) {
 					} else {
 						res.json({
 							result: true,
-							data: car
+							data: {
+								"_id": car.id,
+                                "schoolId": car.schoolId
+							}
 						});
 					}
 				});
 			}
 		});
 	});
-}
+};
+
+exports.getCarList = function(req, res, next) {
+
+    //schoolId = req.query.schoolId
+
+    userId = req.user.id;
+
+    if (!userId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var query = {
+        'status': 1,
+        'userId': userId,
+        'available': true
+    };
+
+    //console.log(query);
+    Car.find(
+            query,
+            'id schoolId title cover username longitude latitude createAt updateAt')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, cars) {
+        	//console.log(cars);
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!cars.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: cars
+                });
+                return;
+            }
+        })
+};

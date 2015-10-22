@@ -86,6 +86,7 @@ module.exports = function(app) {
     app.post('/car', sign.ensureAuthenticated, carRoute.createCar);
     app.put('/car/:id', sign.ensureAuthenticated, carRoute.editCarById);
     app.put('/car/post/:id', sign.ensureAuthenticated, carRoute.postCarById);
+    app.get('/cars', sign.ensureAuthenticated, carRoute.getCarList);
 
     /*  admin */
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);

@@ -72,25 +72,6 @@ var CarSchema = new Schema({
 		//购买日期
 		boughtDate: {
 			type: Date
-		},
-
-		available: {
-			type: Boolean,
-			default: true
-		},
-
-		status: {
-			type: Number,
-			default: 1
-		},
-
-		create_at: {
-			type: Date,
-			default: Date.now
-		},
-		update_at: {
-			type: Date,
-			default: Date.now
 		}
 	}],
 	//颜色
@@ -143,6 +124,11 @@ var CarSchema = new Schema({
 
 	latitude: {
 		type: String
+	},
+
+	available: {
+		type: Boolean,
+		default: true
 	},
 
 	status: {
