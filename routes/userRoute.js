@@ -721,6 +721,7 @@ exports.sendMessage = function(req, res, next) {
     var receiver = req.body.id;
     if (sender == receiver) {
         res.json(Results.ERR_PARAM_ERR);
+        return;
     }
     var ep = new EventProxy();
     var message = new Message();
@@ -776,6 +777,7 @@ exports.sendMessage = function(req, res, next) {
                     result: true,
                     id: message.id
                 });
+                return;
             }
         });
     });
@@ -792,6 +794,7 @@ exports.getUserContact = function(req, res, next) {
         result: true,
         contacts: contacts
     });
+    return;
 }
 
 exports.getUserMessage = function(req, res, next) {
@@ -837,6 +840,7 @@ exports.getUserMessage = function(req, res, next) {
             result: true,
             data: userMessages
         });
+        return;
     });
 }
 
@@ -856,6 +860,7 @@ exports.readMessage = function(req, res, next) {
                         result: true,
                         id: message.id
                     });
+                    return;
                 }
             });
         }
