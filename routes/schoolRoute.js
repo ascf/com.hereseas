@@ -10,6 +10,7 @@ var tools = require('../common/tools');
 var Results = require('./commonResult');
 
 var School = require('../models').School;
+var User = require('../models').User;
 
 var fs = require('fs');
 var adminRoute = require('./adminRoute');
@@ -109,6 +110,119 @@ exports.getSchoolById = function(req, res, next) {
 
     });
 };
+
+
+exports.getSchoolNewStudents = function(req, res, next) {
+
+    var schoolId = req.param('id');
+    var query = {};
+    var resData = {};
+    var NUMOFUSERS = 6;
+
+    var ep = new EventProxy();
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+
+                var count = 0;
+                for (var i = school.users.length - 1; i >= school.users.length - NUMOFUSERS; i--) {
+                    if (i < 0)
+                        break;
+                    count++;
+                }
+
+                for (var i = school.users.length - 1; i >= school.users.length - NUMOFUSERS; i--) {
+                    if (i < 0)
+                        break;
+
+                    User.findById(school.users[i], "id username avatar enrollYear status", function(err, user) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        
+                        ep.emit('findUser', user);
+                    });
+                }
+
+                ep.after("findUser", count, function(users) {
+                    res.json({
+                        result: true,
+                        data: users
+                    });
+                    return;
+                });
+
+
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+
+    });
+};
+
+
+
+exports.getSchoolStudents = function(req, res, next) {
+
+    var schoolId = req.param('id');
+    var query = {};
+    var resData = {};
+
+    var ep = new EventProxy();
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+
+                for (var i = school.users.length - 1; i >= 0; i--) {
+                    if (i < 0)
+                        break;
+
+                    User.findById(school.users[i], "id username avatar enrollYear status", function(err, user) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        ep.emit('findUser', user);
+                    });
+                }
+
+                ep.after("findUser", school.users.length, function(users) {
+                    res.json({
+                        result: true,
+                        data: users
+                    });
+                    return;
+                });
+
+
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+
+    });
+};
+
 
 
 exports.adminGetSchoolInfoList = function(req, res, next) {

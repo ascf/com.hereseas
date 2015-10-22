@@ -12,6 +12,7 @@ var Apartment = require('../models').Apartment;
 var User = require('../models').User;
 var adminRoute = require('./adminRoute');
 var fs = require('fs');
+var School = require('../models').School;
 
 var passport = require('passport');
 
@@ -472,12 +473,17 @@ exports.editUser = function(req, res, next) {
             if (err) {
                 res.json(Results.ERR_DB_ERR);
                 return;
+            } else if (user == null) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
             } else {
                 epUser.emit("findUser", user);
             }
         });
 
     epUser.all("findUser", function(user) {
+
+        previousSchoolId = user.schoolId;
 
         for (var key in reqData) {
             user[key] = reqData[key];
@@ -491,6 +497,10 @@ exports.editUser = function(req, res, next) {
             } else {
                 if (req.query.step == 1 || req.query.step == 3)
                     updateUserApartments(user.id);
+
+                if (req.query.step == 1)
+                    updateSchoolUser(user.id, previousSchoolId, reqData.schoolId);
+
                 res.json({
                     result: true,
                     data: {
@@ -515,6 +525,53 @@ exports.editUser = function(req, res, next) {
 
 
 };
+
+function updateSchoolUser(userId, previousSchoolId, schoolId) {
+
+    if (previousSchoolId != schoolId) {
+
+        School.findById(schoolId, function(err, school) {
+            if (err) {
+                console.log(err);
+                return;
+            } else if (school == null) {
+                console.log("school is null");
+                return;
+            } else {
+                school.users.addToSet(userId);
+                school.save(function() {});
+            }
+        });
+
+
+        if (previousSchoolId != null) {
+
+            School.findById(previousSchoolId, function(err, school) {
+                if (err) {
+                    console.log(err);
+                    return;
+                } else if (school == null) {
+                    console.log("school is null");
+                    return;
+                } else {
+                    var index = school.users.indexOf(userId);
+
+                    if (index > -1) {
+                        console.log(index);
+                        school.users.splice(index, 1);
+                        school.save(function() {});
+                    }
+                }
+
+            });
+
+        }
+    }
+
+
+}
+
+
 
 //update user avatar and username 
 function updateUserApartments(userId) {

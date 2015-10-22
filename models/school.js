@@ -31,6 +31,11 @@ var SchoolSchema = new Schema({
 		type: String
 	},
 
+	users: [{
+		type: Schema.ObjectId,
+		ref: 'User'
+	}],
+
 	userCount: {
 		type: Number,
 		default: 0

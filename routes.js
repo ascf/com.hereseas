@@ -79,6 +79,8 @@ module.exports = function(app) {
     app.get('/school/:id', schoolRoute.getSchoolById);
     app.get('/schools', schoolRoute.getSchoolList);
     app.get('/schools/three', schoolRoute.getSchoolListThree);
+    app.get('/school/:id/newstudents', schoolRoute.getSchoolNewStudents);
+    app.get('/school/:id/students', schoolRoute.getSchoolStudents);
 
     /*  car */
     app.post('/car', sign.ensureAuthenticated, carRoute.createCar);
