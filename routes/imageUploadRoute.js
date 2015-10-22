@@ -40,7 +40,7 @@ exports.image_upload = function(req, res, next) {
                 return;
             } else {
 
-                if (user.status != 1 || user.verified != true) {
+                if (user.status != 1 ) {
                     res.json(Results.ERR_PERMISSION_ERR);
                     deleteTempImage(tmp_path);
                     return;
