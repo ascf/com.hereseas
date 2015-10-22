@@ -808,6 +808,7 @@ exports.getUserMessage = function(req, res, next) {
     Message.find(query, function(err, messages) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
+            return;
         } else {
             for (var i = 0; i < messages.length; i++) {
                 userMessages.push(messages[i]);
@@ -822,6 +823,7 @@ exports.getUserMessage = function(req, res, next) {
         Message.find(query, function(err, messages) {
             if (err) {
                 res.json(Results.ERR_DB_ERR);
+                return;
             } else {
                 for (var i = 0; i < messages.length; i++) {
                     userMessages.push(messages[i]);
