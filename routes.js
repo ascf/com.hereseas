@@ -115,6 +115,7 @@ module.exports = function(app) {
     app.post('/admin/user/:id/active', userRoute.adminActiveUser);
     app.post('/admin/favorite/update',sign.ensureAuthenticated,adminRoute.updateFavorite);
 
+    app.get('/admin/db/show', sign.ensureAuthenticated,adminRoute.showCollections);
 
     /* reset password */
     app.post('/beforereset', forgetterRoute.createForgetter);

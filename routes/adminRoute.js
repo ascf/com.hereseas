@@ -13,8 +13,9 @@ var passport = require('passport');
 var Apartment = require('../models').Apartment;
 var School = require('../models').School;
 var adminRoute = require('./adminRoute');
-
 var User = require('../models').User;
+var mongoose = require('mongoose');
+var mongo_db = 'mongodb://localhost/hereseas_dev';
 
 exports.createAdmin = function(req, res, next) {
     var admin = new Admin();
@@ -149,4 +150,31 @@ exports.updateFavorite = function(req, res, next) {
 
 
 
+};
+
+exports.showCollections = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+            console.log("success");
+            ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        console.log("ok");
+        // execute admin function
+        mongoose.connection.db.collectionNames(function(err, names) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            }
+            res.json({
+                result: true,
+                data: names
+            })
+        });
+    });
 };
