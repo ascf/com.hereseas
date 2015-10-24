@@ -142,7 +142,7 @@ exports.editCarById = function(req, res, next) {
 			for (var key in reqData) {
 				car[key] = reqData[key];
 			}
-			car.update_at = new Date();
+			car.updateAt = new Date();
 			car.save(function(err, apartment) {
 				if (err) {
 					console.log(err);
@@ -213,7 +213,7 @@ exports.postCarById = function(req, res, next) {
 					return;
 				}
 				car['status'] = 1;
-				car.updateAt = new Date();
+				car.update_at = new Date();
 				car.save(function(err, car) {
 					if (err) {
 						consolo.log(err);
@@ -234,9 +234,6 @@ exports.postCarById = function(req, res, next) {
 };
 
 exports.getCarList = function(req, res, next) {
-
-    //schoolId = req.query.schoolId
-
     userId = req.user.id;
 
     if (!userId) {
@@ -250,7 +247,6 @@ exports.getCarList = function(req, res, next) {
         'available': true
     };
 
-    //console.log(query);
     Car.find(
             query,
             'id schoolId title cover username longitude latitude createAt updateAt')
@@ -273,4 +269,40 @@ exports.getCarList = function(req, res, next) {
                 return;
             }
         })
+};
+
+exports.getCarById = function(req, res, next) {
+
+    var carId = req.param('id');
+
+    console.log(carId);
+
+    var query = {
+        '_id': carId,
+        'status': 1,
+        'available': true
+    };
+
+    Car.find(
+            query,
+            'userId username userAvatar schoolId title description cover images basicInfo color noAccident driveSystem transSystem output breakType security comfort address longitude latitude create_at update_at')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, cars) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!cars.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: cars
+                });
+                return;
+            }
+        })
+
 };
