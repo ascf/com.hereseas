@@ -354,7 +354,7 @@ exports.getThreeCars = function(req, res, next) {
 
         Car.find(
                 query,
-                'id userId userName userAvatar schoolId title cover')
+                'id userId username userAvatar schoolId cover')
             .sort({
                 createAt: 'desc'
             }).
