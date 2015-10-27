@@ -378,3 +378,35 @@ exports.getThreeCars = function(req, res, next) {
     });
 
 };
+
+exports.getCarDraftList = function(req, res, next) {
+
+    var query = {
+        'status': 2,
+        'available': true
+    };
+
+    query['userId'] = req.user.id;
+
+    Car.find(
+            query,
+            'id userId schoolId title cover longitude latitude createAt updateAt')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, cars) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!cars.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: cars
+                });
+                return;
+            }
+        })
+};
