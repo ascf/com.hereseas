@@ -410,3 +410,51 @@ exports.getCarDraftList = function(req, res, next) {
             }
         })
 };
+
+exports.getCarDraftById = function(req, res, next) {
+
+    var carId = req.param('id');
+
+    var query = {
+        '_id': carId,
+        'status': 2
+    };
+
+    User.findById(req.user.id,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (user.status != 1 || user.verified != true) {
+                res.json(Results.ERR_PERMISSION_ERR);
+                return;
+            } else {
+
+                Car.find(
+                        query,
+                        'userId username userAvatar schoolId title description cover images basicInfo color noAccident driveSystem transSystem output breakType security comfort available status address longitude latitude create_at update_at')
+                    .sort({
+                        createAt: 'desc'
+                    }).exec(function(err, cars) {
+                        if (err) {
+                            res.json(Results.ERR_DB_ERR);
+                            return;
+                        } else if (!cars.length) {
+                            res.json(Results.ERR_NOTFOUND_ERR);
+                            return;
+                        } else if (cars[0].userId != req.user.id) {
+                            res.json(Results.ERR_PERMISSION_ERR);
+                            return;
+                        } else {
+                            res.json({
+                                result: true,
+                                data: cars
+                            });
+                            return;
+                        }
+                    });
+
+            }
+        })
+
+};

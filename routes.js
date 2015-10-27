@@ -91,6 +91,7 @@ module.exports = function(app) {
     app.get('/cars/three', carRoute.getThreeCars);
     app.post('/car/m_upload_image', sign.ensureAuthenticated, upload.array("car", 1), imageUploadRoute.image_upload);
     app.get('/cars/draft', sign.ensureAuthenticated, carRoute.getCarDraftList);
+    app.get('/car/draft/:id', sign.ensureAuthenticated, carRoute.getCarDraftById);
 
     /*  admin */
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
