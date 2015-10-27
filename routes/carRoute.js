@@ -458,3 +458,69 @@ exports.getCarDraftById = function(req, res, next) {
         })
 
 };
+
+exports.deleteCarById = function(req, res, next) {
+
+    var carId = req.param('id');
+    var reqData = {};
+    var userId = req.user.id;
+
+    if (!carId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var epUser = new EventProxy();
+
+    User.findById(req.user.id,
+        function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                if (user.status != 1 || user.verified != true) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                }
+
+                epUser.emit("findUser", user);
+            }
+        });
+
+    epUser.all("findUser", function(user) {
+
+        Car.findById(carId, function(err, car) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!car) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                if (car.userId != userId) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                }
+
+                car['available'] = false;
+                car.updateAt = new Date();
+
+                car.save(function(err, car) {
+                    if (err) {
+                        return next();
+                    } else {
+                        res.json({
+                            result: true,
+                            data: {}
+                        });
+
+                    }
+                });
+
+            }
+
+        });
+
+    });
+
+}
