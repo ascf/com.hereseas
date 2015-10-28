@@ -317,7 +317,8 @@ exports.getFavorite = function(req, res, next) {
                             "longitude": apartment.longitude,
                             "cover": apartment.cover,
                             "price": price,
-                            "type": type
+                            "type": type,
+                            "status": apartment.status
                         };
 
                         ep.emit("findApartments", apartmentOne);
