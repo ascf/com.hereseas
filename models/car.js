@@ -95,13 +95,9 @@ var CarSchema = new Schema({
 		type: String
 	},
 	//刹车
-	breakType: {
-		type: String
-	},
+	breakType: Schema.Types.Mixed,
 	//安全
-	security: {
-		type: String
-	},
+	security: Schema.Types.Mixed,
 	//舒适
 	comfort: Schema.Types.Mixed,
 	/*
