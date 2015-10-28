@@ -166,6 +166,9 @@ exports.getUser = function(req, res, next) {
                 if (err) {
                     res.json(Results.ERR_DB_ERR);
                     return;
+                } else if (user == null) {
+                    res.json(Results.ERR_NOTFOUND_ERR);
+                    return;
                 } else {
                     res.json({
                         result: true,
