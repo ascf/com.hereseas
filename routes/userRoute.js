@@ -269,17 +269,16 @@ exports.getFavorite = function(req, res, next) {
             var carCount = user.favorite.cars.length;
             var itemCount = user.favorite.items.length;
 
-            for (var i = 0; i < apartmentCount; i++) {
-
-                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar schoolId title cover longitude latitude create_at available status', function(err, apartment) {
-                    if (err) {
-                        res.json(Results.ERR_DB_ERR);
-                        return;
-                    } else {
-                        ep.emit("findApartments", apartment);
+            ep.all("ApartmentDone", function(apartmentList) {
+                res.json({
+                    result: true,
+                    data: {
+                        "apartments": apartmentList
                     }
                 });
-            }
+                return;
+
+            });
 
             ep.after("findApartments", apartmentCount, function(apartments) {
 
@@ -295,17 +294,17 @@ exports.getFavorite = function(req, res, next) {
                 ep.emit("ApartmentDone", apartmentList);
             });
 
+            for (var i = 0; i < apartmentCount; i++) {
 
-            ep.all("ApartmentDone", function(apartmentList) {
-                res.json({
-                    result: true,
-                    data: {
-                        "apartments": apartmentList
+                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar schoolId title cover longitude latitude create_at available status', function(err, apartment) {
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                        return;
+                    } else {
+                        ep.emit("findApartments", apartment);
                     }
                 });
-                return;
-
-            });
+            }
 
 
         }
