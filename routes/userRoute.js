@@ -301,6 +301,14 @@ exports.getFavorite = function(req, res, next) {
                         res.json(Results.ERR_DB_ERR);
                         return;
                     } else {
+
+                        var price = {
+                            maxPrice: calculatePrice(apartment.rooms).maxPrice,
+                            minPrice: calculatePrice(apartment.rooms).minPrice
+                        }
+                        apartment["price"] = price;
+                        apartment["type"] = getType(apartment.rooms);
+
                         ep.emit("findApartments", apartment);
                     }
                 });
@@ -310,6 +318,40 @@ exports.getFavorite = function(req, res, next) {
         }
     });
 };
+
+
+function calculatePrice(rooms) {
+    var max = 0
+    var min = Number.MAX_VALUE
+    for (var i = 0; i < rooms.length; i++) {
+        if (max < rooms[i].price)
+            max = rooms[i].price;
+        if (min > rooms[i].price)
+            min = rooms[i].price;
+    }
+    var price = {
+        maxPrice: max,
+        minPrice: min
+    }
+    return price;
+}
+//type needs to be checked. There are total three types: 卧室、客厅、其它
+function getType(rooms) {
+    var filter = [false, false, false];
+    for (var i = 0; i < rooms.length; i++) {
+        if (rooms[i].type === "卧室")
+            filter[0] = true;
+        if (rooms[i].type === "客厅")
+            filter[1] = true;
+        if (rooms[i].type === "其它")
+            filter[2] = true;
+    }
+    var type = []
+    if (filter[0]) type.push("卧室");
+    if (filter[1]) type.push("客厅");
+    if (filter[2]) type.push("其它");
+    return type;
+}
 
 
 
