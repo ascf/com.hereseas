@@ -296,7 +296,7 @@ exports.getFavorite = function(req, res, next) {
 
             for (var i = 0; i < apartmentCount; i++) {
 
-                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar schoolId title cover longitude latitude create_at available status', function(err, apartment) {
+                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar rooms schoolId title cover longitude latitude create_at available status', function(err, apartment) {
                     if (err) {
                         res.json(Results.ERR_DB_ERR);
                         return;
