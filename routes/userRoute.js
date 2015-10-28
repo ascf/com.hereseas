@@ -306,10 +306,21 @@ exports.getFavorite = function(req, res, next) {
                             maxPrice: calculatePrice(apartment.rooms).maxPrice,
                             minPrice: calculatePrice(apartment.rooms).minPrice
                         }
-                        apartment["price"] = price;
-                        apartment["type"] = getType(apartment.rooms);
+                        var type = getType(apartment.rooms);
 
-                        ep.emit("findApartments", apartment);
+                        var apartmentOne = {
+                            "id": apartment.id,
+                            "schoolId": apartment.schoolId,
+                            "username": apartment.username,
+                            "userAvatar": apartment.userAvatar,
+                            "latitude": apartment.latitude,
+                            "longitude": apartment.longitude,
+                            "cover": apartment.cover,
+                            "price": price,
+                            "type": type
+                        };
+
+                        ep.emit("findApartments", apartmentOne);
                     }
                 });
             }
