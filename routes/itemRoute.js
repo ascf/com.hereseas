@@ -241,3 +241,79 @@ exports.getItemList = function(req, res, next) {
             }
         })
 };
+
+exports.postItemById = function(req, res, next) {
+	var itemId = req.param('id');
+	var reqData = {};
+	var userId = req.user.id;
+	var epUser = new EventProxy();
+	epUser.all("findUser", function(user) {
+		Item.findById(itemId, function(err, item) {
+			if (err) {
+				//console.log(err);
+				res.json(Results.ERR_DB_ERR);
+				return;
+			} else if (!item) {
+				res.json(Results.ERR_NOTFOUND_ERR);
+				return;
+			} else {
+				if (item.userId != userId || item.status != 2){
+					res.json(Results.ERR_PERMISSION_ERR);
+					return;
+				}
+				var reqData = {
+					userId: item.userId,
+                    username: item.username,
+                    userAvatar: item.userAvatar,
+                    schoolId: item.schoolId,
+                   	expireAt: item.expireAt,
+                   	itemName: item.itemName,
+                   	category: item.category,
+                   	price: item.price,
+                    description: item.description,
+                    cover: item.cover,
+                    images: item.images,
+                    address: item.address,
+                    longitude: item.longitude,
+                    latitude: item.latitude
+                   
+				};
+				//console.log(reqData);
+				if (tools.isEmpty(reqData.images)) {
+					res.json(Results.ERR_NOTFINISHED_ERR);
+					return;
+				}
+				if (tools.hasNull(reqData)) {
+					res.json(Results.ERR_NOTFINISHED_ERR);
+					return;
+				}
+				item['status'] = 1;
+				item.updateAt = new Date();
+				item.save(function(err, item) {
+					if (err) {
+						//consolo.log(err);
+						return next();
+					} else {
+						res.json({
+							result: true,
+							data: {
+								"_id": item.id,
+                                "schoolId": item.schoolId
+							}
+						});
+					}
+				});
+			}
+		});
+	});
+
+	User.findById(req.user.id, function(err, user) {
+		if (err) {
+			res.json(Results.ERR_DB_ERR);
+			return;
+		} else {
+			epUser.emit("findUser", user);
+		}
+	});
+
+};
