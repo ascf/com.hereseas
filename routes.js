@@ -98,6 +98,7 @@ module.exports = function(app) {
     /*  item */
     app.post('/item', sign.ensureAuthenticated, itemRoute.createItem);
     app.put('/item/:id', sign.ensureAuthenticated, itemRoute.editItemById);
+    app.get('/item/:id', itemRoute.getItemById);
 
 
     /*  admin */

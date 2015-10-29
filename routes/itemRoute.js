@@ -113,3 +113,33 @@ exports.editItemById = function(req, res, next) {
 		}
 	});
 };
+
+exports.getItemById = function(req, res, next) {
+    var itemId = req.param('id');
+
+    var query = {
+        '_id': itemId,
+        'status': 1,
+        'available': true
+    };
+
+    Item.find(query,
+            'userId username userAvatar schoolId expireAt itemName category price description cover images address longitude latitude createAt updateAt')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, items) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!items.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: items
+                });
+                return;
+            }
+        })
+};
