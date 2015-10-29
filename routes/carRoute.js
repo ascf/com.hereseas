@@ -106,7 +106,8 @@ exports.editCarById = function(req, res, next) {
         }
     } else if (req.query.step == 4) {
         reqData = {
-            description: req.body.description,
+            title: req.body.title,
+            description: req.body.description
         }
     } else if (req.query.step == 5) {
         reqData = {
@@ -191,6 +192,7 @@ exports.postCarById = function(req, res, next) {
                     username: car.username,
                     userAvatar: car.userAvatar,
                     schoolId: car.schoolId,
+                    title: car.title,
                     description: car.description,
                     cover: car.cover,
                     images: car.images,
@@ -201,6 +203,11 @@ exports.postCarById = function(req, res, next) {
                     security: car.security,
                     comfort: car.comfort,
                     basicInfo: car.basicInfo,
+                    color : car.color,
+                    noAccident: car.noAccident,
+                    driveSystem: car.driveSystem,
+                    transSystem: car.transSystem,
+                    output: car.output,
                     status: car.status
                    
 				};
