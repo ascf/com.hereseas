@@ -102,6 +102,7 @@ module.exports = function(app) {
     /*  item */
     app.post('/item', sign.ensureAuthenticated, itemRoute.createItem);
     app.put('/item/:id', sign.ensureAuthenticated, itemRoute.editItemById);
+    app.get('/items', sign.ensureAuthenticated, itemRoute.getItemList);
     app.get('/item/:id', itemRoute.getItemById);
     app.get('/items/three', itemRoute.getThreeItems);
 

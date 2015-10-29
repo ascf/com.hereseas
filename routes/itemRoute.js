@@ -206,3 +206,38 @@ exports.getThreeItems = function(req, res, next) {
     });
 
 };
+
+exports.getItemList = function(req, res, next) {
+
+    var userId = req.user.id;
+
+    if (!userId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var query = {
+        'status': 1,
+        'userId': userId,
+        'available': true
+    };
+
+    Item.find(query, 'id schoolId itemName cover expireAt longitude latitude createAt updateAt')
+        .sort({
+            createAt: 'desc'
+        }).exec(function(err, items) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!items.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: items
+                });
+                return;
+            }
+        })
+};
