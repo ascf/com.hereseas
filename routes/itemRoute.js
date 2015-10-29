@@ -143,3 +143,66 @@ exports.getItemById = function(req, res, next) {
             }
         })
 };
+
+exports.getThreeItems = function(req, res, next) {
+
+    schoolId = req.query.schoolId
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var connection;
+    var ep = new EventProxy();
+
+    ep.all('findSchoolConnection', function() {
+
+        var subQuery = {};
+        subQuery['$in'] = connection;
+
+        var query = {
+            'status': 1,
+            'available': true,
+            'schoolId': subQuery
+        };
+
+        Item.find(query, 'id userId username userAvatar schoolId cover').sort({
+                createAt: 'desc'
+            }).limit(3).exec(function(err, items) {
+	            if (err) {
+	                res.json(Results.ERR_DB_ERR);
+	                return;
+	            } else if (!items.length) {
+	                res.json(Results.ERR_NOTFOUND_ERR);
+	                return;
+	            } else {
+	                res.json({
+	                    result: true,
+	                    data: items
+	                });
+	                return;
+	            }
+        });
+    });
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else if (school) {
+            if (school.status == 1) {
+                connection = school.connection;
+                ep.emit('findSchoolConnection');
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+
+    });
+
+};
