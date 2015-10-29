@@ -102,13 +102,13 @@ module.exports = function(app) {
     /*  item */
     app.post('/item', sign.ensureAuthenticated, itemRoute.createItem);
     app.put('/item/:id', sign.ensureAuthenticated, itemRoute.editItemById);
+    app.put('/item/post/:id', sign.ensureAuthenticated, itemRoute.postItemById);
     app.get('/items', sign.ensureAuthenticated, itemRoute.getItemList);
     app.get('/item/:id', itemRoute.getItemById);
     app.get('/items/three', itemRoute.getThreeItems);
 
 
     /*  forum */
-
     app.get('/school/:id/threads', forumRoute.getThreadsBySchoolId);
     app.get('/thread/:id', forumRoute.getThreadById);
     app.get('/thread/:id/comments', forumRoute.getCommentByThreadId);
