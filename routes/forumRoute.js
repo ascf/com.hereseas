@@ -5,6 +5,8 @@ var tools = require('../common/tools');
 var Thread = require('../models').Thread;
 var School = require('../models').School;
 var Thread = require('../models').Thread;
+var Comment = require('../models').Comment;
+
 
 
 exports.getThreadById = function(req, res, next) {
@@ -49,14 +51,14 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 	}
 
 	var query = {
-		'_id': schoolId,
+		'schoolId': schoolId,
 		'status': 1
 	};
 
 	Thread.find(query,
 		'userId username userAvatar schoolId title createAt lastReplayUserId replayCount updateAt').sort({
 		updateAt: 'desc'
-	}).populate('userId', 'username').exec(function(err, threads) {
+	}).populate('lastReplayUserId', 'username').exec(function(err, threads) {
 
 		if (err) {
 			res.json(Results.ERR_DB_ERR);
@@ -64,7 +66,7 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 		} else {
 			res.json({
 				result: true,
-				data: thread
+				data: threads
 			});
 			return;
 		}
@@ -90,6 +92,8 @@ exports.getCommentByThreadId = function(req, res, next) {
 			'status': 1
 		}
 
+		console.log(commentQuery)
+
 		Comment.find(commentQuery, "userId username userAvatar content createAt").sort({
 			createAt: 'desc'
 		}).exec(function(err, comments) {
@@ -108,7 +112,7 @@ exports.getCommentByThreadId = function(req, res, next) {
 	});
 
 	var query = {
-		'_id': threadId,
+		'threadId': threadId,
 		'status': 1
 	};
 
@@ -196,6 +200,7 @@ exports.createComment = function(req, res, next) {
 			username: user.username,
 			userAvatar: user.avatar,
 			schoolId: req.body.schoolId,
+			threadId: thread.id,
 			content: req.body.content
 		};
 		if (tools.hasNull(reqData)) {
