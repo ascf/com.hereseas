@@ -77,8 +77,6 @@ var ItemSchema = new Schema({
         default: Date.now
     }
 });
-ItemSchema.virtual('avatar_url').get(function() {
-    return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
-});
+
 mongoose.model('Item', ItemSchema);
 exports.Item = mongoose.model('Item');

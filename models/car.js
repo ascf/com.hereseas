@@ -142,8 +142,6 @@ var CarSchema = new Schema({
 		default: Date.now
 	}
 });
-CarSchema.virtual('avatar_url').get(function() {
-	return 'http://www.gravatar.com/avatar/' + utility.md5(this.email.toLowerCase()) + '?size=48';
-});
+
 mongoose.model('Car', CarSchema);
 exports.Car = mongoose.model('Car');
