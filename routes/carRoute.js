@@ -144,7 +144,7 @@ exports.editCarById = function(req, res, next) {
 				car[key] = reqData[key];
 			}
 			car.updateAt = new Date();
-			car.save(function(err, apartment) {
+			car.save(function(err, car) {
 				if (err) {
 					console.log(err);
 					return next();

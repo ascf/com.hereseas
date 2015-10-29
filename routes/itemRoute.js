@@ -10,15 +10,12 @@ exports.createItem = function(req, res, next) {
 
 	epUser.all("findUser", function(user) {
 		//execute after "findUser" is emited
-		console.log(user);
 		var reqData = {
 			userId: user.id,
 			username: user.username,
 			userAvatar: user.avatar,
 			schoolId: req.body.schoolId,
 		};
-		console.log(reqData);
-
 		if (tools.hasNull(reqData)) {
 			res.json(Results.ERR_PARAM_ERR);
 			return;
@@ -53,4 +50,66 @@ exports.createItem = function(req, res, next) {
 			epUser.emit("findUser", user);
 		}
 	});
-}
+};
+
+exports.editItemById = function(req, res, next) {
+	var itemId = req.param('id');
+	var userId = req.user.id;
+	var reqData = {};
+	if (!req.query.step) {
+		res.json(Results.ERR_PARAM_ERR);
+		return;
+	}
+	if (req.query.step == 1) {
+		reqData = {
+			expireAt: req.body.expireAt,
+			itemName: req.body.itemName,
+			category: req.body.category,
+			price: req.body.price,
+			description: req.body.description,
+			cover: req.body.cover,
+			images: req.body.images
+		}
+	} else if (req.query.step == 2) {
+		reqData = {
+			address: req.body.address,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude
+		}
+	} else {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+	if (tools.hasNull(reqData)) {
+		res.json(Results.ERR_PARAM_ERR);
+		return;
+	}
+	Item.findById(itemId, function(err, item) {
+		if (err) {
+			res.json(Results.ERR_DB_ERR);
+			return;
+		} else if (!item) {
+			res.json(Results.ERR_NOTFOUND_ERR);
+			return;
+		} else {
+			if (item.userId != userId) {
+				res.json(Results.ERR_PERMISSION_ERR);
+                return;
+			}
+			for (var key in reqData) {
+				item[key] = reqData[key];
+			}
+			item.updateAt = new Date();
+			item.save(function(err, item) {
+				if (err) {
+					return next();
+				} else {
+					res.json({
+						result: true,
+						data: {}
+					});
+				}
+			});
+		}
+	});
+};
