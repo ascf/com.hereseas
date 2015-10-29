@@ -18,6 +18,8 @@ require('./admin.js');
 require('./forgetter.js');
 require('./message.js');
 require('./item.js');
+require('./thread.js');
+require('./comment.js');
 
 
 exports.User = mongoose.model('User');
@@ -29,3 +31,5 @@ exports.Admin = mongoose.model('Admin');
 exports.Forgetter = mongoose.model('Forgetter');
 exports.Message = mongoose.model('Message');
 exports.Item = mongoose.model('Item');
+exports.Thread = mongoose.model('Thread');
+exports.Comment = mongoose.model('Comment');
