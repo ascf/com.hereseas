@@ -17,6 +17,7 @@ require('./car.js');
 require('./admin.js');
 require('./forgetter.js');
 require('./message.js');
+require('./item.js');
 
 
 exports.User = mongoose.model('User');
@@ -27,3 +28,4 @@ exports.Car = mongoose.model('Car');
 exports.Admin = mongoose.model('Admin');
 exports.Forgetter = mongoose.model('Forgetter');
 exports.Message = mongoose.model('Message');
+exports.Item = mongoose.model('Item');

@@ -5,6 +5,7 @@ var carRoute = require('./routes/carRoute');
 var imageUploadRoute = require('./routes/imageUploadRoute');
 var adminRoute = require('./routes/adminRoute');
 var forgetterRoute = require('./routes/forgetterRoute');
+var itemRoute = require('./routes/itemRoute');
 
 var multer = require('multer');
 var upload = multer({
@@ -93,6 +94,9 @@ module.exports = function(app) {
     app.get('/cars/draft', sign.ensureAuthenticated, carRoute.getCarDraftList);
     app.get('/car/draft/:id', sign.ensureAuthenticated, carRoute.getCarDraftById);
     app.delete('/car/:id', sign.ensureAuthenticated, carRoute.deleteCarById);
+
+    /*  item */
+    app.post('/item', sign.ensureAuthenticated, itemRoute.createItem);
 
     /*  admin */
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
