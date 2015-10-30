@@ -1,0 +1,29 @@
+<div style="background-color:#FFFFFF;min-width:1000px">
+    <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div top-bar></div>
+    
+    <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
+        <div class="row" style="overflow-y:scroll;margin-left:-5px;margin-right:50px">
+            <a href="#/activs/1" ng-repeat="activ in activities">
+                <div class="col-xs-3 col-sm-3" style="padding:5px 5px 5px 5px;" >
+                    <div style="padding:5px 5px 15px 5px;border:1px solid #504e4d">
+                        <div style="border-bottom:1px solid #504e4d;padding:5px 5px 5px 5px;height:30px">
+                            <div style="float:left;color:#504e4d;">{{activ.title}}</div>
+                            <div ng-show="activ.isfavor"><img src="/app/view/img/profile/favorite1.png" style="float:right;width:10px;height:10px"></img></div>
+                            <div ng-hide="activ.isfavor"><img src="/app/view/img/profile/favorite2.png" style="float:right;width:10px;height:10px"></img></div>
+                        </div>
+                        <div style="border-bottom:1px solid #504e4d;color:#504e4d;padding:5px 5px 5px 5px;">{{activ.numOfPeo}}人参与</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+<div footer></div>
+</div>
+
+<style>
+    
+</style>
+
+

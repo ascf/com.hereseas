@@ -1,11 +1,11 @@
-<md-dialog>
+<md-dialog style="border-radius: 0 0 38px 0;">
 
 <div layout="row" class="room_post" ng-controller="CarPostController">
     <!--Begin of left side nav_bar-->
     <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" >
         <md-content role="navigation" class="md-default-theme">
             <ul class="docs-menu">
-                <li>
+                <li style="margin-top:12px;">
                     <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(1)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -54,8 +54,8 @@
                                     详细描述
                                 </span>
                                 <span flex></span>
-                                <i class="nav_icon material-icons" ng-hide='tableFilled[4].filled'>add</i>
-                                <i class="nav_icon material-icons" ng-show='tableFilled[4].filled'>check</i>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[3].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[3].filled'>check</i>
                             </div>
                         </a>
                     </menu-link>
@@ -68,8 +68,8 @@
                                     地址
                                 </span>
                                 <span flex></span>
-                                <i class="nav_icon material-icons" ng-hide='tableFilled[5].filled'>add</i>
-                                <i class="nav_icon material-icons" ng-show='tableFilled[5].filled'>check</i>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[4].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[4].filled'>check</i>
                             </div>
                         </a>
                     </menu-link>
@@ -82,24 +82,42 @@
                                     图片
                                 </span>
                                 <span flex></span>
-                                <i class="nav_icon material-icons" ng-hide='tableFilled[6].filled'>add</i>
-                                <i class="nav_icon material-icons" ng-show='tableFilled[6].filled'>check</i>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[5].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[5].filled'>check</i>
                             </div>
                         </a>
                     </menu-link>
                 </li>
-                <md-button class="md-primary" ng-click="hide()">关闭</md-button>
             </ul>
         </md-content>
+        <div layout="row">
+            <div ng-show="canPost" class="div_submit">
+                <button class="center-block btn submit" ng-click="doPost()">
+                    <div layout="row" layout-align="center center">
+                        <div>
+                            提交
+                        </div>
+                        <div>
+                            <i class="material-icons">navigate_next</i>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            <div ng-hide="canPost" class="div_steps">
+                <p class="rp_font_steps font">还剩&nbsp;</p>
+                <p class="rp_font_steps font"><strong>{{sn}}</strong></p>
+                <p class="rp_font_steps font">&nbsp;步骤未填写</p>
+            </div>
+        </div>
     </md-sidenav>
     <!--End of side nav bar-->
-    <md-dialog-content>
-    <div layout="column" flex>
+    <md-dialog-content style="min-height:520px;">
+    <div layout="column" flex id="post_wrapper">
         <!--Begin of 车辆信息 Page-->
         <div ng-show="activePage == 1" class="room_post_listing_content">
             <div>
                 <div layout="row">
-                    <h4 class="text-muted">您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校页面中</h4>
+                    <h4 class="text-muted" style="color:black">您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校页面中</h4>
                 </div>
             </div>
             <div>
@@ -111,127 +129,74 @@
                     <p class="room_post_font_content">车辆信息</p>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
-                    <div flex="20">
+                    <div flex="15">
                         <p class="room_post_font_content">年款</p>
                     </div>
-                    <div flex="30" layout="row" layout-align="start end">
-                            <md-select name="car_year" placeholder="" ng-model="steps[0].year" required class="rp_select">
-                            <md-option value="2005" >2005</md-option>
-                            <md-option value="2006" >2006</md-option>
-                            <md-option value="2007" >2007</md-option>
-                            <md-option value="2008" >2008</md-option>
-                            <md-option value="2009" >2009</md-option>
-                            <md-option value="2010" >2010</md-option>
-                            <md-option value="2011" >2011</md-option>
-                            <md-option value="2012" >2012</md-option>
-                            <md-option value="2013" >2013</md-option>
-                            <md-option value="2014" >2014</md-option>
-                            <md-option value="2015">2015</md-option>
-                            <md-option value="2016">2016</md-option>
-                            </md-select>
+                    <div flex="35" layout="row" layout-align="start end">
+                        <input required ng-model="steps[0].basicInfo[0].year" name="year" aria-label="CarYear" style="border-radius:4px;width:80px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
-                    <div flex="20">
+                    <div flex="15">
                         <p class="room_post_font_content">车型</p>
                     </div>
-                    <div flex="30" layout="row" layout-align="start end">
-                        <div>
-                            <md-select name="car_style" placeholder="" ng-model="steps[0].style" required class="rp_select">
-                            <md-option value="SUV">SUV</md-option>
-                            <md-option value="Sedan">Sedan</md-option>
-                            <md-option value="Coupe">Coupe</md-option>
-                            <md-option value="Convertible">Convertible</md-option>
-                            <md-option value="Hatchback">Hatchback</md-option>
-                            <md-option value="Minivan">Minivan</md-option>
-                            <md-option value="Wagon">Wagon</md-option>
-                            </md-select>
-                        </div>
+                    <div flex="35" layout="row" layout-align="start end">
+                        <select required ng-model="steps[0].basicInfo[0].model" name="model" style="border-radius:10px;width:80px;border:1px solid #D5D4D2">
+                            <option value="SUV">SUV</option>
+                            <option value="Sedan">Sedan</option>
+                            <option value="Coupe">Coupe</option>
+                            <option value="Convertible">Convertible</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="Minivan">Minivan</option>
+                            <option value="Wagon">Wagon</option>
+                        </select>   
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
-                    <div flex="20">
+                    <div flex="15">
                         <p class="room_post_font_content">制造商</p>
                     </div>
-                    <div flex="30" layout="row" layout-align="start end">
-                        <md-input-container class="room_post_input text_input">
-                            <input required type="text" name="car_make" ng-model="steps[0].make" aria-label="make">
-                        </md-input-container>
+                    <div flex="35" layout="row" layout-align="start end">
+                        <input required ng-model="steps[0].basicInfo[0].make" name="make" aria-label="CarMake" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
-                    <div flex="20">
+                    <div flex="15">
                         <p class="room_post_font_content">车系</p>
                     </div>
-                    <div flex="30" layout="row" layout-align="start end">
-                        <md-input-container class="room_post_input text_input" style="width:135px">
-                            <input required type="text" name="car_model" ng-model="steps[0].model" aria-label="model">
-                        </md-input-container>
+                    <div flex="35" layout="row" layout-align="start end">
+                         <input required ng-model="steps[0].basicInfo[0].style" name="style" aria-label="CarStyle" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
-                    <div flex="20">
+                    <div flex="15">
                         <p class="room_post_font_content">里程</p>
                     </div>
-                    <div flex="30" layout="row" layout-align="start end">
-                        <md-input-container class="room_post_input text_input">
-                            <input required type="text" name="car_mileage" ng-model="mileage" aria-label="mileage">
-                        </md-input-container>&nbsp;&nbsp;
-                        <md-select name="m_units" placeholder="" ng-model="mUnits" required class="rp_select">
-                            <md-option value="miles">miles</md-option>
-                            <md-option value="km">km</md-option>
-                        </md-select>
+                    <div flex="35" layout="row" layout-align="start end">
+                        <input required ng-model="steps[0].basicInfo[0].totalMiles" name="totalMiles" aria-label="CarMiles" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2;margin-right:10px"/>
+                        <input value="miles" name="style" aria-label="CarStyle" style="border-radius:4px;width:40px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
-                    <div flex="20">
+                    <div flex="15">
                         <p class="room_post_font_content">购买日期</p>
                     </div>
                     <div flex="30" layout="row" layout-align="start end">
-                        <md-input-container class="room_post_input">
-                          <input ng-model="steps[0].boughtDate" type="date" name="invoiceDate"  aria-label="boughtDate"/>
-                        </md-input-container>
+                        <input required ng-model="steps[0].basicInfo[0].boughtDate" type="date" name="boughtDate"  aria-label="CarBoughtDate" style="border-radius:10px;width:120px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
-                    <div flex="20">
+                    <div flex="15">
                         <p class="room_post_font_content">型号</p>
                     </div>
                     <div flex="80" layout="row" layout-align="start end">
-                        <md-input-container class="room_post_input text_input" style="width:350px">
-                            <input type="text" name="car_category" ng-model="step[0].category" aria-label="category" >
-                        </md-input-container>
-                        <div style="padding-left:10px">
-                            (optional)
-                        </div>
+                        <input ng-model="steps[0].basicInfo[0].category" name="category"  aria-label="CarCategory" style="border-radius:4px;width:180px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
-                    <div flex="20">
-                        <div class="room_post_font_content">价格<div style="float:right;padding-right:10px">$</div></div>
+                    <div flex="15">
+                        <div class="room_post_font_content">价格</div>
                     </div>
                     <div flex="30" layout="row" layout-align="start end">
-                        <md-input-container class="room_post_input text_input" style="width:135px">
-                            <input required type="text" name="car_price" ng-model="step[0].price" aria-label="category">
-                        </md-input-container>
+                        $&nbsp;<input ng-model="steps[0].basicInfo[0].price" name="price"  aria-label="CarPrice" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
             </div>
             <!--End of room infomation-->
-            
-            
-            
-            <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
-                <!--Begin of next step button-->
-                <div></div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <!--End of next step button-->
-            </div>
         </div>
         <!--End of 车辆信息 Page-->
         <!--Begin of 外观动力 Page-->
@@ -244,39 +209,36 @@
                     <div flex="10" style="margin-top:15px;margin-left:50px;">
                         <p class="room_post_font_content">颜色</p>
                     </div>
-                    <div class="room_post_div">
-                        <div layout="row" layout-wrap>
-                            <md-radio-group required ng-model="step[1].color" layout="column" >
+                    <div class="room_post_div" style="margin-top:5px;">
+                        <div layout="column" layout-wrap>                  
                                 <div layout-align="start center" layout="row">
-                                    <md-radio-button value="白色">
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="white">
                                         <p class="room_post_font_content">白色</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="银色">
+                                    </input>
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="silver">
                                         <p class="room_post_font_content">银色</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="灰色">
+                                    </input>
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="gray">
                                         <p class="room_post_font_content">灰色</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="黄色">
+                                    </input>
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="yellow">
                                         <p class="room_post_font_content">黄色</p>
-                                    </md-radio-button>
+                                    </input>
                                 </div>
                                 <div layout-align="start center" layout="row">
-                                    <md-radio-button value="绿色">
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="green">
                                         <p class="room_post_font_content">绿色</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="蓝色">
+                                    </input>
+                                    <input required  name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="blue">
                                         <p class="room_post_font_content">蓝色</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="红色">
+                                    </input>
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="red">
                                         <p class="room_post_font_content">红色</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="黑色">
+                                    </input>
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="black">
                                         <p class="room_post_font_content">黑色</p>
-                                    </md-radio-button>
-                                </div>
-                            </md-radio-group>
-                            
+                                    </input>
+                                </div>                       
                         </div>
                     </div>
                 </div>
@@ -285,96 +247,64 @@
                         <p class="room_post_font_content">无事故</p>
                     </div>
                     <div class="room_post_div">
-                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[1].noAccident">
-                        </md-checkbox>
+                        <input required type="checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[1].noAccident"></input>
                     </div>
                 </div>
                 <div layout="row">
-                    <div style="margin-top:15px;margin-left:50px;">
+                    <div style="margin-top:15px;margin-left:50px;width:78px;">
                         <p class="room_post_font_content">驱动系统</p>
                     </div>
-                    <div class="room_post_div">
+                    <div class="room_post_div" style="margin-top:5px;">
                         <div layout="row" layout-wrap>
-                            <md-radio-group required ng-model="step[1].driveSystem"layout="column" >
-                                <div layout-align="start center" layout="row">
-                                    <md-radio-button value="FWD">
-                                        <p class="room_post_font_content">FWD</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="BWD">
-                                        <p class="room_post_font_content">BWD</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="AWD">
-                                        <p class="room_post_font_content">AWD</p>
-                                    </md-radio-button>
-                                </div>
-                            </md-radio-group>
+                            <div layout-align="start center" layout="row">
+                                <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" value="FWD" style="margin:15px">
+                                    <p class="room_post_font_content">FWD</p>
+                                </input>
+                                <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" value="BWD" style="margin:15px">
+                                    <p class="room_post_font_content">BWD</p>
+                                </input>
+                                <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" value="AWD" style="margin:15px">
+                                    <p class="room_post_font_content">AWD</p>
+                                </input>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div layout="row">
-                    <div style="margin-top:15px;margin-left:50px;">
+                    <div style="margin-top:15px;margin-left:50px;width:78px;">
                         <p class="room_post_font_content">传动系统</p>
                     </div>
-                    <div class="room_post_div">
+                    <div class="room_post_div" style="margin-top:5px;">
                         <div layout="row" layout-wrap>
-                            <md-radio-group required ng-model="step[1].transSystem"layout="column" >
-                                <div layout-align="start center" layout="row">
-                                    <md-radio-button value="手动">
-                                        <p class="room_post_font_content">手动</p>
-                                    </md-radio-button>
-                                    <md-radio-button value="自动">
-                                        <p class="room_post_font_content">自动</p>
-                                    </md-radio-button>
-                                </div>
-                            </md-radio-group>
+                            <div layout-align="start center" layout="row">
+                                <input required type="radio" ng-model="steps[1].transSystem" name="carTransSystem" value="手动" style="margin:15px">
+                                    <p class="room_post_font_content">手动</p>
+                                </input>
+                                <input required type="radio" ng-model="steps[1].transSystem" name="carTransSystem" value="自动" style="margin:15px">
+                                    <p class="room_post_font_content">自动</p>
+                                </input>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div layout="row">
-                    <div style="margin-top:15px;margin-left:50px;margin-bottom:20px">
+                    <div flex="10" style="margin-top:15px;margin-left:50px;margin-bottom:20px">
                         <p class="room_post_font_content">排量</p>
                     </div>
                     <div class="room_post_div">
-                        <div layout="row" style="margin-top:12px">
-                            <md-select name="car_output" placeholder="" ng-model="steps[1].output" required class="rp_select">
-                                <md-option value="1.5">1.5</md-option>
-                                <md-option value="1.8">1.8</md-option>
-                                <md-option value="2.0">2.0</md-option>
-                                <md-option value="2.5">2.5</md-option>
-                                <md-option value="3.0">3.0</md-option>
-                                <md-option value="3.5">3.5</md-option>
-                            </md-select>
+                        <div layout="row" style="margin-top:12px;padding-top:6px">
+                            <select name="car_output" style="border-radius:10px;width:100px;height:19px" ng-model="steps[1].output" required class="rp_select">
+                                <option value="1.5">1.5</option>
+                                <option value="1.8">1.8</option>
+                                <option value="2.0">2.0</option>
+                                <option value="2.5">2.5</option>
+                                <option value="3.0">3.0</option>
+                                <option value="3.5">3.5</option>
+                            </select>
                             <div style="padding-left:10px;padding-top:10px">
                             L
                             </div>
                         </div>
-                    </div>
-                </div>
-               
-                <div class="room_post_div_content" layout="row" layout-align="space-between center">
-                    <div>
-                        <md-button class="md-raised" ng-click="lastPage()">
-                            <div layout="row" layout-align="center center">
-                                <div>
-                                    <i class="material-icons">navigate_before</i>
-                                </div>
-                                <div>
-                                    上一步
-                                </div>
-                            </div>
-                        </md-button>
-                    </div>
-                    <div>
-                        <md-button class="md-raised" ng-click="nextPage()">
-                            <div layout="row" layout-align="center center">
-                                <div>
-                                    下一步
-                                </div>
-                                <div>
-                                    <i class="material-icons">navigate_next</i>
-                                </div>
-                            </div>
-                        </md-button>
                     </div>
                 </div>
             </div>
@@ -391,12 +321,18 @@
                         <p class="room_post_font_content">刹车与转向</p>
                     </div>
                     <div class="room_post_div" layout="row">
-                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].brake_turn.ABS">
-                            <p class="room_post_font_content">ABS</p>
-                        </md-checkbox>
-                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].brake_turn.ESC">
-                            <p class="room_post_font_content">ESC</p>
-                        </md-checkbox>
+                        <div layout="row" ng-repeat="(key,value) in steps[2].breakType">
+                            <input type="checkbox" ng-model="steps[2].breakType[key]"  style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                                <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">{{name(key)}}</p>
+                            </input>
+                        </div>
+                    <!--
+                        <input type="checkbox" ng-model="steps[2].breakType.ABS" style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                            <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">ABS</p>
+                        </input>
+                        <input type="checkbox" ng-model="steps[2].breakType.ESC" style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                            <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">ESC</p>
+                        </input>-->
                     </div>
                 </div>
                  <div layout="row">
@@ -404,15 +340,21 @@
                         <p class="room_post_font_content">安全</p>
                     </div>
                     <div class="room_post_div" layout="row">
-                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].safe.double_airbag">
-                            <p class="room_post_font_content">双安全气囊</p>
-                        </md-checkbox>
-                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].safe.side_airbag">
-                            <p class="room_post_font_content">侧安全气囊</p>
-                        </md-checkbox>
-                        <md-checkbox required class="rp_checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[2].safe.airbag">
-                            <p class="room_post_font_content">安全气帘</p>
-                        </md-checkbox>
+                        <div layout="row" ng-repeat="(key,value) in steps[2].security">
+                            <input type="checkbox" ng-model="steps[2].security[key]"  style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                                <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">{{name(key)}}</p>
+                            </input>
+                        </div>
+                     <!--
+                        <input type="checkbox" ng-model="steps[2].security.double_airbag" style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                            <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">双安全气囊</p>
+                        </input>
+                        <input type="checkbox" ng-model="steps[2].security.side_airbag" style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                            <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">侧安全气囊</p>
+                        </input>
+                        <input type="checkbox" ng-model="steps[2].security.curtain" style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                            <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">安全气帘</p>
+                        </input>-->
                     </div>
                 </div>
                  <div layout="row">
@@ -421,39 +363,12 @@
                     </div>
                     <div class="room_post_div" layout="row">
                         <div layout="row" layout-wrap style="margin-top:20px;margin-left:14px;margin-bottom:20px">
-                            <div flex="30" ng-repeat="(key,value) in steps[2].comft_entn">
-                                <md-checkbox class="rp_checkbox" ng-model="steps[2].comft_entn[key]" >
-                                    <p class="room_post_font_content">{{name(key)}}</p>
-                                </md-checkbox>
+                            <div flex="30" ng-repeat="(key,value) in steps[2].comfort" layout="row">
+                                <input type="checkbox" ng-model="steps[2].comfort[key]" style="margin-bottom:20px">
+                                    <p class="room_post_font_content" style="margin-left:5px;">{{name(key)}}</p>
+                                </input>
                             </div>
                         </div>
-                    </div>
-                </div>
-        
-                <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
-                    <div>
-                        <md-button class="md-raised" ng-click="lastPage()">
-                            <div layout="row" layout-align="center center">
-                                <div>
-                                    <i class="material-icons">navigate_before</i>
-                                </div>
-                                <div>
-                                    上一步
-                                </div>
-                            </div>
-                        </md-button>
-                    </div>
-                    <div>
-                        <md-button class="md-raised" ng-click="nextPage()">
-                            <div layout="row" layout-align="center center">
-                                <div>
-                                    下一步
-                                </div>
-                                <div>
-                                    <i class="material-icons">navigate_next</i>
-                                </div>
-                            </div>
-                        </md-button>
                     </div>
                 </div>
             </div>
@@ -472,7 +387,7 @@
                 </div>
                 <div class="room_post_div">
                     <md-input-container class="rp_title">
-                    <input type="text" name="title" ng-model="steps[4].title" md-maxlength="35" aria-label="title">
+                    <input type="text" name="title" ng-model="steps[3].title" md-maxlength="35" aria-label="title">
                     </md-input-container>
                     <br>
                     <br>
@@ -481,71 +396,33 @@
                     <div flex="15">
                         <p class="room_post_font_content">描述：</p>
                     </div>
-                    <div>
+                    <div flex>
                         <p class="room_post_font_content">向其他用户介绍任何您需要补充的信息，如距学校距离、交通信息、周边、现有室友等。</p>
                     </div>
                 </div>
-                <div class="room_post_div">
-                    <md-input-container>
-                    <textarea ng-model="steps[4].description" columns="1" md-maxlength="300" aria-label="description"></textarea>
+                <div class="room_post_div" >
+                    <md-input-container flex>
+                    <input ng-model="steps[3].description" columns="1" md-maxlength="300" aria-label="description">
                     </md-input-container>
                 </div>
             </div>
-            <!--Begin of step buttons-->
-            <div class="room_post_div_content" layout="row" layout-align="space-between center">
-                <div>
-                    <md-button class="md-raised" ng-click="lastPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="material-icons">navigate_before</i>
-                            </div>
-                            <div>
-                                上一步
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-            </div>
-            <!--End of step buttons-->
         </div>
         <!--End of 描述 Page-->
         <!--Begin of 地址页 Page-->
         <div ng-show="activePage == 5" class="room_post_listing_content" layout="column">
             <div layout="column">
-                <div>
-                    <p class="room_post_font_content">地址</p>
+                <div class="room_post_font_content">
+                    <p >地址</p>
                 </div>
                 <div class="room_post_div" layout="row">
                     <div flex="10">
                     </div>
                     <div flex layout="column">
                         <div>
-                        <md-button class="md-raised adr" ng-click="">
-                            <div layout="row" layout-align="center center">
-                                <div>
-                                    <i class="material-icons">cloud_download</i>
-                                </div>
-                                <div>
-                                    &nbsp;同个人资料一致
-                                </div>
-                            </div>
-                        </md-button>
-                        <input type="text" id="Autocomplete" class="form-control" ng-model="steps[5].address.full" ng-autocomplete="steps[5].address.full" details="details1" options="options1" style="text-align:left;"/>
+                        <input type="text" id="Autocomplete" class="form-control" ng-model="steps[4].address.full" ng-autocomplete="steps[4].address.full" details="details1" options="options1" style="text-align:left;"/>
                         <div ng-show="addressGot && addressCorrect">
-                            <div layout="row">
-                                <p class="room_post_font_content">Street Address</p>
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">Street Address</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addNum">
                                 <input type="text" ng-model="addresses[0]" disabled="disabled"/>
@@ -555,139 +432,68 @@
                                 <input type="text" ng-model="addresses[1]" disabled="disabled"/>
                                 </md-input-container>
                             </div>
-                            <div layout="row">
-                                <p class="room_post_font_content">City</p>
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">City</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addCity">
                                 <input type="text" ng-model="addresses[2]" disabled="disabled"/>
                                 </md-input-container>
                             </div>
-                            <div layout="row">
-                                <p class="room_post_font_content">State</p>
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">State</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addSta">
                                 <input type="text" ng-model="addresses[3]" disabled="disabled"/>
                                 </md-input-container>
                                 <div flex="5"></div>
-                                <p class="room_post_font_content">Zipcode</p>
+                                <div class="room_post_font_content">Zipcode</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addZip">
                                 <input type="text" ng-model="addresses[4]" disabled="disabled"/>
                                 </md-input-container>
                             </div>
                         </div>
-                        <div>
-                           <p ng-hide="addressCorrect" class="room_post_font_content err">输入地址错误，请输入正确地址。</p>
-                        </div>
+                           <div style="margin-top:20px;" ng-hide="addressCorrect" class="room_post_font_content err">输入地址错误，请输入正确地址。</div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!--Begin of step buttons-->
-            <div class="room_post_div_content" layout="row" layout-align="space-between center">
-                <div>
-                    <md-button class="md-raised" ng-click="lastPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="material-icons">navigate_before</i>
-                            </div>
-                            <div>
-                                上一步
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-            </div>
-            <!--End of step buttons-->
+            </div> 
         </div>
         <!--End of 地址页 Page-->
         <!--Begin of 图片页 Page-->
         <div ng-show="activePage == 6" class="room_post_listing_content" >
             <div layout="column" flex>
-                <div>
-                    <p class="room_post_font_content">图片</p>
-                    <div ngf-drop ngf-select ng-model="files" class="drop-box"  ngf-keep="true" ngf-keep-distinct="true"
-                        ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
-                        accept="image/*">拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片</div>
-                    
-                    
-                    
-                    
-                    <div layout="column" ng-repeat="img in arrUploads"> 
-                        <div ng-show="img.prog > 0">{{img.prog}}%</div>
+                <div class="room_post_font_content">图片</div>
+                <div layout="row" layout-wrap>
+                    <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in steps[5].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic)">删除</p></div>
+
+                    <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="img in arrUploads" ng-style="{'background-image':'url('+img.content+')'}">
+                        <div layout="row">
                         <progress ng-show="img.prog > 0" value="{{img.prog/100}}">{{img.prog}}%</progress>
                         <div ng-show="img.prog==100">上传成功！</div>
-                        <img style="width:300px;height:300px"  ng-src="{{img.content}}"/>
                         <div ng-click="img.cancel()">取消</div>
+                        </div>
                     </div>
-                    <div layout="column" ng-repeat="pic in steps[6].images">
-                        <img style="width:300px;height:300px;"  ng-src="{{pic}}">
-                        <p ng-click="removeImage($index)">删除</p>
+
+                    <div style="height:180;width:140px;" ngf-drop ngf-select ng-model="files" class="drop-box"  ngf-keep="true" ngf-keep-distinct="true"
+                    ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
+                    accept="image/*"><br />拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片
                     </div>
                 </div>
             </div>
-            <!--Begin of step buttons-->
-            
-            
-            
-            <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
-                <div>
-                    <md-button class="md-raised" ng-click="lastPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="material-icons">navigate_before</i>
-                            </div>
-                            <div>
-                                上一步
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div>
-                    <md-button class="md-raised" ng-click="saveImages()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                保存
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div  ng-show="canPost">
-                    <md-button class="md-raised" ng-click="doPost()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                提交
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div ng-hide="canPost" style="content-float:left">
-                    <p class="rp_font_steps">还剩&nbsp;</p>
-                    <p class="rp_font_steps steps"><strong >{{sn}}</strong></p>
-                    <p class="rp_font_steps">&nbsp;步骤未填写</p>
-                </div>
+        </div>
+        <div class="room_post_div_content stepButton"layout="row" layout-align="end" id="post_ft">
+            <div ng-show="activePage >= 2" ng-click="lastPage()" class="rp_last_btn">
+                上一步
             </div>
-            <!--End of step buttons-->
+            <div ng-show="activePage <= 5" ng-click="nextPage()" class="rp_next_btn">
+                下一步
+            </div>
+            <div ng-click="hide()" class="rp_cancel_btn">
+                &nbsp;取&nbsp;&nbsp;消&nbsp;
+            </div>
         </div>
-        <!--End of 图片页 Page-->
-    
-        
-        </div>
+    </div>
         
 </md-dialog-content>
 </div>

@@ -1,0 +1,72 @@
+.angular-date-picker {
+    color: #333;
+    font: normal 14px sans-serif;
+    display: inline-block;
+    
+}
+.angular-date-picker > ._month {
+    text-align: center;
+    line-height: 22px;
+    text-transform: uppercase;
+    font-weight: bold;
+    width: 266px;
+    position: relative;
+    background: #D5D4D2;
+}
+.angular-date-picker > ._month > button {
+    color: #555;
+    font: normal 14px sans-serif;
+    outline: none;
+    position: absolute;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+.angular-date-picker > ._month > button:hover {
+    color: #333;
+}
+.angular-date-picker > ._month > button._previous {
+    left: 10px;
+}
+.angular-date-picker > ._month > button._next {
+    right: 10px;
+}
+.angular-date-picker > ._days {
+    width: 266px; /* 32 x 7 */
+    margin-top: 0px;
+    text-align: center;
+    background: #D5D4D2;
+}
+.angular-date-picker > ._days > ._day-of-week, .angular-date-picker > ._days > ._day {
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    width: 38px;
+    line-height: 19px;
+    float: left;
+    
+}
+.angular-date-picker > ._days > ._day-of-week {
+    font-weight: bold;
+}
+.angular-date-picker > ._days > ._day.-padding {
+    border: 1px solid rgb(248,248,249);
+}
+.angular-date-picker > ._days > ._day {
+    cursor: pointer;
+    border: 1px solid rgb(248,248,249);
+}
+.angular-date-picker > ._days > ._day.-selected {
+    background: #e0e0e0;
+}
+.angular-date-picker > ._days > ._day.-today {
+    background-color: #EA5743
+}
+.angular-date-picker > ._days > ._day:hover {
+    background-color: #EA5743
+}
+.angular-date-picker > ._days:after {
+    content: '';
+    display: block;
+    clear: left;
+    height: 0;
+}

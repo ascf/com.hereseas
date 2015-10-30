@@ -2,7 +2,7 @@ var hereseasApp = angular.module('hereseasApp', [
     'ngAnimate', 'ngCookies', 'ngSanitize','ui.select2',
     'ui.router', 'ngMaterial', 'ngMessages',
     'pascalprecht.translate', 'LocalStorageModule',
-    'pascalprecht.translate', 'angular-loading-bar', 'hereseasDirectives','uiGmapgoogle-maps','ngResource', 'ngFileUpload','ui.bootstrap','jkuri.gallery'
+    'pascalprecht.translate', 'angular-loading-bar', 'hereseasDirectives','uiGmapgoogle-maps','ngResource', 'ngFileUpload','ui.bootstrap','jkuri.gallery', 'mp.datePicker'
 ]);
 
 hereseasApp.constant('APP', {
@@ -63,6 +63,12 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
         templateUrl: '/app/view/partials/_public.html'
     });
 
+    $stateProvider.state('chat', {
+        url: '/chat',
+        templateUrl: '/app/view/partials/_chat_window.html',
+        controller:'ChatCtrl'
+    });
+    
     $stateProvider.state('home', {
         url: '/home',
         templateUrl: '/app/view/new_home.html',
@@ -84,10 +90,10 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
             },
     });
     
-    $stateProvider.state('goods', {
-        url: '/goods/:goodId',
-        templateUrl: '/app/view/goods.html',
-        controller: 'GoodsDisplayController',
+    $stateProvider.state('items', {
+        url: '/items/:itemId',
+        templateUrl: '/app/view/items.html',
+        controller: 'ItemsDisplayController',
         onEnter: scrollContent = function() {
             // Your favorite scroll method here
             },
@@ -105,16 +111,34 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
         controller: 'AllCarsController'
     });
     
-    $stateProvider.state('allGoods', {
-        url: '/allGoods/:schoolId',
-        templateUrl: '/app/view/all_goods.html',
-        controller: 'GoodsController'
+    $stateProvider.state('allItems', {
+        url: '/allItems/:schoolId',
+        templateUrl: '/app/view/all_items.html',
+        controller: 'ItemsController'
     });
     
-    $stateProvider.state('Cars', {
-        url: '/cars',
+    $stateProvider.state('allActivs', {
+        url: '/allActivs/:schoolId',
+        templateUrl: '/app/view/all_activs.html',
+        controller: 'ActivsController'
+    });
+    
+    $stateProvider.state('schoolMates', {
+        url: '/schoolMates/:schoolId',
+        templateUrl: '/app/view/schoolmates.html',
+        controller: 'SchoolMatesCtrl'
+    });
+    
+    $stateProvider.state('cars', {
+        url: '/cars/:carId',
         templateUrl: '/app/view/cars.html',
-        controller: 'CarsController'
+        controller: 'CarDisplayController'
+    });
+    
+    $stateProvider.state('activs', {
+        url: '/activs/:activId',
+        templateUrl: '/app/view/activities.html',
+        controller: 'ActivsDisplayController'
     });
     
     $stateProvider.state('verify', {

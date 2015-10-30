@@ -37,6 +37,23 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
             });
         };
     
+        $scope.editCarPost = function(ev, id, state) {
+            if(state==1){
+                userService.setCarDraft({id:id, state:"update"});
+            }
+            else{
+                userService.setCarDraft({id:id, state:"edit"});    
+            }
+            $mdDialog.show({
+              //controller: RoomPostController,
+              templateUrl: '/app/view/car_post.html',
+              parent: angular.element(document.body),
+              targetEvent: ev,
+              clickOutsideToClose:true
+            });
+        };
+    
+    
     
         $scope.editPost = function(ev, id, state) {
             if(state==1){
@@ -96,6 +113,59 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                     $mdDialog.show({
                         //controller: RoomPostController,
                         templateUrl: '/app/view/car_post.html',
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose:true
+                    });
+                }
+                    
+            }
+            else alertService.alert("请先登录").then(function() {
+                    $scope.showLogin();
+            });
+        };
+    
+        $scope.showItemspost = function(ev) {
+            var flag = userService.getLoginState();
+            //should have logged in to post room
+            if(flag)
+            {
+                if(userService.getUser().schoolId=="")
+                    alertService.alert("请先完善个人信息（first name 和 last name）");
+                else
+                {
+                    userService.setItemDraft({});                   
+                    
+                    $mdDialog.show({
+                        //controller: RoomPostController,
+                        templateUrl: '/app/view/Items_post.html',
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose:true
+                    });
+                }
+                    
+            }
+            else alertService.alert("请先登录").then(function() {
+                    $scope.showLogin();
+            });
+        };
+
+    
+        $scope.showActivspost = function(ev) {
+            var flag = userService.getLoginState();
+            //should have logged in to post room
+            if(flag)
+            {
+                if(userService.getUser().schoolId=="")
+                    alertService.alert("请先完善个人信息（first name 和 last name）");
+                else
+                {
+                    userService.setDraft({});                   
+                    
+                    $mdDialog.show({
+                        //controller: RoomPostController,
+                        templateUrl: '/app/view/activ_post.html',
                         parent: angular.element(document.body),
                         targetEvent: ev,
                         clickOutsideToClose:true

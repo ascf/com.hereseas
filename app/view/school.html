@@ -18,12 +18,12 @@
                         <div style="padding-top:38.51px;font-size:18px;color:#EA5743">
                             新成员
                         </div>
-                        <div ng-repeat="new_user in new_users" style="padding-top:27.29px;padding-left:16.63px;padding-right:16.63px">
-                            <img style="width:59.73px;height:59.73px;"src="{{new_user.img}}" class="img-circle"></img>
+                        <div ng-repeat="schoolMate in newSchoolMates" style="padding-top:27.29px;padding-left:16.63px;padding-right:16.63px">
+                            <img style="width:59.73px;height:59.73px;"src="{{schoolMate.avatar}}" class="img-circle"></img>
                         </div>
                     </div>
                     <div class="text-right" style="padding-top:15.62px;">
-                        <a style="font-size:12px">浏览所有校友(2407)>></a>
+                        <a style="font-size:12px" href="#/schoolMates/{{schoolId}}">浏览所有校友(2407)>></a>
                     </div>
                 </div>
                 <div style="width:320px;padding-left:20px">
@@ -62,22 +62,22 @@
         <div class="container" style="padding-top:17.72px;width:900px;">
             <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >车行</div>
             <div style="margin-top:15px;" layout="row">
-                <a href="#/rooms/{{aptId1}}" class="img-three">
+                <a href="#/cars/{{carId1}}" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+carImg1+')'}">
                     </div>
                 </a>
                  <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
                     </div>-->
-                <a href="#/rooms/{{aptId2}}" class="img-three">
+                <a href="#/cars/{{carId2}}" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+carImg2+')'}">
                     </div>
                 </a>
-                <a href="#/rooms/{{aptId3}}" class="img-three">
+                <a href="#/cars/{{carId3}}" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+carImg3+')'}">
                     </div>
                 </a>
             </div>
-            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllCars()">寻找更多</div>
         </div>
     </div>
 
@@ -85,48 +85,48 @@
         <div class="container" style="padding-top:17.72px;width:900px;">
             <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >集市</div>
             <div style="margin-top:15px;" layout="row">
-                <a href="#/goods/{{aptId1}}" class="img-three">
+                <a href="#/items/{{itemId1}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+itemImg1+')'}">
+                    </div>
+                </a>
+                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>-->
+                <a href="#/items/{{itemId2}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+itemImg2+')'}">
+                    </div>
+                </a>
+                <a href="#/items/{{itemId3}}" class="img-three">
+                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+itemImg3+')'}">
+                    </div>
+                </a>
+            </div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllItems()">寻找更多</div>
+        </div>
+    </div>
+
+    <div class="hide" ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
+        <div class="container" style="padding-top:17.72px;width:900px;">
+            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >活动</div>
+            <div style="margin-top:15px;" layout="row">
+                <a href="#/activs/1" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+goodImg1+')'}">
                     </div>
                 </a>
                  <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
                     </div>-->
-                <a href="#/goods/{{aptId2}}" class="img-three">
+                <a href="#/activs/1" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+goodImg2+')'}">
                     </div>
                 </a>
-                <a href="#/goods/{{aptId3}}" class="img-three">
+                <a href="#/activs/1" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+goodImg3+')'}">
                     </div>
                 </a>
             </div>
-            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllGoods()">寻找更多</div>
+            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllActivs()">寻找更多</div>
         </div>
     </div>
-
-    <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
-        <div class="container" style="padding-top:17.72px;width:900px;">
-            <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >活动</div>
-            <div style="margin-top:15px;" layout="row">
-                <a href="#/rooms/{{aptId1}}" class="img-three">
-                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
-                    </div>
-                </a>
-                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
-                    </div>-->
-                <a href="#/rooms/{{aptId2}}" class="img-three">
-                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
-                    </div>
-                </a>
-                <a href="#/rooms/{{aptId3}}" class="img-three">
-                    <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg3+')'}">
-                    </div>
-                </a>
-            </div>
-            <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
-        </div>
-    </div>
-
+<!--
     <div ng-style="{'background-image':'url('+bgImg+')'}" style="border-top:1px solid #D4D4D2;padding-top:17.72px;padding-bottom:22.26px;background-size:100%;background-color:rgb(248,248,249);background-repeat:no-repeat;text-align:center;">
         <div class="container" style="padding-top:17.72px;width:900px;">
             <div style="font-size:30px;" style="height:20.43px;width:81.23px;color:#EA5743" >学习</div>
@@ -135,8 +135,6 @@
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
                     </div>
                 </a>
-                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
-                    </div>-->
                 <a href="#/rooms/{{aptId2}}" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
                     </div>
@@ -158,8 +156,6 @@
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
                     </div>
                 </a>
-                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
-                    </div>-->
                 <a href="#/rooms/{{aptId2}}" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
                     </div>
@@ -181,8 +177,6 @@
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg1+')'}">
                     </div>
                 </a>
-                 <!--<div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
-                    </div>-->
                 <a href="#/rooms/{{aptId2}}" class="img-three">
                     <div style="height:220.6px;width:281.6px;background-repeat:no-repeat; background-size:cover;" ng-style="{'background-image':'url('+aptImg2+')'}">
                     </div>
@@ -195,6 +189,7 @@
             <div class="showMoreButton" title="showMoreButton" style="height: 50px;width: 180;background-image : url(/app/view/img/buttons/button1.svg);" ng-click="showAllApts()">寻找更多</div>
         </div>
     </div>
+-->
 </div>
 <div footer></div>
 </div>

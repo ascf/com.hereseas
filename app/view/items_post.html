@@ -1,0 +1,255 @@
+<md-dialog style="border-radius: 0 0 38px 0;">
+
+<div layout="row" class="room_post" ng-controller="ItemsPostController">
+    <!--Begin of left side nav_bar-->
+    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" >
+        <md-content role="navigation" class="md-default-theme">
+            <ul class="docs-menu">
+                <li style="margin-top:12px;">
+                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(1)">
+                        <a class="md-button md-default-theme" tabindex="0">
+                            <div layout="row" layout-align="center center">
+                                <span class="ng-binding ng-scope">
+                                    物品信息
+                                </span>
+                                <span flex></span>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[0].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[0].filled'>check</i>
+                            </div>
+                        </a>
+                    </menu-link>
+                </li>
+                <li>
+                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(2)">
+                        <a class="md-button md-default-theme" tabindex="0">
+                            <div layout="row" layout-align="center center">
+                                <span class="ng-binding ng-scope">
+                                    地址
+                                </span>
+                                <span flex></span>
+                                <i class="nav_icon material-icons" ng-hide='tableFilled[1].filled'>add</i>
+                                <i class="nav_icon material-icons" ng-show='tableFilled[1].filled'>check</i>
+                            </div>
+                        </a>
+                    </menu-link>
+                </li>
+            </ul>
+        </md-content>
+        <div layout="row">
+            <div ng-show="canPost" class="div_submit">
+                <button class="center-block btn submit" ng-click="doPost()">
+                    <div layout="row" layout-align="center center">
+                        <div>
+                            提交
+                        </div>
+                        <div>
+                            <i class="material-icons">navigate_next</i>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            <div ng-hide="canPost" class="div_steps">
+                <p class="rp_font_steps font">还剩&nbsp;</p>
+                <p class="rp_font_steps font"><strong>{{sn}}</strong></p>
+                <p class="rp_font_steps font">&nbsp;步骤未填写</p>
+            </div>
+        </div>
+    </md-sidenav>
+    <!--End of side nav bar-->
+    <md-dialog-content style="min-height:90%;">
+        <div layout="column" id="post_wrapper">
+        <!--Begin of 房屋设施 Page-->
+        <div ng-show="activePage == 1" class="room_post_listing_content">
+            <div style="border-bottom:1px solid #000000">
+                <div layout="row">
+                    <h4 class="text-muted">您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校的页面中</h4>
+                </div>
+            </div>
+            <!--Begin of room information-->
+            <div layout="column">
+                <div layout="row" class="room_post_div_content" style="margin-top:15px">
+                    <div flex="23" layout-align="start end" layout="row">
+                        <div>
+                            <p class="room_post_font_content">有效期至</p>
+                        </div>
+                    </div>
+                    <div flex="75" layout="row" layout-align="start end">
+                        <div style="margin-right:10px">
+                            <input required ng-model="shared.expireAt" name="Date" type="date" aria-label="ItemsDate" style="border-radius:10px;height:19px;border:1px solid #D5D4D2"/>
+                        </div>
+                        <div style="width:21px;height:19px;background-image:url(/app/view/img/icon/post_calendar.png);">
+
+                        </div>
+                    </div>
+                </div>
+                <div layout="row" class="room_post_div_content">
+                    <div flex="23" layout-align="start end" layout="row">
+                        <div>
+                            <p class="room_post_font_content" style="font-size:25px">物品信息</p>
+                        </div>
+                    </div>
+                    <div flex="75" layout="row" layout-align="start end">
+                        <div style="color:#EA5743;font-size:15px">
+                            您可以在本页同时发布多个物品，平台会自动为您分开发布。
+                        </div>
+                    </div>
+                </div>
+                <div ng-repeat="item in items">
+                <div layout="row" class="room_post_div_content" layout-align="start end" style="margin-top:10px">
+                    <div flex="15">
+                        <p class="room_post_font_content">物品</p>
+                    </div>
+                    <div flex="75" layout="row" layout-align="start end">
+                        <input ng-model="item.steps[0].name"  name="items_name"  aria-label="price" style="width:250px;border-radius:4px;border:1px solid #D5D4D2"/>
+                    </div>
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end" style="margin-top:10px">
+                    <div flex="15">
+                        <p class="room_post_font_content">类别</p>
+                    </div>
+                    <div flex="25" layout="row" layout-align="start end">
+                        <div>
+                            <select name="room_number" placeholder="" ng-model="item.steps[0].category" required class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2">
+                                <option value="furniture">家具</option>
+                                <option value="equipment">电器</option>
+                                <option value="electric">电子产品</option>
+                                <option value="book">书籍</option>
+                                <option value="necessity">生活用品</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div flex=15>
+                        <p class="room_post_font_content">价格</p>
+                    </div>
+                    <div flex=25 >
+                        <span style="padding-top:10px">$&nbsp;</span><input ng-model="item.steps[0].price"  name="items_price"  aria-label="price" style="width:100px;border-radius:4px;border:1px solid #D5D4D2"/>
+
+                    </div>
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end" style="height:60px;">
+                    <div flex="15" style="margin-bottom:40px;">
+                        <p class="room_post_font_content">说明</p>
+                    </div>
+                    <div flex="75" layout="row" layout-align="start end">
+                        <textarea rows="3" cols="70" style="border-radius:4px;color:#A19F9B;border-color:#D5D4D2" ng-model="item.steps[0].description"></textarea>
+                    </div>
+                </div>
+                <div ng-hide="ready_upload_img[$index]" layout="row" class="room_post_div_content" layout-align="start end" ng-click="add_img($index)">
+                    <div  style="width:30px;height:30px;background-image:url(/app/view/img/icon/post_upload.png);background-size:cover;">
+                    </div>
+                    <div  layout="row" layout-align="start end" style="padding-left:20px">
+                        <p class="room_post_font_content">上传图片</p>
+                    </div>
+                </div>
+                <div ng-show="ready_upload_img[$index]" layout="column" flex>
+                    <div class="room_post_font_content">图片</div>
+                    <div layout="row" layout-wrap>
+                        <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in item.steps[0].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic,$index)">删除</p></div>
+
+                        <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="img in arrUploads" ng-style="{'background-image':'url('+img.content+')'}">
+                            <div layout="row">
+                            <progress ng-show="img.prog > 0" value="{{img.prog/100}}">{{img.prog}}%</progress>
+                            <div ng-show="img.prog==100">上传成功！</div>
+                            <div ng-click="img.cancel()">取消</div>
+                            </div>
+                        </div>
+
+                        <div style="height:180;width:140px;" ngf-drop ngf-select ng-model="files" class="drop-box" ngf-keep="true" ngf-keep-distinct="true"
+                        ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true" accept="image/*"><br />拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end" ng-click="add_item()">
+                    <div  style="width:33px;height:33px;background-image:url(/app/view/img/icon/post_add.png);background-size:cover">
+                    </div>
+                    <div layout="row" layout-align="start end" style="padding-left:20px">
+                        <p class="room_post_font_content">添加物品</p>
+                    </div>
+                </div>
+            </div>
+            <!--End of room infomation-->
+        </div>
+        <!--End of 房屋设施 Page-->
+        <!--Begin of 地址页 Page-->
+        <div ng-show="activePage == 2" class="room_post_listing_content" layout="column">
+            <div layout="column">
+                <div class="room_post_font_content">
+                    <p >地址</p>
+                </div>
+                <div class="room_post_div" layout="row">
+                    <div flex="10">
+                    </div>
+                    <div flex layout="column">
+                        <div>
+                            <!--
+                        <md-button class="md-raised adr" ng-click="">
+                            <div layout="row" layout-align="center center">
+                                <div>
+                                    <i class="material-icons">cloud_download</i>
+                                </div>
+                                <div>
+                                    &nbsp;同个人资料一致
+                                </div>
+                            </div>
+                        </md-button>
+-->
+                        <input type="text" id="Autocomplete" class="form-control" ng-model="shared.address.full" ng-autocomplete="shared.address.full" details="details1" options="options1" style="text-align:left;"/>
+                        <div ng-show="addressGot && addressCorrect">
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">Street Address</div>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addNum">
+                                <input type="text" ng-model="addresses[0]" disabled="disabled"/>
+                                </md-input-container>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addAdd">
+                                <input type="text" ng-model="addresses[1]" disabled="disabled"/>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">City</div>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addCity">
+                                <input type="text" ng-model="addresses[2]" disabled="disabled"/>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">State</div>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addSta">
+                                <input type="text" ng-model="addresses[3]" disabled="disabled"/>
+                                </md-input-container>
+                                <div flex="5"></div>
+                                <div class="room_post_font_content">Zipcode</div>
+                                <div flex="5"></div>
+                                <md-input-container class="room_post_input addZip">
+                                <input type="text" ng-model="addresses[4]" disabled="disabled"/>
+                                </md-input-container>
+                            </div>
+                        </div>
+                           <div  style="margin-top:20px;" ng-hide="addressCorrect" class="room_post_font_content err">输入地址错误，请输入正确地址。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End of 地址页 Page-->
+        <!--Begin of step buttons-->
+        <div class="room_post_div_content stepButton"layout="row" layout-align="end" id="post_ft">
+            <div ng-show="activePage >= 2" ng-click="lastPage()" class="rp_last_btn">
+                上一步
+            </div>
+            <div ng-show="activePage <= 1" ng-click="nextPage()" class="rp_next_btn">
+                下一步
+            </div>
+            <div ng-click="hide()" class="rp_cancel_btn">
+                &nbsp;取&nbsp;&nbsp;消&nbsp;
+            </div>
+        </div>
+        <!--End of step buttons-->
+        </div>
+    </md-dialog-content>
+</div>
+</md-dialog>

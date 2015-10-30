@@ -1,3 +1,263 @@
 <div style="background-color:rgb(248,248,249);" >
     <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div class="container" style="width:1000px;" layout="column">
+        <div layout="row" style="margin:0 0 53 0;" >           
+            <!--信息区-->
+            <div flex="70" layout="column"  id="leftBar">
+                <!--房屋展示图-->
+                <div layout="row" >
+                    <div flex style="height:400px;background-repeat:no-repeat; background-size:cover; " ng-style="{'background-image':'url('+data.cover+')'}">
+                    </div>
+                    <div style="padding-right:30px; margin-right:25px; border-right:1px solid black;">
+                    </div>
+                </div>
+                <div style="margin-right:53px;">
+                    <!--发布者信息-->
+                    <div layout="row" style="padding-top:20px; padding-bottom:20px;">
+                            <div>
+                                <img class="md-whiteframe-z1" ng-src="{{avatar}}" style="border-radius:50%;weight:80px;height:80px; border:1px solid rgb(220,224,224);"/>
+                            </div>
+                            <div layout="row" style="padding-left:30px; padding-top:40px;">
+                                <div>{{username}}</div>
+                                <div style="margin-right:50px;margin-left:50px;">|</div>
+                                <div>{{schoolName}}</div>        
+                            </div>
+                        </div>
+                    <!--画线-->
+                    <div >
+                        <hr style="margin:5px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                    </div>
+                    <!--车辆信息-->
+                    <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
+                        <div flex="33">
+                            <h3 class="hs_subtitle"><b>车辆信息</b></h3>
+                        </div>
+                        <div flex="66" style="margin-top:15px;" layout="column" layout-wrap>
+                            <div layout="row">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        车辆年份：{{data.basicInfo[0].year}}
+                                    </div>
+                                </div>
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        车型：{{data.basicInfo[0].category}}
+                                    </div>
+                                </div>
+                             </div>
+                            <div layout="row">
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                         制造商：{{data.basicInfo[0].make}}
+                                    </div>
+                                </div>
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                         车系：{{data.basicInfo[0].model}}
+                                    </div>
+                                </div>
+                             </div>
+                            <div layout="row">
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                         里程：{{data.basicInfo[0].totalMiles}}
+                                    </div>
+                                </div>
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                         购买日期：{{data.basicInfo[0].boughtDate | date:"yyyy-MM-dd"}}
+                                    </div>
+                                </div>
+                             </div>
+                            <div layout="row">
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                         具体型号：{{data.basicInfo[0].style}}
+                                    </div>
+                                </div>
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                         价格：{{data.basicInfo[0].price}}
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div >
+                        <hr style="margin:5px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                    </div>
+                    <!--外观动力-->
+                    <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
+                        <div flex="33">
+                            <h3 class="hs_subtitle"><b>外观动力</b></h3>
+                        </div>
+                        <div flex="66" style="margin-top:15px;" layout="column" layout-wrap>
+                            <div layout="row">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        <div style="padding-top:10px;">颜色：</div><img ng-style="{'background-color':'{{data.color}}'}" style="width:45px;height:45px;" class="img-circle"></img>
+                                    </div>
+                                </div>
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;padding-top:10px" >事故信息：
+                                        <div ng-show="{{data.noAccident}}">无事故</div>
+                                        <div ng-hide="{{data.noAccident}}">有事故</div>
+                                    </div>
+                                </div>
+                             </div>
+                            <div layout="row">
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        驱动系统：{{data.driveSystem}}
+                                    </div>
+                                </div>
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        传动系统：{{data.transSystem}}
+                                    </div>
+                                </div>
+                             </div>
+                            <div layout="row">
+                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        排量：{{data.output}}&nbsp;L
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                        <!--画线-->
+                        <div >
+                            <hr style="margin:5px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                        </div>
+                        <!--配置参数-->
+                        <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
+                            <div flex="33">
+                                <h3 class="hs_subtitle"><b>配置参数</b></h3>
+                            </div>
+                            <div flex="66" style="margin-top:15px;" layout="row" layout-wrap>
+                                <div flex="50" ng-show="value" ng-repeat="(key,value) in data.breakType" style="margin-bottom:10px;height:40px;padding-top:10px;padding-left:5px">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        <div>{{key}}</div>
+                                    </div>
+                                </div>
+                                <div flex="50" ng-show="value" ng-repeat="(key,value) in data.security" style="margin-bottom:10px;height:40px;padding-top:10px;padding-left:5px">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        <div>{{name(key)}}</div>
+                                    </div>
+                                </div>
+                                <div flex="50" ng-show="value" ng-repeat="(key,value) in data.comfort" style="margin-bottom:10px;height:40px;padding-top:10px;padding-left:5px">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                        <div>{{name(key)}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--画线-->
+                        <div >
+                            <hr style="margin:5px 5px 0px 5px; border:0;border-top:1px solid #333333;">
+                        </div>
+                        <!--信息描述-->
+                        <div class="md-padding" style="padding-top:0px;padding-bottom:5px;"  layout="row">
+                            <div flex="33">
+                                <h3 class="hs_subtitle"><b>信息描述</b></h3>
+                            </div>
+                            <div flex="66" style="margin-top:21px;" >
+                                <p>{{data.description}}</p>
+                            </div>
+                        </div>       
+                        <!--图片信息-->
+                        <div class="md-padding" layout="column"> 
+                            <div ng-show="!(data.images.length ==2)">    
+                                <div  ng-click="showImgs($event, data.images, 0)"  style="height:250px;width:580px; margin-bottom:10px; background-size:cover; " ng-style="{'background-image':'url('+data.images[0]+')'} "></div> 
+                            </div>
+                            <div ng-show="!(data.images.length ==1)" layout="row">
+                                <div  ng-click="showImgs($event, data.images, 1)" style="height:165px;width:285px; margin-right:10px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
+                                <div  ng-click="showImgs($event, data.images, 1)" style="height:165px;width:285px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
+                            </div>
+                        </div>
+
+                        </div>
+            </div>
+            <!--滚动条-->
+            <div flex="30">
+            <!--车辆信息以及买卖-->         
+                <div  layout="column" affixme id="rightBar">
+                    <div layout="column" >
+                        <div>
+                            <h3 class="text-center hs_subtitle" style="font-weight:bold;margin:0 0 0 0; padding:0 0 10 0;">{{data.title}}</h3>
+                            <p style="text-align:center;">{{data.address.city+', '+data.address.state}}</p>
+                        </div>
+                        <div class="md-padding hs_frame withBorderRdius">
+                            <div style="margin-bottom:18px;">
+                                <div layout="row">
+                                    <div flex="20" class="withBorderRdius roomTypeBottonBedroom"><h5>{{data.basicInfo[0].style}}</h5></div>
+                                    <div flex="20" style="font-size:16px;height:35px; padding-top:6px; margin-left:28px;"><p>{{data.basicInfo[0].price}}$</p></div>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <div flex="30">
+                                    车辆信息：
+                                </div>
+                                <div>
+                                    <span>
+                                        {{data.basicInfo[0].year}},
+                                    </span>
+                                    <span>
+                                        {{data.basicInfo[0].category}},
+                                    </span>
+                                    <span>
+                                        {{data.basicInfo[0].totalMiles}}
+                                    </span>
+                                    <br>
+                                </div>
+                            </div>
+                            <div layout="row" style="margin-top:10px;">
+                                <div flex="30">购于：</div>
+                                <div><p>{{data.basicInfo[0].boughtDate | date:"yyyy-MM-dd"}}</p></div>
+                            </div>
+                        </div>
+
+                                <div layout="row">
+                                    <div flex="100" class="withBorderRdius roomsBotton" style="background-color:rgb(71,175,150);" ng-click="sendMessage()"><h4>即刻联系</h4></div>   
+                                   <!-- <div flex="10"></div>
+                                    <div flex="45"  class="withBorderRdius roomsBotton" style="background-color:rgb(231,132,110);"><h4>预订<h4></div>   -->
+                                </div>
+                                <div layout="row">
+                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;"><p>添加收藏</p></div>   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--地图显示-->
+        <div layout="row"  style="background-color:rgb(77,77,78); margin:0 0 53 0;padding:30 30 30 30;">
+                <div flex="70" id="map-canvas" class="application" style="height:480px;"> </div>
+                <div flex="30" layout="row">   
+                    <div flex="35"></div>
+                    <div flex layout="column" style="margin-top:100;">
+                        <div style="color:white;">
+                            <md-button aria-label="driving" class="md-icon-button md-raised"   ng-click="SetMethod('driving')" style="height:60px;width:60px;">
+                                <md-icon md-svg-icon="/app/view/img/room/driving.svg"  style="height:50px;width:50px"></md-icon>
+                            </md-button>
+                          {{durations.driving}}
+                        </div>
+                        <div style="margin-top:20px;color:white;">
+                            <md-button aria-label="bicycling" class="md-icon-button md-raised"  ng-click="SetMethod('bicycling')" style="height:60px;width:60px;">
+                                <md-icon md-svg-icon="/app/view/img/room/bicycling.svg"  style="height:50px;width:50px"></md-icon>
+                            </md-button>
+                          {{durations.bicycling}}
+                        </div>
+                        <div style="margin-top:20px;color:white;">
+                            <md-button aria-label="walking" class="md-icon-button md-raised"   ng-click="SetMethod('walking')" style="height:60px;width:60px;">
+                                <md-icon md-svg-icon="/app/view/img/room/walking.svg"  style="height:50px;width:50px"></md-icon>
+                            </md-button>
+                          {{durations.walking}}
+                        </div>
+                    </div>
+                </div>
+                     </div>
+    </div>
+    <div footer></div>
 </div>
+        

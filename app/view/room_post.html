@@ -1,15 +1,15 @@
-<md-dialog>
+<md-dialog style="border-radius: 0 0 38px 0;">
 
 <div layout="row" class="room_post" ng-controller="RoomPostController">
     <!--Begin of left side nav_bar-->
     <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" >
         <md-content role="navigation" class="md-default-theme">
-            <ul class="docs-menu">
-                <li>
-                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(1)">
+            <ul class="docs-menu"  >
+                <li style="margin-top:12px;">
+                    <menu-link ng-click="setActivePage(1)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
-                                <span class="ng-binding ng-scope">
+                                <span>
                                     房源信息
                                 </span>
                                 <span flex></span>
@@ -19,11 +19,11 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
-                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(2)">
+                <li >
+                    <menu-link ng-click="setActivePage(2)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
-                                <span class="ng-binding ng-scope">
+                                <span>
                                     房间信息
                                 </span>
                                 <span flex></span>
@@ -32,13 +32,12 @@
                             </div>
                         </a>
                     </menu-link>
-                </li>
-                
+                </li>       
                 <li>
-                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(3)">
+                    <menu-link ng-click="setActivePage(3)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
-                                <span class="ng-binding ng-scope">
+                                <span>
                                     设施
                                 </span>
                                 <span flex></span>
@@ -46,11 +45,11 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
-                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(4)">
+                <li >
+                    <menu-link ng-click="setActivePage(4)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
-                                <span class="ng-binding ng-scope">
+                                <span>
                                     附加费用
                                 </span>
                                 <span flex></span>
@@ -60,11 +59,11 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
-                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(5)">
+                <li >
+                    <menu-link ng-click="setActivePage(5)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
-                                <span class="ng-binding ng-scope">
+                                <span>
                                     描述
                                 </span>
                                 <span flex></span>
@@ -75,10 +74,10 @@
                     </menu-link>
                 </li>
                 <li>
-                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(6)">
+                    <menu-link ng-click="setActivePage(6)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
-                                <span class="ng-binding ng-scope">
+                                <span>
                                     地址
                                 </span>
                                 <span flex></span>
@@ -89,10 +88,10 @@
                     </menu-link>
                 </li>
                 <li>
-                    <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(7)">
+                    <menu-link ng-click="setActivePage(7)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
-                                <span class="ng-binding ng-scope">
+                                <span>
                                     图片
                                 </span>
                                 <span flex></span>
@@ -102,18 +101,36 @@
                         </a>
                     </menu-link>
                 </li>
-                <md-button class="md-primary" ng-click="hide()">关闭</md-button>
             </ul>
         </md-content>
+        <div layout="row">
+            <div ng-show="canPost" class="div_submit">
+                <button class="center-block btn submit" ng-click="doPost()">
+                    <div layout="row" layout-align="center center">
+                        <div>
+                            提交
+                        </div>
+                        <div>
+                            <i class="material-icons">navigate_next</i>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            <div ng-hide="canPost" class="div_steps">
+                <p class="rp_font_steps font">还剩&nbsp;</p>
+                <p class="rp_font_steps font"><strong>{{sn}}</strong></p>
+                <p class="rp_font_steps font">&nbsp;步骤未填写</p>
+            </div>
+        </div>
     </md-sidenav>
     <!--End of side nav bar-->
-    <md-dialog-content>
-    <div layout="column" flex>
+    <md-dialog-content style="min-height:520px;">
+        <div layout="column" id="post_wrapper">
         <!--Begin of 房屋设施 Page-->
         <div ng-show="activePage == 1" class="room_post_listing_content">
             <div>
                 <div layout="row">
-                    <h4 class="text-muted">您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校页面中</h4>
+                    <h4>您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校的页面中</h4>
                 </div>
             </div>
             <div>
@@ -159,10 +176,10 @@
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
                         <div>
-                        <md-input-container class="room_post_input">
-                          <input ng-model="steps[0].beginDate" type="date" name="invoiceDate"  aria-label="beginDate"/>
-                        </md-input-container>
-                            </div>
+                            <md-input-container class="room_post_input">
+                              <input ng-model="steps[0].beginDate" type="date" name="invoiceDate"  aria-label="beginDate"/>
+                            </md-input-container>
+                        </div>
                         <div>
                         <i class="rp_icon material-icons">event_available</i>  
                         </div>
@@ -187,26 +204,6 @@
                 </div>
             </div>
             <!--End of room infomation-->
-            
-            
-            
-            <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
-                <!--Begin of next step button-->
-                <div></div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <!--End of next step button-->
-            </div>
         </div>
         <!--End of 房屋设施 Page-->
         <div ng-show="activePage == 2" class="room_post_listing_content" >
@@ -218,14 +215,14 @@
                     <div flex="20">
                         <p class="room_post_font_content">房屋类型</p>
                     </div>
-                    <div flex="25" layout="row">
+                    <div flex="20" layout="row">
                       <md-select name="room_type"  ng-model="room.type" required class="rp_select">
                         <md-option value="卧室">卧室</md-option>
                         <md-option value="客厅">客厅</md-option>
                         <md-option value="其它">其它</md-option>
                       </md-select>
                     </div>
-                    <div flex="55">
+                    <div flex="60" layout="row">
                         <fieldset>
                             <div layout="row" layout-wrap>
                                 <md-checkbox ng-model="room.bathroom" >
@@ -239,14 +236,15 @@
                                 </md-checkbox>
                             </div>
                         </fieldset>
-                    </div>
-                    <div ng-hide="steps[1].rooms.length == 1" flex layout="row">
+                        <div ng-hide="steps[1].rooms.length == 1" flex layout="row">
                         <div>
                             <md-button ng-click="RemoveRoom(steps[1].rooms.indexOf(room))" class="md-icon-button">
                                 <i class="rp_icon icon_delete material-icons">delete</i>
                             </md-button>
                          </div>
+                        </div>
                     </div>
+                    
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
                     <div flex="20">
@@ -274,44 +272,23 @@
                     </div>
                 </div>
             </div>
-            <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
-                <div>
-                    <md-button ng-click="AddRoom()" class="md-raised">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="rp_icon material-icons">add</i>
-                            </div>
-                            <div>
-                                添加房间
-                            </div>
-                        </div>
-                    </md-button>
+            <div class="room_post_div_content" style="margin-top:40px;" layout="row" layout-align="begin">
+                <div ng-click="AddRoom()" class="rp_add_btn">
+                    
                 </div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
+                <div class="room_post_font_content" style="padding-top:16px; padding-left:10px;">添加房间</div>
             </div>
         </div>
-        
-        <!--Begin of 设施 Page-->
+        <!--Begin of 设施 asPage-->
         <div ng-show="activePage == 3" class="room_post_listing_content" >
             <!--Begin of 设施信息-->
-            <div  flex>
+            <div flex>
                 <!--Begin of 公寓设施-->
                 <div layout="row">
-                    <div flex="25" style="margin-top:15px;">
+                    <div flex="25">
                         <p class="room_post_font_content">公寓设施</p>
                     </div>
-                    <div class="md-padding room_post_div" layout="row">
+                    <div flex="75" class="room_post_div" layout="row">
                         <div layout="row" layout-wrap>
                             <div flex="50" ng-repeat="(key,value) in steps[2].facilities.apt"  layout-align="start center" layout="row">
                                 <div>
@@ -330,10 +307,10 @@
                 
                 <!--Begin of 房间设施-->
                 <div layout="row">
-                    <div flex="25" >
+                    <div flex="25">
                         <p class="room_post_font_content">房间设施</p>
                     </div>
-                    <div class="md-padding room_post_div" layout="row">
+                    <div class="room_post_div" layout="row">
                         <div layout="row" layout-wrap>
                             <div flex="50" ng-repeat="(key,value) in steps[2].facilities.room"  layout-align="start center" layout="row">
                                 <div>
@@ -346,48 +323,20 @@
                     </div>
                 </div>
                 <!--End of 房间设施-->
-                
             </div>
             <!--End of 设施信息-->
-            <!--Begin of step buttons-->
-            <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
-                <div>
-                    <md-button class="md-raised" ng-click="lastPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="material-icons">navigate_before</i>
-                            </div>
-                            <div>
-                                上一步
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-            </div>
-            <!--End of step buttons-->
         </div>
         <!--End of 设施 Page-->
         <!--Begin of 附加费用 Page-->
         <div ng-show="activePage == 4" class="room_post_listing_content" layout="column">
             <!--Begin of 具体附加费用-->
-            <div layout="column">
-                <div flex="5">
-                    <p class="room_post_font_content">附加费用</p>
+           
+                <div class="room_post_font_content">
+                    <p >附加费用</p>
                     <br>
                 </div>
-                <div flex="5" layout="row" flex  ng-repeat="(key,value) in steps[3].fees">
+                <div layout="column"  ng-repeat="(key,value) in steps[3].fees">
+                    <div class="room_post_font_content"  layout="row" >
                     <div flex="20" style="text-align:right;">
                         <p class="room_post_font_content">{{name(key)}}</p>
                     </div>
@@ -397,39 +346,11 @@
                         <md-input-container class="room_post_input fees">
                         <input required type="number" name="fees" ng-model="steps[3].fees[key]" aria-label="fees">
                         </md-input-container>
-                        <p class="room_post_font_content" style="color:red;">每人每月(需修改)</p>
+                        <p class="room_post_font_content">每人每月</p>
+                    </div>
                     </div>
                 </div>
-            </div>
             <!--End of 具体附加费用-->
-            <!--Begin of step buttons-->
-            <div class="room_post_div_content" layout="row" layout-align="space-between center">
-                <div>
-                    <md-button class="md-raised" ng-click="lastPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="material-icons">navigate_before</i>
-                            </div>
-                            <div>
-                                上一步
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-            </div>
-            <!--End of step buttons-->
         </div>
         <!--End of 附加费用 Page-->
         <!--Begin of 描述 Page-->
@@ -458,67 +379,29 @@
                         <p class="room_post_font_content">向其他用户介绍任何您需要补充的信息，如距学校距离、交通信息、周边、现有室友等。</p>
                     </div>
                 </div>
-                <div class="room_post_div">
+                <div class="room_post_div" >
                     <md-input-container flex>
-                    <textarea ng-model="steps[4].description" columns="1" md-maxlength="300" aria-label="description"></textarea>
+                    <input ng-model="steps[4].description" columns="1" md-maxlength="300" aria-label="description">
                     </md-input-container>
                 </div>
             </div>
-            <!--Begin of step buttons-->
-            <div class="room_post_div_content" layout="row" layout-align="space-between center">
-                <div>
-                    <md-button class="md-raised" ng-click="lastPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="material-icons">navigate_before</i>
-                            </div>
-                            <div>
-                                上一步
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-            </div>
-            <!--End of step buttons-->
         </div>
         <!--End of 描述 Page-->
         <!--Begin of 地址页 Page-->
         <div ng-show="activePage == 6" class="room_post_listing_content" layout="column">
             <div layout="column">
-                <div>
-                    <p class="room_post_font_content">地址</p>
+                <div class="room_post_font_content">
+                    <p >地址</p>
                 </div>
                 <div class="room_post_div" layout="row">
                     <div flex="10">
                     </div>
                     <div flex layout="column">
                         <div>
-                        <md-button class="md-raised adr" ng-click="">
-                            <div layout="row" layout-align="center center">
-                                <div>
-                                    <i class="material-icons">cloud_download</i>
-                                </div>
-                                <div>
-                                    &nbsp;同个人资料一致
-                                </div>
-                            </div>
-                        </md-button>
                         <input type="text" id="Autocomplete" class="form-control" ng-model="steps[5].address.full" ng-autocomplete="steps[5].address.full" details="details1" options="options1" style="text-align:left;"/>
                         <div ng-show="addressGot && addressCorrect">
-                            <div layout="row">
-                                <p class="room_post_font_content">Street Address</p>
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">Street Address</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addNum">
                                 <input type="text" ng-model="addresses[0]" disabled="disabled"/>
@@ -528,108 +411,64 @@
                                 <input type="text" ng-model="addresses[1]" disabled="disabled"/>
                                 </md-input-container>
                             </div>
-                            <div layout="row">
-                                <p class="room_post_font_content">City</p>
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">City</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addCity">
                                 <input type="text" ng-model="addresses[2]" disabled="disabled"/>
                                 </md-input-container>
                             </div>
-                            <div layout="row">
-                                <p class="room_post_font_content">State</p>
+                            <div layout="row" style="margin-top:20px;">
+                                <div class="room_post_font_content">State</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addSta">
                                 <input type="text" ng-model="addresses[3]" disabled="disabled"/>
                                 </md-input-container>
                                 <div flex="5"></div>
-                                <p class="room_post_font_content">Zipcode</p>
+                                <div class="room_post_font_content">Zipcode</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addZip">
                                 <input type="text" ng-model="addresses[4]" disabled="disabled"/>
                                 </md-input-container>
                             </div>
                         </div>
-                        <div>
-                           <p ng-hide="addressCorrect" class="room_post_font_content err">输入地址错误，请输入正确地址。</p>
-                        </div>
+                           <div  style="margin-top:20px;" ng-hide="addressCorrect" class="room_post_font_content err">输入地址错误，请输入正确地址。</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--Begin of step buttons-->
-            <div class="room_post_div_content" layout="row" layout-align="space-between center">
-                <div>
-                    <md-button class="md-raised" ng-click="lastPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="material-icons">navigate_before</i>
-                            </div>
-                            <div>
-                                上一步
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div>
-                    <md-button class="md-raised" ng-click="nextPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                下一步
-                            </div>
-                            <div>
-                                <i class="material-icons">navigate_next</i>
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-            </div>
-            <!--End of step buttons-->
         </div>
         <!--End of 地址页 Page-->
         <!--Begin of 图片页 Page-->
         <div ng-show="activePage == 7" class="room_post_listing_content" >
-            <div layout="column" flex>
-                <div>
-                    <p class="room_post_font_content">图片</p>
-                    <div ngf-drop ngf-select ng-model="files" class="drop-box"  ngf-keep="true" ngf-keep-distinct="true"
+            
+                <div layout="column" flex>
+                    <div class="room_post_font_content">图片</div>
+                    <div layout="row" layout-wrap>
+                        <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in steps[6].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic)">删除</p></div>
+                        
+                        <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="img in arrUploads" ng-style="{'background-image':'url('+img.content+')'}">
+                            <div layout="row">
+                            <progress ng-show="img.prog > 0" value="{{img.prog/100}}">{{img.prog}}%</progress>
+                            <div ng-show="img.prog==100">上传成功！</div>
+                            <div ng-click="img.cancel()">取消</div>
+                            </div>
+                        </div>
+                        
+                        <div style="height:180;width:140px;" ngf-drop ngf-select ng-model="files" class="drop-box"  ngf-keep="true" ngf-keep-distinct="true"
                         ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
-                        accept="image/*">拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片</div>
-                    
-                    
-                    
-                    
-                    <div layout="column" ng-repeat="img in arrUploads"> 
-                        <div ng-show="img.prog > 0">{{img.prog}}%</div>
-                        <progress ng-show="img.prog > 0" value="{{img.prog/100}}">{{img.prog}}%</progress>
-                        <div ng-show="img.prog==100">上传成功！</div>
-                        <img style="width:300px;height:300px"  ng-src="{{img.content}}"/>
-                        <div ng-click="img.cancel()">取消</div>
-                    </div>
-                    <div layout="column" ng-repeat="pic in steps[6].images">
-                        <img style="width:300px;height:300px;"  ng-src="{{pic}}">
-                        <p ng-click="removeImage(pic)">删除</p>
+                        accept="image/*"><br />拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片
+                        </div>
                     </div>
                 </div>
-            </div>
+           
             <!--Begin of step buttons-->
             
             
             
-            <div class="room_post_div_content" layout="row" layout-align="space-between center" flex>
-                <div>
-                    <md-button class="md-raised" ng-click="lastPage()">
-                        <div layout="row" layout-align="center center">
-                            <div>
-                                <i class="material-icons">navigate_before</i>
-                            </div>
-                            <div>
-                                上一步
-                            </div>
-                        </div>
-                    </md-button>
-                </div>
-                <div  ng-show="canPost">
-                    <md-button class="md-raised" ng-click="doPost()">
+            <!--<div class="room_post_div_content" style="margin-top:40px;" layout="row" layout-align="space-between center">
+                <div ng-show="canPost">
+                    <md-button class="submit" ng-click="doPost()" style="color:black">
                         <div layout="row" layout-align="center center">
                             <div>
                                 提交
@@ -645,13 +484,24 @@
                     <p class="rp_font_steps steps"><strong >{{sn}}</strong></p>
                     <p class="rp_font_steps">&nbsp;步骤未填写</p>
                 </div>
-            </div>
+            </div>-->
             <!--End of step buttons-->
         </div>
         <!--End of 图片页 Page-->
     
+        <div class="room_post_div_content stepButton"layout="row" layout-align="end" id="post_ft">
+            <div ng-show="activePage >= 2" ng-click="lastPage()" class="rp_last_btn">
+                上一步
+            </div>
+            <div ng-show="activePage <= 6" ng-click="nextPage()" class="rp_next_btn">
+                下一步
+            </div>
+            <div ng-click="hide()" class="rp_cancel_btn">
+                &nbsp;取&nbsp;&nbsp;消&nbsp;
+            </div>
+        </div>
         
         </div>
-</md-dialog-content>
+    </md-dialog-content>
 </div>
 </md-dialog>

@@ -26,15 +26,28 @@ angular.module('jkuri.gallery', [])
 	// Set the default template
   	$templateCache.put(template_url,
 	'<div class="{{ baseClass }}">' +
-    '<div class="md-padding" layout="column">'+
-    '   <div ng-show="!(images.length ==2)">'+
-    '       <div ng-click="openGallery(0)" style="height:250px;width:580px; margin-bottom:10px; background-size:cover;" ng-style="{\'background-image\':\'url(\'+images[0].thumb+\')\'}"></div>'+
-    '   </div>'+
-    '   <div ng-show="!(images.length ==1)" layout="row">'+
-    '       <div ng-click="openGallery(1)" style="height:165px;width:285px; margin-right:10px;background-size:cover;" ng-style="{\'background-image\':\'url(\'+images[1].thumb+\')\'} "></div>'+
-    '       <div ng-click="openGallery(1)" style="height:165px;width:285px;background-size:cover;" ng-style="{\'background-image\':\'url(\'+images[1].thumb+\')\'} "></div>'+
-    '   </div>'+
-    '</div>'+
+    '<div class="md-padding"> ' +
+    '                    <div ng-show="(images.length ==1)">   ' + 
+    '                        <div  ng-click="openGallery(0)"  style="outline:none;height:280px;width:600px; background-size:cover; " ng-style="{\'background-image\':\'url(\'+images[0].thumb+\')\'} "></div> ' +
+    '                    </div>' +
+    '                    <div ng-show="(images.length > 1)" layout="row"> ' +
+    '                        <div  ng-click="openGallery(0)"  style="outline:none;height:280px;width:370px; background-size:cover; margin-right:10px;" ng-style="{\'background-image\':\'url(\'+images[0].thumb+\')\'} "></div> ' +
+    '                        <div ng-show="(images.length == 2)"> ' +
+    '                            <div  ng-click="openGallery(1)" style="outline:none; height:280px;width:220px;background-size:cover; " ng-style="{\'background-image\':\'url(\'+images[1].thumb+\')\'} "></div>' +
+    '                        </div>' +
+    '                        <div ng-show="(images.length == 3)" layout="column"> ' +
+    '                            <div  ng-click="openGallery(1)" style="outline:none; height:135px;width:220px;background-size:cover; margin-bottom:10px; " ng-style="{\'background-image\':\'url(\'+images[1].thumb+\')\'} "></div>' +
+    '                            <div  ng-click="openGallery(2)" style="outline:none; height:135px;width:220px;background-size:cover; " ng-style="{\'background-image\':\'url(\'+images[2].thumb+\')\'} "></div>' +
+    '                        </div>' +
+    '                        <div ng-show="(images.length > 3)" layout="column"> ' +
+    '                            <div  ng-click="openGallery(1)" style="outline:none; height:185px;width:220px;background-size:cover; margin-bottom:10px; " ng-style="{\'background-image\':\'url(\'+images[1].thumb+\')\'} "></div>' +
+    '                            <div layout="row">' +
+    '                            <div  ng-click="openGallery(2)" style="outline:none; margin-right:10px; height:85px;width:105px;background-size:cover; " ng-style="{\'background-image\':\'url(\'+images[2].thumb+\')\'} "></div>' +
+    '                            <div  ng-click="openGallery(3)" style="outline:none; height:85px;width:105px;background-size:cover; " ng-style="{\'background-image\':\'url(\'+images[3].thumb+\')\'} "></div>' +
+    '                            </div>' +
+    '                        </div>' +
+    '                     </div>' +
+    '                </div>' +
 	'</div>' +
 	'<div class="ng-overlay" ng-show="opened">' +
 	'</div>' +
@@ -42,9 +55,9 @@ angular.module('jkuri.gallery', [])
 	'  <div class="uil-ring-css" ng-show="loading"><div></div></div>' + 
 	'  <a class="close-popup" ng-click="closeGallery()"><i class="fa fa-close"></i></a>' +
 	'  <a class="nav-left" ng-click="prevImage()"><i class="fa fa-angle-left"></i></a>' +
-	'  <img ng-src="{{ img }}" ng-click="nextImage()" ng-show="!loading" class="effect" />' +
+	'  <img ng-src="{{ img }}" ng-click="nextImage()" ng-hide="loading" class="effect" />' +
 	'  <a class="nav-right" ng-click="nextImage()"><i class="fa fa-angle-right"></i></a>' +
-	'  <span class="info-text">{{ index + 1 }}/{{ images.length }} - {{ description }}</span>' +
+	'  <span class="info-text">{{ index + 1 }}/{{ images.length }}</span>' +
 	'  <div class="ng-thumbnails-wrapper">' +
 	'    <div class="ng-thumbnails slide-left">' +
 	'      <div ng-repeat="i in images">' + 

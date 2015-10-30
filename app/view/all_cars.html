@@ -1,164 +1,138 @@
-<div>
+<div style="background-color:rgb(248,248,249);min-width:1000px">
     <header ng-include="'app/view/partials/_header-one.html'"></header>
     <div top-bar></div>
     
-    <div layout="row">
-        <div style="width:230px;margin-left:40px;" layout="column">
-            <div class="filter-bar">Filter</div>
-            <div layout="column" style="margin-top:20px;width:165px;">
-                <div layout="row">
-                    <img style="width:22px;height:22px;" src=""/>
-                    <span flex></span>
-                    <span>car maker</span>
-                </div>
-                <select style="margin-top:10px;background:#A19F9B;text-indent:35px;color:white;" ng-model="carMaker">
-                    <option value="1">None</option>
-                    <option value="2">BMW</option>
-                    <option value="2">Audi</option>
-                    <option value="2">VW</option>
-                    <option value="2">Honda</option>
-                    <option value="2">Toyota</option>
-                    <option value="2">Mazda</option>
-                </select>
-            </div>
-            
-            <div layout="column" style="margin-top:20px;width:165px;">
-                <div layout="row">
-                    <img style="width:22px;height:22px;" src=""/>
-                    <span flex></span>
-                    <span>Color</span>
-                </div>
-                <select style="margin-top:10px;background:#A19F9B;text-indent:35px;color:white;" ng-model="carColor">
-                    <option value="1">None</option>
-                    <option value="2">white</option>
-                    <option value="3">balck</option>
-                </select>
-            </div>
-            
-            <div layout="column" style="margin-top:20px;width:165px;">
-                <div layout="row">
-                    <img style="width:22px;height:22px;" src=""/>
-                    <span flex></span>
-                    <span>car type</span>
-                </div>
-                <select style="margin-top:10px;background:#A19F9B;text-indent:35px;color:white;" ng-model="carModel">
-                    <option value="1">None</option>
-                    <option value="2">Sedan</option>
-                    <option value="3">SUV</option>
-                </select>
-            </div>
-            
-            <div layout="column" style="margin-top:20px;width:165px;">
-                <div layout="row">
-                    <img style="width:22px;height:22px;" src=""/>
-                    <span flex></span>
-                    <span>price range</span>
-                </div>
-                <select style="margin-top:10px;background:#A19F9B;text-indent:35px;color:white;" ng-model="carPrice">
-                    <option value="1">$500 ~ $12000</option>
-                    <option value="1">$12000 ~ $22000</option>
-                    <option value="1">$22000 ~ $32000</option>
-                    <option value="1">$32000 +</option>
-                </select>
-            </div>
-            
-            <div layout="column" style="margin-top:20px;width:165px;">
-                <div layout="row">
-                    <img style="width:22px;height:22px;" src=""/>
-                    <span flex></span>
-                    <span>years</span>
-                </div>
-                <input style="margin-top:10px;background:#A19F9B;text-indent:15px;color:white;height:25px;" />
-                <input style="margin-top:10px;background:#A19F9B;text-indent:15px;color:white;height:25px;" />
-            </div>
-           
-        </div>
-        
-        <div style="overflow-y:scroll;height:530px;width:675px;" layout="row" layout-wrap>
-            
-            <div style="width:310px;height:233px;background-size:100% 90%;background-repeat:no-repeat;margin-right:15px;" ng-style="{'background-image':'url('+apt.cover+')'} " ng-repeat="apt in aptResult">
-                <div layout="row">
-                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
-                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
-                        <div class="rotate" style="font-size:9px;">$1100-1500</div>
-
+    <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
+        <div layout="row">
+            <div style="width:165px" layout="column">
+                <div class="filter-bar" style="width:165px">筛选栏</div>
+                <div layout="column" style="margin-top:20px;width:165px;">
+                    <div layout="row">
+                        <img style="width:22px;height:22px;" src="/app/view/img/apts/price.png"/>
+                        <span flex></span>
+                        <span>价格</span>
                     </div>
+                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="carPrice" ngChange="updatePage()">
+                        <option value="all">All</option>
+                        <option value="1">$5000-$10000</option>
+                        <option value="2">$10000-$15000</option>
+                        <option value="3">$15000-$20000</option>
+                        <option value="4">$20000+</option>
+                    </select>
                 </div>
-                <div layout="row" style="margin-top:129px;margin-left:10px;">
-                    <img style="height:52px;width:52px;" src="/app/view/img/profile/default_avatar_small.png"/>
-                    <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">{{apt.rooms[0].type}}</span>
+
+                <div layout="column" style="margin-top:20px;width:165px;">
+                    <div layout="row">
+                        <img style="width:22px;height:22px;" src="/app/view/img/apts/aptType.png"/>
+                        <span flex></span>
+                        <span>车型</span>
+                    </div>
+                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="carStyle" ngChange="updatePage()">
+                        <option value="all">All</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="Coupe">Coupe</option>
+                        <option value="Convertible">Convertible</option>
+                        <option value="Hatchback">Hatchback</option>
+                        <option value="Minivan">Minivan</option>
+                        <option value="Wagon">Wagon</option>
+                    </select>
+                </div>
+
+                <div layout="column" style="margin-top:20px;width:165px;">
+                    <div layout="row">
+                        <img style="width:22px;height:22px;" src="/app/view/img/apts/roomType.png"/>
+                        <span flex></span>
+                        <span>里程</span>
+                    </div>
+                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="carMileAge" ngChange="updatePage()">
+                        <option value="all">All</option>
+                        <option value="0">&lt;10000mile</option>
+                        <option value="1">10000mile-40000mile</option>
+                        <option value="2">40000mile-80000mile</option>
+                        <option value="3">&gt;10000mile</option>
+                    </select>
+                </div>
+                
+                <div layout="column" style="margin-top:20px;width:165px;">
+                    <div layout="row">
+                        <img style="width:22px;height:22px;" src="/app/view/img/apts/roomType.png"/>
+                        <span flex></span>
+                        <span>年份</span>
+                    </div>
+                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="carYear" ngChange="updatePage()">
+                        <option value="all">All</option>
+                        <option value="2005">before&nbsp;2005</option>
+                        <option value="2006">2006</option>
+                        <option value="2007">2007</option>
+                        <option value="2008">2008</option>
+                        <option value="2009">2009</option>
+                        <option value="2010">2010</option>
+                        <option value="2011">2011</option>
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                    </select>
                 </div>
             </div>
             
-            <div style="width:310px;height:233px;background-size:100% 90%;background-repeat:no-repeat;margin-right:15px;" ng-style="{'background-image':'url(/app/view/img/car/car_temp.jpg)'} ">
-                <div layout="row">
-                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
-                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
-                        <div class="rotate">$1100</div>
+            <div layout="column" style="">
+                <div id="cars_panel" style="overflow-y:scroll;height:530px;width:485px;margin-left:10px;margin-right:10px;" class="row">
+                    
+                    <div ng-show="carResult.length==0">没有结果</div>
+                    <a href="#/cars/{{car._id}}" ng-repeat="car in carResult">
+                        <div class="col-xs-6 col-sm-6" style="width:210px;height:160px;background-size:cover;background-repeat:no-repeat;margin-left:10px;margin-right:10px;margin-bottom:35px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+car.cover+')'} " >
+                            <div layout="row">
+                                <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
+                                <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
+                                    <div class="rotate" style="font-size:9px;"></div>
 
-                    </div>
+                                </div>
+                            </div>
+                            <div layout="row" style="margin-top:80px;margin-left:10px;">
+                                <img style="height:52px;width:52px;" class="img-circle" ng-src="{{car.userAvatar}}"/>
+                                <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">{{}}</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                <div layout="row" style="margin-top:129px;margin-left:10px;">
-                    <img style="height:52px;width:52px;" src="/app/view/img/profile/default_avatar_small.png"/>
-                    <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">&Room Type&</span>
-                </div>
-            </div>
-            <div style="width:310px;height:233px;background-size:100% 90%;background-repeat:no-repeat;margin-right:15px;" ng-style="{'background-image':'url(/app/view/img/car/car_temp.jpg)'} ">
                 <div layout="row">
-                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
-                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
-                        <div class="rotate">$1100</div>
-
-                    </div>
-                </div>
-                <div layout="row" style="margin-top:129px;margin-left:10px;">
-                    <img style="height:52px;width:52px;" src="/app/view/img/profile/default_avatar_small.png"/>
-                    <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">&Room Type&</span>
-                </div>
-            </div>
-        
-            <div style="width:310px;height:233px;background-size:100% 90%;background-repeat:no-repeat;margin-right:15px;" ng-style="{'background-image':'url(/app/view/img/car/car_temp.jpg)'} ">
-                <div layout="row">
-                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
-                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
-                        <div class="rotate">$1100</div>
-
-                    </div>
-                </div>
-                <div layout="row" style="margin-top:129px;margin-left:10px;">
-                    <img style="height:52px;width:52px;" src="/app/view/img/profile/default_avatar_small.png"/>
-                    <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">&Room Type&</span>
-                </div>
-            </div>
-            
-            <div style="width:310px;height:233px;background-size:100% 90%;background-repeat:no-repeat;margin-right:15px;" ng-style="{'background-image':'url(/app/view/img/car/car_temp.jpg)'} ">
-                <div layout="row">
-                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
-                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
-                        <div class="rotate">$1100</div>
-
-                    </div>
-                </div>
-                <div layout="row" style="margin-top:129px;margin-left:10px;">
-                    <img style="height:52px;width:52px;" src="/app/view/img/profile/default_avatar_small.png"/>
-                    <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">&Room Type&</span>
+                    <nav>
+                      <ul class="pagination" style="margin-left:10px;">
+                        <li>
+                          <a href="#" aria-label="Previous" ng-click="previous()">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                            <li ng-repeat="page in pages">
+                                <a href="#" ng-click="setPage($index)">{{page.id}}</a>
+                            </li>
+                        <li>
+                          <a href="#" aria-label="Next" ng-click="next()">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
                 </div>
             </div>
             
-            <div style="width:310px;height:233px;background-size:100% 90%;background-repeat:no-repeat;margin-right:15px;" ng-style="{'background-image':'url(/app/view/img/car/car_temp.jpg)'} ">
-                <div layout="row">
-                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
-                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
-                        <div class="rotate">$1100</div>
-
-                    </div>
-                </div>
-                <div layout="row" style="margin-top:129px;margin-left:10px;">
-                    <img style="height:52px;width:52px;" src="/app/view/img/profile/default_avatar_small.png"/>
-                    <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">&Room Type&</span>
-                </div>
-            </div>
-            
+            <div id="carsMap" class="application" style="height:530px;width:320px;"> </div>
         </div>
     </div>
+    
+<div footer></div>
 </div>
+
+<style>
+    .labels {
+      color: white;
+      font-size: 2px;
+      text-align: center;
+      white-space: nowrap;
+    }
+</style>
+
+

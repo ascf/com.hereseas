@@ -72,7 +72,7 @@
                     <div ng-show="aptResult.length==0">没有结果</div>
                     <div class="col-xs-6 col-sm-6" style="width:210px;height:160px;background-size:cover;background-repeat:no-repeat;margin-left:10px;margin-right:10px;margin-bottom:35px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+apt.cover+')'} " ng-repeat="apt in aptResult">
                         <div layout="row">
-                            <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png"/>
+                            <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" ng-src="{{favs[$index]}}" ng-click="updateFavs($index)" clickme/>
                             <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
                                 <div class="rotate" style="font-size:9px;">{{apt.price.minPrice}}-{{apt.price.maxPrice}}</div>
 
@@ -80,7 +80,7 @@
                         </div>
                         <div layout="row" style="margin-top:80px;margin-left:10px;">
                             <img style="height:52px;width:52px;" class="img-circle" ng-src="{{apt.userAvatar}}"/>
-                            <span style="margin-top:auto;margin-bottom:0;margin-right:0;margin-left:auto;">{{apt.rooms[0].type}}</span>
+                            <span style="margin-top:auto;margin-bottom:0;" ng-repeat="type in apt.type">{{type}}</span>
                         </div>
                     </div>                
                 </div>

@@ -1,34 +1,8 @@
-hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,requestService,userService, Upload, fileReader) {
-    requestService.GetInit(function (res) {
+hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,requestService,userService, Upload, fileReader, $window,$cookies) {
+    requestService.GetUserSelf(function (res) {
+        console.log("userself", res);
         if (res.result){
-            
-            /*$scope.$on('schoolNameChanged',function (e, result){
-                //console.log('school changed', result);
-                $scope.basicInfo.schoolId = result.id;
-                $scope.schoolName = result.name;
-            });*/
-            
-            /*$scope.$watch('basicInfo', function (newValue, oldValue) {
-                if(!angular.equals(newValue, oldValue) && !angular.equals(oldValue, {})){
-                    console.log(newValue, oldValue);
-                    $scope.updateMark.basic = true;
-                }
-            }, true);
-            
-            $scope.$watch('address', function (newValue, oldValue) {
-                if(!angular.equals(newValue, oldValue) && !angular.equals(oldValue, {
-                         street :  '',
-                         apt :       '',
-                         city :     '',
-                         state :    '',
-                         zipcode :  '',
-                         full:   ''
-                    })){
-                    console.log(newValue, oldValue);
-                    $scope.updateMark.address = true;
-                }
-            }, true);*/
-            
+                        
             var geocoder = new google.maps.Geocoder();
             $scope.options1 = null;
             $scope.details1 = '';
@@ -36,6 +10,264 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             $scope.addressGot = false;        //控制页面上是否显示解析后地址  
             $scope.addressCorrect = false;     //判断地址是否正确
             $scope.validAddress = validAddress; //判断地址是否合法
+            
+             //基本信息model
+            $scope.basicInfo = {
+                username : '',
+                schoolId : '',
+                enrollYear :'',
+                enrollSeason:''
+            };
+            //地址信息model
+            $scope.address ={
+                 street :  '',
+                 apt :       '',
+                 city :     '',
+                 state :    '',
+                 zipcode :  '',
+                 full:   ''
+            };
+            
+            $scope.setPostPage = setPostPage;
+            $scope.setActivePage = setActivePage;
+            
+            $scope.setActiveTab = setActiveTab;
+            $scope.updateMsgs = updateMsgs;
+            $scope.getUnreadMsgsNum = getUnreadMsgsNum;
+            $scope.initMessages = initMessages;
+            
+            $scope.filterApt = true;
+            $scope.filterCar = true;
+            $scope.filterGood = true;
+            $scope.filterActivity = true;
+            $scope.postType2 = "Apts";
+            $scope.content = "Hello World ";
+            $scope.postPage = 1;
+            $scope.activePage = 1;
+            $scope.activeTab = 1;
+            
+            $scope.numPosted = 1;
+            $scope.numToPost = 1;
+            $scope.numDeal = 0;
+
+            $scope.messages = [];
+            $scope.numNotify = 0;
+            var popWindows = [];
+            
+            $scope.initProfiles = initProfiles;//初始化个人信息内容函数
+            
+            $scope.intiFavorite = intiFavorite;
+            $scope.deleteFavorite = deleteFavorite;
+            
+            $scope.deleteCar = deleteCar;
+            $scope.getCars = getCars;
+            $scope.getCarDrafts = getCarDrafts;
+            
+            $scope.deleteApt = deleteApt;
+            $scope.getApts = getApts;
+            $scope.getAptDrafts = getAptDrafts;
+            
+            $scope.img = undefined;
+            
+            $scope.initProfiles();
+            $scope.intiFavorite();
+            $scope.initMessages();
+            
+            $scope.getApts(true);
+            $scope.getAptDrafts(true);
+            $scope.getCars(true);
+            $scope.getCarDrafts(true);
+            
+            function intiFavorite(){
+                requestService.GetFavList({action:''}, function(res){
+                    //console.log(res);
+                    if(res.data.apartments !== null)
+                        $scope.favoriteApts = res.data.apartments;
+                    else $scope.favoriteApts = [];
+
+                    if(res.data.activities !== null)
+                        $scope.favoriteActs = res.data.activities;
+                    else $scope.favoriteActs = [];
+
+                    if(res.data.cars !== null)
+                        $scope.favoriteCars = res.data.cars;
+                    else $scope.favoriteCars = [];
+
+                    if(res.data.items !== null)
+                        $scope.favoriteItems = res.data.items;
+                    else $scope.favoriteItems = [];
+                });
+            };
+
+            
+            function deleteFavorite(index){
+                var id = $scope.favoriteApts[index]._id;
+                userService.deleteFavorite({
+                    id:id,
+                    category:"apartments"
+                }).then(function (res) {
+                    console.log(res);
+                    if (res.result) {
+                        //alert("Message has been sent");
+                    } else {
+                        //alert("err");
+                    }
+                });
+                
+                $scope.favoriteApts.splice(index, 1);
+                
+                var temp = [];
+                angular.forEach($scope.favoriteApts, function(key){
+                    temp.push(key._id);
+                });
+                var favoriteList = userService.cookies2Favorite();
+                favoriteList.apartments = temp;
+                userService.saveFavorite2Cookies(favoriteList);
+            };
+            
+            function deleteCar(index, id, type){
+                if(type == 1){
+                    $scope.localCars.splice(index, 1);
+                }
+                else{
+                    $scope.localDraftCars.splice(index, 1);
+                }
+                
+                requestService.DeleteCar({id:id}, function(res){
+                    console.log(id,res);
+                });
+            };
+            
+            function getCars(init){
+                requestService.GetCars(function(res) {
+                    if(res.result==false)
+                    {
+                        $scope.hasPostedCars = false;
+                    }
+                    else
+                    {
+                        $scope.hasPostedCars = true;
+                        $scope.cars = res.data;
+                        if(init == true)
+                            $scope.localCars = $scope.cars;
+                        console.log($scope.localCars);
+                    }
+                });
+            };
+            
+            function getCarDrafts(init){
+                requestService.GetCarDrafts(function(res){
+                    if(res.result == false){
+                        $scope.hasDraftCars = false;
+                    }else{
+                        $scope.hasDraftCars = true;
+                        $scope.carDrafts = res.data;
+                        if(init == true)
+                            $scope.localDraftCars = $scope.carDrafts;
+                    }
+                });
+            };
+            
+            function deleteApt(index, id, type){
+                if(type == 1){
+                    $scope.localApts.splice(index, 1);
+                }
+                else{
+                    $scope.localDraftApts.splice(index, 1);
+                }
+                
+                requestService.DeleteApt({id:id}, function(res){
+                    console.log(id,res);
+                });
+            };
+            
+            
+            function getApts(init){
+                requestService.GetApts(function(res) {
+                    if(res.result==false)
+                    {
+                        $scope.hasPostedApts = false;
+                    }
+                    else
+                    {
+                        $scope.hasPostedApts = true;
+                        $scope.apts = res.data;
+                        if(init == true)
+                            $scope.localApts = $scope.apts;
+                    }
+                });
+            };
+            
+            function getAptDrafts(init){
+                 requestService.GetAptDrafts(function(res){
+                    if(res.result == false){
+                        $scope.hasDraftApts = false;
+                    }else{
+                        $scope.hasDraftApts = true;
+                        $scope.aptDrafts = res.data;
+                        if(init == true)
+                            $scope.localDraftApts = $scope.aptDrafts;
+                    }
+                });
+            };
+            
+            $scope.$watch('file', function (newValue, oldValue) {
+                //console.log($scope.files, "old:", oldValue, "new:", newValue);
+                if(!angular.equals(newValue, oldValue))
+                    $scope.upload($scope.file);
+            });
+            
+            $scope.upload = function (file) {
+                if (file) {
+                    console.log(file);
+                   
+                    console.log("111");
+                    fileReader.readAsDataUrl(file, $scope).then(function(result) {
+                        $scope.img = result;
+                        //key.content = result;
+                    });
+                    var up = Upload.upload({
+                        url: 'http://52.25.82.212:8080/avatar/m_upload_image',
+                        file: file,
+                        fileFormDataName: 'avatar'
+                    }).progress(function (evt) {
+                        $scope.prog = parseInt(100.0 * evt.loaded / evt.total);
+                    }).success(function (data, status, headers, config) {
+                        console.log('file ' + config.file.name + 'uploaded. Response: ');
+                        console.log(data);
+                        $scope.avatar = "https://s3.amazonaws.com/hereseas-public-images/"+data.data;
+                        requestService.ChangeProfile({step:3}, {'avatar':$scope.avatar}, function(res){
+                                console.log(res);
+                            });
+                    }).error(function (data, status, headers, config) {
+                        console.log('error status: ' + status);
+                    })
+                }
+            };
+            function initMessages(){
+                requestService.GetContact(function(res){
+                    //console.log(res.contacts);
+                    angular.forEach(res.contacts, function(key){
+                        popWindows.push(null);
+                        requestService.GetMsgs({userid:key}, function(res){
+                            //console.log(res.data);
+                            if(!angular.equals(res.data,[])){
+                                var tempMsgs = [];
+                                var num=0;
+                                angular.forEach(res.data, function(msg){
+                                    tempMsgs.push({id:msg._id, content:msg.content, read:msg.read, sender:msg.senderUsername,senderId:msg.sender, time:msg.createAt});
+                                    if(msg.read == false && msg.senderUsername !== $scope.basicInfo.username) num++;
+                                });
+
+                                $scope.messages.push({userId:key, user:tempMsgs[0].sender, favorite:false, msgs:tempMsgs, lastMsg:res.data[res.data.length-1].content, num:num});
+                                tempMsgs = [];
+                                num=0;
+                            }
+                        });
+                    });
+                });
+            };
+            
             
             $scope.$watch('details1', function(newValue){  //在地址合法之后的操作
                 if(newValue && $scope.validAddress(newValue)){//set the model 
@@ -86,6 +318,37 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             });
             
             
+            function getUnreadMsgsNum(){
+                var num = 0;
+                angular.forEach($scope.messages, function(key){
+                    num += key.num;
+                });
+                return num;
+            };
+            
+            function updateMsgs(index) {
+                if(angular.equals(popWindows[index], null)){
+                    popWindows[index] = $window.open('#/chat');
+                    popWindows[index].senderId = $scope.messages[index].userId;
+                }
+                $scope.messages[index].num =0;
+                angular.forEach($scope.messages[index].msgs, function(key){
+                    if(key.read == false && key.sender !== $scope.basicInfo.username)
+                    {
+                        userService.updateMessages({
+                            id: key.id
+                        }).then(function (res) {
+                            if (res.result) {
+                                console.log("Message updated");
+                                key.read = true;
+                            } else {
+                                console.log("err");
+                            }
+                        });
+                    }
+                });
+            };
+
             function validAddress(value) {
                 var num = 0;
                 angular.forEach( value, function() {
@@ -94,361 +357,86 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                 return num==1 ? false : true;
             };
             
-            $scope.img = undefined;
-            
-            requestService.GetUserSelf(function(res){
-                console.log("userself", res);
-                
-                $scope.img = res.data.avatar;
-                
-                
-                if(res.data.address !== undefined){
-                    $scope.address =  res.data.address;
-                    $scope.addressGot = true;
-                    $scope.addressCorrect = true;
-                    
-                    $scope.$watch(function(){return $scope.address.apt}, function (newValue) {
-                        console.log(newValue);
-                        $scope.address.apt = newValue;
-                        requestService.ChangeProfile({step:2}, {'address':$scope.address}, function(res){
-                            console.log(res);
-                        });
-                    }, true);
-                }
-                
-                if(res.data.enrollYear !== undefined){
-                    $scope.basicInfo.enrollYear = res.data.enrollYear;
-                }
-                
-                if(res.data.enrollSeason !== undefined){
-                    $scope.basicInfo.enrollSeason = res.data.enrollSeason;
-                }
-                
-                $scope.basicInfo.username = res.data.username;
-
-                $scope.basicInfo.schoolId = res.data.schoolId;
-                
-                $scope.$watch('basicInfo', function (newValue, oldValue) {
-                    if(!angular.equals(newValue, oldValue)){
-                        console.log(newValue, oldValue);
-                        requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
-                            console.log(res);
-                        });
-                    }
-                }, true);
-                
-                
-                
-                
-                /*$scope.$watch('address', function (newValue, oldValue) {
-                    if(newValue.street !==oldValue.street || newValue.city !==oldValue.city || newValue.state !==oldValue.state || newValue.zipcode !==oldValue.zipcode){
-                        console.log(newValue, oldValue);
-                        $scope.address.full = newValue.street+', ' + newValue.city +', '+newValue.state;
-                        
-                        geocoder.geocode({ 'address' : $scope.address.full}, function (results, status) {
-                            console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-                            if (status == google.maps.GeocoderStatus.OK) {
-                                console.log("Valid address");
-                            } else {
-                                console.log("Invalid address");
-                            }
-                        });
-                        
-                        
-                        requestService.ChangeProfile({step:2}, {'address':newValue}, function(res){
-                            console.log(res);
-                        });
-                    }
-                }, true);*/
-                
-                requestService.GetSchool({id:$scope.basicInfo.schoolId}, function(res){
-                    console.log(res);
-                    $scope.schoolName = res.data.name;
-                    $scope.schoolAvatar = res.data.avatar;
-                    //$scope.$broadcast('getSchoolName', $scope.schoolName);
-                });
-               
-                
-            });
-            
-            
-            $scope.sendInfo = '';
-            
-            userService.userSelf({
-                    
-                })
-                    .then(function (res) {
-                        if (res.result) {
-                            if(res.data.verified == true){
-                                $scope.verified = true;
-                            }else{
-                                $scope.verified = false;
-                            }
-                            $scope.email = res.data.email;
-                        } else {
-                            
-                        }
-                    })
-            
-
-            $scope.sendVerifyLink = function(){
-                userService.active({
-                    eduEmail: $scope.eduEmail,
-                })
-                    .then(function (res) {
-                        console.log(res.result);
-                        if (res.result) {                          
-                            $scope.sendInfo = 'email sended';                                                         
-                        } else {
-                            $scope.sendInfo = res.err;
-                        }
-                    })
-            };
-            
-            
-            $scope.deleteApt = function(index, id, type){
-                if(type == 1){
-                    $scope.localApts.splice(index, 1);
-                }
-                else{
-                    $scope.localDrafts.splice(index, 1);
-                }
-                
-                requestService.DeleteApt({id:id}, function(res){
-                    console.log(id,res);
-                    
-                });
-            };
-            
-            $scope.getApts = function(init){
-                requestService.GetApts(function(res) {
-                    if(res.result==false)
-                    {
-                        $scope.hasPosted = false;
-                    }
-                    else
-                    {
-                        $scope.hasPosted = true;
-                        $scope.apts = res.data;
-                        if(init == true)
-                            $scope.localApts = $scope.apts;
-                    }
-                });
-            };
-            
-            
-            $scope.getDrafts = function(init){
-                requestService.GetDrafts(function(res){
-                    if(res.result == false){
-                        $scope.hasDraft = false;
-                    }else{
-                        $scope.hasDraft = true;
-                        $scope.drafts = res.data;
-                        if(init == true)
-                            $scope.localDrafts = $scope.drafts;
-                    }
-                });
-            };
-            $scope.getApts(true);
-            $scope.getDrafts(true);
-            
-            
-            $scope.$watch('file', function (newValue, oldValue) {
-                //console.log($scope.files, "old:", oldValue, "new:", newValue);
-                if(!angular.equals(newValue, oldValue))
-                    $scope.upload($scope.file);
-            });
-            
-            $scope.upload = function (file) {
-                if (file) {
-                    console.log(file);
-                   
-                    console.log("111");
-                    fileReader.readAsDataUrl(file, $scope).then(function(result) {
-                        $scope.img = result;
-                        //key.content = result;
-                    });
-                    var up = Upload.upload({
-                        url: 'http://52.25.82.212:8080/avatar/m_upload_image',
-                        file: file,
-                        fileFormDataName: 'avatar'
-                    }).progress(function (evt) {
-                        $scope.prog = parseInt(100.0 * evt.loaded / evt.total);
-                    }).success(function (data, status, headers, config) {
-                        console.log('file ' + config.file.name + 'uploaded. Response: ');
-                        console.log(data);
-                        $scope.avatar = "https://s3.amazonaws.com/hereseas-public-images/"+data.data;
-                        requestService.ChangeProfile({step:3}, {'avatar':$scope.avatar}, function(res){
-                                console.log(res);
-                            });
-                    }).error(function (data, status, headers, config) {
-                        console.log('error status: ' + status);
-                    })
-                }
-            };
-            
-            
-            
-            //基本信息model
-            $scope.basicInfo = {
-                username : '',
-                schoolId : '',
-                enrollYear :'',
-                enrollSeason:''
-            };
-            //地址信息model
-            $scope.address ={
-                 street :  '',
-                 apt :       '',
-                 city :     '',
-                 state :    '',
-                 zipcode :  '',
-                 full:   ''
-            };
-            
-            
-            $scope.setPostPage = setPostPage;
-            $scope.setActivePage = setActivePage;
-            //$scope.lastPage = lastPage;
-            //$scope.nextPage = nextPage;
-            //$scope.cancel = cancel;
-            
-            $scope.setActiveTab = setActiveTab;
-            $scope.setFavorite = setFavorite;
-            $scope.updateMsgs = updateMsgs;
-            $scope.getUnReadMessages = getUnReadMessages;
-            
-            $scope.filterApt = true;
-            $scope.filterCar = true;
-            $scope.filterGood = true;
-            $scope.filterActivity = true;
-            $scope.postType2 = "Apts";
-            $scope.content = "Hello World ";
-            $scope.postPage = 1;
-            $scope.activePage = 1;
-            $scope.activeTab = 1;
-            
-            $scope.numPosted = 1;
-            $scope.numToPost = 1;
-            $scope.numDeal = 0;
-
-            $scope.numMessage = 0;
-            $scope.numNotify = 0;
-            $scope.favorite = ["/app/view/img/profile/favorite1.png","/app/view/img/profile/favorite2.png"];            
-            
-            $scope.messages = [
-                {
-                    user:"Zhenyu Han", 
-                    msgs:[
-                        {content:"aaaaaaaaaaaaaaaaa",read:false},
-                        {content:"bbbbbbbbbbbbbbbbb",read:true},
-                        {content:"ccccccccccccccccc",read:false}
-                    ], 
-                    favorite: false
-                },
-                {
-                    user:"Shuo Peng", 
-                    msgs:[
-                        {content:"ddddddddddddddddd",read:false},
-                        {content:"eeeeeeeeeeeeeeeee",read:true},
-                    ], 
-                    favorite: true
-                },
-                {
-                    user:"Huanzhou Huang", 
-                    msgs:[
-                        {content:"ddddddddddddddddd",read:true},
-                        {content:"eeeeeeeeeeeeeeeee",read:true},
-                    ], 
-                    favorite: true     
-                }
-            ];
-            
-            $scope.unReadMessages = [];
-            
-            getUnReadMessages();
-            function getUnReadMessages() {
-                var temp = [];
-                var lastestMsg="";
-                for(var i=0; i<$scope.messages.length; i++)
-                {
-                    var value = $scope.messages[i].msgs;
-                    for(var j=0; j<value.length; j++)
-                    {
-                        if(value[j].read == false)
-                            temp.push(value[j].content);
-                        lastestMsg = value[j].content;
-                    }
-                    if(temp.length == 0 )
-                        $scope.unReadMessages.push({user: $scope.messages[i].user, contents: temp,lastest:lastestMsg, hasNew:false});
-                    else
-                    { 
-                        $scope.unReadMessages.push({user: $scope.messages[i].user, contents: temp,lastest:lastestMsg, hasNew:true});
-                        $scope.numMessage += temp.length;
-                    }
-                    temp = [];
-                    lastestMsg="";
-                }
-            }
-            
-            function updateMsgs(index) {
-                if($scope.unReadMessages[index].hasNew == true){
-                    $scope.numMessage -= $scope.unReadMessages[index].contents.length;
-                    $scope.unReadMessages[index].contents = [];
-                    $scope.unReadMessages[index].hasNew = false;
-                    
-                    //console.log($scope.unReadMessages[index].contents.length);
-                    for(var i=0; i<$scope.messages[index].msgs.length; i++)
-                    {
-                        $scope.messages[index].msgs[i].read = true;
-                    }
-                }
-            };
-            
-            
-            function setFavorite(index) {
-                $scope.messages[index].favorite = !$scope.messages[index].favorite;
-                //console.log($scope.messages);
-            };
-            
-            
-            /*function lastPage() {
-                setActivePage($scope.activePage-1);
-            };
-
-            function nextPage() {
-                setActivePage($scope.activePage+1);
-            };*/
-            
-            function cancel() {
-                $state.go('home');
-            };
-
             
             function setPostPage(page){ 
                 $scope.postPage = page;
             }
 
             function setActivePage(page) {
-                /*if($scope.activePage == page){
-                    
-                } else{
-                    if($scope.activePage == 2){
-                        if($scope.updateMark.address){
-                            $scope.address.full = $scope.address.street+', ' + $scope.address.city +', '+$scope.address.state;
-                            requestService.ChangeProfile({step:2}, {'address':$scope.address}, function(res){
-                                console.log(res);
-                                $scope.updateMark.address = false;
-                            });
-                        }
-                    }
-                }*/
                 $scope.activePage = page;
             };
             
             function setActiveTab(tab) {
                 $scope.activeTab = tab;
             };
+            
+            function initProfiles(){
+                if(res.data.verified == true){
+                    $scope.verified = true;
+                }else{
+                    $scope.verified = false;
+                }
+                $scope.email = res.data.email;
+
+                $scope.img = res.data.avatar;
+                if(res.data.address !== undefined){
+                    $scope.address =  res.data.address;
+                    $scope.addressGot = true;
+                    $scope.addressCorrect = true;
+
+                    $scope.$watch(function(){return $scope.address.apt}, function (newValue) {
+                        $scope.address.apt = newValue;
+                        requestService.ChangeProfile({step:2}, {'address':$scope.address}, function(res){
+                            //console.log(res);
+                        });
+                    }, true);
+                }
+
+                if(res.data.enrollYear !== undefined){
+                    $scope.basicInfo.enrollYear = res.data.enrollYear;
+                }
+
+                if(res.data.enrollSeason !== undefined){
+                    $scope.basicInfo.enrollSeason = res.data.enrollSeason;
+                }
+
+                $scope.basicInfo.username = res.data.username;
+
+                requestService.GetSchools(function(res){
+                    $scope.schoolNames = [];
+                    $scope.schoolIds = [];
+                    for(var i=0; i<res.data.length; i++){
+                        $scope.schoolNames.push(res.data[i].name);
+                        $scope.schoolIds.push(res.data[i]._id);
+                    }
+                    
+                    $scope.$watch('schoolName', function (newValue) {//学校字段内容改变时判断是否是正确的名字。正确时匹配schoolId
+                        if(newValue !== undefined){
+                            var index = $scope.schoolNames.indexOf(newValue);
+                            if(index !== -1)
+                                $scope.basicInfo.schoolId = $scope.schoolIds[index];
+                        }
+                    });
+                });
+
+                if(res.data.schoolId !== undefined){
+                    $scope.basicInfo.schoolId = res.data.schoolId;
+                    requestService.GetSchool({id:$scope.basicInfo.schoolId}, function(res){
+                        if(res.result){
+                            $scope.schoolName = res.data.name;
+                        }   
+                    }); 
+                }
+
+                $scope.$watch('basicInfo', function (newValue, oldValue) {
+                    if(newValue.username!=='' && newValue.enrollSeason!=='' && newValue.enrollYear!=='' && newValue.schoolId!=='' && !angular.equals(newValue,oldValue)){
+                        requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
+                            console.log(res);
+                        });
+                    }
+                }, true);
+            };
+            
         } else {
             $state.go('home');
         }

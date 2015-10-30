@@ -14,18 +14,18 @@
                 <div style="margin-right:53px;">
                     <!--发布者信息-->
                     <div layout="row" style="padding-top:20px; padding-bottom:20px;">
-                            <div>
-                                <img class="md-whiteframe-z1" ng-src="{{avatar}}" style="border-radius:50%; weight:80px;height:80px; border:1px solid rgb(220,224,224);"/>
-                            </div>
-                            <div layout="row" style="padding-left:30px; padding-top:40px;">
-                                <div>{{username}}</div>
-                                <div style="margin-right:50px;margin-left:50px;">|</div>
-                                <div>{{schoolName}}</div>        
-                            </div>
+                        <div>
+                            <img class="md-whiteframe-z1" ng-src="{{avatar}}" style="border-radius:50%; weight:80px;height:80px; border:1px solid rgb(220,224,224);"/>
                         </div>
+                        <div layout="row" style="padding-left:30px; padding-top:40px;">
+                            <div>{{username}}</div>
+                            <div style="margin-right:50px;margin-left:50px;">|</div>
+                            <div>{{schoolName}}</div>        
+                        </div>
+                    </div>
                     <!--画线-->
                     <div >
-                        <hr style="margin:5px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                        <hr style="margin:0px 5px 0px 5px;border:0;border-top:1px solid #333333;">
                     </div>
                     <!--公寓信息-->
                     <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
@@ -47,71 +47,75 @@
                                     <div flex="80"><del>{{name(key)}}</del></div>
                                 </div>
                             </div>
+                            <div style="margin-bottom:20px;">
                             <a id="moreApts" style="color:#E95743;outline:none;" href="" ng-show="!has_all_facilities()" data-ng-click="ShowAllApt()">
                                 <strong ng-show="!show_all_apt">+ More</strong>
                             </a>
+                            </div>
                         </div>
                     </div>
-                        <!--画线-->
-                        <div >
-                            <hr style="margin:5px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                    <!--画线-->
+                    <div >
+                        <hr style="margin:0px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                    </div>
+                    <!--房间信息-->
+                    <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
+                        <div flex="33">
+                            <h3 class="hs_subtitle" ng-click="ShowAllApt()"><b>房间信息</b></h3>
                         </div>
-                        <!--房间信息-->
-                        <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
-                            <div flex="33">
-                                <h3 class="hs_subtitle" ng-click="ShowAllApt()"><b>房间信息</b></h3>
+                        <div flex="66" style="margin-top:21px;" layout="row" layout-wrap>
+                            <div flex="50" ng-show="data.facilities.room[key]" ng-repeat="(key,value) in data.facilities.room">
+                                <div layout="row" style="margin-bottom:10px;height:40px;">
+                                    <div flex="10" ng-style="{'background-image':'url({{roomIcons[$index]}})'}" style=" background-size:100%;background-repeat:no-repeat;"></div>
+                                    <div flex="10" ></div>
+                                    <div flex="80">{{name(key)}}</div>
+                                </div>
                             </div>
-                            <div flex="66" style="margin-top:21px;" layout="row" layout-wrap>
-                                            <div flex="50" ng-show="data.facilities.room[key]" ng-repeat="(key,value) in data.facilities.room">
-                                                <div layout="row" style="margin-bottom:10px;height:40px;">
-                                                    <div flex="10" ng-style="{'background-image':'url({{roomIcons[$index]}})'}" style=" background-size:100%;background-repeat:no-repeat;"></div>
-                                                    <div flex="10" ></div>
-                                                    <div flex="80">{{name(key)}}</div>
-                                                </div>
-                                                </div>
-                                                <div flex="50" ng-show="!data.facilities.room[key] && show_all_room" ng-repeat="(key,value) in data.facilities.room">
-                                                    <div layout="row" style="margin-bottom:10px;height:40px;">
-                                                        <div flex="10" ng-style="{'background-image':'url({{roomIcons[$index]}})'}" style=" background-size:100%;background-repeat:no-repeat;"></div>
-                                                        <div flex="10" ></div>
-                                                        <div flex="80"><del>{{name(key)}}</del></div>
-                                                    </div>
-                                                </div>
-                                                 <a id="moreRooms" style="color:#E95743; outline:none;"  href="" ng-show="!has_all_room_facilities()" ng-click="ShowAllRoom()">
-                                                    <strong ng-show="!show_all_room">+ More</strong>
-                                                </a>
-                                        </div>
-                        </div>
-                        <!--画线-->
-                        <div >
-                            <hr style="margin:5px 5px 0px 5px; border:0;border-top:1px solid #333333;">
-                        </div>
-                        <!--相关费用-->
-                        <div class="md-padding"  style="padding-top:0px;padding-bottom:5px;" layout="row">
-                            <div flex="33">
-                                <h3 class="hs_subtitle"><b>相关费用</b></h3>
+                            <div flex="50" ng-show="!data.facilities.room[key] && show_all_room" ng-repeat="(key,value) in data.facilities.room">
+                                <div layout="row" style="margin-bottom:10px;height:40px;">
+                                    <div flex="10" ng-style="{'background-image':'url({{roomIcons[$index]}})'}" style=" background-size:100%;background-repeat:no-repeat;"></div>
+                                    <div flex="10" ></div>
+                                    <div flex="80"><del>{{name(key)}}</del></div>
+                                </div>
                             </div>
-                                        <div flex="66" style="margin-top:21px;" layout="row" layout-wrap >
-                                            <div style="margin-bottom:10px;height:40px;" flex="50" ng-show="data.fees[key] !== null" ng-repeat="(key,value) in data.fees">
-                                                <div >
-                                                    {{data.fees[key]}} $ &nbsp; {{name(key)}}
-                                                </div>
-                                            </div>
-                                            <div style="margin-bottom:10px;height:40px;" flex="50" ng-show="data.fees[key] == null && show_all_fees" ng-repeat="(key,value) in data.fees">
-                                                <div >
-                                                    <del>{{name(key)}} {{data.fees[key]}}<del>
-                                                </div>
-                                            </div>
-                                                <a id="moreFees" style="color:#E95743;outline:none;"  href="" ng-show="!has_all_fees()" ng-click="ShowAllFees()" flex-end>
-                                                    <strong ng-show="!show_all_fees">+ More</strong>
-                                                </a>
-                                        </div>
-                                    </div> 
-                        <!--画线-->
-                        <div >
-                            <hr style="margin:5px 5px 0px 5px; border:0;border-top:1px solid #333333;">
+                            <div style="margin-bottom:20px;">
+                                <a id="moreRooms" style="color:#E95743; outline:none;"  href="" ng-show="!has_all_room_facilities()" ng-click="ShowAllRoom()">
+                                    <strong ng-show="!show_all_room">+ More</strong>
+                                </a>
+                            </div>    
                         </div>
-                        <!--信息描述-->
-                        <div class="md-padding" style="padding-top:0px;padding-bottom:5px;"  layout="row">
+                    </div>
+                    <!--画线-->
+                    <div >
+                        <hr style="margin:0px 5px 0px 5px; border:0;border-top:1px solid #333333;">
+                    </div>
+                    <!--相关费用-->
+                    <div class="md-padding"  style="padding-top:0px;padding-bottom:5px;" layout="row">
+                        <div flex="33">
+                            <h3 class="hs_subtitle"><b>相关费用</b></h3>
+                        </div>
+                        <div flex="66" style="margin-top:21px;" layout="row" layout-wrap >
+                            <div style="margin-bottom:10px;height:40px;" flex="50" ng-show="data.fees[key] !== null" ng-repeat="(key,value) in data.fees">
+                                <div >{{data.fees[key]}} $ &nbsp; {{name(key)}}</div>
+                            </div>
+                            <div style="margin-bottom:10px;height:40px;" flex="50" ng-show="data.fees[key] == null && show_all_fees" ng-repeat="(key,value) in data.fees">
+                                <div >
+                                    <del>{{name(key)}} {{data.fees[key]}}<del>
+                                </div>
+                            </div>
+                            <div style="margin-bottom:20px;">
+                                <a id="moreFees" style="color:#E95743;outline:none;"  href="" ng-show="!has_all_fees()" ng-click="ShowAllFees()" flex-end>
+                                    <strong ng-show="!show_all_fees">+ More</strong>
+                                </a>
+                            </div>
+                        </div>
+                    </div> 
+                    <!--画线-->
+                    <div >
+                        <hr style="margin:5px 5px 0px 5px; border:0;border-top:1px solid #333333;">
+                    </div>
+                    <!--信息描述-->
+                    <div class="md-padding" style="padding-top:0px;padding-bottom:5px;"  layout="row">
                             <div flex="33">
                                 <h3 class="hs_subtitle"><b>信息描述</b></h3>
                             </div>
@@ -119,22 +123,40 @@
                                 <p>{{data.description}}</p>
                             </div>
                         </div>       
-                        <!--图片信息-->
-                        <!--div class="md-padding" layout="column"> 
-                            <div ng-show="!(data.images.length ==2)">    
-                                <div  ng-click="showImgs($event, data.images, 0)"  style="height:250px;width:580px; margin-bottom:10px; background-size:cover; " ng-style="{'background-image':'url('+data.images[0]+')'} "></div> 
-                            </div>
-                            <div ng-show="!(data.images.length ==1)" layout="row">
-                                <div  ng-click="showImgs($event, data.images, 1)" style="height:165px;width:285px; margin-right:10px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
-                                <div  ng-click="showImgs($event, data.images, 1)" style="height:165px;width:285px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
-                            </div>
-                        </div-->
-                                            
-                        <ng-gallery images="images" >
-                        </ng-gallery>                    
-                        
-
+                    <!--图片信息-->
+                    <!--
+                    <div class="md-padding"> 
+                        <div ng-show="(data.images.length ==1)">    
+                            <div  ng-click="openGallery(0)"  style="outline:none;height:280px;width:600px; background-size:cover; " ng-style="{'background-image':'url('+data.images[0]+')'} "></div> 
                         </div>
+                        <div ng-show="(data.images.length > 1)" layout="row"> 
+                            <div  ng-click="openGallery(0)"  style="outline:none;height:280px;width:370px; background-size:cover; margin-right:10px;" ng-style="{'background-image':'url('+data.images[0]+')'} "></div> 
+                       
+                            <div ng-show="(data.images.length == 2)"> 
+                                <div  ng-click="openGallery(1)" style="outline:none; height:280px;width:220px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
+                            </div>
+                            
+                            <div ng-show="(data.images.length == 3)" layout="column"> 
+                                
+                                <div  ng-click="openGallery(1)" style="outline:none; height:135px;width:220px;background-size:cover; margin-bottom:10px; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
+                                <div  ng-click="openGallery(2)" style="outline:none; height:135px;width:220px;background-size:cover; " ng-style="{'background-image':'url('+data.images[2]+')'} "></div>
+                            </div>
+                            
+                            <div ng-show="(data.images.length > 3)" layout="column"> 
+                                
+                                <div  ng-click="openGallery(1)" style="outline:none; height:185px;width:220px;background-size:cover; margin-bottom:10px; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
+                                <div layout="row">
+                                <div  ng-click="openGallery(2)" style="outline:none; margin-right:10px; height:85px;width:105px;background-size:cover; " ng-style="{'background-image':'url('+data.images[2]+')'} "></div>
+                                <div  ng-click="openGallery(3)" style="outline:none; height:85px;width:105px;background-size:cover; " ng-style="{'background-image':'url('+data.images[3]+')'} "></div>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+
+                    -->                
+                    <ng-gallery images="images" thumbs-num="{{images.length}}">
+                    </ng-gallery>                    
+                </div>
             </div>
             <!--滚动条-->
             <div flex="30">

@@ -75,10 +75,11 @@ hereseasApp.directive('topBar', function(){
             console.log($stateParams.schoolId);
             var index = $scope.icons.indexOf($scope.iconsToShow[id]);
             //console.log($scope.iconsToShow[id]);
-            if(index==0) $state.go('school', { schoolId:$stateParams.schoolId });
-            if(index==1) $state.go('allApts', { schoolId:$stateParams.schoolId });
-            if(index==2) $state.go('allCars', { schoolId:$stateParams.schoolId });
-            if(index==3) $state.go('allGoods', { schoolId:$stateParams.schoolId });
+            if(id==0) $state.go('school', { schoolId:$stateParams.schoolId });
+            if(id==1) $state.go('allApts', { schoolId:$stateParams.schoolId });
+            if(id==2) $state.go('allCars', { schoolId:$stateParams.schoolId });
+            if(id==3) $state.go('allGoods', { schoolId:$stateParams.schoolId });
+            if(id==4) $state.go('allActivs', { schoolId:$stateParams.schoolId });
         };
         
 

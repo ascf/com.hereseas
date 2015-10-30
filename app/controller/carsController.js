@@ -1,21 +1,381 @@
-hereseasApp.controller('AllCarsController',function($scope,requestService){
+hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestService,userService){
     
-    $scope.carMaker = "1";
-    $scope.carColor = "1";
-    $scope.carPrice = "1";
-    $scope.carModel = "1";
+    var cur_page = 1;
+    var max_page = 1;
     
+    $scope.carPrice = "all";
+    $scope.carStyle = "all";
+    $scope.carMileAge = "all";
+    $scope.carYear = "all";
+    
+    $scope.selectData = {
+        schoolId : $stateParams.schoolId, 
+//        page : cur_page, 
+//        pageSize : 3,
+//        price:'',
+//        style:'',
+//        year: '',
+//        miles: '',
+    };
+    
+    $scope.favs = [];
+    
+    $scope.savedCars = userService.cookies2Favorite().cars;
+
+    $scope.updateFavs = function(index){
+        if(userService.getLoginState()){
+            var id = $scope.carResult[index]._id;
+            var pos = $scope.savedCars.indexOf(id);
+
+            if(pos == -1){
+                $scope.savedCars.push(id);
+                $scope.favs[index] = "/app/view/img/profile/favorite2.png";
+                
+                userService.postFavorite({
+                    id: id,
+                    category: "cars"
+                }).then(function (res) {
+                    console.log(res);
+                    if (res.result) {
+                        //alert("Message has been sent");
+                    } else {
+                        //alert("err");
+                    }
+                });
+                
+            }else{
+                $scope.savedCars.splice(pos, 1);
+                $scope.favs[index] = "/app/view/img/profile/favorite1.png";
+            }
+            console.log($scope.savedCars);
+
+            var favoriteList = userService.cookies2Favorite();
+            favoriteList.cars = $scope.savedCars;
+            userService.saveFavorite2Cookies(favoriteList);
+        }else{
+            console.log("需要登录");
+        }
+    };
+    
+    function updatePage(){
+        requestService.GetCars($scope.selectData,
+        function(res){
+            console.log(res);
+            if(res.result){
+                console.log(res.data);
+                var cars = res.data;
+                $scope.carResult = cars;
+                if(userService.getLoginState()){
+                    $scope.favs = [];
+                    angular.forEach(cars, function(key){
+                        if($scope.savedCars.indexOf(key.id) !== -1)
+                            $scope.favs.push("/app/view/img/profile/favorite2.png");
+                        else $scope.favs.push("/app/view/img/profile/favorite1.png");
+                    });
+                }else{
+                    angular.forEach(cars, function(key){
+                        $scope.favs.push("/app/view/img/profile/favorite1.png");
+                    });
+                }
+                // store number of max pages
+                max_page = res.data.totalPage;
+                $scope.pages = [];
+                for(var i=0; i<max_page; i++){
+                    $scope.pages[i] = {};
+                    $scope.pages[i].id = i+1;             
+                }
+
+                // initial map
+                var myLatLng=[];
+                for(var i=0; i<cars.length; i++){
+                    myLatLng[i]={};
+                    myLatLng[i].lat = parseFloat(cars[i].latitude);
+                    myLatLng[i].lng = parseFloat(cars[i].longitude);             
+                }
+
+                // Create a map object and specify the DOM element for display.
+                var map = new google.maps.Map(document.getElementById('carsMap'), {
+                    center: myLatLng[0],
+                    scrollwheel: true,
+                    zoom: 12
+                });
+
+                // Origins, anchor positions and coordinates of the marker increase in the X
+                // direction to the right and in the Y direction down.
+                var image = {
+                    url: '/app/view/img/apts/marker.png',
+                    // This marker is 58 pixels wide by 24 pixels high.
+                    size: new google.maps.Size(58, 24),
+                    // The origin for this image is (0, 0).
+                    origin: new google.maps.Point(0, 0),
+                    // The anchor for this image is the base of the flagpole at (0, 24).
+                    anchor: new google.maps.Point(36, 24)
+                };
+                // Shapes define the clickable region of the icon. The type defines an HTML
+                // <area> element 'poly' which traces out a polygon as a series of X,Y points.
+                // The final coordinate closes the poly by connecting to the first coordinate.
+                var shape = {
+                    coords: [0, 0, 0, 24, 58, 24, 58, 0],
+                    type: 'poly'
+                };
+
+                var price;
+                for(var i=0; i<cars.length; i++){
+                    // Create a marker and set its position.
+                    var marker = new MarkerWithLabel({
+                        map: map,
+                        position: myLatLng[i],
+                        icon: image,
+                        shape: shape,
+                        labelContent: cars[i].price,
+                        draggable: false,
+                        labelClass: "labels",
+                        labelAnchor: new google.maps.Point(30, 22)
+                    });   
+                }
+            }else{
+                $scope.carResult = []; 
+            }
+        });
+    };
+    updatePage();
 
 });
 
-hereseasApp.controller('CarsController',function($scope,requestService){
-    
-    $scope.carMaker = "1";
-    $scope.carColor = "1";
-    $scope.carPrice = "1";
-    $scope.carModel = "1";
-    
+hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateParams, languageService, requestService,$mdDialog) {         
+    requestService.GetCar({id: $stateParams.carId}, function(res){
+        
+        if(res.result){
+            console.log(res);
+            $scope.data= res.data[0];
+            
+//                {
+//                userId: '56147dee8eecbd0d06c8970b',
+//	           username: 'abc', 
+//	           userAvatar:'/app/view/img/user/img1.JPG',
+//	           schoolId:'56147f7aef6d2a2806532536',
+//                title: '最便宜',
+//                description: '再也找不到更便宜的了',
+//                cover: '/app/view/img/car/car_temp.jpg',
+//                images: ['/app/view/img/car/car_temp.jpg','/app/view/img/car/car_temp.jpg','/app/view/img/car/car_temp.jpg'],
+//                   basicInfo: {
+//                      year: '2014',
+//                      make: 'lexus',
+//                      totalMiles: '8000mile',
+//                      style: 'IS250',
+//                      category: 'Sedan',
+//                      model: 'IS',
+//                        price: '15000',
+//                      boughtDate: new Date(),
+//                        available: true,
+//                       status: 1,
+//                       create_at: new Date(),
+//                      update_at: new Date(),
+//                   },
+//                color: 'white',
+//	           noAccident: true,
+//	           driveSystem: 'FWD',
+//	           transSystem: '自动',
+//	           output: '2.0',
+//	           breakType: {
+//                    ABS:true,
+//                    ESC:true
+//               },
+//               security: {
+//                    double_airbag:true,
+//                    slide_airbag:true,
+//                    airbag:true
+//	           },
+//               comfort:{
+//                    elec_lock:true,
+//                    elec_start: true,
+//                    cruise: true,
+//                    elec_window: true,
+//                    navi: true,
+//                    backup_supp: true,
+//                    CD: true,
+//                    DVD: true,
+//                    bluetooth:true,
+//                    USB:true,
+//                    sun_roof: true
+//               },
+//                address:{
+//                    apt: '',
+//                    city: 'Arlington',
+//                    full: '2000 S Eads St, Arlington, VA, United States',
+//                    state: 'VA',
+//                    street: '2000 South Eads Street',
+//                    zipcode: '22202'
+//                },
+//                latitude:'38.9131296',
+//                longitude:'-77.00652760000003'
+//            }
+            $scope.images = [];
+            for(var i=0; i<$scope.data.images.length; i++)
+                $scope.images.push({thumb:$scope.data.images[i], img: $scope.data.images[i]});
+            console.log($scope.images);
+            
+            $scope.showImgs = function(ev, images, index){
+                $mdDialog.show({
+                    controller:function ($scope){
+                        $scope.images = images;
+                        $scope.index = index;
+                    },
+                    templateUrl: '/app/view/partials/_image-display.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose:true
+                });
+            };
+            
+            $scope.sendMsg = function(){
+                requestService.SendMsg({id:'56147dee8eecbd0d06c8970b', content:'hahahaha'}, function(res){
+                    console.log(res);
+                });
+            };
+            
+            
+            $scope.sendMessage = function(ev) {
+                $mdDialog.show({
+                    templateUrl: '/app/view/message.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose:true
+                });
+            };
 
+            /*$scope.aprPowIcons = [
+                '/app/view/img/icon/bbq.svg',
+                '/app/view/img/icon/businessRoom.svg',
+                '/app/view/img/icon/elevator.svg',
+                '/app/view/img/icon/freeParking.svg',
+                '/app/view/img/icon/frontDesk.svg',
+                '/app/view/img/icon/gym.svg',
+                '/app/view/img/icon/laundry.svg',
+                '/app/view/img/icon/partyRoom.svg',
+                '/app/view/img/icon/petsAllowed.svg',
+                '/app/view/img/icon/roof.svg',
+                '/app/view/img/icon/safetySystem.svg',
+                '/app/view/img/icon/swimmingPool.svg',
+                '/app/view/img/icon/wheelchairAccessible.svg',
+                '/app/view/img/icon/yard.svg'
+            ];
+            $scope.confParamIcons = [
+                '/app/view/img/icon/airCondition.svg',
+                '/app/view/img/icon/balcony.svg',
+                '/app/view/img/icon/dishwasher.svg',
+                '/app/view/img/icon/dryer.svg',
+                '/app/view/img/icon/extinguisher.svg',
+                '/app/view/img/icon/furnitures.svg',
+                '/app/view/img/icon/heater.svg',
+                '/app/view/img/icon/microwave.svg',
+                '/app/view/img/icon/oven.svg',
+                '/app/view/img/icon/refrigerator.svg',
+                '/app/view/img/icon/smokeDetector.svg',
+                '/app/view/img/icon/washer.svg'
+            ];
+            $scope.data = $scope.carResult;
+            console.log($scope.data);*/
+            requestService.GetUser({id: $scope.data.userId},function(res){
+                console.log(res.data)
+                $scope.username = res.data.username;
+                $scope.avatar = res.data.avatar;
+            });
+            
+            /*
+            console.log($scope.data);
+            $scope.add_apt = $scope.data.address.full;
+            
+            $scope.rooms = $scope.data.rooms;
+            $scope.theRoom = $scope.rooms[1];
+            */
+            requestService.GetSchool({id: $scope.data.schoolId}, function(res) {
+                if (res.result) {
+                    console.log(res.data);
+                    $scope.schoolName = res.data.name;
+                    
+                } else {
+                    //http get school id error
+                }
+            });
+    
+            $scope.name = name;
+            /*
+            $scope.ShowAllApt = ShowAllApt;
+            $scope.ShowAllRoom = ShowAllRoom;
+            $scope.ShowAllFees = ShowAllFees;
+            $scope.SetMethod = SetMethod;
+            
+            $scope.count = count;
+            $scope.has_all_facilities = has_all_facilities;
+            $scope.has_all_room_facilities = has_all_room_facilities;
+            $scope.has_all_fees = has_all_fees;
+            
+            $scope.numAptFacilitiesType =0;
+            $scope.numRoomFacilitiesType =0;
+            $scope.numFeesType =0;
+            
+            count();
+
+            function count() {
+                //统计拥有的公寓设施的数量
+                for (var key in $scope.data.facilities.apt)
+                {                  
+                    $scope.numAptFacilitiesType++;
+                    if($scope.data.facilities.apt[key] == true)
+                        $scope.apt_true++;
+                };
+                //统计拥有的房间设施的数量
+                for(var key in $scope.data.facilities.room)
+                {
+                    $scope.numRoomFacilitiesType++;
+                    if($scope.data.facilities.room[key] == true)
+                        $scope.room_true++;
+                };
+                //统计拥有的费用的数量
+                for(var key in $scope.data.fees)
+                {
+                    $scope.numFeesType++;
+                    if(!($scope.data.fees[key] == null))
+                        $scope.fees_true++;
+                };
+            };
+
+            function ShowAllApt() {
+                $scope.show_all_apt = !$scope.show_all_apt;  
+            };
+
+            function ShowAllRoom() {
+                $scope.show_all_room = !$scope.show_all_room;
+            };
+
+            function ShowAllFees() {
+                $scope.show_all_fees = !$scope.show_all_fees;
+            };
+
+            function SetMethod(method) {
+                roomService.setDisplay(method);
+            };
+            */
+            function name(name) {
+                return languageService.getChineseName(name);
+            };
+            /*
+            function has_all_facilities() {
+                return $scope.apt_true == $scope.numAptFacilitiesType;
+            };
+
+            function has_all_room_facilities() {
+                return $scope.room_true == $scope.numRoomFacilitiesType;
+            };
+
+            function has_all_fees() {
+                return $scope.fees_true == $scope.numFeesType;
+            };*/
+        }else{
+            $state.go('home');
+        }
+    });
 });
 
 hereseasApp.controller('CarPostController', function($scope, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter){
@@ -35,13 +395,8 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
             $scope.nextPage = nextPage;
             $scope.setActivePage = setActivePage;
             
-	        $scope.isStudio = false,
-            $scope.numBedrooms = 1,
-            $scope.numBathrooms = 1,
             //$scope.beginDate = new Date(),
             //$scope.endDate = $scope.beginDate,
-            $scope.AddRoom = AddRoom;
-            $scope.RemoveRoom = RemoveRoom;
             
             $scope.name = name;  //获取中午名称函数
             $scope.doPost = doPost;
@@ -49,38 +404,18 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
             $scope.arrUploads = [];
             //表格是否填完变量
             $scope.tableFilled = [
-                {filled: true},
+                {filled: false},
                 {filled: false},
                 {filled: true},
-                {filled: false},
                 {filled: false},
                 {filled: false},
                 {filled: false}
             ];
     
             $scope.hide = function() {
-                userService.setDraft({});
+                userService.setCarDraft({});
                 $mdDialog.hide();
             };
-             
-            //control the field of bedroom num and bathroom num in case of studio selected
-            $scope.$watch(
-              function() { return $scope.numBedrooms; },
-              // This is the change listener, called when the value returned from the above function changes
-              function(newValue, oldValue) {
-                if ( newValue !== oldValue ) {
-                    if(newValue == 0){ 
-                        $scope.isStudio = true;
-                        $scope.numBathrooms = 0;
-                    }
-                    else {
-                        $scope.isStudio = false;
-                        $scope.numBathrooms = 1;
-                    }
-                }
-              }
-            );
-    
     
             //details1 is the detail address provided by google address autocomplete 
             $scope.$watch('details1', function(newValue){  //在地址合法之后的操作
@@ -104,18 +439,18 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                         }
                     }
                     
-                    $scope.steps[5].address.street = $scope.addresses[0]+" "+$scope.addresses[1];
-                    $scope.steps[5].address.city = $scope.addresses[2];
-                    $scope.steps[5].address.state = $scope.addresses[3];
-                    $scope.steps[5].address.zipcode = $scope.addresses[4];
-                    console.log($scope.steps[5].address.zipcode);
-                    geocoder.geocode({ 'address' : $scope.steps[5].address.full}, function (results, status) {
+                    $scope.steps[4].address.street = $scope.addresses[0]+" "+$scope.addresses[1];
+                    $scope.steps[4].address.city = $scope.addresses[2];
+                    $scope.steps[4].address.state = $scope.addresses[3];
+                    $scope.steps[4].address.zipcode = $scope.addresses[4];
+                    console.log($scope.steps[4].address.zipcode);
+                    geocoder.geocode({ 'address' : $scope.steps[4].address.full}, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
                             
-                            $scope.steps[5].latitude = results[0].geometry.location.lat();
-                            $scope.steps[5].longitude = results[0].geometry.location.lng();
-                            console.log($scope.steps[5]);
+                            $scope.steps[4].latitude = results[0].geometry.location.lat();
+                            $scope.steps[4].longitude = results[0].geometry.location.lng();
+                            console.log($scope.steps[4]);
                         } else {}
                     });
                 }
@@ -130,7 +465,47 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 return num==1 ? false : true;
             };
             
-            
+            $scope.removeImage = function(url){
+                if(userService.getCarDraft().state == 'update'){
+                    requestService.GetCar({id:userService.getCarDraft().id},function(res){
+                        $scope.steps[5].images = res.data[0].images;
+                        var index = $scope.steps[5].images.indexOf(url);
+                        $scope.steps[5].images.splice(index, 1);
+                        if($scope.steps[5].images.length == 0)
+                            $scope.steps[5].cover = '';
+                        else
+                            $scope.steps[5].cover = $scope.steps[5].images[0];
+
+                        requestService.CarStepPost({id:userService.getCarDraft().id , step:6}, $scope.steps[5], function(res){
+                            console.log(res);
+                            requestService.GetCar({id:userService.getCarDraft().id},function(res){
+                                $scope.steps[5].images = res.data[0].images;
+                                $scope.steps[5].cover = res.data[0].cover;
+                            });
+                        });
+                    });
+                }else{
+                    requestService.GetCarDraft({id:userService.getCarDraft().id},function(res){
+
+                        $scope.steps[5].images = res.data[0].images;
+                        console.log(res, $scope.steps[5].images,url);
+                        var index = $scope.steps[5].images.indexOf(url);
+                        $scope.steps[5].images.splice(index, 1);
+                        if($scope.steps[5].images.length == 0)
+                            $scope.steps[5].cover = '';
+                        else
+                            $scope.steps[5].cover = $scope.steps[5].images[0];
+
+                        requestService.CarStepPost({id:userService.getCarDraft().id , step:6}, $scope.steps[5], function(res){
+                            console.log(res);
+                            requestService.GetCarDraft({id:userService.getCarDraft().id},function(res){
+                                $scope.steps[5].images = res.data[0].images;
+                                $scope.steps[5].cover = res.data[0].cover;
+                            });
+                        });
+                    });
+                }
+            };
             $scope.$watch('files', function (newValue, oldValue) {
                 //files:image upload model
                 if(!angular.equals(newValue, oldValue)&& newValue !== [])
@@ -150,7 +525,7 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                                 key.content = result;
                             });
                             var up = Upload.upload({
-                                url: 'http://52.25.82.212:8080/apartment/m_upload_image',
+                                url: 'http://52.25.82.212:8080/car/m_upload_image',
                                 file: key.file,
                                 fileFormDataName: 'car'
                             }).progress(function (evt) {
@@ -162,29 +537,16 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                                 key.id = 'https://s3.amazonaws.com/hereseas-public-images/'+data.data;
                                 console.log(key.id);
                                 
-                                $scope.steps[6].images.push(key.id);
-                                if($scope.steps[6].images.length == 1)
-                                    $scope.steps[6].cover = $scope.steps[6].images[0];
+                                $scope.steps[5].images.push(key.id);
+                                if($scope.steps[5].images.length == 1)
+                                    $scope.steps[5].cover = $scope.steps[5].images[0];
+                                $scope.arrUploads.splice($scope.arrUploads.indexOf(key), 1);
+                                $scope.files.splice($scope.files.indexOf(key.file), 1);
+
+                                requestService.CarStepPost({id:userService.getCarDraft().id , step:6}, $scope.steps[5], function(res){
+                                    console.log(res);
+                                });
                                 
-                                
-                                
-                                key.cancel = function(){
-                                    var index = $scope.steps[6].images.indexOf(key.id);
-                                    $scope.steps[6].images.splice(index,1);
-                                    if($scope.steps[6].images.length == 0){ 
-                                        $scope.steps[6].cover = '';
-                                    }
-                                    else if(index == 0) {
-                                        $scope.steps[6].cover = $scope.steps[6].images[0];
-                                    }
-                                    
-                                    
-                                    $scope.arrUploads.splice($scope.arrUploads.indexOf(key), 1);
-                                    $scope.files.splice($scope.files.indexOf(key.file), 1);
-                                    console.log("cancel after upload", $scope.files, $scope.arrUploads);
-                                    
-                                    key.id = "";
-                                };
                             }).error(function (data, status, headers, config) {
                                 console.log('error status: ' + status);
                             })
@@ -201,20 +563,23 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
             };
 
             
-            
             //the main model 
 	       $scope.steps = [
                 {
-                    schoolId : '',
-                    year : '',
-                    make : '',
-                    totalMiles : '',
-                    style : '',
-                    category : '',
-                    model : '',
-                    price : '',
-                    boughtDate : new Date(),
-                    available : true 
+                    basicInfo: [
+                        {
+                           // schoolId : '',
+                            year : '',
+                            make : '',
+                            totalMiles : '',
+                            style : '',
+                            category : '',
+                            model : 'Sedan',
+                            price : '',
+                            boughtDate : undefined,
+                         //   available : true
+                        }
+                    ]
                 },
                 {
                     color : '',
@@ -224,16 +589,16 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                     output: ''
                 },
                 {
-                    brake_turn:{
+                    breakType:{
                         ABS : false,
-                        ESC : false
+                        ESC : false,
                     },
-                    safe:{
+                    security:{
                         double_airbag : false,
                         side_airbag : false,
-                        airbag : false
+                        curtain : false,
                     },
-                    comft_entn:{
+                    comfort:{
                         elec_lock : false,
                         elec_start : false,
                         cruise : false,
@@ -249,12 +614,20 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                     
                 },
                 {
+                    title :  '',
                     description : ''
                 },
                 {
-                    address :  '',
-                    longitude :  '',
-                    latitude :  ''
+                    address : {
+                         street :  '',
+                         apt :       '',
+                         city :     '',
+                         state :    '',
+                         zipcode :  '',
+                         full:   ''
+                    },
+                    latitude : '',
+                    longitude : ''
                 },
                 {
                     cover : '',
@@ -262,26 +635,43 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 }
             ];
     
-            /*$scope.ifShowSubmit = function(){
-                return userService.getDraft().state !== "edit";
-            };*/
+
     
             $scope.setEditModel = function(data){
-                console.log(data.beginDate, data.endDate);
-                $scope.steps[0].beginDate = new Date(data.beginDate);
-                $scope.steps[0].endDate = new Date(data.endDate);
+                $scope.steps[0].basicInfo = data.basicInfo;
+                $scope.steps[0].basicInfo[0].boughtDate = new Date(data.basicInfo[0].boughtDate);
                 
-                if(data.type == 'Studio'){
-                    $scope.isStudio = true;
-                }
-                else{
-                    $scope.numBedrooms = data.type.charAt(0)*1;
-                    $scope.numBathrooms = data.type.charAt(2)*1;
-                }
-                $scope.steps[1].rooms = data.rooms; 
-
                 
-                if(data.facilities !== undefined){
+                if(data.color !== undefined)
+                    $scope.steps[1].color = data.color;
+                
+                if(data.driveSystem !== undefined)
+                    $scope.steps[1].driveSystem = data.driveSystem;
+                
+                if(data.noAccident !== undefined)
+                    $scope.steps[1].noAccident = data.noAccident;
+                
+                if(data.output !== undefined)
+                    $scope.steps[1].output = data.output;
+                
+                if(data.transSystem !== undefined)
+                    $scope.steps[1].transSystem = data.transSystem;
+                
+                if(data.breakType !== undefined)
+                    $scope.steps[2].breakType = data.breakType;
+                
+                if(data.comfort !== undefined)
+                    $scope.steps[2].comfort = data.comfort;
+                
+                if(data.security !== undefined)
+                    $scope.steps[2].security = data.security;
+                
+                if(data.description !== undefined)
+                    $scope.steps[3].description = data.description;
+                
+                if(data.title !== undefined)
+                    $scope.steps[3].title = data.title;
+                /*if(data.facilities !== undefined){
                     $scope.steps[2].facilities = data.facilities;
                 }
 
@@ -290,40 +680,39 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 }
                 
                 $scope.steps[4].title = data.title;
-                $scope.steps[4].description = data.description;
-
+                $scope.steps[4].description = data.description;*/
 
                 if(data.address !== undefined)
                 {
-                    $scope.steps[5].address = data.address;
-                    console.log($scope.steps[5].address);
+                    $scope.steps[4].address = data.address;
+                    console.log($scope.steps[4].address);
                     $scope.addressGot = true;
-                    $scope.addresses[0] = $scope.steps[5].address.street.split(' ')[0];
-                    $scope.addresses[1] = $scope.steps[5].address.street.split(' ')[1];
-                    $scope.addresses[2] = $scope.steps[5].address.city;
-                    $scope.addresses[3] = $scope.steps[5].address.state;
-                    $scope.addresses[4] = $scope.steps[5].address.zipcode;
+                    $scope.addresses[0] = $scope.steps[4].address.street.split(' ')[0];
+                    $scope.addresses[1] = $scope.steps[4].address.street.split(' ')[1];
+                    $scope.addresses[2] = $scope.steps[4].address.city;
+                    $scope.addresses[3] = $scope.steps[4].address.state;
+                    $scope.addresses[4] = $scope.steps[4].address.zipcode;
 
                 }
 
                 if(data.cover !== undefined){
-                    $scope.steps[6].cover = data.cover;
-                    $scope.steps[6].images = data.images;
-                    console.log($scope.steps[6].images);
+                    $scope.steps[5].cover = data.cover;
+                    $scope.steps[5].images = data.images;
+                    console.log($scope.steps[5].images);
                 }
             };
     
             
-            if(!angular.equals(userService.getDraft(),{})){
-                if(userService.getDraft().state == 'edit'){
-                    requestService.GetDraft({id:userService.getDraft().id}, function(res){
+            if(!angular.equals(userService.getCarDraft(),{})){
+                if(userService.getCarDraft().state == 'edit'){
+                    requestService.GetCarDraft({id:userService.getCarDraft().id}, function(res){
                         console.log("EDIT", res);
 
                         $scope.setEditModel(res.data[0]);                
                     })
                 }
-                else if(userService.getDraft().state == 'update'){
-                    requestService.GetApt({id:userService.getDraft().id}, function(res){
+                else if(userService.getCarDraft().state == 'update'){
+                    requestService.GetCar({id:userService.getCarDraft().id}, function(res){
                         console.log("UPDATE", res);
                         
                         $scope.setEditModel(res.data[0]);                
@@ -331,54 +720,56 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 }
             }
             
+//            $scope.$watch(function(){return $scope.steps[0];}, function(newValue){
+//                if(newValue.basicInfo[0].year == '' || newValue.basicInfo[0].model == '' || newValue.basicInfo[0].make == ''||newValue.basicInfo[0].style == ''||
+//                  newValue.basicInfo[0].totalMiles == ''||newValue.basicInfo[0].boughtDate == undefined||newValue.basicInfo[0].price == ''){
+//                    $scope.tableFilled[0].filled = false; 
+//                }else{
+//                    $scope.tableFilled[0].filled = true; 
+//                }
+//            }, true);
             
             //表格是否填完显示变化函数
             $scope.$watch('steps', function(){
                 var s0 = 0; //initial step page 1
                 var s2 = 0; //initial step page 3
                 $scope.sn = 0; //initial whole pages
-                //test if step page 1 is filled
-                angular.forEach($scope.steps[1].rooms, function(room){
-                    if(room.type == '' || room.share == null || room.price == '' || room.priceType == ''){
-                        $scope.tableFilled[1].filled = false; 
-                    }else{
-                        $scope.tableFilled[1].filled = true;
-                    }
-                });
-                //test if step page 3 is filled
-                /*for(var i = 0; i < 7; i++){
-                    if($scope.steps[3].fees[i].price == null){s2 = s2 + 1;}
-                }*/
-                angular.forEach($scope.steps[3].fees, function(key,value){
-                    //console.log(key, value);
-                    if(key==null) {s2 = s2 + 1;}
-                });
-                if(s2 == 0){
+                //test if step page 0 is filled
+                if($scope.steps[0].basicInfo[0].year == '' || $scope.steps[0].basicInfo[0].model == '' || $scope.steps[0].basicInfo[0].make ==
+                   ''||$scope.steps[0].basicInfo[0].style == ''||$scope.steps[0].basicInfo[0].totalMiles == ''||$scope.steps[0].basicInfo[0].boughtDate ==
+                   undefined||$scope.steps[0].basicInfo[0].price == ''){
+                    $scope.tableFilled[0].filled = false;
+                }else{
+                    $scope.tableFilled[0].filled = true; 
+                }
+                
+                if($scope.steps[1].color == '' || $scope.steps[1].driveSystem ==
+                   ''||$scope.steps[1].transSystem == ''||$scope.steps[1].output == ''){
+                    $scope.tableFilled[1].filled = false;
+                }else{
+                    $scope.tableFilled[1].filled = true; 
+                }
+                
+                if($scope.steps[3].title != '' && $scope.steps[4].description != ''){
                     $scope.tableFilled[3].filled = true;
                 }else{
                     $scope.tableFilled[3].filled = false;
                 }
-                //test if step page 4 is filled
-                if($scope.steps[4].title != '' && $scope.steps[4].description != ''){
+                //test if step page 5 is filled
+                if($scope.steps[4].address.zipcode != '' && $scope.steps[4].address.zipcode != undefined){
                     $scope.tableFilled[4].filled = true;
                 }else{
                     $scope.tableFilled[4].filled = false;
                 }
-                //test if step page 5 is filled
-                if($scope.steps[5].address.zipcode != '' && $scope.steps[5].address.zipcode != undefined){
+                //test if step page 6 is filled  
+                if($scope.steps[5].cover !== '')
+                {
                     $scope.tableFilled[5].filled = true;
                 }else{
                     $scope.tableFilled[5].filled = false;
                 }
-                //test if step page 6 is filled  
-                if($scope.steps[6].cover !== '')
-                {
-                    $scope.tableFilled[6].filled = true;
-                }else{
-                    $scope.tableFilled[6].filled = false;
-                }
                 //test if all tables are filled
-                for(var i = 0; i < 7; i++){
+                for(var i = 0; i < 6; i++){
                     if(!$scope.tableFilled[i].filled){$scope.sn = $scope.sn + 1;}
                 }
                 if($scope.sn == 0){
@@ -386,31 +777,22 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 }else{
                     $scope.canPost = false;
                 }
-                //test if address is valid
-                if($scope.steps[5].address.zipcode != undefined) $scope.addressCorrect = true;
+                if($scope.steps[4].address.zipcode != undefined) $scope.addressCorrect = true;
                 else $scope.addressCorrect = false;
             }, true);
             
             
             function doPost() {//
-                //insert image urls to array 'images' 
-                /*angular.forEach($scope.arrUploads, function(key) {
-                    
-                    if($scope.arrUploads.indexOf(key) == 0) $scope.steps[6].cover = key.id;
-                    
-                   if(key.id !== "") $scope.steps[6].images.push(key.id); 
-                });*/
-                
-                requestService.StepPost({id:userService.getDraft().id , step:7}, $scope.steps[6], function(res){
+                requestService.CarStepPost({id:userService.getCarDraft().id , step:6}, $scope.steps[5], function(res){
                     console.log("step6",res);
-                    requestService.EndRoompost({id:userService.getDraft().id}, function(res){
+                    requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
                         console.log("final", res);
-                        userService.setDraft({});
+                        userService.setCarDraft({});
+                        $mdDialog.hide();
                     });
                 });  
             };
             
-
             //Room Post页切换功能
             function lastPage() {
                 setActivePage($scope.activePage-1);
@@ -423,25 +805,33 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 if($scope.activePage == page){
                     
                 } else{
+                    console.log($scope.activePage);
                     if($scope.activePage == 1){
-                        $scope.steps[0].schoolId = userService.getUser().schoolId;
-                        $scope.steps[0].totalMiles = $scope.mileage + $scope.mUnits;
-                        if(angular.equals(userService.getDraft(), {})){
-                            requestService.StartCarpost($scope.steps[0], function(res){
-                                userService.setDraft({id:res.data._id, state:"post"});
+                        var schoolId = {schoolId: userService.getUser().schoolId};
+                        //$scope.steps[0].totalMiles = $scope.mileage + $scope.mUnits;
+                        if(angular.equals(userService.getCarDraft(), {})){
+                            requestService.StartCarpost(schoolId, function(res){
+                                console.log(res);
+                                userService.setCarDraft({id:res.data._id, state:"post"});
+                                requestService.CarStepPost({id:userService.getCarDraft().id , step:1}, $scope.steps[0], function(res){
+                                    console.log(res);
+                                });
+                            });
+                            
+                        }else{
+                            requestService.CarStepPost({id:userService.getCarDraft().id , step:1}, $scope.steps[0], function(res){
                                 console.log(res);
                             });
                         }
-                        else{
-                            requestService.StepPost({id:userService.getDraft().id , step:1}, $scope.steps[0], function(res){
-                                console.log(res);
-                            });
-                        }
-                    }
-                    else{
-                        if(!angular.equals(userService.getDraft(),{}) && $scope.tableFilled[$scope.activePage-1].filled){
+                    }else if($scope.activePage == 3){
+                        console.log($scope.steps[$scope.activePage-1], $scope.activePage);
+                        requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
+                            console.log(res);
+                        });
+                    }else{
+                        if(!angular.equals(userService.getCarDraft(),{}) && $scope.tableFilled[$scope.activePage-1].filled){
                             console.log($scope.steps[$scope.activePage-1], $scope.activePage);
-                            requestService.CarStepPost({id:userService.getDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
+                            requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
                                 console.log(res);
                             });
                         }
@@ -449,25 +839,6 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 }
                 $scope.activePage = page;
             };
-
-            function AddRoom() {
-                $scope.steps[1].rooms.push(
-                    {
-                        share : null,
-                        type :    '',
-                        price :       '',
-                        priceType :   '',
-                        bathroom:    false,
-                        walkInCloset:   false,
-                        closet:        false
-                    }
-                );
-            };
-
-            function RemoveRoom(index) {
-                $scope.steps[1].rooms.splice(index,1);
-            };
-            
 
             function name(name) {
                 return languageService.getChineseName(name);

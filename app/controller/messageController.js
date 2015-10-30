@@ -4,19 +4,7 @@ hereseasApp.controller('MessageCtrl', function ($scope, $stateParams, requestSer
             $scope.data = res.data[0];
             $scope.userData = {};
             $scope.userData.id = $scope.data.userId;
-            /*
-            $scope.sendmessage = function() {
-                console.log($scope.userData);
-                requestService.SendMessage($scope.userData, function(res) {
-                    console.log(res);
-                    if (res.result) {
-                        alert("Message has been sent" );
-                    } else {
-                        alert("err");
-                    }
-                });
-
-            }*/
+            
             $scope.sendmessage = function() {
                 console.log($scope.userData);
                 userService.sendmessage({

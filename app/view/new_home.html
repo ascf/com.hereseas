@@ -5,7 +5,7 @@
 <!--header-->
 <div class="wrapper" style="position:relative;padding-bottom:45.45%;min-height:700px;min-width:1000px;">
     <nav class="navbar navbar-default" style="background-color:transparent;border-color:transparent;z-index:2;">
-        <div class="container-fluid" style="padding-left:13px;padding-right:13px;padding-top:7px;min-width:183px;" ng-controller="HeaderController">
+        <div class="container-fluid headerdiv" ng-controller="HeaderController">
                 <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top:30px;">
@@ -14,12 +14,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" style="padding-left:13px;padding-top:0;" href="#"><img class="logo" clickme ng-click="goHome()" style="height:42px;" src="/app/view/img/header/hereseas.svg"></img></a>
+                <a class="navbar-brand" style="padding-left:13px;padding-top:8px;" href="#"><img class="logo" clickme ng-click="goHome()" style="height:42px;" src="/app/view/img/header/hereseas.svg"></img></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style=""> 
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> 
                 <ul class="nav navbar-nav navbar-right">
                     <li class="nav-li" ng-hide="logged()">
                         <a class="hd nav-li-a" ng-click="showLogin()" href="#" style="color:white;outline:none;">登录</a>
@@ -38,11 +38,11 @@
                     </li>
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:#FFFFFF;padding:0 0 0 0;background-color:inherit"><div class="hd_div_post" style="padding-top:7px;font-size:20px;">发布你的</div></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="#" ng-click="showRoompost()">你的房间</a></li>
-                        <li><a href="#" ng-click="showCarpost()">你的车</a></li>
-                        <li><a href="#">你的集市</a></li>
-                        <li><a href="#">你的活动</a></li>
+                      <ul class="dropdown-menu" style="border-radius:0 0px 8px 8px; border:1px solid #b3b3b4;background-color:#f3f3f3;margin-left:20px;margin-right:10px;min-width:100px;margin-top:2px;padding:0 0 0 0;">
+                        <li class="post_list" ng-click="showRoompost()">发布房子</li>
+                        <li class="post_list" ng-click="showCarpost()">发布车子</li>
+                        <li class="post_list" ng-click="showItemspost()">发布旧货</li>
+                        <li class="post_list2" ng-click="showActivspost()">发布活动</li>
                       </ul>
                     </li>
                 </ul>
@@ -132,21 +132,18 @@
     <div class="jumbotron" style="background-color:#FFFFFF;height:180px;;width:auto;overflow:hidden;min-width:650px;">
         <div class="container sub-title"><span class="" style="font-size:36px;color:#000000;">网站说明</span></div>
     </div>
-    <div layout="row">
-        <div flex=33 style="margin-bottom:50px;padding-left:15px;padding-right:15px">
-            <div layout="row"><div flex=40 style="background-image:url(/app/view/img/home/intro_1.png);background-size:cover;"></div><div flex=60>Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo.</div></div>
-            <div layout="row">Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo. Vis aliquet tortor ultricies non ante erat nunc integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer non. Adipiscing cubilia elementum.</div>
-            <div layout="row"><div flex=60>Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo.</div><div flex=40 style="background-image:url(/app/view/img/home/intro_2.png);background-size:cover;"></div></div>
+    <div style="border:1px solid rgb(222,89,81);margin-bottom:40px;padding:20px 40px 20px 40px">
+        <div flex style="padding:20px 40px 20px 40px">
+            <h3>吉屋：帮你找到最合适的出租公寓，综合考虑地理位置、价格、大小、环境等诸多因素。在这里，你可以找到理想的学习环境，志同道合的室友，体验地道的美式生活。</h3>
         </div>
-        <div flex=33 style="border-left:1px solid #D4D4D2;border-right:1px solid #D4D4D2;margin-bottom:50px;padding-left:15px;padding-right:15px">
-            <div layout="row">Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo. Vis aliquet tortor ultricies non ante erat nunc integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer non. Adipiscing cubilia elementum.</div>
-            <div layout="row"><div flex=60>Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo.</div><div flex=40 style="background-image:url(/app/view/img/home/intro_3.png);background-size:cover;"></div></div> 
-            <div layout="row">Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo. Vis aliquet tortor ultricies non ante erat nunc integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer non. Adipiscing cubilia elementum.</div>
+        <div flex style="border-top:1px solid #D4D4D2;padding:20px 40px 20px 40px">
+            <h3>车行：在外游学，出行多有不便。长期租车费用较高，不如购入一辆二手车，为您上学，买菜，购物，旅游提供诸多便利。在这里，您可以根据自身需求，通过对价格，车型，年份等条件的筛选找到称心如意的座驾。</h3>
         </div>
-        <div flex=33 style="margin-bottom:50px;padding-left:15px;padding-right:15px">
-            <div layout="row">Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. </div>
-            <div layout="row"><div flex=40 style="background-image:url(/app/view/img/home/intro_4.png);background-size:cover;"></div><div flex=60>Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo.</div></div>
-            <div layout="row">Faucibus sed lobortis aliquam lorem blandit. Lorem eu nunc metus col. Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo. Vis aliquet tortor ultricies non ante erat nunc integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer non. Adipiscing cubilia elementum.Commodo id in arcu ante lorem ipsum sed accumsan erat praesent faucibus commodo ac mi lacus. Adipiscing mi ac commodo. Vis aliquet tortor ultricies non ante erat nunc integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer non. Adipiscing cubilia elementum.</div>   
+        <div flex style="border-top:1px solid #D4D4D2;padding:20px 40px 20px 40px">
+            <h3>集市：卖卖卖，总有些东西买来就有些后悔，又或者是有了一段时间以后发现不适合自己，也可能是新品上市想更新产品，不如把旧货放到我们的小站上，这可比卖给一些二手电商要划算多了；买买买，总有些东西想买却又感觉价格太高，在心里种了好多“草”却又舍不得“拔”，不如来我们的集市淘淘宝，说不定就能以惊喜的价格买到朝思暮想的好宝贝。</h3>
+        </div>
+        <div flex style="border-top:1px solid #D4D4D2;padding:20px 40px 20px 40px">
+            <h3>活动：一个人出门在外，难免会感到寂寞，社交活动必不可少。想想大家围在一起玩桌游，充斥着的欢声笑语；相约一起去游乐园，过山车上不时传来的尖叫声。又或是安静的夜晚，大家躺在公园的草地上看着夜空，我，把我的心事说给你听。</h3>
         </div>
     </div>
 </div>
@@ -154,46 +151,7 @@
 <!--footer-->
 <div footer></div>
 <style>
-    .nav-li{
-        font-size: 20px;    
-    }
-    
-    .head-line{
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-    
-    .sub-title{
-        width:200px;
-        height:50px;
-        text-align: center;
-        margin-top:20px;
-    }
-    
-    .text-uppercase {
-        text-transform: uppercase;
-    }
-    
-    .search-area{
-        text-align: center;
-        color: #fff;
-        width: 480px;
-        height: 240px;
-        top: 50%;
-        position: absolute;
-        left: 50%;
-        margin-left: -240px;
-        margin-top: -120px;
-        padding-top: 50px;
-        z-index:1;
-    }
-    
-    .search-univer {
-        max-width: 440px;
-        position: relative;
-        margin: 30px auto;
-        text-align: center;
-    }
+
 </style>
 </body>
 </html>

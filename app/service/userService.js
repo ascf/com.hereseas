@@ -1,4 +1,4 @@
-hereseasApp.factory('userService', function ($http, $state) {
+hereseasApp.factory('userService', function ($http, $state, $cookies) {
 
 
     var userService = this;
@@ -10,14 +10,62 @@ hereseasApp.factory('userService', function ($http, $state) {
 
     var loginState = false;   
     
-    /**
-     *
-     * @type {{}}
-     */
     var userInfo = {};
     var draft = {};
+    var carDraft = {};
+    var itemDraft = [{}];
     
     var signupOrLogin = 1;
+    
+    var favoriteList = {
+        apartments:[],
+        activities:[],
+        cars:[],
+        items:[]
+    };
+    
+    this.saveFavorite2Cookies = function(data){
+        angular.forEach($cookies, function(v,k){
+            delete $cookies[k];
+        });
+        angular.forEach(data.apartments, function(key){
+            $cookies['apt'+data.apartments.indexOf(key)] = key;
+        });
+        angular.forEach(data.activities, function(key){
+            $cookies['acti'+data.activities.indexOf(key)] = key;
+        });
+        angular.forEach(data.cars, function(key){
+            $cookies['car'+data.cars.indexOf(key)] = key;
+        });
+        angular.forEach(data.items, function(key){
+            $cookies['item'+data.items.indexOf(key)] = key;
+        });
+    };
+    
+    this.cookies2Favorite = function(){
+        
+        favoriteList = {
+            apartments:[],
+            activities:[],
+            cars:[],
+            items:[]
+        };
+        
+        angular.forEach($cookies, function(key, value){
+            //console.log(key, value);
+            if(value.indexOf('apt')!==-1)
+                favoriteList.apartments.push(key);
+            else if(value.indexOf('acti')!==-1)
+                favoriteList.activities.push(key);
+            else if(value.indexOf('car')!==-1)
+                favoriteList.cars.push(key);
+            else if(value.indexOf('item')!==-1)
+                favoriteList.items.push(key);
+        });
+        return favoriteList;
+    };
+    
+    
     this.setSignupOrLogin = function(state){
         signupOrLogin = state;
     };
@@ -33,6 +81,22 @@ hereseasApp.factory('userService', function ($http, $state) {
     
     this.getDraft = function(){
         return draft;
+    };
+    
+    this.setCarDraft = function(data){
+        carDraft = data;
+    };
+    
+    this.getCarDraft = function(){
+        return carDraft;
+    };
+
+    this.setItemDraft = function(data){
+        itemDraft = data;
+    };
+    
+    this.getItemDraft = function(){
+        return itemDraft;
     };
     
     this.setUser = function (info){
@@ -103,22 +167,6 @@ hereseasApp.factory('userService', function ($http, $state) {
 
 
     };
-    
-    this.userSelf = function (data){
-        return $http.get(host+'/userself',{
-            
-        })
-            .then(
-                function(res){
-                    //console.log(res);
-                    if(res.data.result){
-                        return {result:true,data:res.data.data};
-                    }else{
-                        return {result:false};
-                    }
-                },errResponseHandler);
-
-    };
 
 
     this.checkreset = function (data){
@@ -169,6 +217,51 @@ hereseasApp.factory('userService', function ($http, $state) {
                 }
             },errResponseHandler);
     }
+    
+    this.updateMessages = function (data) {
+        return $http.put(host+'/readmessage',{
+            id: data.id
+        })
+        .then(
+            function(res){
+                if(res.data.result){
+                    return {result:true};
+                }else{
+                    return {result:false,err:res.data.err};
+                }
+            },errResponseHandler);
+    }
+    
+    this.postFavorite = function(data){
+        return $http.post(host+'/favorite',{
+            id: data.id,
+            category: data.category
+        })
+        .then(
+            function(res){
+                if(res.data.result){
+                    return {result:true};
+                }else{
+                    return {result:false,err:res.data.err};
+                }
+            },errResponseHandler);
+    };
+    
+    this.deleteFavorite = function(data){
+        return $http({url:host+'/favorite',
+                      method:'DELETE',
+                      data: {id: data.id, category: data.category}, 
+                      headers: {"Content-Type": "application/json;charset=utf-8"}
+        })
+        .then(
+            function(res){
+                if(res.data.result){
+                    return {result:true};
+                }else{
+                    return {result:false,err:res.data.err};
+                }
+            },errResponseHandler);
+    };
 
     /*this.logOut = function() {
         return $http.get(host+'/logout')
