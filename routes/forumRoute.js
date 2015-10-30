@@ -94,8 +94,6 @@ exports.getCommentsByThreadId = function(req, res, next) {
 			'status': 1
 		}
 
-		console.log(commentQuery)
-
 		Comment.find(commentQuery, "userId username userAvatar content createAt").sort({
 			createAt: 'desc'
 		}).exec(function(err, comments) {
@@ -222,10 +220,14 @@ exports.createComment = function(req, res, next) {
 				return next();
 			} else {
 
-				thread["lastReplayUserId"] = user.id;
-				thread["replayCount"] = thread["replayCount"] + 1;
-				thread["updateAt"] = Date.now;
-				thread.save(function() {});
+				thread.lastReplayUserId = user.id;
+				thread.replayCount = thread.replayCount + 1;
+				thread.updateAt = new Date();
+
+				thread.save(function(err, thread) {
+					if (err)
+						console.log(err);
+				});
 
 				res.json({
 					result: true,
