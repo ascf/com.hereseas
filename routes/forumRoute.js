@@ -66,7 +66,9 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 		} else {
 			res.json({
 				result: true,
-				data: threads
+				data: {
+					threads: threads
+				}
 			});
 			return;
 		}
@@ -75,7 +77,7 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 };
 
 
-exports.getCommentByThreadId = function(req, res, next) {
+exports.getCommentsByThreadId = function(req, res, next) {
 	var threadId = req.param('id');
 
 	if (tools.isEmpty(threadId)) {
@@ -104,7 +106,9 @@ exports.getCommentByThreadId = function(req, res, next) {
 			} else {
 				res.json({
 					result: true,
-					data: comments
+					data: {
+						comments: comments
+					}
 				});
 				return;
 			}
@@ -176,7 +180,7 @@ exports.createThread = function(req, res, next) {
 		} else if (user == null) {
 			res.json(Results.ERR_NOTFOUND_ERR);
 			return;
-		} else if (user.status != 1) {
+		} else if (user.status != 1 || user.verified != true) {
 			res.json(Results.ERR_PERMISSION_ERR);
 			return;
 		} else
@@ -243,7 +247,7 @@ exports.createComment = function(req, res, next) {
 		} else if (user == null) {
 			res.json(Results.ERR_NOTFOUND_ERR);
 			return;
-		} else if (user.status != 1) {
+		} else if (user.status != 1 || user.verified != true) {
 			res.json(Results.ERR_PERMISSION_ERR);
 			return;
 		} else
