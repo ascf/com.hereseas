@@ -11,19 +11,17 @@ var easyimg = require('easyimage');
 var AWS = require('aws-sdk');
 var EventProxy = require('eventproxy');
 var Results = require('./commonResult');
-
-
 var User = require('../models').User;
 
-var photoType = ["bmp", "jpg", "jpeg", "png", "psd"]
+var photoType = ["bmp", "jpg", "jpeg", "png", "psd"];
+var photoTypeForum = ["bmp", "jpg", "jpeg", "png", "psd", "gif"];
 
 
 exports.image_upload = function(req, res, next) {
 
-    //  console.log(req.files)
     var category = req.files[0].fieldname;
     var tmp_path = req.files[0].path;
-    var fileName = uuid.v4() + '.jpeg';
+    var fileNameJpeg = uuid.v4() + '.jpeg';
 
     if (tools.isEmpty(category) || tools.isEmpty(tmp_path)) {
         res.json(Results.ERR_PARAM_ERR);
@@ -40,7 +38,7 @@ exports.image_upload = function(req, res, next) {
                 return;
             } else {
 
-                if (user.status != 1 ) {
+                if (user.status != 1) {
                     res.json(Results.ERR_PERMISSION_ERR);
                     deleteTempImage(tmp_path);
                     return;
@@ -65,41 +63,62 @@ exports.image_upload = function(req, res, next) {
             // },
             function(file) {
 
-                if (photoType.indexOf(file.type.toLowerCase()) <= -1) {
+                console.log(tmp_path);
+                if (category == "forum" && photoTypeForum.indexOf(file.type.toLowerCase()) <= -1) {
                     deleteTempImage(tmp_path);
                     res.json({
                         result: false,
                         err: "ERR_TYPE_ERR"
                     });
-
+                    return;
+                } else if (category != "forum" && photoType.indexOf(file.type.toLowerCase()) <= -1) {
+                    deleteTempImage(tmp_path);
+                    res.json({
+                        result: false,
+                        err: "ERR_TYPE_ERR"
+                    });
+                    return;
                 } else {
 
-                    easyimg.convert({
-                        src: tmp_path,
-                        dst: './convert/' + fileName,
-                        quality: 100
-                    }).then(function(file) {
+                    if (category != "forum") {
 
-                        deleteTempImage(tmp_path);
+                        convertImageToJpeg(tmp_path, fileNameJpeg, function(file) {
 
-                        if (file.type != 'jpeg' || file.path == undefined) {
-                            res.json({
-                                result: false
+                            deleteTempImage(tmp_path);
+
+                            if (file.type != 'jpeg' || file.path == undefined) {
+                                res.json({
+                                    result: false
+                                });
+                                return;
+                            }
+
+
+
+                            uploadImageToS3(file, file.name, category, function(err, data) {
+
+                                deleteTempImage(file.path);
+
+                                if (err) {
+                                    console.log(err)
+                                    res.json({
+                                        result: false
+                                    });
+                                    return;
+                                } else {
+                                    res.json({
+                                        data: category + '/' + file.name,
+                                        result: true
+                                    });
+                                    return;
+                                }
                             });
-                        }
-                        var s3 = new AWS.S3();
+                        });
+                    } else {
 
-                        var image = require('fs').createReadStream(file.path);
+                        var fileName = uuid.v4() + "." + file.type.toLowerCase();
 
-                        var params = {
-                            Bucket: 'hereseas-public-images',
-                            Key: category + '/' + file.name,
-                            Body: image,
-                            ACL: "public-read",
-                            ContentType: "image/jpeg"
-                        };
-
-                        s3.putObject(params, function(err, data) {
+                        uploadImageToS3(file, fileName, category, function(err, data) {
 
                             deleteTempImage(file.path);
 
@@ -108,16 +127,17 @@ exports.image_upload = function(req, res, next) {
                                 res.json({
                                     result: false
                                 });
-
+                                return;
                             } else {
-
                                 res.json({
-                                    data: category + '/' + file.name,
+                                    data: category + '/' + fileName,
                                     result: true
                                 });
+                                return;
                             }
                         });
-                    });
+                    }
+
                 }
             }
         );
@@ -126,11 +146,44 @@ exports.image_upload = function(req, res, next) {
 };
 
 
+
+function uploadImageToS3(file, fileName, category, callback) {
+
+    var s3 = new AWS.S3();
+    var image = require('fs').createReadStream(file.path);
+
+    var contentType = "image/jpeg";
+    if (category == "forum") {
+        contentType = "image/" + file.type.toLowerCase();
+    }
+
+    var params = {
+        Bucket: 'hereseas-public-images',
+        Key: category + '/' + fileName,
+        Body: image,
+        ACL: "public-read",
+        ContentType: contentType
+    };
+
+    console.log(params);
+    s3.putObject(params, callback);
+
+}
+
+function convertImageToJpeg(tmp_path, fileName, callback) {
+    easyimg.convert({
+        src: tmp_path,
+        dst: './convert/' + fileName,
+        quality: 100
+    }).then(callback);
+
+}
+
+
+
 function deleteTempImage(path) {
 
-
     fs.unlink(path, function(err) {
-
         if (err) {
             console.log(err);
             throw err;
@@ -139,7 +192,4 @@ function deleteTempImage(path) {
         }
 
     });
-
-
-
 };

@@ -137,6 +137,15 @@ exports.getSchoolNewStudents = function(req, res, next) {
                     count++;
                 }
 
+                ep.after("findUser", count, function(users) {
+                    res.json({
+                        result: true,
+                        data: users
+                    });
+                    return;
+                });
+
+
                 for (var i = school.users.length - 1; i >= school.users.length - NUMOFUSERS; i--) {
                     if (i < 0)
                         break;
@@ -150,13 +159,6 @@ exports.getSchoolNewStudents = function(req, res, next) {
                     });
                 }
 
-                ep.after("findUser", count, function(users) {
-                    res.json({
-                        result: true,
-                        data: users
-                    });
-                    return;
-                });
 
 
             } else {
@@ -190,6 +192,14 @@ exports.getSchoolStudents = function(req, res, next) {
         } else if (school) {
             if (school.status == 1) {
 
+                ep.after("findUser", school.users.length, function(users) {
+                    res.json({
+                        result: true,
+                        data: users
+                    });
+                    return;
+                });
+
                 for (var i = school.users.length - 1; i >= 0; i--) {
                     if (i < 0)
                         break;
@@ -201,15 +211,6 @@ exports.getSchoolStudents = function(req, res, next) {
                         ep.emit('findUser', user);
                     });
                 }
-
-                ep.after("findUser", school.users.length, function(users) {
-                    res.json({
-                        result: true,
-                        data: users
-                    });
-                    return;
-                });
-
 
             } else {
                 res.json(Results.ERR_ACTIVATED_ERR);

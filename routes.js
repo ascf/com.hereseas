@@ -109,11 +109,12 @@ module.exports = function(app) {
 
 
     /*  forum */
-    app.get('/school/:id/threads', forumRoute.getThreadsBySchoolId);
-    app.get('/thread/:id', forumRoute.getThreadById);
-    app.get('/thread/:id/comments', forumRoute.getCommentByThreadId);
-    app.post('/thread', sign.ensureAuthenticated, forumRoute.createThread);
-    app.post('/comment', sign.ensureAuthenticated, forumRoute.createComment);
+    app.get('/forum/:id/threads', forumRoute.getThreadsBySchoolId);
+    app.get('/forum/thread/:id', forumRoute.getThreadById);
+    app.get('/forum/thread/:id/comments', forumRoute.getCommentByThreadId);
+    app.post('/forum/thread', sign.ensureAuthenticated, forumRoute.createThread);
+    app.post('/forum/comment', sign.ensureAuthenticated, forumRoute.createComment);
+    app.post('/forum/m_upload_image', sign.ensureAuthenticated, upload.array("forum", 1), imageUploadRoute.image_upload);
 
 
     /*  admin */
