@@ -315,5 +315,68 @@ exports.postItemById = function(req, res, next) {
 			epUser.emit("findUser", user);
 		}
 	});
-
 };
+
+exports.deleteItemById = function(req, res, next) {
+
+    var itemId = req.param('id');
+    var reqData = {};
+    var userId = req.user.id;
+
+    if (!itemId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var epUser = new EventProxy();
+
+    epUser.all("findUser", function(user) {
+
+        Item.findById(itemId, function(err, item) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!item) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                if (item.userId != userId) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                }
+
+                item['available'] = false;
+                item.updateAt = new Date();
+
+                item.save(function(err, item) {
+                    if (err) {
+                        return next();
+                    } else {
+                        res.json({
+                            result: true,
+                            data: {}
+                        });
+
+                    }
+                });
+
+            }
+
+        });
+
+    });
+
+    User.findById(req.user.id, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            if (user.status != 1 || user.verified != true) {
+                res.json(Results.ERR_PERMISSION_ERR);
+                return;
+            }
+            epUser.emit("findUser", user);
+        }
+    });
+
+}
