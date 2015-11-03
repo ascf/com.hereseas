@@ -13,6 +13,9 @@ var User = require('../models').User;
 var adminRoute = require('./adminRoute');
 var fs = require('fs');
 var School = require('../models').School;
+var Car = require('../models').Car;
+var Apartment = require('../models').Apartment;
+var Item = require('../models').Item;
 
 var passport = require('passport');
 
@@ -980,6 +983,108 @@ exports.readMessage = function(req, res, next) {
             });
         }
     });
+}
+
+
+exports.getUserAllPost = function(req, res, next) {
+    var userId = req.param('id');
+
+    if (!userId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var query = {
+        'status': 1,
+        'userId': userId,
+        'available': true
+    };
+
+    var ep = new EventProxy();
+
+    ep.all('findItems', function(){
+
+        //sort resData by updateAt in descending order
+        
+        resData.sort(function(a, b) {
+            return b.content.updateAt.valueOf() - a.content.updateAt.valueOf();
+        });
+        
+        res.json({
+            result: true,
+            data: resData
+        });
+        return;
+        
+
+    });
+
+
+    ep.all('findCars', function() {
+        Item.find(query, 'id title cover createAt updateAt')
+        .sort({
+            updateAt: 'desc'
+        }).exec(function(err, items) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                for (var i = 0; i < items.length; i++) {
+                    var tmp = {};
+                    tmp.identity = 3;
+                    tmp.content = items[i];
+                    resData.push(tmp);
+                }
+                ep.emit('findItems')
+            }
+        });
+
+    });
+
+
+    ep.all('findApartments', function() {
+        Car.find(query, 'id title cover createAt updateAt')
+        .sort({
+            updateAt: 'desc'
+        }).exec(function(err, cars) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                for (var i = 0; i < cars.length; i++) {
+                    var tmp = {};
+                    tmp.identity = 2;
+                    tmp.content = cars[i];
+                    resData.push(tmp);
+                }
+                ep.emit('findCars')
+            }
+        });
+
+    });
+
+    var resData = [];
+
+    Apartment.find(query, 'id title cover createAt updateAt')
+        .sort({
+            updateAt: 'desc'
+        }).exec(function(err, apartments) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else {
+                for (var i = 0; i < apartments.length; i++) {
+                    var tmp = {};
+                    tmp.identity = 1;
+                    tmp.content = apartments[i];
+                    resData.push(tmp);
+                }
+                ep.emit('findApartments')
+            }
+        });
 }
 
 //admin functions
