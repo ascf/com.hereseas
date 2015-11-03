@@ -106,6 +106,7 @@ module.exports = function(app) {
     app.get('/items', sign.ensureAuthenticated, itemRoute.getItemList);
     app.get('/item/:id', itemRoute.getItemById);
     app.get('/items/three', itemRoute.getThreeItems);
+    app.get('/items/other/:id', itemRoute.getUserOtherItems);
     app.post('/item/m_upload_image', sign.ensureAuthenticated, upload.array("item", 1), imageUploadRoute.image_upload);
     app.delete('/item/:id', sign.ensureAuthenticated, itemRoute.deleteItemById);
 
