@@ -384,9 +384,11 @@ exports.deleteItemById = function(req, res, next) {
 }
 
 exports.getUserOtherItems = function(req, res, next) {
+    //console.log(req.query.itemId);
 	var userId = req.param('id');
+    var itemId = req.query.itemId;
 
-	if (!userId) {
+	if (!userId || !itemId) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
@@ -425,7 +427,13 @@ exports.getUserOtherItems = function(req, res, next) {
 
 
 	ep.all('findCars', function() {
-		Item.find(query, 'id title cover createAt updateAt')
+        var queryItem = {
+            'status': 1,
+            'userId': userId,
+            'available': true,
+            '_id': {'$ne': itemId}
+        }
+		Item.find(queryItem, 'id itemName cover createAt updateAt')
         .sort({
             updateAt: 'desc'
         }).limit(9).exec(function(err, items) {
