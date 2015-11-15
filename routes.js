@@ -39,7 +39,7 @@ module.exports = function(app) {
     app.post('/user', userRoute.createUser);
     app.post('/login', userRoute.login);
     app.get('/logout', sign.ensureAuthenticated, sign.logout);
-    app.post('/user/active', sign.ensureAuthenticated, userRoute.activeUserSendEmail);
+    app.post('/user/active', userRoute.activeUserSendEmail);
     app.post('/user/verify', userRoute.activeUserVerifyLink);
     app.put('/user', sign.ensureAuthenticated, userRoute.editUser);
     app.post('/avatar/m_upload_image', sign.ensureAuthenticated, upload.array("avatar", 1), imageUploadRoute.image_upload);

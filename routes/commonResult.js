@@ -41,6 +41,10 @@ var Results = {
     ERR_ALREADYVERIFIED_ERR: {
         result: false,
         err: 'ERR_ALREADYVERIFIED_ERR'
+    },
+    ERR_SCHOOLISNULL_ERR: {
+        result: false,
+        err: 'ERR_SCHOOLISNULL_ERR'
     }
 
 

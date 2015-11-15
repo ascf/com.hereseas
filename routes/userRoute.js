@@ -90,6 +90,14 @@ exports.createUser = function(req, res, next) {
         return res.json(Results.ERR_DATAFORMAT_ERR);
     }
 
+    if (!eduChecker(user.email)) {
+        res.json({
+            result: false,
+            err: 'ERR_NOT_EDUEMAIL_ERR'
+        });
+        return;
+    }
+
     user.username = req.body.username;
     user.password = req.body.password;
 
@@ -112,11 +120,15 @@ exports.createUser = function(req, res, next) {
             if (err) {
                 console.log(err);
                 return next();
-            } else
+            } else {
+                var url = APIHOST + '/verify' + '?uid=' + user.id + '&action=activate&code=' + user.activecode;
+                sendEmail(user.email, url);
+
                 res.json({
                     result: true,
                     id: user.id
                 });
+            }
         });
     });
 
@@ -140,11 +152,9 @@ exports.createUser = function(req, res, next) {
 
 exports.getUserList = function(req, res, next) {
 
-
     var query = {};
     if (req.query.gender)
         query.gender = req.query.gender;
-
 
     User.find(
         query,
@@ -479,7 +489,6 @@ exports.deleteFavorite = function(req, res, next) {
                         }
                     });
 
-
                 }
             });
     } else {
@@ -626,8 +635,6 @@ function updateSchoolUser(userId, previousSchoolId, schoolId) {
 
         }
     }
-
-
 }
 
 
@@ -673,51 +680,28 @@ exports.activeUserSendEmail = function(req, res, next) {
         return;
     }
 
-    console.log(eduEmail)
-
     User.findOne({
-        eduEmail: eduEmail
+        email: eduEmail
     }, function(err, user) {
-        if (user != null) {
-            res.json({
-                result: false,
-                err: 'ERR_EXISTED_EMAIL'
-            });
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else if (user == null) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else if (user.verified) {
+            res.json(Results.ERR_ALREADYVERIFIED_ERR);
+            return;
         } else {
-            User.findById(req.user.id,
-                function(err, user) {
-                    if (err) {
-                        res.json(Results.ERR_DB_ERR);
-                        return;
-                    } else {
+            var url = APIHOST + '/verify' + '?uid=' + user.id + '&action=activate&code=' + user.activecode;
+            sendEmail(eduEmail, url);
 
-                        if (user.verified) {
-                            res.json(Results.ERR_ALREADYVERIFIED_ERR);
-                            return;
-                        }
-
-                        user.eduEmailTemp = eduEmail;
-                        user.save(function(err, user) {
-
-                            if (err) {
-                                console.log(err);
-                                return next();
-                            } else {
-                                var url = APIHOST + '/verify' + '?uid=' + user.id + '&action=activate&code=' + user.activecode;
-                                sendEmail(eduEmail, url)
-
-                                res.json({
-                                    result: true,
-                                });
-
-                            }
-                        });
-
-                    }
-                });
-
+            res.json({
+                result: true,
+            });
         }
     });
+
 
 
 };
@@ -725,14 +709,10 @@ exports.activeUserSendEmail = function(req, res, next) {
 
 exports.activeUserVerifyLink = function(req, res, next) {
 
-
     var reqData = {
         uid: req.body.uid,
         code: req.body.code
     };
-
-    console.log(reqData);
-
 
     if (tools.hasNull(reqData)) {
         res.json(Results.ERR_PARAM_ERR);
@@ -743,6 +723,10 @@ exports.activeUserVerifyLink = function(req, res, next) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
             return;
+        } else if (user == null) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+
         } else if (user.verified == true) {
             res.json(Results.ERR_ALREADYVERIFIED_ERR);
             return;
@@ -750,38 +734,22 @@ exports.activeUserVerifyLink = function(req, res, next) {
             res.json(Results.ERR_ACTIVATED_ERR);
             return;
         } else {
-            User.findOne({
-                eduEmail: user.eduEmailTemp
-            }, function(err, userCheck) {
-                if (userCheck != null) {
+            user.activecode = "";
+            user.verified = true;
+            user.save(function(err, user) {
+
+                if (err) {
+                    console.log(err);
+                    return next();
+                } else
                     res.json({
-                        result: false,
-                        err: 'ERR_EXISTED_EMAIL'
+                        result: true,
+                        id: user.id
                     });
-                } else {
-
-                    user.activecode = "";
-                    user.verified = true;
-                    user.eduEmail = user.eduEmailTemp
-                    user.eduEmailTemp = "";
-
-                    user.save(function(err, user) {
-
-                        if (err) {
-                            console.log(err);
-                            return next();
-                        } else
-                            res.json({
-                                result: true,
-                                id: user.id
-                            });
-                    });
-                }
             });
         }
+
     });
-
-
 
 };
 
@@ -805,7 +773,7 @@ function sendEmail(email, url) {
     ses_mail = ses_mail + "Content-Type: multipart/mixed; boundary=\"NextPart\"\n\n";
     ses_mail = ses_mail + "--NextPart\n";
     ses_mail = ses_mail + "Content-Type: text/html; charset=us-ascii\n\n";
-    ses_mail = ses_mail + "Thank you for joining Hereseas community ! Please click the link below to verify that this is your edu email address：" + url + '\n\n';
+    ses_mail = ses_mail + "Thank you for joining Hereseas community ! Please click the link below to verify that this is your edu email address: " + url + '\n\n';
     // ses_mail = url + "\n\n";
 
 
@@ -824,6 +792,7 @@ function sendEmail(email, url) {
             console.log(err)
             return false;
         } else {
+            console.log(email + " true");
             return true;
         }
     });
@@ -1002,66 +971,66 @@ exports.getUserAllPost = function(req, res, next) {
 
     var ep = new EventProxy();
 
-    ep.all('findItems', function(){
+    ep.all('findItems', function() {
 
         //sort resData by updateAt in descending order
-        
+
         resData.sort(function(a, b) {
             return b.content.updateAt.valueOf() - a.content.updateAt.valueOf();
         });
-        
+
         res.json({
             result: true,
             data: resData
         });
         return;
-        
+
 
     });
 
 
     ep.all('findCars', function() {
         Item.find(query, 'id title cover createAt updateAt')
-        .sort({
-            updateAt: 'desc'
-        }).exec(function(err, items) {
-            if (err) {
-                console.log(err);
-                res.json(Results.ERR_DB_ERR);
-                return;
-            } else {
-                for (var i = 0; i < items.length; i++) {
-                    var tmp = {};
-                    tmp.identity = 3;
-                    tmp.content = items[i];
-                    resData.push(tmp);
+            .sort({
+                updateAt: 'desc'
+            }).exec(function(err, items) {
+                if (err) {
+                    console.log(err);
+                    res.json(Results.ERR_DB_ERR);
+                    return;
+                } else {
+                    for (var i = 0; i < items.length; i++) {
+                        var tmp = {};
+                        tmp.identity = 3;
+                        tmp.content = items[i];
+                        resData.push(tmp);
+                    }
+                    ep.emit('findItems')
                 }
-                ep.emit('findItems')
-            }
-        });
+            });
 
     });
 
 
     ep.all('findApartments', function() {
         Car.find(query, 'id title cover createAt updateAt')
-        .sort({
-            updateAt: 'desc'
-        }).exec(function(err, cars) {
-            if (err) {
-                console.log(err);
-                res.json(Results.ERR_DB_ERR);
-                return;
-            } else {
-                for (var i = 0; i < cars.length; i++) {
-                    var tmp = {};
-                    tmp.identity = 2;
-                    tmp.content = cars[i];
-                    resData.push(tmp);
+            .sort({
+                updateAt: 'desc'
+            }).exec(function(err, cars) {
+                if (err) {
+                    console.log(err);
+                    res.json(Results.ERR_DB_ERR);
+                    return;
+                } else {
+                    for (var i = 0; i < cars.length; i++) {
+                        var tmp = {};
+                        tmp.identity = 2;
+                        tmp.content = cars[i];
+                        resData.push(tmp);
+                    }
+                    ep.emit('findCars')
                 }
-                ep.emit('findCars')
-            }
-        });
+            });
 
     });
 

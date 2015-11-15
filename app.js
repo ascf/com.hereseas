@@ -13,6 +13,9 @@ var md5 = require('MD5');
 var cors = require('cors')
 
 
+
+
+
 //var routes = require('./routes/index');
 //var users = require('./routes/users');
 
@@ -129,6 +132,8 @@ passport.use(new LocalStrategy({
         // asynchronous verification, for effect...
         process.nextTick(function() {
 
+
+
             // Find the user by username.  If there is no user with the given
             // username, or the password is not correct, set the user to `false` to
             // indicate failure and set a flash message.  Otherwise, return the
@@ -145,6 +150,9 @@ passport.use(new LocalStrategy({
                 }
                 if (user.password != md5(password)) {
                     return done(null, false, 'ERR_INVALID_PASSWORD');
+                }
+                if (user.verified != true || user.status != 1){
+                    return done(null, false, 'ERR_ACTIVATED_ERR');
                 }
 
                 user.last_login = new Date();
@@ -233,6 +241,12 @@ function md5(str) {
     md5sum.update(str);
     str = md5sum.digest('hex');
     return str;
+}
+
+
+function eduChecker(email) {
+    var str = email.substring(email.indexOf('@') + 1);
+    return str.indexOf(".edu") > -1
 }
 
 

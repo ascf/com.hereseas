@@ -533,6 +533,9 @@ exports.createApartment = function(req, res, next) {
                 if (user.status != 1 || user.verified != true) {
                     res.json(Results.ERR_PERMISSION_ERR);
                     return;
+                } else if (user.schoolId == null) {
+                    res.json(Results.ERR_SCHOOLISNULL_ERR);
+                    return;
                 }
 
                 epUser.emit("findUser", user);
@@ -540,8 +543,6 @@ exports.createApartment = function(req, res, next) {
         });
 
     epUser.all("findUser", function(user) {
-
-        //console.log("user", user);
 
         var reqData = {
             userId: user.id,
@@ -710,6 +711,9 @@ exports.editApartmentById = function(req, res, next) {
             } else if (user.status != 1 || user.verified != true) {
                 res.json(Results.ERR_PERMISSION_ERR);
                 return;
+            } else if (user.schoolId == null) {
+                res.json(Results.ERR_SCHOOLISNULL_ERR);
+                return;
             } else {
 
                 Apartment.findById(apartmentId, function(err, apartment) {
@@ -777,6 +781,9 @@ exports.postApartmentById = function(req, res, next) {
             } else {
                 if (user.status != 1 || user.verified != true) {
                     res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                } else if (user.schoolId == null) {
+                    res.json(Results.ERR_SCHOOLISNULL_ERR);
                     return;
                 }
 
@@ -1083,6 +1090,7 @@ exports.adminEditApartmentStatus = function(req, res, next) {
                 return next();
             } else if (!apartment) {
                 res.json(Results.ERR_NOTFOUND_ERR);
+                return;
             } else {
                 for (var key in reqData) {
                     apartment[key] = reqData[key];

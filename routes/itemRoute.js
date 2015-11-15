@@ -8,112 +8,115 @@ var Car = require('../models').Car;
 var Apartment = require('../models').Apartment;
 
 exports.createItem = function(req, res, next) {
-	var epUser = new EventProxy();
+    var epUser = new EventProxy();
 
-	epUser.all("findUser", function(user) {
-		//execute after "findUser" is emited
-		var reqData = {
-			userId: user.id,
-			username: user.username,
-			userAvatar: user.avatar,
-			schoolId: req.body.schoolId,
-		};
-		if (tools.hasNull(reqData)) {
-			res.json(Results.ERR_PARAM_ERR);
-			return;
-		}
-		var item = new Item();
-		for (var key in reqData) {
-			item[key] = reqData[key];
-		}
-		item['status'] = 2;
-		item.save(function(err, item) {
-			if (err) {
-				console.log(err);
-				return next();
-			} else {
-				res.json({
-					result: true,
-					data: item
-				});
-			}
-		});
-	});
+    epUser.all("findUser", function(user) {
+        //execute after "findUser" is emited
+        var reqData = {
+            userId: user.id,
+            username: user.username,
+            userAvatar: user.avatar,
+            schoolId: req.body.schoolId,
+        };
+        if (tools.hasNull(reqData)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        var item = new Item();
+        for (var key in reqData) {
+            item[key] = reqData[key];
+        }
+        item['status'] = 2;
+        item.save(function(err, item) {
+            if (err) {
+                console.log(err);
+                return next();
+            } else {
+                res.json({
+                    result: true,
+                    data: item
+                });
+            }
+        });
+    });
 
-	User.findById(req.user.id, function(err, user) {
-		if (err) {
-			res.json(Results.ERR_DB_ERR);
-			return;
-		} else {
-			if (user.status != 1) {
-				res.json(Results.ERR_PERMISSION_ERR);
-				return;
-			}
-			epUser.emit("findUser", user);
-		}
-	});
+    User.findById(req.user.id, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            if (user.status != 1 || user.verified != true) {
+                res.json(Results.ERR_PERMISSION_ERR);
+                return;
+            } else if (user.schoolId == null) {
+                res.json(Results.ERR_SCHOOLISNULL_ERR);
+                return;
+            }
+            epUser.emit("findUser", user);
+        }
+    });
 };
 
 exports.editItemById = function(req, res, next) {
-	var itemId = req.param('id');
-	var userId = req.user.id;
-	var reqData = {};
-	if (!req.query.step) {
-		res.json(Results.ERR_PARAM_ERR);
-		return;
-	}
-	if (req.query.step == 1) {
-		reqData = {
-			expireAt: req.body.expireAt,
-			itemName: req.body.itemName,
-			category: req.body.category,
-			price: req.body.price,
-			description: req.body.description,
-			cover: req.body.cover,
-			images: req.body.images
-		}
-	} else if (req.query.step == 2) {
-		reqData = {
-			address: req.body.address,
-            longitude: req.body.longitude,
-            latitude: req.body.latitude
-		}
-	} else {
+    var itemId = req.param('id');
+    var userId = req.user.id;
+    var reqData = {};
+    if (!req.query.step) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
-	if (tools.hasNull(reqData)) {
-		res.json(Results.ERR_PARAM_ERR);
-		return;
-	}
-	Item.findById(itemId, function(err, item) {
-		if (err) {
-			res.json(Results.ERR_DB_ERR);
-			return;
-		} else if (!item) {
-			res.json(Results.ERR_NOTFOUND_ERR);
-			return;
-		} else {
-			if (item.userId != userId) {
-				res.json(Results.ERR_PERMISSION_ERR);
+    if (req.query.step == 1) {
+        reqData = {
+            expireAt: req.body.expireAt,
+            itemName: req.body.itemName,
+            category: req.body.category,
+            price: req.body.price,
+            description: req.body.description,
+            cover: req.body.cover,
+            images: req.body.images
+        }
+    } else if (req.query.step == 2) {
+        reqData = {
+            address: req.body.address,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude
+        }
+    } else {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+    if (tools.hasNull(reqData)) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+    Item.findById(itemId, function(err, item) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else if (!item) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else {
+            if (item.userId != userId) {
+                res.json(Results.ERR_PERMISSION_ERR);
                 return;
-			}
-			for (var key in reqData) {
-				item[key] = reqData[key];
-			}
-			item.updateAt = new Date();
-			item.save(function(err, item) {
-				if (err) {
-					return next();
-				} else {
-					res.json({
-						result: true,
-						data: {}
-					});
-				}
-			});
-		}
-	});
+            }
+            for (var key in reqData) {
+                item[key] = reqData[key];
+            }
+            item.updateAt = new Date();
+            item.save(function(err, item) {
+                if (err) {
+                    return next();
+                } else {
+                    res.json({
+                        result: true,
+                        data: {}
+                    });
+                }
+            });
+        }
+    });
 };
 
 exports.getItemById = function(req, res, next) {
@@ -170,21 +173,21 @@ exports.getThreeItems = function(req, res, next) {
         };
 
         Item.find(query, 'id userId username userAvatar schoolId cover').sort({
-                createAt: 'desc'
-            }).limit(3).exec(function(err, items) {
-	            if (err) {
-	                res.json(Results.ERR_DB_ERR);
-	                return;
-	            } else if (!items.length) {
-	                res.json(Results.ERR_NOTFOUND_ERR);
-	                return;
-	            } else {
-	                res.json({
-	                    result: true,
-	                    data: items
-	                });
-	                return;
-	            }
+            createAt: 'desc'
+        }).limit(3).exec(function(err, items) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!items.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                res.json({
+                    result: true,
+                    data: items
+                });
+                return;
+            }
         });
     });
 
@@ -245,78 +248,78 @@ exports.getItemList = function(req, res, next) {
 };
 
 exports.postItemById = function(req, res, next) {
-	var itemId = req.param('id');
-	var reqData = {};
-	var userId = req.user.id;
-	var epUser = new EventProxy();
-	epUser.all("findUser", function(user) {
-		Item.findById(itemId, function(err, item) {
-			if (err) {
-				//console.log(err);
-				res.json(Results.ERR_DB_ERR);
-				return;
-			} else if (!item) {
-				res.json(Results.ERR_NOTFOUND_ERR);
-				return;
-			} else {
-				if (item.userId != userId || item.status != 2){
-					res.json(Results.ERR_PERMISSION_ERR);
-					return;
-				}
-				var reqData = {
-					userId: item.userId,
+    var itemId = req.param('id');
+    var reqData = {};
+    var userId = req.user.id;
+    var epUser = new EventProxy();
+    epUser.all("findUser", function(user) {
+        Item.findById(itemId, function(err, item) {
+            if (err) {
+                //console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!item) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                if (item.userId != userId || item.status != 2) {
+                    res.json(Results.ERR_PERMISSION_ERR);
+                    return;
+                }
+                var reqData = {
+                    userId: item.userId,
                     username: item.username,
                     userAvatar: item.userAvatar,
                     schoolId: item.schoolId,
-                   	expireAt: item.expireAt,
-                   	itemName: item.itemName,
-                   	category: item.category,
-                   	price: item.price,
+                    expireAt: item.expireAt,
+                    itemName: item.itemName,
+                    category: item.category,
+                    price: item.price,
                     description: item.description,
                     cover: item.cover,
                     images: item.images,
                     address: item.address,
                     longitude: item.longitude,
                     latitude: item.latitude
-                   
-				};
-				//console.log(reqData);
-				if (tools.isEmpty(reqData.images)) {
-					res.json(Results.ERR_NOTFINISHED_ERR);
-					return;
-				}
-				if (tools.hasNull(reqData)) {
-					res.json(Results.ERR_NOTFINISHED_ERR);
-					return;
-				}
-				item['status'] = 1;
-				item.updateAt = new Date();
-				item.save(function(err, item) {
-					if (err) {
-						//consolo.log(err);
-						return next();
-					} else {
-						res.json({
-							result: true,
-							data: {
-								"_id": item.id,
-                                "schoolId": item.schoolId
-							}
-						});
-					}
-				});
-			}
-		});
-	});
 
-	User.findById(req.user.id, function(err, user) {
-		if (err) {
-			res.json(Results.ERR_DB_ERR);
-			return;
-		} else {
-			epUser.emit("findUser", user);
-		}
-	});
+                };
+                //console.log(reqData);
+                if (tools.isEmpty(reqData.images)) {
+                    res.json(Results.ERR_NOTFINISHED_ERR);
+                    return;
+                }
+                if (tools.hasNull(reqData)) {
+                    res.json(Results.ERR_NOTFINISHED_ERR);
+                    return;
+                }
+                item['status'] = 1;
+                item.updateAt = new Date();
+                item.save(function(err, item) {
+                    if (err) {
+                        //consolo.log(err);
+                        return next();
+                    } else {
+                        res.json({
+                            result: true,
+                            data: {
+                                "_id": item.id,
+                                "schoolId": item.schoolId
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    User.findById(req.user.id, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
 };
 
 exports.deleteItemById = function(req, res, next) {
@@ -385,10 +388,10 @@ exports.deleteItemById = function(req, res, next) {
 
 exports.getUserOtherItems = function(req, res, next) {
     //console.log(req.query.itemId);
-	var userId = req.param('id');
+    var userId = req.param('id');
     var itemId = req.query.itemId;
 
-	if (!userId || !itemId) {
+    if (!userId || !itemId) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
@@ -399,83 +402,85 @@ exports.getUserOtherItems = function(req, res, next) {
         'available': true
     };
 
-	var ep = new EventProxy();
+    var ep = new EventProxy();
 
-	ep.all('findItems', function(){
+    ep.all('findItems', function() {
 
-		//sort resData by updateAt in descending order
-        
+        //sort resData by updateAt in descending order
+
         resData.sort(function(a, b) {
             return b.content.updateAt.valueOf() - a.content.updateAt.valueOf();
         });
 
         if (resData.length <= 9) {
-        	res.json({
+            res.json({
                 result: true,
                 data: resData
             });
             return;
         } else {
-        	res.json({
+            res.json({
                 result: true,
                 data: resData.slice(0, 9)
             });
             return;
         }
 
-	});
+    });
 
 
-	ep.all('findCars', function() {
+    ep.all('findCars', function() {
         var queryItem = {
             'status': 1,
             'userId': userId,
             'available': true,
-            '_id': {'$ne': itemId}
+            '_id': {
+                '$ne': itemId
+            }
         }
-		Item.find(queryItem, 'id itemName cover createAt updateAt')
-        .sort({
-            updateAt: 'desc'
-        }).limit(9).exec(function(err, items) {
-            if (err) {
-                console.log(err);
-                res.json(Results.ERR_DB_ERR);
-                return;
-            } else {
-                for (var i = 0; i < items.length; i++) {
-                	var tmp = {};
-                	tmp.identity = 3;
-                	tmp.content = items[i];
-                	resData.push(tmp);
+        Item.find(queryItem, 'id itemName cover createAt updateAt')
+            .sort({
+                updateAt: 'desc'
+            }).limit(9).exec(function(err, items) {
+                if (err) {
+                    console.log(err);
+                    res.json(Results.ERR_DB_ERR);
+                    return;
+                } else {
+                    for (var i = 0; i < items.length; i++) {
+                        var tmp = {};
+                        tmp.identity = 3;
+                        tmp.content = items[i];
+                        resData.push(tmp);
+                    }
+                    ep.emit('findItems')
                 }
-                ep.emit('findItems')
-            }
-        });
+            });
 
-	});
+    });
 
 
-	ep.all('findApartments', function() {
-		Car.find(query, 'id title cover createAt updateAt')
-        .sort({
-            updateAt: 'desc'
-        }).limit(9).exec(function(err, cars) {
-            if (err) {
-                console.log(err);
-                res.json(Results.ERR_DB_ERR);
-                return;
-            } else {
-                for (var i = 0; i < cars.length; i++) {
-                	var tmp = {};
-                	tmp.identity = 2;
-                	tmp.content = cars[i];
-                	resData.push(tmp);
+    ep.all('findApartments', function() {
+        Car.find(query, 'id title cover createAt updateAt')
+            .sort({
+                updateAt: 'desc'
+            }).limit(9).exec(function(err, cars) {
+                if (err) {
+                    console.log(err);
+                    res.json(Results.ERR_DB_ERR);
+                    return;
+                } else {
+                    for (var i = 0; i < cars.length; i++) {
+                        var tmp = {};
+                        tmp.identity = 2;
+                        tmp.content = cars[i];
+                        resData.push(tmp);
+                    }
+                    ep.emit('findCars')
                 }
-                ep.emit('findCars')
-            }
-        });
+            });
 
-	});
+    });
 
     var resData = [];
 
@@ -489,10 +494,10 @@ exports.getUserOtherItems = function(req, res, next) {
                 return;
             } else {
                 for (var i = 0; i < apartments.length; i++) {
-                	var tmp = {};
-                	tmp.identity = 1;
-                	tmp.content = apartments[i];
-                	resData.push(tmp);
+                    var tmp = {};
+                    tmp.identity = 1;
+                    tmp.content = apartments[i];
+                    resData.push(tmp);
                 }
                 ep.emit('findApartments')
             }
