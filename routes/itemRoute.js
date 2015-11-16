@@ -398,7 +398,7 @@ exports.searchItem = function(req, res, next) {
                 totalPage = Math.ceil(count / pageSize);
 
                 var resData = [];
-                Item.find(query, 'id userId username userAvatar schoolId itemName cover longitude latitude create_at', pagination)
+                Item.find(query, 'id userId username userAvatar schoolId itemName cover price category longitude latitude create_at', pagination)
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, items) {
@@ -410,11 +410,13 @@ exports.searchItem = function(req, res, next) {
                             res.json(Results.ERR_NOTFOUND_ERR);
                             return;
                         } else {
-                       
+
                             res.json({
                                 result: true,
                                 data: {
-                                    "items": items
+                                    "items": items,
+                                    "totalPage": totalPage,
+                                    "currentPage": currentPage
                                 }
                             });
                             return;
@@ -446,7 +448,6 @@ exports.searchItem = function(req, res, next) {
 
 
 }
-
 
 
 
