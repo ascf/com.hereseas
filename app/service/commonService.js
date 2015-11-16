@@ -54,7 +54,10 @@ hereseasApp.factory('requestService', ['$resource', function($resource){
         GetItem: { method: "GET", params: { dir: "item"}},
         GetApts: { method: "GET", params: { dir: "apartments"}},
         GetCars: { method: "GET", params: { dir: "cars"}},
+        GetItems: { method: "GET", params: { dir: "items"}},
+        GetOtherItems: { method: "GET", params: { dir: "items",action: "other"}},
         GetUser: { method:"GET", params:{dir:"user"}},
+        GetUserAllPost: { method:"GET",params:{dir:"user", action:"allpost"}},
         GetSchoolMates: {method:"GET", params:{dir:"school", search:"students"}},
         GetNewSchoolMates: {method:"GET", params:{dir:"school", search:"newstudents"}},
         GetUserSelf: { method:"GET", params:{dir:"userself"}},
@@ -62,6 +65,7 @@ hereseasApp.factory('requestService', ['$resource', function($resource){
         CarStepPost:{method:"PUT", params:{dir:"car"}},
         ItemStepPost:{method:"PUT", params:{dir:"item"}},
         GetAptsBySchool: {method:"GET", params:{dir:"apartments", search:"search"}},
+        GetItemsBySchool: {method:"GET", params:{dir:"items", search:"search"}},
         ChangeProfile: {method:"PUT", params:{dir:"user"}},
         GetAptDrafts:{ method: "GET", params: { dir: "apartments", action:"draft"}},
         GetAptDraft:{ method: "GET", params: { dir: "apartment", action:"draft"}},
@@ -79,7 +83,13 @@ hereseasApp.factory('requestService', ['$resource', function($resource){
         SendMsg:{ method: "POST", params: { dir: "sendmessage"}},
         GetContact:{method: "GET", params: { dir: "contact"}},
         GetMsgs:{method: "GET", params: { dir: "message"}},
-        GetFavList:{method: "GET", params: { dir: "favorite", action:"list"}}
+        GetFavList:{method: "GET", params: { dir: "favorite", action:"list"}},
+        AdminGetUserInfo:{method: "GET", params: { dir: "admin", action:"users"}},
+        GetForumThreads:{method: "GET", params: { dir: "forum", search:"threads"}},
+        GetForumThreadById:{method: "GET", params: { dir: "forum", action:"thread"}},
+        GetForumCommentsById:{method: "GET", params: { dir: "forum", action:"thread" ,search:"comments"}},
+        PostForumThread:{method: "POST", params: { dir: "forum", action:"thread"}},
+        PostForumComment:{method: "POST", params: { dir: "forum", action:"comment"}},
     });
 }]);
 

@@ -1,0 +1,70 @@
+<div style="background-color:rgb(248,248,249);" style="min-width:1000px;">
+    <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div layout="row">
+        <div class="container" style="width:1000px;" layout="row">          
+            <!--items left-->
+            <div flex=70 layout="column" style="padding-right:20px">
+                <div style="margin-top:20px;margin-bottom:20px;padding-left:3px;padding-right:3px;">
+                    <div layout="row" style="float:left;">
+                        <div ng-click="showArticlePost()" layout="row" style="width:140px;height:46px;background-color:rgb(240,140,106);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF;margin-right:15px">
+                            <div class="center-block" style="width:110px;">
+                                <div style="background:url(/app/view/img/items/resrv.png);background-size:cover;width:27px;height:27px;margin-top:5px;margin-right:5px;float:left"></div>   
+                                <h4 style="margin-top:8px;color:#ffffff">添加文章</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+     
+                <div style="padding-left:3px;margin-bottom:50px;">
+                    <div id="forum_panel" style="overflow-y:scroll;height:500;margin-top:20px;">
+                        <div ng-repeat="thread in threads" style="margin-bottom:10px;border:1px solid #D5D4D2;padding:10px;background-color:#ffffff" layout="row" ng-click="goToArticle(thread._id)">
+                            <div flex=25 style="border:1px solid #D5D4D2;height:100px;margin-right:20px"></div>
+                            <div flex=70>
+                                <div><h4>Title:{{thread.title}}</h4></div>
+                                <div><h4>正文</h4></div>
+                                <div>
+                                    <div style="float:left"><h4>来自:{{thread.username}}</h4></div>
+                                    <div style="float:right"><img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;" ng-click=""/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!--items right-->
+            <div flex=26 layout="column">
+                <div layout="row">
+                    <div flex= 25>
+                        <img style="height:50px;width:50px;" class="img-circle" ng-src="{{item.userAvatar}}"/>
+                    </div>
+                    <div flex= 20>
+                        <h5>{{item.username}}</h5>
+                    </div>
+                    <div flex= 55>
+                        <h5>{{schoolName}}</h5>
+                    </div>
+                </div>
+                <div class="center-block">
+                    参与者<span style="margin-left:5px;width:15px;height:15px;line-height:15px;background-image:url(/app/view/img/profile/posted.png);background-size:100% 100%;color:#62B5DB;">12</span>
+                </div>
+                <div style="width:310px;height:350px;">
+                    <div ng-repeat="otherItem in otherItems" style="padding:1px;float:left" ng-click="goToEach($index)">
+                        <div ng-style="{'background-image':'url('+otherItem.content.cover+')'}" style="width:75px;height:100px;background-size:cover;margin-top:-1px;margin-left:-1px;"></div>
+                    </div>
+                </div>
+                <div style="padding:10px;border:1px solid #6A6966;height:210px;width:300px;">
+                    <h4>详情</h4>        
+                </div>
+            </div>
+        </div>
+    </div>
+    <div footer></div>
+</div>
+<style>
+    h4{
+        color:#6A6966;
+        margin-top:0px;margin-bottom:0px;
+    }
+</style>
+        

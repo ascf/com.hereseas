@@ -3,11 +3,28 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
     $scope.login_err = false; //登陆时用户名密码是否匹配变量
     $scope.emailerr = false; //注册时错误变量
     $scope.psworderr = false; //注册时错误变量
+    $scope.need_activate = false;
     $scope.signUpData = {};
+    
+    $scope.userData = {};	
+	$scope.createForgetter = function () {
+		//console.log($scope.userData)
+        requestService.CreateForgetter($scope.userData, function(res) {
+        	//console.log(res);
+        	if (res.result) {
+        		//alert("email has been sent" );
+                $scope.state = 'resetTrue';
+        	} else {
+        		$scope.state = 'resetFalse';
+        	}
+
+        });
+    };
+    
     $scope.user = {
         email: '',
         password: '',
-        save: true
+        remember: true
     };
     $scope.emailpattern = /^.+@.+\..+$/;
     
@@ -34,26 +51,34 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
     };
     
     $scope.goSignup = function(){
-        $scope.state = 2;
-        userService.setSignupOrLogin(2);
+        $scope.state = 'signup';
+        userService.setSignupOrLogin('signup');
         $scope.login_err = false;
         $scope.emailerr = false;
         $scope.psworderr = false;
     };
     
+    $scope.goReset = function(){
+        $scope.state = 'reset';
+        $scope.emailerr = false;
+        
+    };
+    
     $scope.goLogin = function(){
-        $scope.state = 1;
-        userService.setSignupOrLogin(1);
+        $scope.state = 'login';
+        userService.setSignupOrLogin('login');
         $scope.emailerr = false;
         $scope.psworderr = false;
     };
     
-    
+    $scope.rememberMe = function(){
+        console.log("before",$scope.user.remember);
+        console.log($scope.user.remember);
+    }
     // controller to handle login check
     $scope.loginClick = function () {
         //console.log($scope.user);
         var isMatch = $scope.emailpattern.test($scope.user.email);
-        console.log($scope.user.password);
         if(!isMatch){$scope.emailerr = true;}
             else{$scope.emailerr = false;}
         if($scope.user.password.length < 6){$scope.psworderr = true;}
@@ -76,7 +101,12 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
                         $scope.login_err = false;
                     });                    
                 }else{
-                    $scope.login_err = true;
+                    if(res.err == 'ERR_ACTIVATED_ERR'){
+                        $scope.need_activate = true;
+                    }else{
+                        
+                        $scope.login_err = true;
+                    }
                 }
             });
         }

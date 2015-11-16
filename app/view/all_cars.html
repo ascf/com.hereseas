@@ -3,82 +3,52 @@
     <div top-bar></div>
     
     <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
-        <div layout="row">
-            <div style="width:165px" layout="column">
+        <div style="width:1000px" layout="row">
                 <div class="filter-bar" style="width:165px">筛选栏</div>
-                <div layout="column" style="margin-top:20px;width:165px;">
-                    <div layout="row">
-                        <img style="width:22px;height:22px;" src="/app/view/img/apts/price.png"/>
-                        <span flex></span>
-                        <span>价格</span>
-                    </div>
-                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="carPrice" ngChange="updatePage()">
-                        <option value="all">All</option>
-                        <option value="1">$5000-$10000</option>
-                        <option value="2">$10000-$15000</option>
-                        <option value="3">$15000-$20000</option>
-                        <option value="4">$20000+</option>
-                    </select>
+                <div layout="row" style="margin-top:5px;padding-left:15px;padding-right:15px;">
+                        <div style="padding-right:20px;">
+                            <img style="width:22px;height:22px;" src="/app/view/img/apts/price.png"/>
+                        </div> 
+                        <div layout="column">
+                            <input id="price-slider" type="text" class="span2" data-slider-min="2000" data-slider-max="40000" data-slider-step="1000" data-slider-value="[2000,40000]" style="width:130px"/>
+                            <div><span style="margin-left:-10px;padding-right:70px;">$2000</span><span>$40000</span></div>
+                        </div>
+                        <div>
+                            <span>价格</span>
+                        </div>
                 </div>
 
-                <div layout="column" style="margin-top:20px;width:165px;">
-                    <div layout="row">
-                        <img style="width:22px;height:22px;" src="/app/view/img/apts/aptType.png"/>
-                        <span flex></span>
-                        <span>车型</span>
+                <div layout="row" style="height:25px;padding-top:5px">
+                    <div style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
+                        <div ng-hide="selectData.style=='all'" ng-click="setStyle('all')">所有</div><div ng-show="selectData.style=='all'" style="color:#3CB49E">所有</div>
+                     </div>
+                    <div style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
+                        <div ng-hide="selectData.style=='sedan'" ng-click="setStyle('sedan')">四门轿车</div><div ng-show="selectData.style=='sedan'" style="color:#3CB49E">四门轿车</div>
                     </div>
-                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="carStyle" ngChange="updatePage()">
-                        <option value="all">All</option>
-                        <option value="SUV">SUV</option>
-                        <option value="Sedan">Sedan</option>
-                        <option value="Coupe">Coupe</option>
-                        <option value="Convertible">Convertible</option>
-                        <option value="Hatchback">Hatchback</option>
-                        <option value="Minivan">Minivan</option>
-                        <option value="Wagon">Wagon</option>
-                    </select>
-                </div>
-
-                <div layout="column" style="margin-top:20px;width:165px;">
-                    <div layout="row">
-                        <img style="width:22px;height:22px;" src="/app/view/img/apts/roomType.png"/>
-                        <span flex></span>
-                        <span>里程</span>
+                    <div style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
+                        <div ng-hide="selectData.style=='wagon'" ng-click="setStyle('wagon')">两厢车</div><div ng-show="selectData.style=='wagon'" style="color:#3CB49E">两厢车</div>
                     </div>
-                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="carMileAge" ngChange="updatePage()">
-                        <option value="all">All</option>
-                        <option value="0">&lt;10000mile</option>
-                        <option value="1">10000mile-40000mile</option>
-                        <option value="2">40000mile-80000mile</option>
-                        <option value="3">&gt;10000mile</option>
-                    </select>
-                </div>
-                
-                <div layout="column" style="margin-top:20px;width:165px;">
-                    <div layout="row">
-                        <img style="width:22px;height:22px;" src="/app/view/img/apts/roomType.png"/>
-                        <span flex></span>
-                        <span>年份</span>
+                    <div style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
+                        <div ng-hide="selectData.style=='coupe'" ng-click="setStyle('coupe')">双门跑车</div><div ng-show="selectData.style=='coupe'" style="color:#3CB49E">双门跑车</div>
                     </div>
-                    <select style="margin-top:10px;background:#A19F9B;color:white;" ng-model="carYear" ngChange="updatePage()">
-                        <option value="all">All</option>
-                        <option value="2005">before&nbsp;2005</option>
-                        <option value="2006">2006</option>
-                        <option value="2007">2007</option>
-                        <option value="2008">2008</option>
-                        <option value="2009">2009</option>
-                        <option value="2010">2010</option>
-                        <option value="2011">2011</option>
-                        <option value="2012">2012</option>
-                        <option value="2013">2013</option>
-                        <option value="2014">2014</option>
-                        <option value="2015">2015</option>
-                        <option value="2016">2016</option>
-                    </select>
+                    <div style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
+                        <div ng-hide="selectData.style=='SUV'" ng-click="setStyle('SUV')">SUV</div><div ng-show="selectData.style=='SUV'" style="color:#3CB49E">SUV</div>
+                    </div>
+                    <div style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
+                        <div ng-hide="selectData.style=='pickup'" ng-click="setStyle('pickup')">皮卡</div><div ng-show="selectData.style=='pickup'" style="color:#3CB49E">皮卡</div>
+                    </div>
+                    <div style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B">
+                        <div ng-hide="selectData.style=='van'" ng-click="setStyle('van')">面包车</div><div ng-show="selectData.style=='van'" style="color:#3CB49E">面包车</div>
+                    </div>
                 </div>
-            </div>
             
-            <div layout="column" style="">
+            <div layout="row" style="padding-left:10px;margin-top:5px;">
+                <div style="width:20px;height:20px;background-image:url(/app/view/img/header/search.png);background-size:cover"></div>
+                <input ng-model="searchCont" style="margin-left:10px;border-radius:4px;width:140px;height:25px;border:1px solid #D5D4D2" placeholder="搜索你要的汽车"></input>
+            </div>
+        </div>
+        <div layout="row" style="padding-top:20px">          
+            <div layout="column">
                 <div id="cars_panel" style="overflow-y:scroll;height:530px;width:485px;margin-left:10px;margin-right:10px;" class="row">
                     
                     <div ng-show="carResult.length==0">没有结果</div>
@@ -135,4 +105,7 @@
     }
 </style>
 
-
+<script>
+    $("#price-slider").slider({});
+    
+</script>

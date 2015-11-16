@@ -3,33 +3,33 @@
     <header ng-include="'app/view/partials/_header-one.html'"></header>
     <div layout="row">
     <div class="container" style="width:1000px;" layout="row">          
-            <!--goods left-->
+            <!--activities left-->
             <div flex=70 layout="column" style="padding-right:20px">
                 <div>
                     <div style="height:32px">
                         <div style="float:left"><h3 style="margin-top:0px;">题目</h3></div>
                         <div style="float:right"><h3 style="margin-top:0px;">$价格</h3></div>
                     </div>
-                    <div style="height:280px;background-image:url(/app/view/img/goods/goods.png);background-size:cover;"></div>
+                    <div style="height:280px;background-image:url(/app/view/img/items/items.png);background-size:cover;"></div>
                 </div>
                 <div style="margin-top:20px;margin-bottom:20px;padding-left:3px;padding-right:3px;">
                     <div layout="row" style="float:left">
-                        <div layout="row" style="width:140px;height:46px;background-color:rgb(71,175,150);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF">
+                        <div layout="row" style="width:140px;height:46px;background-color:rgb(71,175,150);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF" ng-click="article(0)">
                             <div class="center-block" style="width:105px;">
-                                <div style="background:url(/app/view/img/goods/tele.png);background-size:cover;width:27px;height:27px;margin-top:5px;margin-right:5px;float:left"></div>
+                                <div style="background:url(/app/view/img/items/tele.png);background-size:cover;width:27px;height:27px;margin-top:5px;margin-right:5px;float:left"></div>
                                 <h4>即刻联系</h4>
                             </div>
                         </div>
-                        <div layout="row" style="width:140px;height:46px;background-color:rgb(240,140,106);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF;margin-left:20px;">
-                            <div class="center-block" style="width:70px;">
-                                <div style="background:url(/app/view/img/goods/resrv.png);background-size:cover;width:27px;height:27px;margin-top:5px;margin-right:5px;float:left"></div>
-                                <h4>预定</h4>
+                        <div layout="row" style="width:140px;height:46px;background-color:rgb(240,140,106);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF;margin-left:20px;" ng-click="article(1)">
+                            <div class="center-block" style="width:105px;">
+                                <div style="background:url(/app/view/img/items/resrv.png);background-size:cover;width:27px;height:27px;margin-top:5px;margin-right:5px;float:left"></div>
+                                <h4>添加文章</h4>
                             </div>
                         </div>
                     </div>
                     <div layout="row" style="float:right;">
-                        <div style="background:url(/app/view/img/goods/star.png);background-size:cover;width:48px;height:46px;margin-right:15px"></div>
-                        <div style="background:url(/app/view/img/goods/circle.png);background-size:cover;width:48px;height:46px;margin-right:5px"></div>
+                        <div style="background:url(/app/view/img/items/star.png);background-size:cover;width:48px;height:46px;margin-right:15px"></div>
+                        <div style="background:url(/app/view/img/items/circle.png);background-size:cover;width:48px;height:46px;margin-right:5px"></div>
                     </div>
                 </div>
                 <div style="padding-left:3px">

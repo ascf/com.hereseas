@@ -1,15 +1,13 @@
 hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,requestService,userService, Upload, fileReader, $window,$cookies) {
     requestService.GetUserSelf(function (res) {
         console.log("userself", res);
-        if (res.result){
-                        
+        if (res.result){            
             var geocoder = new google.maps.Geocoder();
             $scope.options1 = null;
             $scope.details1 = '';
             $scope.addresses = [];
             $scope.addressGot = false;        //控制页面上是否显示解析后地址  
             $scope.addressCorrect = false;     //判断地址是否正确
-            $scope.validAddress = validAddress; //判断地址是否合法
             
              //基本信息model
             $scope.basicInfo = {
@@ -28,14 +26,6 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                  full:   ''
             };
             
-            $scope.setPostPage = setPostPage;
-            $scope.setActivePage = setActivePage;
-            
-            $scope.setActiveTab = setActiveTab;
-            $scope.updateMsgs = updateMsgs;
-            $scope.getUnreadMsgsNum = getUnreadMsgsNum;
-            $scope.initMessages = initMessages;
-            
             $scope.filterApt = true;
             $scope.filterCar = true;
             $scope.filterGood = true;
@@ -53,6 +43,16 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             $scope.messages = [];
             $scope.numNotify = 0;
             var popWindows = [];
+            $scope.img = undefined;
+            
+            $scope.validAddress = validAddress; //判断地址是否合法
+            $scope.setPostPage = setPostPage;
+            $scope.setActivePage = setActivePage;
+            
+            $scope.setActiveTab = setActiveTab;
+            $scope.updateMsgs = updateMsgs;
+            $scope.getUnreadMsgsNum = getUnreadMsgsNum;
+            $scope.initMessages = initMessages;
             
             $scope.initProfiles = initProfiles;//初始化个人信息内容函数
             
@@ -67,16 +67,19 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             $scope.getApts = getApts;
             $scope.getAptDrafts = getAptDrafts;
             
-            $scope.img = undefined;
+            $scope.upload = upload;
             
             $scope.initProfiles();
             $scope.intiFavorite();
             $scope.initMessages();
             
+            
             $scope.getApts(true);
             $scope.getAptDrafts(true);
             $scope.getCars(true);
             $scope.getCarDrafts(true);
+            
+            
             
             function intiFavorite(){
                 requestService.GetFavList({action:''}, function(res){
@@ -211,13 +214,9 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                 });
             };
             
-            $scope.$watch('file', function (newValue, oldValue) {
-                //console.log($scope.files, "old:", oldValue, "new:", newValue);
-                if(!angular.equals(newValue, oldValue))
-                    $scope.upload($scope.file);
-            });
             
-            $scope.upload = function (file) {
+            
+            function upload(file) {
                 if (file) {
                     console.log(file);
                    
@@ -267,56 +266,6 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     });
                 });
             };
-            
-            
-            $scope.$watch('details1', function(newValue){  //在地址合法之后的操作
-                if(newValue && $scope.validAddress(newValue)){//set the model 
-                    $scope.addressGot = true;
-                    $scope.addresses = [];
-                    //console.log( newValue);
-                    var componentForm = {
-                      street_number: 'short_name',
-                      route: 'long_name',
-                      locality: 'long_name',
-                      administrative_area_level_1: 'short_name',
-                      postal_code: 'short_name'
-                    };
-
-                    for (var i = 0; i < $scope.details1.address_components.length; i++) {
-                        var addressType = $scope.details1.address_components[i].types[0];
-                        if (componentForm[addressType]) {
-                          var val = $scope.details1.address_components[i][componentForm[addressType]];
-                          $scope.addresses.push(val);
-                        }
-                    }
-                    
-                    $scope.address.street = $scope.addresses[0]+" "+$scope.addresses[1];
-                    console.log($scope.address.street);
-                    $scope.address.city = $scope.addresses[2];
-                    $scope.address.state = $scope.addresses[3];
-                    $scope.address.zipcode = $scope.addresses[4];
-                    if($scope.address.zipcode !== undefined){
-                        $scope.addressCorrect = true;
-                        geocoder.geocode({ 'address' : $scope.address.full}, function (results, status) {
-                            if (status == google.maps.GeocoderStatus.OK) {
-                                console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-                                console.log(results[0].formatted_address);
-                                $scope.address.latitude = results[0].geometry.location.lat();
-                                $scope.address.longitude = results[0].geometry.location.lng();
-                                console.log($scope.address);
-                                requestService.ChangeProfile({step:2}, {'address':$scope.address}, function(res){
-                                    console.log(res);
-                                });
-                            } else {}
-                        });   
-                    }
-                    else{
-                        $scope.addressCorrect = false;
-                    }
-                    
-                }
-            });
-            
             
             function getUnreadMsgsNum(){
                 var num = 0;
@@ -377,20 +326,10 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     $scope.verified = false;
                 }
                 $scope.email = res.data.email;
-
-                $scope.img = res.data.avatar;
-                if(res.data.address !== undefined){
-                    $scope.address =  res.data.address;
-                    $scope.addressGot = true;
-                    $scope.addressCorrect = true;
-
-                    $scope.$watch(function(){return $scope.address.apt}, function (newValue) {
-                        $scope.address.apt = newValue;
-                        requestService.ChangeProfile({step:2}, {'address':$scope.address}, function(res){
-                            //console.log(res);
-                        });
-                    }, true);
-                }
+                if(res.data.avatar !== "avatar/default.png")
+                    $scope.img = res.data.avatar;
+                else $scope.img = "/app/view/img/profile/default_avatar.png"
+               
 
                 if(res.data.enrollYear !== undefined){
                     $scope.basicInfo.enrollYear = res.data.enrollYear;
@@ -403,6 +342,8 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                 $scope.basicInfo.username = res.data.username;
 
                 requestService.GetSchools(function(res){
+                    $scope.schools = res.data;
+                    console.log($scope.schools);
                     $scope.schoolNames = [];
                     $scope.schoolIds = [];
                     for(var i=0; i<res.data.length; i++){
@@ -410,26 +351,18 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                         $scope.schoolIds.push(res.data[i]._id);
                     }
                     
-                    $scope.$watch('schoolName', function (newValue) {//学校字段内容改变时判断是否是正确的名字。正确时匹配schoolId
-                        if(newValue !== undefined){
-                            var index = $scope.schoolNames.indexOf(newValue);
-                            if(index !== -1)
-                                $scope.basicInfo.schoolId = $scope.schoolIds[index];
-                        }
-                    });
                 });
 
                 if(res.data.schoolId !== undefined){
+                    
                     $scope.basicInfo.schoolId = res.data.schoolId;
-                    requestService.GetSchool({id:$scope.basicInfo.schoolId}, function(res){
-                        if(res.result){
-                            $scope.schoolName = res.data.name;
-                        }   
-                    }); 
+                    console.log($scope.basicInfo.schoolId);
+
                 }
 
                 $scope.$watch('basicInfo', function (newValue, oldValue) {
-                    if(newValue.username!=='' && newValue.enrollSeason!=='' && newValue.enrollYear!=='' && newValue.schoolId!=='' && !angular.equals(newValue,oldValue)){
+                    console.log(1);
+                    if(newValue.schoolId!=='' && !angular.equals(newValue,oldValue)){
                         requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
                             console.log(res);
                         });
@@ -437,14 +370,99 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                 }, true);
             };
             
+            $scope.$watch('file', function (newValue, oldValue) {
+                if(!angular.equals(newValue, oldValue))
+                    $scope.upload($scope.file);
+            });
+            
+            
+            /*$scope.$watch('details1', function(newValue){  //在地址合法之后的操作
+                if(newValue && $scope.validAddress(newValue)){//set the model 
+                    $scope.addressGot = true;
+                    $scope.addresses = [];
+                    var componentForm = {
+                      street_number: 'short_name',
+                      route: 'long_name',
+                      locality: 'long_name',
+                      administrative_area_level_1: 'short_name',
+                      postal_code: 'short_name'
+                    };
+
+                    for (var i = 0; i < $scope.details1.address_components.length; i++) {
+                        var addressType = $scope.details1.address_components[i].types[0];
+                        if (componentForm[addressType]) {
+                          var val = $scope.details1.address_components[i][componentForm[addressType]];
+                          $scope.addresses.push(val);
+                        }
+                    }
+                    
+                    $scope.address.street = $scope.addresses[0]+" "+$scope.addresses[1];
+                    console.log($scope.address.street);
+                    $scope.address.city = $scope.addresses[2];
+                    $scope.address.state = $scope.addresses[3];
+                    $scope.address.zipcode = $scope.addresses[4];
+                    if($scope.address.zipcode !== undefined){
+                        $scope.addressCorrect = true;
+                        geocoder.geocode({ 'address' : $scope.address.full}, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+                                console.log(results[0].formatted_address);
+                                $scope.address.latitude = results[0].geometry.location.lat();
+                                $scope.address.longitude = results[0].geometry.location.lng();
+                                console.log($scope.address);
+                                requestService.ChangeProfile({step:2}, {'address':$scope.address}, function(res){
+                                    console.log(res);
+                                });
+                            } else {}
+                        });   
+                    }
+                    else{
+                        $scope.addressCorrect = false;
+                    }
+                    
+                }
+            });*/
         } else {
             $state.go('home');
         }
     });
-    
-    
-    
-    
 
+});
 
+hereseasApp.controller('OthersProfileController', function ($state, $scope, $stateParams, requestService) {
+    $scope.hasSelling = false;
+    $scope.goToEach = function(index){
+        console.log(index);
+        switch($scope.onSelling[index].identity){
+            case 1:$state.go('rooms',{aptId:$scope.onSelling[index].content._id});break;
+            case 2:$state.go('cars',{carId:$scope.onSelling[index].content._id});break;
+            case 3:$state.go('items',{itemId:$scope.onSelling[index].content._id});break;
+        }
+    };
+    
+    $scope.pageReturn = function(){
+        $state.go('schoolMates',{schoolId:$scope.othersInfo.schoolId});
+    };
+    
+    requestService.GetUser({id:$stateParams.othersId}, function(res){
+        if(res.result){
+            console.log(res.data);
+            $scope.othersInfo = res.data;
+            requestService.GetUserAllPost({id:$stateParams.othersId}, function(res){
+                console.log(res.data);
+                if(res.data.length!=0){
+                    $scope.hasSelling = true;
+                    $scope.onSelling = res.data;
+                }
+            });
+            
+            requestService.GetSchool({id:$scope.othersInfo.schoolId}, function(res) {
+                if (res.result) {
+                    $scope.schoolName = res.data.name;
+                } else {
+                    
+                }
+            });
+        };   
+    }); 
 });

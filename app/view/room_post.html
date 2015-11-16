@@ -171,8 +171,8 @@
                 <div layout="row" class="room_post_div_content">
                     <div flex="20" layout-align="start end" layout="row">
                         <div>
-                        <p class="room_post_font_content">入住时间</p>
-                            </div>
+                            <p class="room_post_font_content">入住时间</p>
+                        </div>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
                         <div>
@@ -290,7 +290,7 @@
                     </div>
                     <div flex="75" class="room_post_div" layout="row">
                         <div layout="row" layout-wrap>
-                            <div flex="50" ng-repeat="(key,value) in steps[2].facilities.apt"  layout-align="start center" layout="row">
+                            <div flex="50" ng-repeat="(key,value) in steps[2].facilities.apt"  layout-align="start center" layout="row" style="margin-bottom:4px;">
                                 <div>
                                     <md-checkbox class="rp_checkbox" ng-model="steps[2].facilities.apt[key]">
                                     <p class="room_post_font_content">{{name(key)}}</p>
@@ -312,7 +312,7 @@
                     </div>
                     <div class="room_post_div" layout="row">
                         <div layout="row" layout-wrap>
-                            <div flex="50" ng-repeat="(key,value) in steps[2].facilities.room"  layout-align="start center" layout="row">
+                            <div flex="50" ng-repeat="(key,value) in steps[2].facilities.room"  layout-align="start center" layout="row" style="margin-bottom:4px;">
                                 <div>
                                     <md-checkbox class="rp_checkbox" ng-model="steps[2].facilities.room[key]">
                                         <p class="room_post_font_content">{{name(key)}}</p>

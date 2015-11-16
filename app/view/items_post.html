@@ -100,7 +100,7 @@
                         <p class="room_post_font_content">物品</p>
                     </div>
                     <div flex="75" layout="row" layout-align="start end">
-                        <input ng-model="item.steps[0].name"  name="items_name"  aria-label="price" style="width:250px;border-radius:4px;border:1px solid #D5D4D2"/>
+                        <input ng-model="item.steps[0].itemName"  name="items_name"  aria-label="price" style="width:250px;border-radius:4px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end" style="margin-top:10px">
@@ -135,15 +135,23 @@
                         <textarea rows="3" cols="70" style="border-radius:4px;color:#A19F9B;border-color:#D5D4D2" ng-model="item.steps[0].description"></textarea>
                     </div>
                 </div>
-                <div ng-hide="ready_upload_img[$index]" layout="row" class="room_post_div_content" layout-align="start end" ng-click="add_img($index)">
+                <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in item.steps[0].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic,$index)">删除</p></div>
+                </div>
+                <div ng-hide="ready_upload_img" layout="row" class="room_post_div_content" layout-align="start end" ng-click="add_img()">
                     <div  style="width:30px;height:30px;background-image:url(/app/view/img/icon/post_upload.png);background-size:cover;">
                     </div>
                     <div  layout="row" layout-align="start end" style="padding-left:20px">
                         <p class="room_post_font_content">上传图片</p>
                     </div>
                 </div>
-                <div ng-show="ready_upload_img[$index]" layout="column" flex>
-                    <div class="room_post_font_content">图片</div>
+                <div layout="row" class="room_post_div_content" layout-align="start end" ng-click="add_item()">
+                    <div  style="width:33px;height:33px;background-image:url(/app/view/img/icon/post_add.png);background-size:cover">
+                    </div>
+                    <div layout="row" layout-align="start end" style="padding-left:20px">
+                        <p class="room_post_font_content">添加物品</p>
+                    </div>
+                </div>
+                <div ng-show="ready_upload_img" layout="column" flex>
                     <div layout="row" layout-wrap>
                         <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in item.steps[0].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic,$index)">删除</p></div>
 
@@ -156,16 +164,7 @@
                         </div>
 
                         <div style="height:180;width:140px;" ngf-drop ngf-select ng-model="files" class="drop-box" ngf-keep="true" ngf-keep-distinct="true"
-                        ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true" accept="image/*"><br />拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片
-                        </div>
-                    </div>
-                </div>
-                </div>
-                <div layout="row" class="room_post_div_content" layout-align="start end" ng-click="add_item()">
-                    <div  style="width:33px;height:33px;background-image:url(/app/view/img/icon/post_add.png);background-size:cover">
-                    </div>
-                    <div layout="row" layout-align="start end" style="padding-left:20px">
-                        <p class="room_post_font_content">添加物品</p>
+                        ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true" accept="image/*"><br />拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片，可为每个物品选择一张图片</div>
                     </div>
                 </div>
             </div>

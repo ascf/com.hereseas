@@ -139,15 +139,15 @@
                         <p class="room_post_font_content">车型</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <select required ng-model="steps[0].basicInfo[0].model" name="model" style="border-radius:10px;width:80px;border:1px solid #D5D4D2">
-                            <option value="SUV">SUV</option>
-                            <option value="Sedan">Sedan</option>
-                            <option value="Coupe">Coupe</option>
-                            <option value="Convertible">Convertible</option>
-                            <option value="Hatchback">Hatchback</option>
-                            <option value="Minivan">Minivan</option>
-                            <option value="Wagon">Wagon</option>
-                        </select>   
+                        <md-select required ng-model="steps[0].basicInfo[0].model" name="model" class="cp_select">
+                            <md-option value="SUV">SUV</md-option>
+                            <md-option value="Sedan">四门轿车</md-option>
+                            <md-option value="Coupe">双门跑车</md-option>
+                            <md-option value="Convertible">敞篷车</md-option>
+                            <md-option value="Hatchback">两厢车</md-option>
+                            <md-option value="Minivan">小货车</md-option>
+                            <md-option value="Wagon">货车</md-option>
+                        </md-select>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
@@ -170,13 +170,15 @@
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
                         <input required ng-model="steps[0].basicInfo[0].totalMiles" name="totalMiles" aria-label="CarMiles" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2;margin-right:10px"/>
-                        <input value="miles" name="style" aria-label="CarStyle" style="border-radius:4px;width:40px;height:19px;border:1px solid #D5D4D2"/>
+                        miles
                     </div>
                     <div flex="15">
                         <p class="room_post_font_content">购买日期</p>
                     </div>
                     <div flex="30" layout="row" layout-align="start end">
-                        <input required ng-model="steps[0].basicInfo[0].boughtDate" type="date" name="boughtDate"  aria-label="CarBoughtDate" style="border-radius:10px;width:120px;height:19px;border:1px solid #D5D4D2"/>
+                        <md-input-container class="room_post_input">
+                          <input ng-model="steps[0].basicInfo[0].boughtDate" type="date" name="boughtDate"  aria-label="CarBoughtDate"/>
+                        </md-input-container>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
@@ -206,44 +208,52 @@
                     <p class="room_post_font_content">外观动力</p>
                 </div>
                 <div layout="row">
-                    <div flex="10" style="margin-top:15px;margin-left:50px;">
+                    <div style="margin-top:15px;margin-left:50px;width:78px;">
                         <p class="room_post_font_content">颜色</p>
                     </div>
                     <div class="room_post_div" style="margin-top:5px;">
                         <div layout="column" layout-wrap>                  
                                 <div layout-align="start center" layout="row">
-                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="white">
-                                        <p class="room_post_font_content">白色</p>
-                                    </input>
+                                    <input required name="carColor" type="radio" id="white" ng-model="steps[1].color" style="margin:15px" value="white">
+                                    <label for="white" class="room_post_font_content">
+                                        白色
+                                    </label>
+                                    <label layout-align="start center" layout="row">
                                     <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="silver">
                                         <p class="room_post_font_content">银色</p>
-                                    </input>
+                                    </label>
+                                    <label layout-align="start center" layout="row">
                                     <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="gray">
                                         <p class="room_post_font_content">灰色</p>
-                                    </input>
+                                    </label>
+                                    <label layout-align="start center" layout="row">
                                     <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="yellow">
                                         <p class="room_post_font_content">黄色</p>
-                                    </input>
+                                    </label>
                                 </div>
                                 <div layout-align="start center" layout="row">
-                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="green">
-                                        <p class="room_post_font_content">绿色</p>
-                                    </input>
-                                    <input required  name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="blue">
-                                        <p class="room_post_font_content">蓝色</p>
-                                    </input>
-                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="red">
-                                        <p class="room_post_font_content">红色</p>
-                                    </input>
-                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="black">
-                                        <p class="room_post_font_content">黑色</p>
-                                    </input>
+                                    <input required name="carColor" type="radio" id="green" ng-model="steps[1].color" style="margin:15px" value="green">
+                                    <label for="green" class="room_post_font_content">
+                                        绿色
+                                    </label>
+                                    <input required name="carColor" type="radio" id="blue" ng-model="steps[1].color" style="margin:15px" value="bluw">
+                                    <label for="blue" class="room_post_font_content">
+                                        蓝色
+                                    </label>
+                                    <input required name="carColor" type="radio" id="red" ng-model="steps[1].color" style="margin:15px" value="red">
+                                    <label for="red" class="room_post_font_content">
+                                        红色
+                                    </label>
+                                    <input required name="carColor" type="radio" id="black" ng-model="steps[1].color" style="margin:15px" value="black">
+                                    <label for="black" class="room_post_font_content">
+                                        黑色
+                                    </label>
                                 </div>                       
                         </div>
                     </div>
                 </div>
                 <div layout="row">
-                    <div flex="10" style="margin-top:15px;margin-left:50px;">
+                    <div style="margin-top:15px;margin-left:50px;width:78px;">
                         <p class="room_post_font_content">无事故</p>
                     </div>
                     <div class="room_post_div">
@@ -257,15 +267,18 @@
                     <div class="room_post_div" style="margin-top:5px;">
                         <div layout="row" layout-wrap>
                             <div layout-align="start center" layout="row">
-                                <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" value="FWD" style="margin:15px">
-                                    <p class="room_post_font_content">FWD</p>
-                                </input>
-                                <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" value="BWD" style="margin:15px">
-                                    <p class="room_post_font_content">BWD</p>
-                                </input>
-                                <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" value="AWD" style="margin:15px">
-                                    <p class="room_post_font_content">AWD</p>
-                                </input>
+                                <input required type="radio" ng-model="steps[1].driveSystem" id="fwd" name="carDriveSystem" value="FWD" style="margin:15px">
+                                <label for="fwd" class="room_post_font_content">
+                                    FWD
+                                </label>
+                                <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" id="BWD" value="BWD" style="margin:15px">
+                                <label for="BWD" class="room_post_font_content">
+                                    BWD
+                                </label>
+                                <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" id="AWD" value="AWD" style="margin:15px">
+                                <label for="AWD" class="room_post_font_content">
+                                    AWD
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -277,32 +290,32 @@
                     <div class="room_post_div" style="margin-top:5px;">
                         <div layout="row" layout-wrap>
                             <div layout-align="start center" layout="row">
-                                <input required type="radio" ng-model="steps[1].transSystem" name="carTransSystem" value="手动" style="margin:15px">
-                                    <p class="room_post_font_content">手动</p>
-                                </input>
-                                <input required type="radio" ng-model="steps[1].transSystem" name="carTransSystem" value="自动" style="margin:15px">
-                                    <p class="room_post_font_content">自动</p>
-                                </input>
+                                <input required type="radio" ng-model="steps[1].transSystem" name="carTransSystem" id="ma" value="手动" style="margin:15px">
+                                    <label for="ma" class="room_post_font_content">手动</label>
+                                <input required type="radio" ng-model="steps[1].transSystem" name="carTransSystem" id="auto" value="自动" style="margin:15px">
+                                    <label for="auto" class="room_post_font_content">自动</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div layout="row">
-                    <div flex="10" style="margin-top:15px;margin-left:50px;margin-bottom:20px">
+                    <div class="room_post_div" style="margin-top:10px;margin-left:50px;margin-bottom:20px;width:78px;">
                         <p class="room_post_font_content">排量</p>
                     </div>
-                    <div class="room_post_div">
-                        <div layout="row" style="margin-top:12px;padding-top:6px">
-                            <select name="car_output" style="border-radius:10px;width:100px;height:19px" ng-model="steps[1].output" required class="rp_select">
-                                <option value="1.5">1.5</option>
-                                <option value="1.8">1.8</option>
-                                <option value="2.0">2.0</option>
-                                <option value="2.5">2.5</option>
-                                <option value="3.0">3.0</option>
-                                <option value="3.5">3.5</option>
-                            </select>
-                            <div style="padding-left:10px;padding-top:10px">
-                            L
+                    <div class="room_post_div" layout-align="start end">
+                        <div layout="row" layout-align="start end">
+                            <div style="margin-left:17px;">
+                                <md-select name="car_output" ng-model="steps[1].output" required class="rp_select">
+                                    <md-option value="1.5">1.5</md-option>
+                                    <md-option value="1.8">1.8</md-option>
+                                    <md-option value="2.0">2.0</md-option>
+                                    <md-option value="2.5">2.5</md-option>
+                                    <md-option value="3.0">3.0</md-option>
+                                    <md-option value="3.5">3.5</md-option>
+                                </md-select>
+                            </div>
+                            <div>
+                                <p class="room_post_font_content">L</p>
                             </div>
                         </div>
                     </div>
@@ -321,11 +334,11 @@
                         <p class="room_post_font_content">刹车与转向</p>
                     </div>
                     <div class="room_post_div" layout="row">
-                        <div layout="row" ng-repeat="(key,value) in steps[2].breakType">
+                        <label layout="row" ng-repeat="(key,value) in steps[2].breakType">
                             <input type="checkbox" ng-model="steps[2].breakType[key]"  style="margin-top:20px;margin-left:14px;margin-bottom:20px">
                                 <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">{{name(key)}}</p>
                             </input>
-                        </div>
+                        </label>
                     <!--
                         <input type="checkbox" ng-model="steps[2].breakType.ABS" style="margin-top:20px;margin-left:14px;margin-bottom:20px">
                             <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">ABS</p>
@@ -340,11 +353,10 @@
                         <p class="room_post_font_content">安全</p>
                     </div>
                     <div class="room_post_div" layout="row">
-                        <div layout="row" ng-repeat="(key,value) in steps[2].security">
-                            <input type="checkbox" ng-model="steps[2].security[key]"  style="margin-top:20px;margin-left:14px;margin-bottom:20px">
+                            <label layout="row" ng-repeat="(key,value) in steps[2].security">
+                                <input type="checkbox" ng-model="steps[2].security[key]"  style="margin-top:20px;margin-left:14px;margin-bottom:20px">
                                 <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">{{name(key)}}</p>
-                            </input>
-                        </div>
+                            </label>
                      <!--
                         <input type="checkbox" ng-model="steps[2].security.double_airbag" style="margin-top:20px;margin-left:14px;margin-bottom:20px">
                             <p class="room_post_font_content" style="margin-top:16px;margin-left:5px;">双安全气囊</p>
@@ -363,11 +375,10 @@
                     </div>
                     <div class="room_post_div" layout="row">
                         <div layout="row" layout-wrap style="margin-top:20px;margin-left:14px;margin-bottom:20px">
-                            <div flex="30" ng-repeat="(key,value) in steps[2].comfort" layout="row">
+                            <label flex="30" ng-repeat="(key,value) in steps[2].comfort" layout="row">
                                 <input type="checkbox" ng-model="steps[2].comfort[key]" style="margin-bottom:20px">
                                     <p class="room_post_font_content" style="margin-left:5px;">{{name(key)}}</p>
-                                </input>
-                            </div>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -482,7 +493,7 @@
                 </div>
             </div>
         </div>
-        <div class="room_post_div_content stepButton"layout="row" layout-align="end" id="post_ft">
+        <div class="room_post_div_content stepButton" layout="row" layout-align="end" id="post_ft">
             <div ng-show="activePage >= 2" ng-click="lastPage()" class="rp_last_btn">
                 上一步
             </div>

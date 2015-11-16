@@ -18,12 +18,6 @@
                         {{!brokenLink && !activated && !activating?'Something happened, failed to activate your account!':''}}
                         more info:{{errInfo}}
                     </a></p>
-                    <div class="activate-your-account-buttons" ng-if="!brokenLink&&activated&&!activating">
-                        <button type="submit" class="btn btn-primary" ui-sref="user.home">Sign In</button>
-                    </div>
-                    <div class="activate-your-account-buttons" ng-if="brokenLink||!activated||activating">
-                        <button type="submit" class="btn btn-primary" ui-sref="login">Sign In</button>
-                    </div>
                 </div>      
         </div>
     </div>

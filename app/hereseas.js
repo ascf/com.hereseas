@@ -99,6 +99,21 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
             },
     });
     
+    $stateProvider.state('forum', {
+        url: '/forum/:schoolId/',
+        templateUrl: '/app/view/forum.html',
+        controller: 'ForumController',
+        
+    });
+    
+    $stateProvider.state('article', {
+        url: '/forum/article/:id',
+        templateUrl: '/app/view/article.html',
+        controller: 'ArticleController',
+        
+    });
+    
+    
     $stateProvider.state('allApts', {
         url: '/apts/:schoolId',
         templateUrl: '/app/view/all_apts.html',
@@ -165,12 +180,17 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
         controller: 'ResetController'
     });
 
-    $stateProvider.state('beforereset', {
-        url: '/beforereset',
-        templateUrl: '/app/view/beforereset.html',
-        controller: 'BeforeResetController'
-    });
-
+    $stateProvider.state('admin', {
+        url: '/admin/userinfo',
+        templateUrl: '/app/view/admin_userinfo.html',
+        controller: 'AdminController'
+    }); 
+    
+    $stateProvider.state('othersProfile', {
+        url: '/othersProfile/:othersId',
+        templateUrl: '/app/view/othersProfile.html',
+        controller: 'OthersProfileController'
+    });  
     /*$stateProvider.state('roompost', {
         url: '/roompost',
         templateUrl: '/app/view/room_post.html',

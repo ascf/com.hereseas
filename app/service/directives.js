@@ -78,8 +78,9 @@ hereseasApp.directive('topBar', function(){
             if(id==0) $state.go('school', { schoolId:$stateParams.schoolId });
             if(id==1) $state.go('allApts', { schoolId:$stateParams.schoolId });
             if(id==2) $state.go('allCars', { schoolId:$stateParams.schoolId });
-            if(id==3) $state.go('allGoods', { schoolId:$stateParams.schoolId });
+            if(id==3) $state.go('allItems', { schoolId:$stateParams.schoolId });
             if(id==4) $state.go('allActivs', { schoolId:$stateParams.schoolId });
+            if(id==6) $state.go('forum', { schoolId:$stateParams.schoolId });
         };
         
 
@@ -248,7 +249,7 @@ hereseasApp.directive('affixme', function() {
         $(elem[0]).affix({
               offset: {
                 top:80,
-                bottom: 870//leftBarHeight-rightBarHeight
+                bottom: 741//leftBarHeight-rightBarHeight
               }
             }); 
     }

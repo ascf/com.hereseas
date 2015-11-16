@@ -65,22 +65,43 @@
                 <span style="margin-left:40px;margin-top:20px;">学校信息</span>
                 <div class="div-vertical-center" layout="row" style="margin-left:160px;margin-top:30px;">
                     <span>学校名称</span>
-                    <input ng-model='schoolName' class='form-control text-left' type='text' style='width:540px;margin-left:5px;' />
+                    <md-select ng-model="basicInfo.schoolId" style="width:400px;margin-left:15px;">
+                        <md-option value="{{id}}" ng-repeat="id in schoolIds">
+                            {{schoolNames[$index]}}
+                        </md-option>
+                        <!--option value="56147f7aef6d2a2806532536">
+                            The George Washington University
+                        </option>
+                        <option value="56147fc8ef6d2a2806532537">
+                            Johns Hopkins University
+                        </option>
+                        <option value="56147fd4ef6d2a2806532538">
+                            Georgetown University
+                        </option-->
+                    </md-select>
+                    <!--<input ng-model='schoolName' class='form-control text-left' type='text' style='width:400px;margin-left:15px;' />-->
                 </div>
                 
                 <div class="div-vertical-center" layout="row" style="margin-left:160px;margin-top:20px;" >
-                    <span>入学年份&nbsp;</span>
-                    <md-select placeholder="" ng-model="basicInfo.enrollYear" required class="rp_select" aria-label="enrollyear">
-                        <md-option value ="2014">2014</md-option>
-                        <md-option value ="2015">2015</md-option>
-                        <md-option value="2016">2016</md-option>
-                        <md-option value="2017">2017</md-option>
-                    </md-select>
-                    <input type="radio" id="fall" name="group1" style="margin-left:85px;" value="Fall" ng-model="basicInfo.enrollSeason" clickme aria-label="seasonfall"/> 
-                    <label for="fall" style="margin-left:10px;vertical-align:middle;">秋季入学（8月）</label>
-                    
-                    <input type="radio" id="spring" name="group1" style="margin-left:50px;" value="Spring" ng-model="basicInfo.enrollSeason" clickme aria-label="seasonspring"/>
-                    <label for="spring" style="margin-left:10px;vertical-align:middle;">春季入学（2月）</label>
+                    <div layout="row" layout-align="start end">
+                        <div>
+                            <p class="room_post_font_content" style="margin-bottom:3px;">入学年份</p>
+                        </div>
+                        <div style="margin-left:10px;">
+                            <md-select placeholder="" ng-model="basicInfo.enrollYear" required class="rp_select" aria-label="enrollyear">
+                                <md-option value ="2014">2014</md-option>
+                                <md-option value ="2015">2015</md-option>
+                                <md-option value="2016">2016</md-option>
+                                <md-option value="2017">2017</md-option>
+                            </md-select>
+                        </div>
+                    </div>
+                    <div layout-align="start center" layout="row">
+                        <input type="radio" id="fall" name="group1" style="margin-left:85px;" value="Fall" ng-model="basicInfo.enrollSeason" clickme aria-label="seasonfall"/> 
+                        <label for="fall" style="margin-left:10px;margin-bottom:0px;">秋季入学（8月）</label>
+                        <input type="radio" id="spring" name="group1" style="margin-left:50px;" value="Spring" ng-model="basicInfo.enrollSeason" clickme aria-label="seasonspring"/>
+                        <label for="spring" style="margin-left:10px;margin-bottom:0px;">春季入学（2月）</label>
+                    </div>
                 </div>
                 <div layout="row" style="margin-left:160px;margin-top:20px;height:30px;line-height:30px;">
                     修改Edu邮箱
@@ -144,7 +165,7 @@
                         <span class="half_price">{{apt.price.minPrice}}-{{apt.price.maxPrice}}</span>
                         <img class="half_user_pic" ng-src="{{apt.userAvatar}}">
                     </a>
-                    <div class="half_type" layout="row"><p ng-repeat="type in apt.type">&nbsp;&nbsp;{{type}}</p></div>
+                    <div class="half_type" layout="row"><p ng-repeat="type in apt.type">{{type}}&nbsp;&nbsp;</p></div>
                 </li>
             </div>
             </div>
@@ -189,13 +210,15 @@
         
         <div layout="column" >
             <span style="margin-left:40px;">消息</span>
-            <div layout="row" style="margin-left:40px;height:80px;" ng-repeat="message in messages">
+            <div layout="row" style="margin-left:40px;" ng-repeat="message in messages">
                 <div layout="column">
-                    <div ng-style="{'background-image':'url(/app/view/img/profile/default_avatar_small.png)'}" style="height:60px;width:60px;background-size:100% 100%;">
+                    <div ng-style="{'background-image':'url(/app/view/img/profile/default_avatar_small.png)'}" style="height:60px;width:60px;background-size:cover;">
                         <div style="height:22px;width:22px;background-size:100% 100%;background-image:url(/app/view/img/profile/msg2.png);margin-left:38px;margin-top:0;
                                     color:white;text-align:center;line-height:22px;" ng-show="message.num!==0">{{message.num}}</div>
                     </div>
-                    <span>2015-08-21</span>
+                    <div>
+                        2015-08-21
+                    </div>
                 </div>
                 <div layout="column" style="margin-left:40px;width:180px;overflow:hidden;">
                     <span style="margin-top:10px;">{{message.user}}</span>
@@ -282,7 +305,7 @@
             </div>
             <div style="margin-top:15px;margin-left:40px;height:45px;line-height:45px;width:95px;background:#F08C6A;text-align:center;color:white;">$price</div>
             <span style="margin-left:40px;">state</span>
-            <span style="margin-left:40px;" ng-click="editPost($event, apt._id, 1)">编辑</span>
+            <span style="margin-left:40px;" ng-click="editAptPost($event, apt._id, 1)">编辑</span>
             <img src="/app/view/img/profile/line2.png" style="height:38px;margin-left:40px;margin-top:19px;"/>
             <img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;margin-left:30px;margin-top:25px;" ng-click="deleteApt($index, apt._id, 1)"/>
         </div>
@@ -317,7 +340,7 @@
                 <span>{{apt.createAt | date}} </span>
             </div>
             
-            <span style="margin-left:40px;" ng-click="editPost($event, apt._id, 2)">编辑</span>
+            <span style="margin-left:40px;" ng-click="editAptPost($event, apt._id, 2)">编辑</span>
             <img src="/app/view/img/profile/line2.png" style="height:38px;margin-left:40px;margin-top:19px;"/>
             <img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;margin-left:30px;margin-top:25px;" ng-click="deleteApt($index, apt._id, 2)"/>
         </div>

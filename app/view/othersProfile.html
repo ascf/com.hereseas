@@ -1,0 +1,89 @@
+<div style="background-color:rgb(248,248,249);min-width:1000px">
+    <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div top-bar></div>
+    
+    <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
+        <div layout="row">
+            <div flex=75>
+                <div layout="row">
+                    <div style="padding-left:25px;padding-right:25px;"><img class="img-circle" style="width:120px;height:120px;" ng-src="{{othersInfo.avatar}}"></img></div>
+                    <div style="width:180px;padding-left:15px;padding-right:5px;">
+                        <p><b><h4>{{othersInfo.username}}</h4></b></p>
+                        <p><h4>{{schoolName}}</h4></p>
+                    </div>
+                    <div><div style="margin-top:85px;width:140px;" ng-click="pageReturn()" layout="row">
+                        <div><img style="width:24;height:24;" src="/app/view/img/icon/othersInfo_return.png"></img></div>
+                        <div style="padding-left:5px;padding-bottom:5px;"><h4 style="margin-top:5px;margin-bottom:5px;">返回校友列表</h4></div></div>
+                    </div>
+                    <div layout="row">
+                        <div class="img-circle" style="width:80px;height:80px;background-color:#3CB49E;margin-top:20px;margin-left:25px;padding-top:25px;padding-left:20px;color:#ffffff;"><h4>关注</h4></div>
+                        <div class="img-circle" style="width:80px;height:80px;background-color:#F08C6A;margin-top:20px;margin-left:25px;padding-top:25px;padding-left:20px;color:#ffffff;"><h4>联系</h4></div>
+                    </div>
+                </div>
+                <div layout="column" style="padding-top:20px;">
+                    <div layout="row">
+                        <div><h4><b>正在出售</b></h4></div>
+                        <div ng-show="hasSelling" style="margin-left:8px;margin-top:8px;padding-left:4px;padding-top:1px;width:15px;height:15px;line-height:15px;background-image:url(/app/view/img/profile/topost.png);background-size:100% 100%;color:#EA5743;">{{onSelling.length}}</div>
+                    </div>
+                    <div>
+                        <div ng-hide="hasSelling"><h4>&gt;_&lt;该用户还没有任何发布</h4></div>
+                        <div ng-repeat="each in onSelling" style="padding:15px;float:left" ng-click="goToEach($index)">
+                            
+                                <div style="background-size:cover;width:160px;height:120px;margin-top:-10px;margin-left:-10px;"  ng-style="{'background-image':'url('+each.content.cover+')'}"></div>
+                                <div style="width:150px"><h5>{{each.content.title}}</h5></div>
+                            
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div flex=25 layout="column">
+                <div style="padding-bottom:10px"><h4><b>相关活动</b></h4></div>
+                <div style="padding:0 5 12 5;margin-bottom:15px;border:2px solid #9c9f9f">
+                    <div style="border-bottom:1px solid #9c9f9f;height:35px;">
+                        <div style="float:left;"><h4>标题</h4></div>
+                        <div style="float:right;padding-top:5px;"><img style="height:15px;width:15px;margin-left:10px;"  src="/app/view/img/profile/favorite1.png"/></div>
+                    </div>
+                    <div style="border-bottom:1px solid #9c9f9f;height:35px;padding-top:5px;">
+                        <h4>321人参与</h4>
+                    </div>
+                </div>
+                <div style="padding:0 5 12 5;margin-bottom:15px;border:2px solid #9c9f9f">
+                    <div style="border-bottom:1px solid #9c9f9f;height:35px;">
+                        <div style="float:left;"><h4>标题</h4></div>
+                        <div style="float:right;padding-top:5px;"><img style="height:15px;width:15px;margin-left:10px;"  src="/app/view/img/profile/favorite1.png"/></div>
+                    </div>
+                    <div style="border-bottom:1px solid #9c9f9f;height:35px;padding-top:5px;">
+                        <h4>321人参与</h4>
+                    </div>
+                </div>
+                <div style="padding:0 5 12 5;margin-bottom:15px;border:2px solid #9c9f9f">
+                    <div style="border-bottom:1px solid #9c9f9f;height:35px;">
+                        <div style="float:left;"><h4>标题</h4></div>
+                        <div style="float:right;padding-top:5px;"><img style="height:15px;width:15px;margin-left:10px;"  src="/app/view/img/profile/favorite1.png"/></div>
+                    </div>
+                    <div style="border-bottom:1px solid #9c9f9f;height:35px;padding-top:5px;">
+                        <h4>321人参与</h4>
+                    </div>
+                </div>
+                <div style="padding:0 5 12 5;border:2px solid #9c9f9f">
+                    <div style="border-bottom:1px solid #9c9f9f;height:35px;">
+                        <div style="float:left;"><h4>标题</h4></div>
+                        <div style="float:right;padding-top:5px;"><img style="height:15px;width:15px;margin-left:10px;"  src="/app/view/img/profile/favorite1.png"/></div>
+                    </div>
+                    <div style="border-bottom:1px solid #9c9f9f;height:35px;padding-top:5px;">
+                        <h4>321人参与</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<div footer></div>
+</div>
+<style>
+    h4{
+        margin-top:5px;
+        margin-bottom:5px;
+    }
+</style>
+

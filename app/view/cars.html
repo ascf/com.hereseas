@@ -25,14 +25,14 @@
                         </div>
                     <!--画线-->
                     <div >
-                        <hr style="margin:5px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                        <hr style="margin:0px 5px 0px 5px;border:0;border-top:1px solid #333333;">
                     </div>
                     <!--车辆信息-->
                     <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
                         <div flex="33">
                             <h3 class="hs_subtitle"><b>车辆信息</b></h3>
                         </div>
-                        <div flex="66" style="margin-top:15px;" layout="column" layout-wrap>
+                        <div flex="66" style="margin-top:21px;" layout="column" layout-wrap>
                             <div layout="row">
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
@@ -46,45 +46,45 @@
                                 </div>
                              </div>
                             <div layout="row">
-                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
                                          制造商：{{data.basicInfo[0].make}}
                                     </div>
                                 </div>
-                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
                                          车系：{{data.basicInfo[0].model}}
                                     </div>
                                 </div>
                              </div>
                             <div layout="row">
-                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
                                          里程：{{data.basicInfo[0].totalMiles}}
                                     </div>
                                 </div>
-                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
                                          购买日期：{{data.basicInfo[0].boughtDate | date:"yyyy-MM-dd"}}
                                     </div>
                                 </div>
                              </div>
                             <div layout="row">
-                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
                                          具体型号：{{data.basicInfo[0].style}}
                                     </div>
                                 </div>
-                                <div flex="50" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         价格：{{data.basicInfo[0].price}}
+                                         价格：{{data.basicInfo[0].price}} $
                                     </div>
                                 </div>
                              </div>
                         </div>
                     </div>
                     <div >
-                        <hr style="margin:5px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                        <hr style="margin:0px 5px 0px 5px;border:0;border-top:1px solid #333333;">
                     </div>
                     <!--外观动力-->
                     <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
@@ -95,7 +95,7 @@
                             <div layout="row">
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                        <div style="padding-top:10px;">颜色：</div><img ng-style="{'background-color':'{{data.color}}'}" style="width:45px;height:45px;" class="img-circle"></img>
+                                        <div style="padding-top:10px;">颜色：{{data.color}}</div>
                                     </div>
                                 </div>
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
@@ -126,63 +126,64 @@
                              </div>
                         </div>
                     </div>
-                        <!--画线-->
-                        <div >
-                            <hr style="margin:5px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                    <!--画线-->
+                    <div >
+                        <hr style="margin:0px 5px 0px 5px;border:0;border-top:1px solid #333333;">
+                    </div>
+                    <!--配置参数-->
+                    <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
+                        <div flex="33">
+                            <h3 class="hs_subtitle"><b>配置参数</b></h3>
                         </div>
-                        <!--配置参数-->
-                        <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
-                            <div flex="33">
-                                <h3 class="hs_subtitle"><b>配置参数</b></h3>
-                            </div>
-                            <div flex="66" style="margin-top:15px;" layout="row" layout-wrap>
-                                <div flex="50" ng-show="value" ng-repeat="(key,value) in data.breakType" style="margin-bottom:10px;height:40px;padding-top:10px;padding-left:5px">
-                                    <div layout="row" style="margin-bottom:10px;height:40px;">
-                                        <div>{{key}}</div>
-                                    </div>
-                                </div>
-                                <div flex="50" ng-show="value" ng-repeat="(key,value) in data.security" style="margin-bottom:10px;height:40px;padding-top:10px;padding-left:5px">
-                                    <div layout="row" style="margin-bottom:10px;height:40px;">
-                                        <div>{{name(key)}}</div>
-                                    </div>
-                                </div>
-                                <div flex="50" ng-show="value" ng-repeat="(key,value) in data.comfort" style="margin-bottom:10px;height:40px;padding-top:10px;padding-left:5px">
-                                    <div layout="row" style="margin-bottom:10px;height:40px;">
-                                        <div>{{name(key)}}</div>
-                                    </div>
+                        <div flex="66" style="margin-top:15px;" layout="row" layout-wrap>
+                            <div flex="50" ng-show="value" ng-repeat="(key,value) in data.breakType" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div layout="row" style="margin-bottom:10px;height:40px;">
+                                    <div>{{key}}</div>
                                 </div>
                             </div>
-                        </div>
-                        <!--画线-->
-                        <div >
-                            <hr style="margin:5px 5px 0px 5px; border:0;border-top:1px solid #333333;">
-                        </div>
-                        <!--信息描述-->
-                        <div class="md-padding" style="padding-top:0px;padding-bottom:5px;"  layout="row">
-                            <div flex="33">
-                                <h3 class="hs_subtitle"><b>信息描述</b></h3>
+                            <div flex="50" ng-show="value" ng-repeat="(key,value) in data.security" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div layout="row" style="margin-bottom:10px;height:40px;">
+                                    <div>{{name(key)}}</div>
+                                </div>
                             </div>
-                            <div flex="66" style="margin-top:21px;" >
-                                <p>{{data.description}}</p>
-                            </div>
-                        </div>       
-                        <!--图片信息-->
-                        <div class="md-padding" layout="column"> 
-                            <div ng-show="!(data.images.length ==2)">    
-                                <div  ng-click="showImgs($event, data.images, 0)"  style="height:250px;width:580px; margin-bottom:10px; background-size:cover; " ng-style="{'background-image':'url('+data.images[0]+')'} "></div> 
-                            </div>
-                            <div ng-show="!(data.images.length ==1)" layout="row">
-                                <div  ng-click="showImgs($event, data.images, 1)" style="height:165px;width:285px; margin-right:10px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
-                                <div  ng-click="showImgs($event, data.images, 1)" style="height:165px;width:285px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
+                            <div flex="50" ng-show="value" ng-repeat="(key,value) in data.comfort" style="margin-bottom:10px;height:40px;padding-top:10px;">
+                                <div layout="row" style="margin-bottom:10px;height:40px;">
+                                    <div>{{name(key)}}</div>
+                                </div>
                             </div>
                         </div>
-
+                    </div>
+                    <!--画线-->
+                    <div>
+                        <hr style="margin:0px 5px 0px 5px; border:0;border-top:1px solid #333333;">
+                    </div>
+                    <!--信息描述-->
+                    <div class="md-padding" style="padding-top:0px;padding-bottom:5px;" layout="row">
+                        <div flex="33">
+                            <h3 class="hs_subtitle"><b>信息描述</b></h3>
                         </div>
+                        <div flex="66" style="margin-top:21px;" >
+                            <p>{{data.description}}</p>
+                        </div>
+                    </div>       
+                    <!--图片信息-->
+                   <!-- <div class="md-padding" layout="column"> 
+                        <div ng-show="!(data.images.length ==2)">    
+                            <div  ng-click="showImgs($event, data.images, 0)"  style="height:250px;width:580px; margin-bottom:10px; background-size:cover; " ng-style="{'background-image':'url('+data.images[0]+')'} "></div> 
+                        </div>
+                        <div ng-show="!(data.images.length ==1)" layout="row">
+                            <div  ng-click="showImgs($event, data.images, 1)" style="height:165px;width:285px; margin-right:10px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
+                            <div  ng-click="showImgs($event, data.images, 1)" style="height:165px;width:285px;background-size:cover; " ng-style="{'background-image':'url('+data.images[1]+')'} "></div>
+                        </div>
+                    </div>-->
+                    <ng-gallery images="images" thumbs-num="{{images.length}}">
+                    </ng-gallery>
+                </div>
             </div>
             <!--滚动条-->
             <div flex="30">
             <!--车辆信息以及买卖-->         
-                <div  layout="column" affixme id="rightBar">
+                <div layout="column" affixme id="rightBar">
                     <div layout="column" >
                         <div>
                             <h3 class="text-center hs_subtitle" style="font-weight:bold;margin:0 0 0 0; padding:0 0 10 0;">{{data.title}}</h3>

@@ -2,18 +2,23 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
     
     var cur_page = 1;
     var max_page = 1;
+
+    $scope.min_price = 2000;
+    $scope.max_price = 40000;
     
-    $scope.carPrice = "all";
-    $scope.carStyle = "all";
-    $scope.carMileAge = "all";
-    $scope.carYear = "all";
+    $("#price-slider").on("slideStop", function(slideEvt) {
+        console.log(slideEvt);
+        $scope.selectData.startPrice = slideEvt.value[0];
+        $scope.selectData.endPrice = slideEvt.value[1];
+        updatePage();
+    });
     
     $scope.selectData = {
         schoolId : $stateParams.schoolId, 
 //        page : cur_page, 
 //        pageSize : 3,
 //        price:'',
-//        style:'',
+        style:'all',
 //        year: '',
 //        miles: '',
     };
@@ -139,6 +144,11 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
         });
     };
     updatePage();
+    
+    $scope.setStyle = function(style){
+        $scope.selectData.style = style;
+        updatePage();
+    };
 
 });
 
@@ -750,7 +760,7 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                     $scope.tableFilled[1].filled = true; 
                 }
                 
-                if($scope.steps[3].title != '' && $scope.steps[4].description != ''){
+                if($scope.steps[3].title != '' && $scope.steps[3].description != ''){
                     $scope.tableFilled[3].filled = true;
                 }else{
                     $scope.tableFilled[3].filled = false;

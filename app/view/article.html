@@ -1,0 +1,88 @@
+<div style="background-color:rgb(248,248,249);" style="min-width:1000px;">
+    <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div layout="row">
+        <div class="container" style="width:1000px;" layout="row">          
+            <!--items left-->
+            <div flex=70 layout="column" style="padding-right:20px">
+                <div>
+                    <div style="height:30px;">
+                        <div style="float:left;"><h3>题目:{{thread.title}}</h3></div>
+                         <!--<div style="float:right;"><h3>10篇文章</h3></div>-->
+                    </div>
+                    <div style="height:280px;background-size:cover;border:1px solid #6A6966">
+                        <p>{{thread.username}}&nbsp;&nbsp;{{thread.createAt}}</p>
+                        <p>{{thread.content}}</p>
+                    </div>
+                </div>
+                <div style="margin-top:20px;margin-bottom:20px;padding-left:3px;padding-right:3px;">
+                    <div style="float:left">
+                        <h3>69人收藏</h3>                        
+                    </div>
+                    <div layout="row" style="float:right;">
+                        
+                        <div style="background:url(/app/view/img/items/star.png);background-size:cover;width:48px;height:46px;margin-right:15px"></div>
+                        <div style="background:url(/app/view/img/items/circle.png);background-size:cover;width:48px;height:47px;margin-right:5px"></div>
+                    </div>
+                </div>
+                
+                
+                <div style="padding-left:3px;margin-bottom:50px;">
+                    <div layout="row">
+                        <div style="padding-left:50px;padding-right:50px;"><h4>发布留言</h4></div>
+                        <div><textarea ng-model="content" rows="2" cols="55" style="border-radius:4px"></textarea></div>
+                        <div ng-click="postComment()" style="margin-left:10px;padding-left:10px;padding-top:10px;width:42px;height:42px;border-radius:4px;color:#ffffff;background-color:#3CB49E"><h4 style="color:#ffffff">go</h4></div>
+                    </div>
+                    <div  id="comments_panel" style="overflow-y:scroll;height:250px;margin-top:20px;">
+                        <div ng-repeat="comment in threadComments" style="margin-bottom:10px;padding:10px;" layout="row">
+                            <div style="height:100px;margin-right:20px;padding-left:50px;padding-right:30px;"><img class="img-circle" ng-src="{{comment.userAvatar}}"></div>
+                            <div>
+                                <p><u>姓名:{{comment.username}}&nbsp;&nbsp;时间:{{comment.createAt}}&nbsp;&nbsp;
+                                <img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;margin-bottom:15px;" ng-click=""/>&nbsp;&nbsp;
+                                    回复</u></p>
+                                <p><u>{{comment.content}}</u></p>
+                            </div>
+                        </div>                   
+                    </div>
+                </div>
+            </div>
+        
+            <!--items right-->
+            <div flex=26 layout="column">
+                <div layout="row">
+                    <div flex= 25>
+                        <img style="height:50px;width:50px;" class="img-circle" ng-src="{{item.userAvatar}}"/>
+                    </div>
+                    <div flex= 20>
+                        <h5>{{item.username}}</h5>
+                    </div>
+                    <div flex= 55>
+                        <h5>{{schoolName}}</h5>
+                    </div>
+                </div>
+                <div class="center-block">
+                    参与者<span style="margin-left:5px;width:15px;height:15px;line-height:15px;background-image:url(/app/view/img/profile/posted.png);background-size:100% 100%;color:#62B5DB;">12</span>
+                </div>
+                <div style="width:310px;height:350px;">
+                    <div ng-repeat="otherItem in otherItems" style="padding:1px;float:left" ng-click="goToEach($index)">
+                        <div ng-style="{'background-image':'url('+otherItem.content.cover+')'}" style="width:75px;height:100px;background-size:cover;margin-top:-1px;margin-left:-1px;"></div>
+                    </div>
+                </div>
+                <div style="padding:10px;border:1px solid #6A6966;height:210px;width:300px;">
+                    <h4>详情</h4>        
+                </div>
+            </div>
+        </div>
+    </div>
+    <div footer></div>
+</div>
+<style>
+    h3{
+        color:#6A6966;
+        margin-top:0px;
+    }
+    h4{
+        color:#6A6966;
+        margin-top:0px;margin-bottom:0px;
+    }
+</style>
+        

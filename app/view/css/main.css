@@ -24,6 +24,33 @@
     right:0;
 }
 
+.top_bar{
+    padding-left:6%;
+    padding-right:7px;
+    padding-top:30px;
+}
+
+a.school{
+    z-index: 1;
+    padding-bottom: 100%;
+    display: block;
+    background-size: cover; 
+    position: relative;
+    height:344px;
+    width:314px;
+}
+.school_name{
+    color: #ffffff;
+    text-align: center;
+    font-size: 32px;
+    position: absolute;
+    bottom: 45%;
+    left: 0%;
+    right: 0%;
+}
+/* search bar*/
+
+/* end of search bar*/
 /*--begin of home page--*/
 .nav-li{
     font-size: 20px;    
@@ -116,13 +143,22 @@ a.half_pic{
     border: 2px solid #dddddd;
 }
 .half_type{
-    margin-left: 140px;
     margin-top:auto;
     margin-bottom:0;
+    float:right;
 }
 /*--end of 2.5 & favorite--*/
 
 /*--begin of login singup--*/
+.overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.4;
+}
 .login_err{
     background-color: #f2dede;
     padding: 10px;
@@ -134,7 +170,7 @@ a.half_pic{
 
 .sign_form_row{
     width: 90%;
-    margin: 15px 50px 5px 15px;
+    margin: 15px 50px 5px 21px;
     border-radius:3px;
 }
 .accountForm{
@@ -217,7 +253,7 @@ a, h4{
 
 .rp_next_btn{
     background-image:url(/app/view/img/icon/post_next.png);
-    background-size:cover;
+    background-size:100% 100%;
     width:53px;
     height:53px;
     padding-top:16px;
@@ -241,7 +277,7 @@ a, h4{
 
 .rp_last_btn{
     background-image:url(/app/view/img/icon/post_previous.png);
-    background-size:cover;
+    background-size:100% 100%;
     width:53px;
     height:53px;
     padding-top:16px;
@@ -253,7 +289,7 @@ a, h4{
 
 .rp_cancel_btn{
     background-image:url(/app/view/img/icon/post_cancel.png);
-    background-size:cover;
+    background-size:100% 100%;
     width:53px;
     height:53px;
     padding-top:16px;
@@ -479,9 +515,16 @@ a, h4{
     padding-left:20px;
 }
 
+div .three{
+    height:230.6px;
+    width:293.6px;
+    background-repeat:no-repeat;
+    background-size:cover;
+    margin: 0px 14.5px 0px 14.5px;
+}
+
 .img-three{
-    height: 240px; 
-    width: 350px;
+
 }
 
 .img-two{
@@ -494,7 +537,9 @@ a, h4{
     width: 600px;
 }
 
-
+.md-dialog-container{
+    background-color: rgba(0,0,0,0.6);
+}
 
 md-sidenav.md-locked-open{
     width: 200px;
@@ -553,7 +598,11 @@ md-select{
 }
 
 
-
+<!--car post-->
+.cp_select{
+    90px;
+}
+<!--end of car post-->
 <!--自建CSS-->
 .nav_icon{
     padding-top: 8px;
@@ -603,6 +652,7 @@ md-select{
     font-size: 16px;
     margin: 0px;
     color:black;
+    font-weight: normal;
 }
 .room_post_font_content.err{
     color: red;
@@ -745,9 +795,10 @@ input[type=checkbox]:checked{
     background-size: 100% 100%;
     border:0;
     margin-top: 2px;
-
 }
-
+input[type=checkbox]:focus{
+    outline: none;
+}
 .form-control .text-left{
     text-align:left;
 }
@@ -857,3 +908,4 @@ margin-left:45px;width:150px;height:50px;
     overflow: hidden;
 }
 <!--end of profile css-->
+

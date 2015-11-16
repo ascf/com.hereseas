@@ -123,9 +123,6 @@ module.exports = function(app) {
 
 
     /*  admin */
-    app.get('/admin/apartments', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentId);
-    app.get('/admin/apartment/:id', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentAllInfo);
-    app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
     app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
     app.get('/admin/schools', sign.ensureAuthenticated, schoolRoute.adminGetSchoolInfoList);
     app.get('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminGetSchoolAllInfo);
@@ -141,6 +138,10 @@ module.exports = function(app) {
     app.post('/admin/favorite/update', sign.ensureAuthenticated, adminRoute.updateFavorite);
     app.get('/admin/db/show', sign.ensureAuthenticated, adminRoute.showCollections);
     app.post('/admin/update', adminRoute.updateFavorite);
+    app.get('/admin/apartments', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentId);
+    app.get('/admin/apartment/:id', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentAllInfo);
+    app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
+    app.get('/admin/cars', sign.ensureAuthenticated, carRoute.adminGetCars);
 
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
 

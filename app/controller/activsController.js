@@ -112,10 +112,14 @@ hereseasApp.controller('ActivsPostController', function ($state, $scope, roomSer
         $scope.activePage = page;
     };
     
+    $scope.cancel = function(){
+        $mdDialog.hide();
+    };
 });
 
 hereseasApp.controller('ActivsDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,$mdDialog) {
     console.log($stateParams.activId);
+    
     // display single old stuff
     function activSetMap(){
         // initial map

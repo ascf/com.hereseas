@@ -99,35 +99,33 @@
 
 <!--hot recomment-->
 <div class="jumbotron" style="background-image:url(/app/view/img/home/recommend.jpg);background-repeat:no-repeat;background-size:cover;height:10%px;;width:auto;overflow:hidden;min-width:1000px;">
-    <div class="container sub-title">
+    <div class="container text-center">
         <span class="" style="font-size:42px;color:#FFFFFF;" id="title-zh">热门推荐</span> 
     </div>
 </div>
 
-<div class="container" style="min-width:1000px;">
-    <div layout="row">
-        <div flex=33 style="padding-left:15px;padding-right:15px">
-            <a href="#/school/{{schools[0]._id}}">
-                <div style="height:180;width:300;background-repeat:no-repeat;background-size:cover;margin-left:auto;margin-right:auto;margin-bottom:50px;" ng-style="{'background-image':'url('+schools[0].image+')'}">
-                </div>
+<div class="container" style="width:1000px;margin-bottom:30px;">
+    <div layout="row" layout-align="center" style="margin-bottom:30px;">
+        <div flex=30 style="margin-left:25px;margin-right:25px;">
+            <a href="#/school/{{schools[0]._id}}" ng-style="{'background-image':'url('+schools[0].image+')'}" class="school">
+                <span class="school_name" style="bottom: 40%;"><strong>George <br/>Washington</strong></span>
             </a>
         </div>
-        <div flex=33 style="padding-left:15px;padding-right:15px">
-            <a href="#/school/{{schools[1]._id}}">
-                <div style="height:180;width:300;background-repeat:no-repeat;background-size:cover;margin-left:auto;margin-right:auto;margin-bottom:50px;" ng-style="{'background-image':'url('+schools[1].image+')'}">
-                </div>
+        <div flex=30 style="margin-left:25px;margin-right:25px;">
+            <a href="#/school/{{schools[2]._id}}" ng-style="{'background-image':'url('+schools[2].image+')'}" class="school">
+                <span class="school_name"><strong>Georgetown</strong></span>
             </a>
         </div>
-        <div flex=33 style="padding-left:15px;padding-right:15px">
-            <a href="#/school/{{schools[2]._id}}">
-                <div style="height:180;width:300;background-repeat:no-repeat;background-size:cover;margin-left:auto;margin-right:auto;margin-bottom:50px;" ng-style="{'background-image':'url('+schools[2].image+')'}">
-                </div>
+        <div flex=30 style="margin-left:25px;margin-right:25px;">
+            <a href="#/school/{{schools[1]._id}}" ng-style="{'background-image':'url('+schools[1].image+')'}" class="school">
+                <span class="school_name"><strong>Brown</strong></span>
             </a>
         </div>
     </div>
 </div>
 
 <!--website intro-->
+<!--
 <div class="container" style="min-width:1000px;">
     <div class="jumbotron" style="background-color:#FFFFFF;height:180px;;width:auto;overflow:hidden;min-width:650px;">
         <div class="container sub-title"><span class="" style="font-size:36px;color:#000000;">网站说明</span></div>
@@ -147,7 +145,7 @@
         </div>
     </div>
 </div>
-
+-->
 <!--footer-->
 <div footer></div>
 <style>

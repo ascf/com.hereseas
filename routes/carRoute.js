@@ -4,6 +4,7 @@ var Results = require('./commonResult');
 var tools = require('../common/tools');
 var Car = require('../models').Car;
 var School = require('../models').School;
+var adminRoute = require('./adminRoute');
 
 exports.createCar = function(req, res, next) {
     var epUser = new EventProxy();
@@ -613,9 +614,6 @@ exports.searchCar = function(req, res, next) {
 
 
 
-
-
-
 exports.getCarDraftList = function(req, res, next) {
 
     var query = {
@@ -761,3 +759,33 @@ exports.deleteCarById = function(req, res, next) {
     });
 
 }
+
+
+exports.adminGetCars = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        Car.find({status:1},
+            function(err, cars) {
+                if (err) {
+                    res.json(Results.ERR_DB_ERR);
+                } else {
+                    res.json({
+                        result: true,
+                        data: cars
+                    });
+                }
+            });
+    });
+
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+            ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+
+};

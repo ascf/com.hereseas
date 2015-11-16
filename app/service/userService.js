@@ -13,9 +13,9 @@ hereseasApp.factory('userService', function ($http, $state, $cookies) {
     var userInfo = {};
     var draft = {};
     var carDraft = {};
-    var itemDraft = [{}];
+    //var itemDraft = [];
     
-    var signupOrLogin = 1;
+    var signupOrLogin = 'login';
     
     var favoriteList = {
         apartments:[],
@@ -91,13 +91,13 @@ hereseasApp.factory('userService', function ($http, $state, $cookies) {
         return carDraft;
     };
 
-    this.setItemDraft = function(data){
-        itemDraft = data;
-    };
-    
-    this.getItemDraft = function(){
-        return itemDraft;
-    };
+//    this.setItemDraft = function(data){
+//        itemDraft.push(data);
+//    };
+//    
+//    this.getItemDraft = function(){
+//        return itemDraft;
+//    };
     
     this.setUser = function (info){
         userInfo = info;
