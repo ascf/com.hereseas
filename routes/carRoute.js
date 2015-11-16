@@ -389,6 +389,233 @@ exports.getThreeCars = function(req, res, next) {
 
 };
 
+
+exports.searchCar = function(req, res, next) {
+
+    var query = {};
+    var aptQuery = {};
+    var pagination = {};
+
+    var currentPage = 1;
+    var totalPage;
+    var pageSize = 6;
+
+    console.log(req.query);
+    // var page = false;
+
+    var schoolId = req.param('schoolId');
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var connection;
+    var ep = new EventProxy();
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+                connection = school.connection;
+                ep.emit('findSchoolConnection');
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+    });
+
+
+    ep.all('findSchoolConnection', function() {
+
+        if (tools.isEmpty(connection)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+
+        var subQuery = {};
+        subQuery['$in'] = connection;
+        aptQuery['schoolId'] = subQuery;
+
+
+        if (req.query.pageSize > 0 && req.query.page > 0) {
+            pageSize = req.query.pageSize;
+            currentPage = req.query.page;
+        }
+
+        pagination['skip'] = (currentPage - 1) * pageSize;
+        pagination['limit'] = pageSize;
+
+        if (req.query.car) {
+            var subQuery = {};
+            subQuery['car'] = req.query.car;
+            aptQuery['facilities'] = subQuery;
+        }
+
+        if (req.query.utility) {
+            var subQuery = {};
+            subQuery['utility'] = req.query.utility;
+            aptQuery['facilities'] = subQuery;
+        }
+
+        if (req.query.pet) {
+            var subQuery = {};
+            subQuery['pet'] = req.query.pet;
+            aptQuery['facilities'] = subQuery;
+        }
+
+        if (req.query.share) {
+            query['share'] = req.query.share;
+        }
+
+        if (req.query.startPrice && req.query.endPrice) {
+            var subQuery = {};
+            subQuery['$gte'] = req.query.startPrice;
+            subQuery['$lt'] = req.query.endPrice;
+            query['price'] = subQuery;
+        } else if (req.query.startPrice) {
+            var subQuery = {};
+            subQuery['$gte'] = req.query.startPrice;
+            query['price'] = subQuery;
+        } else if (req.query.endPrice) {
+            var subQuery = {};
+            subQuery['$lt'] = req.query.endPrice;
+            query['price'] = subQuery;
+        }
+
+        if (req.query.apartmentType) {
+            aptQuery['type'] = req.query.apartmentType;
+        }
+
+        if (req.query.roomType) {
+            query['type'] = req.query.roomType;
+        }
+
+        if (req.query.date) {
+            var subQuery1 = {};
+            subQuery1['$gte'] = req.query.date;
+            aptQuery['endDate'] = subQuery1;
+
+            var subQuery2 = {};
+            subQuery2['$lt'] = req.query.date;
+            aptQuery['beginDate'] = subQuery2;
+        }
+
+        query['available'] = true;
+        query['status'] = 1;
+
+        var prepareQuery = {};
+        prepareQuery['$elemMatch'] = query;
+        aptQuery['rooms'] = prepareQuery;
+
+        aptQuery['status'] = 1;
+        aptQuery['available'] = true;
+
+        // console.log("aptQuery", aptQuery);
+
+        /*
+            Apartment.find(
+                    aptQuery,
+                    'userId username userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at', pagination)
+                .sort({
+                    createAt: 'desc'
+                }).exec(function(err, apartments) {
+                    if (err) {
+                        console.log(err);
+                        res.json(Results.ERR_NOTFOUND_ERR);
+                        return;
+                    } else if (!apartments.length) {
+                        res.json(Results.ERR_NOTFOUND_ERR);
+                        return;
+                    } else {
+                        res.json({
+                            result: true,
+                            data: apartments
+                        });
+                        return;
+                    }
+                })
+        */
+
+        Apartment.count(aptQuery, function(err, count) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (count == 0) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+
+                totalPage = Math.ceil(count / pageSize);
+
+                var resData = [];
+                Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude create_at', pagination)
+                    .sort({
+                        createAt: 'desc'
+                    }).exec(function(err, apartments) {
+                        if (err) {
+                            console.log(err);
+                            res.json(Results.ERR_DB_ERR);
+                            return;
+                        } else if (!apartments.length) {
+                            res.json(Results.ERR_NOTFOUND_ERR);
+                            return;
+                        } else {
+                            for (var i = 0; i < apartments.length; i++) {
+                                var apartment = apartments[i];
+                                var price = {
+                                    maxPrice: calculatePrice(apartments[0].rooms).maxPrice,
+                                    minPrice: calculatePrice(apartments[0].rooms).minPrice
+                                }
+                                var type = getType(apartment.rooms);
+                                resData.push({
+                                    "id": apartment.id,
+                                    "schoolId": apartment.schoolId,
+                                    "username": apartment.username,
+                                    "userAvatar": apartment.userAvatar,
+                                    "latitude": apartment.latitude,
+                                    "longitude": apartment.longitude,
+                                    "cover": apartment.cover,
+                                    "price": price,
+                                    "type": type
+                                });
+                            }
+                            res.json({
+                                result: true,
+                                data: {
+                                    "apartments": resData,
+                                    "totalPage": totalPage,
+                                    "currentPage": currentPage
+                                }
+                            });
+                            return;
+                        }
+                    });
+            }
+        });
+
+
+
+    });
+
+
+
+}
+
+
+
+
+
+
 exports.getCarDraftList = function(req, res, next) {
 
     var query = {

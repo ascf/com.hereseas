@@ -322,6 +322,134 @@ exports.postItemById = function(req, res, next) {
     });
 };
 
+
+exports.searchItem = function(req, res, next) {
+
+    var query = {};
+    var pagination = {};
+
+    var currentPage = 1;
+    var totalPage;
+    var pageSize = 6;
+
+    console.log(req.query);
+
+    var schoolId = req.param('schoolId');
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var connection;
+    var ep = new EventProxy();
+
+    ep.all('findSchoolConnection', function() {
+
+        if (tools.isEmpty(connection)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+
+        var subQuery = {};
+        subQuery['$in'] = connection;
+        query['schoolId'] = subQuery;
+
+        if (req.query.pageSize > 0 && req.query.page > 0) {
+            pageSize = req.query.pageSize;
+            currentPage = req.query.page;
+        }
+
+        pagination['skip'] = (currentPage - 1) * pageSize;
+        pagination['limit'] = pageSize;
+
+        if (req.query.category) {
+            query['category'] = req.query.category;
+        }
+
+        if (req.query.startPrice && req.query.endPrice) {
+            var subQuery = {};
+            subQuery['$gte'] = req.query.startPrice;
+            subQuery['$lt'] = req.query.endPrice;
+            query['price'] = subQuery;
+        } else if (req.query.startPrice) {
+            var subQuery = {};
+            subQuery['$gte'] = req.query.startPrice;
+            query['price'] = subQuery;
+        } else if (req.query.endPrice) {
+            var subQuery = {};
+            subQuery['$lt'] = req.query.endPrice;
+            query['price'] = subQuery;
+        }
+
+        query['available'] = true;
+        query['status'] = 1;
+
+        Item.count(query, function(err, count) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (count == 0) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+
+                totalPage = Math.ceil(count / pageSize);
+
+                var resData = [];
+                Item.find(query, 'id userId username userAvatar schoolId itemName cover longitude latitude create_at', pagination)
+                    .sort({
+                        createAt: 'desc'
+                    }).exec(function(err, items) {
+                        if (err) {
+                            console.log(err);
+                            res.json(Results.ERR_DB_ERR);
+                            return;
+                        } else if (!items.length) {
+                            res.json(Results.ERR_NOTFOUND_ERR);
+                            return;
+                        } else {
+                       
+                            res.json({
+                                result: true,
+                                data: {
+                                    "items": items
+                                }
+                            });
+                            return;
+                        }
+                    });
+            }
+        });
+    });
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+                connection = school.connection;
+                ep.emit('findSchoolConnection');
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+    });
+
+
+}
+
+
+
+
 exports.deleteItemById = function(req, res, next) {
 
     var itemId = req.param('id');
