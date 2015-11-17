@@ -95,7 +95,7 @@ exports.getCommentsByThreadId = function(req, res, next) {
 		}
 
 		Comment.find(commentQuery, "userId username userAvatar content createAt").sort({
-			createAt: 'desc'
+			createAt: 'asc'
 		}).exec(function(err, comments) {
 
 			if (err) {
