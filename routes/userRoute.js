@@ -285,11 +285,13 @@ exports.getFavorite = function(req, res, next) {
             var carCount = user.favorite.cars.length;
             var itemCount = user.favorite.items.length;
 
-            ep.all("ApartmentDone", function(apartmentList) {
+            ep.all("ApartmentDone", "CarDone", "ItemDone", function(apartmentList, carList, itemList) {
                 res.json({
                     result: true,
                     data: {
-                        "apartments": apartmentList
+                        "apartments": apartmentList,
+                        "cars": carList,
+                        "items": itemList
                     }
                 });
                 return;
@@ -301,8 +303,6 @@ exports.getFavorite = function(req, res, next) {
                 var apartmentList = [];
                 for (var i = 0; i < apartments.length; i++) {
 
-                    console.log(apartments[i]);
-
                     if (apartments[i] != null && apartments[i].status != null && apartments[i].status == 1) {
                         apartmentList.push(apartments[i]);
                     }
@@ -312,7 +312,7 @@ exports.getFavorite = function(req, res, next) {
 
             for (var i = 0; i < apartmentCount; i++) {
 
-                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar rooms schoolId title cover longitude latitude create_at available status', function(err, apartment) {
+                Apartment.findById(user.favorite.apartments[i], '_id userId username userAvatar rooms schoolId title cover longitude latitude createAt available status', function(err, apartment) {
                     if (err) {
                         res.json(Results.ERR_DB_ERR);
                         return;
@@ -341,6 +341,58 @@ exports.getFavorite = function(req, res, next) {
                     }
                 });
             }
+
+            ep.after("findCars", carCount, function(cars) {
+
+                var carList = [];
+                for (var i = 0; i < cars.length; i++) {
+
+                    if (cars[i] != null && cars[i].status != null && cars[i].status == 1) {
+                        carList.push(cars[i]);
+                    }
+                }
+                ep.emit("CarDone", carList);
+            });
+
+            for (var i = 0; i < carCount; i++) {
+
+                Car.findById(user.favorite.cars[i], '_id userId username userAvatar schoolId title cover price category longitude latitude createAt available status', function(err, car) {
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                        return;
+                    } else {
+
+                        ep.emit("findCars", car);
+                    }
+                });
+            }
+
+
+            ep.after("findItems", itemCount, function(items) {
+
+                var itemList = [];
+                for (var i = 0; i < items.length; i++) {
+
+                    if (items[i] != null && items[i].status != null && items[i].status == 1) {
+                        itemList.push(items[i]);
+                    }
+                }
+                ep.emit("ItemDone", itemList);
+            });
+
+            for (var i = 0; i < itemCount; i++) {
+
+                Item.findById(user.favorite.items[i], '_id userId username userAvatar schoolId itemName cover price category longitude latitude createAt available status', function(err, item) {
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                        return;
+                    } else {
+
+                        ep.emit("findItems", item);
+                    }
+                });
+            }
+
 
 
         }
