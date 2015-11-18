@@ -357,7 +357,11 @@ exports.searchItem = function(req, res, next) {
 
         if (req.query.pageSize > 0 && req.query.page > 0) {
             pageSize = req.query.pageSize;
-            currentPage = req.query.page;
+            currentPage = parseInt(req.query.page, 10);
+
+            if (!tools.checkPositiveNumber(currentPage)) {
+                currentPage = 1;
+            }
         }
 
         pagination['skip'] = (currentPage - 1) * pageSize;
