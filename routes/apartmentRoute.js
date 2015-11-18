@@ -447,8 +447,8 @@ exports.searchApartment = function(req, res, next) {
                             for (var i = 0; i < apartments.length; i++) {
                                 var apartment = apartments[i];
                                 var price = {
-                                    maxPrice: calculatePrice(apartments[0].rooms).maxPrice,
-                                    minPrice: calculatePrice(apartments[0].rooms).minPrice
+                                    maxPrice: calculatePrice(apartment.rooms).maxPrice,
+                                    minPrice: calculatePrice(apartment.rooms).minPrice
                                 }
                                 var type = getType(apartment.rooms);
                                 resData.push({
