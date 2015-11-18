@@ -398,7 +398,7 @@ exports.searchItem = function(req, res, next) {
                 totalPage = Math.ceil(count / pageSize);
 
                 var resData = [];
-                Item.find(query, 'id userId username userAvatar schoolId itemName cover price category longitude latitude create_at', pagination)
+                Item.find(query, 'id userId username userAvatar schoolId itemName cover price category longitude latitude createAt', pagination)
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, items) {

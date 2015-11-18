@@ -40,40 +40,40 @@ var CarSchema = new Schema({
 		type: String
 	},*/
 	//车辆信息
-	basicInfo: [{
-		//年份
-		year: {
-			type: String
-		},
-		//制造商
-		make: {
-			type: String
-		},
-		//里程
-		totalMiles: {
-			type: Number
-		},
-		//型号
-		style: {
-			type: String
-		},
-		//车型
-		category: {
-			type: String
-		},
-		//车系
-		model: {
-			type: String
-		},
-		//价格
-		price: {
-			type: Number
-		},
-		//购买日期
-		boughtDate: {
-			type: Date
-		}
-	}],
+
+	//年份
+	year: {
+		type: String
+	},
+	//制造商
+	make: {
+		type: String
+	},
+	//里程
+	totalMiles: {
+		type: Number
+	},
+	//型号
+	style: {
+		type: String
+	},
+	//车型
+	category: {
+		type: String
+	},
+	//车系
+	model: {
+		type: String
+	},
+	//价格
+	price: {
+		type: Number
+	},
+	//购买日期
+	boughtDate: {
+		type: Date
+	},
+
 	//颜色
 	color: {
 		type: String

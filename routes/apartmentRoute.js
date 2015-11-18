@@ -432,7 +432,7 @@ exports.searchApartment = function(req, res, next) {
                 totalPage = Math.ceil(count / pageSize);
 
                 var resData = [];
-                Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude create_at', pagination)
+                Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude createAt', pagination)
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, apartments) {
