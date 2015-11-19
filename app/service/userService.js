@@ -17,7 +17,7 @@ hereseasApp.factory('userService', function ($http, $state, $cookies) {
     
     var signupOrLogin = 'login';
     
-    var favoriteList = {
+    /*var favoriteList = {
         apartments:[],
         activities:[],
         cars:[],
@@ -63,7 +63,7 @@ hereseasApp.factory('userService', function ($http, $state, $cookies) {
                 favoriteList.items.push(key);
         });
         return favoriteList;
-    };
+    };*/
     
     
     this.setSignupOrLogin = function(state){

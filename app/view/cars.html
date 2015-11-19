@@ -15,7 +15,7 @@
                     <!--发布者信息-->
                     <div layout="row" style="padding-top:20px; padding-bottom:20px;">
                             <div>
-                                <img class="md-whiteframe-z1" ng-src="{{avatar}}" style="border-radius:50%;weight:80px;height:80px; border:1px solid rgb(220,224,224);"/>
+                                <img class="md-whiteframe-z1" ng-src="{{avatar}}" style="border-radius:50%;width:80px;height:80px; border:1px solid rgb(220,224,224);"/>
                             </div>
                             <div layout="row" style="padding-left:30px; padding-top:40px;">
                                 <div>{{username}}</div>
@@ -36,48 +36,48 @@
                             <div layout="row">
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                        车辆年份：{{data.basicInfo[0].year}}
+                                        车辆年份：{{data.year}}
                                     </div>
                                 </div>
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                        车型：{{data.basicInfo[0].category}}
-                                    </div>
-                                </div>
-                             </div>
-                            <div layout="row">
-                                <div flex="50" style="margin-bottom:10px;height:40px;">
-                                    <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         制造商：{{data.basicInfo[0].make}}
-                                    </div>
-                                </div>
-                                <div flex="50" style="margin-bottom:10px;height:40px;">
-                                    <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         车系：{{data.basicInfo[0].model}}
+                                        车型：{{data.category}}
                                     </div>
                                 </div>
                              </div>
                             <div layout="row">
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         里程：{{data.basicInfo[0].totalMiles}}
+                                         制造商：{{data.make}}
                                     </div>
                                 </div>
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         购买日期：{{data.basicInfo[0].boughtDate | date:"yyyy-MM-dd"}}
+                                         车系：{{data.model}}
                                     </div>
                                 </div>
                              </div>
                             <div layout="row">
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         具体型号：{{data.basicInfo[0].style}}
+                                         里程：{{data.totalMiles}}
                                     </div>
                                 </div>
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         价格：{{data.basicInfo[0].price}} $
+                                         购买日期：{{data.boughtDate | date:"yyyy-MM-dd"}}
+                                    </div>
+                                </div>
+                             </div>
+                            <div layout="row">
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                         具体型号：{{data.style}}
+                                    </div>
+                                </div>
+                                <div flex="50" style="margin-bottom:10px;height:40px;">
+                                    <div layout="row" style="margin-bottom:10px;height:40px;">
+                                         价格：{{data.price}} $
                                     </div>
                                 </div>
                              </div>
@@ -192,8 +192,8 @@
                         <div class="md-padding hs_frame withBorderRdius">
                             <div style="margin-bottom:18px;">
                                 <div layout="row">
-                                    <div flex="20" class="withBorderRdius roomTypeBottonBedroom"><h5>{{data.basicInfo[0].style}}</h5></div>
-                                    <div flex="20" style="font-size:16px;height:35px; padding-top:6px; margin-left:28px;"><p>{{data.basicInfo[0].price}}$</p></div>
+                                    <div flex="20" class="withBorderRdius roomTypeBottonBedroom"><h5>{{data.style}}</h5></div>
+                                    <div flex="20" style="font-size:16px;height:35px; padding-top:6px; margin-left:28px;"><p>{{data.price}}$</p></div>
                                 </div>
                             </div>
                             <div layout="row">
@@ -202,20 +202,20 @@
                                 </div>
                                 <div>
                                     <span>
-                                        {{data.basicInfo[0].year}},
+                                        {{data.year}},
                                     </span>
                                     <span>
-                                        {{data.basicInfo[0].category}},
+                                        {{data.category}},
                                     </span>
                                     <span>
-                                        {{data.basicInfo[0].totalMiles}}
+                                        {{data.totalMiles}}
                                     </span>
                                     <br>
                                 </div>
                             </div>
                             <div layout="row" style="margin-top:10px;">
                                 <div flex="30">购于：</div>
-                                <div><p>{{data.basicInfo[0].boughtDate | date:"yyyy-MM-dd"}}</p></div>
+                                <div><p>{{data.boughtDate | date:"yyyy-MM-dd"}}</p></div>
                             </div>
                         </div>
 
@@ -225,7 +225,8 @@
                                     <div flex="45"  class="withBorderRdius roomsBotton" style="background-color:rgb(231,132,110);"><h4>预订<h4></div>   -->
                                 </div>
                                 <div layout="row">
-                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;"><p>添加收藏</p></div>   
+                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;" ng-click="addFav()" ng-hide="isFav"><p>添加收藏</p></div>  
+                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;" ng-click="delFav()" ng-show="isFav"><p>取消收藏</p></div>  
                                 </div>
                             </div>
                         </div>

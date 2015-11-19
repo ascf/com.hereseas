@@ -1,5 +1,6 @@
 <div style="background-color:rgb(248,248,249);" style="min-width:1000px;">
     <header ng-include="'app/view/partials/_header-one.html'"></header>
+    <div top-bar></div>
     <div layout="row">
         <div class="container" style="width:1000px;" layout="row">          
             <!--items left-->
@@ -15,18 +16,21 @@
                     </div>
                 </div>
      
-                <div style="padding-left:3px;margin-bottom:50px;">
-                    <div id="forum_panel" style="overflow-y:scroll;height:500;margin-top:20px;">
-                        <div ng-repeat="thread in threads" style="margin-bottom:10px;border:1px solid #D5D4D2;padding:10px;background-color:#ffffff" layout="row" ng-click="goToArticle(thread._id)">
-                            <div flex=25 style="border:1px solid #D5D4D2;height:100px;margin-right:20px"></div>
-                            <div flex=70>
-                                <div><h4>Title:{{thread.title}}</h4></div>
-                                <div><h4>正文</h4></div>
-                                <div>
-                                    <div style="float:left"><h4>来自:{{thread.username}}</h4></div>
-                                    <div style="float:right"><img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;" ng-click=""/></div>
-                                </div>
+                <div style="margin-bottom:50px;">
+                    <div id="forum_panel" style="height:auto;margin-top:20px;">
+                        <div ng-repeat="thread in threads" style="margin-bottom:10px;outline:none;" layout="column" ng-click="goToArticle(thread._id)">
+                            <div style="background-color:rgb(229,229,224);height:40px;font-size:18px;margin-bottom:10px;padding:0px 0px 0px 15px;" layout="row">
+                                <div style="padding-top:7px;">{{thread.title}}</div>
                             </div>
+                            <div style="float:left;margin-bottom:10px;color:rgb(55,120,106);">
+                                <img style="margin:0px 10px 0px 0px; padding:0px 0px 0px 0px; width:40px;height:40px;"src="{{thread.userAvatar}}" class="img-circle"></img>{{thread.username}} &nbsp;&nbsp; {{thread.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                            <div style="margin-bottom:10px;">
+                                <div>我看到第一批影评出来说这部略差于Skyfall的时候我就觉得药丸，因为我一直觉得Skyfall非常麻麻地，唯一亮点就是感谢门导引进了一个年轻的Q，从此开启了随缘热门同人文区的一个新分支，不得不服。 当我开始看片头之前的墨西哥长镜头的时候我就觉得乙烷，因为很多友邻说这个长镜头是整片的亮点，我就跪了，这长镜头太平庸了，毫无意义，跟鸟人什么的就先不比了基本属于欺负人......</div>
+                                <!--div>
+                                    <div style="float:right"><img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;" ng-click=""/></div>
+                                </div-->
+                            </div>
+                            <div style="margin-bottom:10px; color:rgb(55,120,106)">{{thread.replayCount}}回复</div>
                         </div>
                     </div>
                 </div>
@@ -34,6 +38,7 @@
         
             <!--items right-->
             <div flex=26 layout="column">
+                <!--
                 <div layout="row">
                     <div flex= 25>
                         <img style="height:50px;width:50px;" class="img-circle" ng-src="{{item.userAvatar}}"/>
@@ -56,6 +61,7 @@
                 <div style="padding:10px;border:1px solid #6A6966;height:210px;width:300px;">
                     <h4>详情</h4>        
                 </div>
+                -->
             </div>
         </div>
     </div>

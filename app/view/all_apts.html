@@ -10,8 +10,8 @@
     
     <div class="container" style="padding-top:15px;padding-bottom:27.7px;width:1000px">
         <div style="width:1000px" layout="row">
-                <div class="filter-bar" style="width:165px">筛选栏</div>
-                <div layout="row" style="margin-top:10px;padding-left:30px;padding-right:30px;">
+                <div class="filter-bar" style="width:165px;">筛选栏</div>
+                <div layout="row" style="margin-top:5px;padding-left:30px;padding-right:30px;">
                         <div style="padding-right:20px;">
                             <img style="width:22px;height:22px;" src="/app/view/img/apts/price.png"/>
                         </div> 
@@ -38,27 +38,23 @@
                     </div>
                 </div>
             
-            <div layout="row" style="padding-left:30px;margin-top:10px;">
+            <div layout="row" style="padding-left:25px;margin-top:10px;">
                 <div style="width:20px;height:20px;background-image:url(/app/view/img/header/search.png);background-size:cover"></div>
                 <input ng-model="searchCont" style="margin-left:10px;border-radius:4px;width:180px;height:25px;border:1px solid #D5D4D2" placeholder="  搜索你要的房间"></input>
             </div>
         </div>
         <div layout="row" style="padding-top:20px;">       
-            <div layout="column" style="">
-                <div id="apts_panel" style="overflow-y:scroll;width:585px;min-height:670px;margin-right:10px;" class="row">
+            <div layout="column">
+                <div id="apts_panel" style="overflow-y:scroll;width:585px;min-height:672px;margin-right:10px;" class="row">
                     
                     <div ng-show="aptResult.length==0" style="margin-left:20px;">没有任何结果, ╮(╯_╰)╭ </div>
                     <a href="#/rooms/{{apt.id}}" style="declaration:none;color:inherit;" ng-repeat="apt in aptResult"> 
                     <div  class="col-xs-6 col-sm-6" style="width:260px;height:180px;background-size:cover;background-repeat:no-repeat;margin-left:15px;margin-right:10px;margin-bottom:45px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+apt.cover+')'} " >
                         <div layout="row">
-                            <!--
-                            <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" ng-src="{{favs[$index]}}" ng-click="updateFavs($index)" clickme/>
-                            <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
-                                <div class="rotate" style="font-size:9px;">{{apt.price.minPrice}}-{{apt.price.maxPrice}}</div>
-
-                            </div>-->
-                            <div style="margin-top:20px;width:110px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" >
-                                <div style="font-size:18px; color:white; background-color:black;">&nbsp;$&nbsp;{{apt.price.minPrice}}-{{apt.price.maxPrice}}</div>
+                            
+                            <div style="margin-top:20px;min-width:70px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" >
+                                <div ng-show="apt.price.minPrice == apt.price.maxPrice" style="font-size:18px; color:white; background-color:black;text-align: center;">&nbsp;${{apt.price.minPrice}}&nbsp;</div>
+                                <div ng-show="apt.price.minPrice != apt.price.maxPrice" style="font-size:18px; color:white; background-color:black;">&nbsp;${{apt.price.minPrice}}-{{apt.price.maxPrice}}&nbsp;</div>
 
                             </div>
                         </div>
@@ -69,9 +65,9 @@
                     </div>  
                         </a>
                 </div>
-                <div layout="row">
+                <div layout="row" style="height:40px;">
                     <nav>
-                      <ul class="pagination" style="margin-left:10px;">
+                      <ul class="pagination">
                         <li>
                           <a href="#" aria-label="Previous" ng-click="previous()">
                               <span aria-hidden="true">&laquo;</span>
@@ -89,7 +85,6 @@
                     </nav>
                 </div>
             </div>
-            
             <div id="aptsMap" class="application" style="height:725px;width:480px;"> </div>
         </div>
     </div>

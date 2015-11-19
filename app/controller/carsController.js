@@ -7,7 +7,7 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
     $scope.max_price = 40000;
     
     $("#price-slider").on("slideStop", function(slideEvt) {
-        console.log(slideEvt);
+        //console.log(slideEvt);
         $scope.selectData.startPrice = slideEvt.value[0];
         $scope.selectData.endPrice = slideEvt.value[1];
         updatePage();
@@ -23,65 +23,17 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
 //        miles: '',
     };
     
-    $scope.favs = [];
     
-    $scope.savedCars = userService.cookies2Favorite().cars;
-
-    $scope.updateFavs = function(index){
-        if(userService.getLoginState()){
-            var id = $scope.carResult[index]._id;
-            var pos = $scope.savedCars.indexOf(id);
-
-            if(pos == -1){
-                $scope.savedCars.push(id);
-                $scope.favs[index] = "/app/view/img/profile/favorite2.png";
-                
-                userService.postFavorite({
-                    id: id,
-                    category: "cars"
-                }).then(function (res) {
-                    console.log(res);
-                    if (res.result) {
-                        //alert("Message has been sent");
-                    } else {
-                        //alert("err");
-                    }
-                });
-                
-            }else{
-                $scope.savedCars.splice(pos, 1);
-                $scope.favs[index] = "/app/view/img/profile/favorite1.png";
-            }
-            console.log($scope.savedCars);
-
-            var favoriteList = userService.cookies2Favorite();
-            favoriteList.cars = $scope.savedCars;
-            userService.saveFavorite2Cookies(favoriteList);
-        }else{
-            console.log("需要登录");
-        }
-    };
     
     function updatePage(){
         requestService.GetCars($scope.selectData,
         function(res){
             console.log(res);
             if(res.result){
-                console.log(res.data);
+                //console.log(res.data);
                 var cars = res.data;
                 $scope.carResult = cars;
-                if(userService.getLoginState()){
-                    $scope.favs = [];
-                    angular.forEach(cars, function(key){
-                        if($scope.savedCars.indexOf(key.id) !== -1)
-                            $scope.favs.push("/app/view/img/profile/favorite2.png");
-                        else $scope.favs.push("/app/view/img/profile/favorite1.png");
-                    });
-                }else{
-                    angular.forEach(cars, function(key){
-                        $scope.favs.push("/app/view/img/profile/favorite1.png");
-                    });
-                }
+                
                 // store number of max pages
                 max_page = res.data.totalPage;
                 $scope.pages = [];
@@ -152,13 +104,47 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
 
 });
 
-hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateParams, languageService, requestService,$mdDialog) {         
+hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateParams, languageService, requestService,$mdDialog,userService) {         
     requestService.GetCar({id: $stateParams.carId}, function(res){
         
         if(res.result){
             console.log(res);
             $scope.data= res.data[0];
+            $scope.addFav = addFav;
+            $scope.delFav = delFav;
             
+            function delFav(){
+               
+                userService.deleteFavorite({
+                    id:$stateParams.carId,
+                    category:"cars"
+                }).then(function (res) {
+                    //console.log(res);
+                    if (res.result) {
+                        //alert("Message has been sent");
+                        $scope.isFav = false;
+                    } else {
+                        //alert("err");
+                    }
+                });
+
+            };
+            
+            function addFav(){
+                userService.postFavorite({
+                    id: $stateParams.carId,
+                    category: "cars"
+                }).then(function (res) {
+                    //console.log(res);
+                    if (res.result) {
+                        $scope.isFav = true;
+                        //alert("Message has been sent");
+                    } else {
+                        //alert("err");
+                    }
+                });
+            }
+
 //                {
 //                userId: '56147dee8eecbd0d06c8970b',
 //	           username: 'abc', 
@@ -223,7 +209,18 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
             $scope.images = [];
             for(var i=0; i<$scope.data.images.length; i++)
                 $scope.images.push({thumb:$scope.data.images[i], img: $scope.data.images[i]});
-            console.log($scope.images);
+            //console.log($scope.images);
+            
+            requestService.GetFavList(function(res){
+                console.log(res);
+                if(res.data.cars !== null)
+                    $scope.favoriteCars = res.data.cars;
+                else $scope.favoriteCars = [];
+
+                $scope.isFav = $scope.favoriteCars.indexOf($stateParams.carId) !== -1;
+            });
+            
+            
             
             $scope.showImgs = function(ev, images, index){
                 $mdDialog.show({
@@ -301,7 +298,7 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
             */
             requestService.GetSchool({id: $scope.data.schoolId}, function(res) {
                 if (res.result) {
-                    console.log(res.data);
+                    //console.log(res.data);
                     $scope.schoolName = res.data.name;
                     
                 } else {
@@ -576,20 +573,17 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
             //the main model 
 	       $scope.steps = [
                 {
-                    basicInfo: [
-                        {
-                           // schoolId : '',
-                            year : '',
-                            make : '',
-                            totalMiles : '',
-                            style : '',
-                            category : '',
-                            model : 'Sedan',
-                            price : '',
-                            boughtDate : undefined,
-                         //   available : true
-                        }
-                    ]
+                   // schoolId : '',
+                    year : '',
+                    make : '',
+                    totalMiles : '',
+                    style : '',
+                    category : '',
+                    model : 'Sedan',
+                    price : '',
+                    boughtDate : undefined,
+                 // available : true
+                       
                 },
                 {
                     color : '',
@@ -652,6 +646,9 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 $scope.steps[0].basicInfo[0].boughtDate = new Date(data.basicInfo[0].boughtDate);
                 
                 
+                
+                
+                
                 if(data.color !== undefined)
                     $scope.steps[1].color = data.color;
                 
@@ -681,16 +678,6 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 
                 if(data.title !== undefined)
                     $scope.steps[3].title = data.title;
-                /*if(data.facilities !== undefined){
-                    $scope.steps[2].facilities = data.facilities;
-                }
-
-                if(data.fees !== undefined){
-                    $scope.steps[3].fees = data.fees;
-                }
-                
-                $scope.steps[4].title = data.title;
-                $scope.steps[4].description = data.description;*/
 
                 if(data.address !== undefined)
                 {
@@ -730,24 +717,18 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 }
             }
             
-//            $scope.$watch(function(){return $scope.steps[0];}, function(newValue){
-//                if(newValue.basicInfo[0].year == '' || newValue.basicInfo[0].model == '' || newValue.basicInfo[0].make == ''||newValue.basicInfo[0].style == ''||
-//                  newValue.basicInfo[0].totalMiles == ''||newValue.basicInfo[0].boughtDate == undefined||newValue.basicInfo[0].price == ''){
-//                    $scope.tableFilled[0].filled = false; 
-//                }else{
-//                    $scope.tableFilled[0].filled = true; 
-//                }
-//            }, true);
+
             
             //表格是否填完显示变化函数
             $scope.$watch('steps', function(){
+                console.log($scope.steps);
                 var s0 = 0; //initial step page 1
                 var s2 = 0; //initial step page 3
                 $scope.sn = 0; //initial whole pages
                 //test if step page 0 is filled
-                if($scope.steps[0].basicInfo[0].year == '' || $scope.steps[0].basicInfo[0].model == '' || $scope.steps[0].basicInfo[0].make ==
-                   ''||$scope.steps[0].basicInfo[0].style == ''||$scope.steps[0].basicInfo[0].totalMiles == ''||$scope.steps[0].basicInfo[0].boughtDate ==
-                   undefined||$scope.steps[0].basicInfo[0].price == ''){
+                if($scope.steps[0].year == '' || $scope.steps[0].model == '' || $scope.steps[0].make ==
+                   ''||$scope.steps[0].style == ''||$scope.steps[0].totalMiles == ''||$scope.steps[0].boughtDate ==
+                   undefined||$scope.steps[0].price == ''){
                     $scope.tableFilled[0].filled = false;
                 }else{
                     $scope.tableFilled[0].filled = true; 

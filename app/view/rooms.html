@@ -15,7 +15,7 @@
                     <!--发布者信息-->
                     <div layout="row" style="padding-top:20px; padding-bottom:20px;">
                         <div>
-                            <img class="md-whiteframe-z1" ng-src="{{avatar}}" style="border-radius:50%; weight:80px;height:80px; border:1px solid rgb(220,224,224);"/>
+                            <img class="md-whiteframe-z1" ng-src="{{avatar}}" style="border-radius:50%; width:80px;height:80px; border:1px solid rgb(220,224,224);"/>
                         </div>
                         <div layout="row" style="padding-left:30px; padding-top:40px;">
                             <div>{{username}}</div>
@@ -222,7 +222,8 @@
                                     <div flex="45"  class="withBorderRdius roomsBotton" style="background-color:rgb(231,132,110);"><h4>预订<h4></div>   -->
                                 </div>
                                 <div layout="row">
-                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;"><p>添加收藏</p></div>   
+                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;" ng-click="addFav()" ng-hide="isFav"><p>添加收藏</p></div> 
+                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;" ng-click="delFav()" ng-show="isFav"><p>取消收藏</p></div>   
                                 </div>
                             </div>
                         </div>

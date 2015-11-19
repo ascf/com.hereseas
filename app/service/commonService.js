@@ -79,6 +79,7 @@ hereseasApp.factory('requestService', ['$resource', function($resource){
         GetThreeItems:{ method: "GET", params: { dir: "items", action:"three"}},
         DeleteApt:{ method: "DELETE", params: { dir: "apartment"}},
         DeleteCar:{ method: "DELETE", params: { dir: "car"}},
+        DeleteItem:{ method: "DELETE", params: { dir: "item"}},
         CreateForgetter:{ method: "POST", params: { dir: "beforereset"}},
         SendMsg:{ method: "POST", params: { dir: "sendmessage"}},
         GetContact:{method: "GET", params: { dir: "contact"}},

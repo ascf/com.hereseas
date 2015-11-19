@@ -25,45 +25,6 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
         date:''
     };
     
-    $scope.favs = [];
-    
-    $scope.savedApts = userService.cookies2Favorite().apartments;
-    
-    
-    $scope.updateFavs = function(index){
-        if(userService.getLoginState()){
-            var id = $scope.aptResult[index].id;
-            var pos = $scope.savedApts.indexOf(id);
-
-            if(pos == -1){
-                $scope.savedApts.push(id);
-                $scope.favs[index] = "/app/view/img/profile/favorite2.png";
-                
-                userService.postFavorite({
-                    id: id,
-                    category: "apartments"
-                }).then(function (res) {
-                    console.log(res);
-                    if (res.result) {
-                        //alert("Message has been sent");
-                    } else {
-                        //alert("err");
-                    }
-                });
-                
-            }else{
-                $scope.savedApts.splice(pos, 1);
-                $scope.favs[index] = "/app/view/img/profile/favorite1.png";
-            }
-            console.log($scope.savedApts);
-
-            var favoriteList = userService.cookies2Favorite();
-            favoriteList.apartments = $scope.savedApts;
-            userService.saveFavorite2Cookies(favoriteList);
-        }else{
-            console.log("需要登录");
-        }
-    };
     
     
     function updatePage(){
@@ -73,18 +34,7 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
                 //console.log(res.data);
                 var apts = res.data.apartments;
                 $scope.aptResult = apts;
-                if(userService.getLoginState()){
-                    $scope.favs = [];
-                    angular.forEach(apts, function(key){
-                        if($scope.savedApts.indexOf(key.id) !== -1)
-                            $scope.favs.push("/app/view/img/profile/favorite2.png");
-                        else $scope.favs.push("/app/view/img/profile/favorite1.png");
-                    });
-                }else{
-                    angular.forEach(apts, function(key){
-                        $scope.favs.push("/app/view/img/profile/favorite1.png");
-                    });
-                }
+                
                 // store number of max pages
                 max_page = res.data.totalPage;
                 $scope.pages = [];
@@ -731,7 +681,7 @@ hereseasApp.controller('RoomPostController', function ($scope, languageService, 
 
 
 
-hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,$mdDialog) {         
+hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,userService,$mdDialog) {         
     requestService.GetApt({id: $stateParams.aptId}, function(res){
         if(res.result){
             $scope.apt_true = 0;
@@ -787,6 +737,9 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
             $scope.has_all_room_facilities = has_all_room_facilities;
             $scope.has_all_fees = has_all_fees;
             
+            $scope.addFav = addFav;
+            $scope.delFav = delFav;
+            
             init();
             function init(){
                 $scope.data = res.data[0];
@@ -822,10 +775,50 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
                     }
                 }); 
                 
+                requestService.GetFavList(function(res){
+                    console.log(res);
+                    if(res.data.apartments !== null)
+                        $scope.favoriteApts = res.data.apartments;
+                    else $scope.favoriteApts = [];
+                    
+                    $scope.isFav = $scope.favoriteApts.indexOf($stateParams.aptId) !== -1;
+                });
+                
+                
                 count();
             };
+
+            function delFav(){
+               
+                userService.deleteFavorite({
+                    id:$stateParams.aptId,
+                    category:"apartments"
+                }).then(function (res) {
+                    console.log(res);
+                    if (res.result) {
+                        //alert("Message has been sent");
+                        $scope.isFav = false;
+                    } else {
+                        //alert("err");
+                    }
+                });
+
+            };
             
-            
+            function addFav(){
+                userService.postFavorite({
+                    id: $stateParams.aptId,
+                    category: "apartments"
+                }).then(function (res) {
+                    console.log(res);
+                    if (res.result) {
+                        $scope.isFav = true;
+                        //alert("Message has been sent");
+                    } else {
+                        //alert("err");
+                    }
+                });
+            }
 
             function sendMessage(ev) {
                 $mdDialog.show({

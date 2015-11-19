@@ -92,11 +92,11 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
                         userService.setUser(res.data);
                         userService.setLoginState(true);
 
-                        requestService.GetFavList(function(res){
+                        /*requestService.GetFavList(function(res){
                             console.log(res);
                             userService.saveFavorite2Cookies(res.data);
 
-                        });
+                        });*/
                         $scope.hide();
                         $scope.login_err = false;
                     });                    
@@ -132,10 +132,10 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
                                 userService.setUser(res.data);
                                 userService.setLoginState(true);
 
-                                requestService.GetFavList(function(res){
+                                /*requestService.GetFavList(function(res){
                                     console.log(res);
                                     userService.saveFavorite2Cookies(res.data);
-                                });
+                                });*/
                                 //$scope.hide();
                             });
                         }

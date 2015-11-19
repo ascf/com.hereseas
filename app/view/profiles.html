@@ -133,15 +133,6 @@
                 <span style="margin-left:40px;">账号信息</span>
                
             </div>
-                        <!--div layout="row" >
-                <span flex></span>
-                <md-button style="background-image:url(/app/view/img/profile/last_step.png);background-size:100% 100%;color:white;" 
-                           class="md-icon-button" aria-label="lastStep" ng-show="activePage!==1" ng-click="lastPage()">上一步</md-button>
-                <md-button style="background-image:url(/app/view/img/profile/next_step.png);background-size:100% 100%;color:white;" 
-                           class="md-icon-button" aria-label="nextStep" ng-show="activePage!==3" ng-click="nextPage()">下一步</md-button>
-                <md-button style="background-image:url(/app/view/img/profile/cancel.png);background-size:100% 100%;color:white;" 
-                           class="md-icon-button" aria-label="cancel" ng-click="cancel()">取消</md-button>
-            </div-->
         </div>
     </div>
     <!--End of profile-->
@@ -153,21 +144,32 @@
             <div layout="row" style="margin-top:20px;">
                 <input type="checkbox" ng-model="filterApt" style="margin-left:85px;margin-top:1px;" id="Apts" clickme/> <label for="Apts">吉屋</label>
                 <input type="checkbox" ng-model="filterCar" style="margin-left:50px;margin-top:1px;" id="Cars" clickme/> <label for="Cars">车行</label>
-                <input type="checkbox" ng-model="filterGood" style="margin-left:50px;margin-top:1px;" id="Goods" clickme/> <label for="Goods">集市</label>
+                <input type="checkbox" ng-model="filterItem" style="margin-left:50px;margin-top:1px;" id="Goods" clickme/> <label for="Goods">集市</label>
                 <input type="checkbox" ng-model="filterActivity" style="margin-left:50px;margin-top:1px;" id="Activities" clickme/> <label for="Activities">活动</label>    
             </div>
             <hr style="margin-left:40px;width:750px;"/>
             <div layout="row" layout-wrap>
             <div flex="33" style="box-sizing:border-box;"ng-repeat="apt in favoriteApts">
                 <li class="half_li">
-                    <a class="half_pic" ng-style="{'background-image':'url('+apt.cover+')'}">
-                        <img class="half_fav" src="/app/view/img/profile/favorite2.png" ng-click="deleteFavorite($index)"/>
+                    <a class="half_pic" ng-style="{'background-image':'url('+apt.cover+')'}" href="#/rooms/{{apt.id}}">
+                        
                         <span class="half_price">{{apt.price.minPrice}}-{{apt.price.maxPrice}}</span>
                         <img class="half_user_pic" ng-src="{{apt.userAvatar}}">
                     </a>
                     <div class="half_type" layout="row"><p ng-repeat="type in apt.type">{{type}}&nbsp;&nbsp;</p></div>
                 </li>
             </div>
+            
+                <div flex="33" style="box-sizing:border-box;"ng-repeat="car in favoriteCars">
+                    <li class="half_li">
+                        <a class="half_pic" ng-style="{'background-image':'url('+car.cover+')'}" href="#/cars/{{car.id}}">
+
+                            <span class="half_price">{{car.price}}</span>
+                            <img class="half_user_pic" ng-src="{{car.userAvatar}}">
+                        </a>
+                        <div class="half_type" layout="row"><p ng-repeat="type in car.type">{{type}}&nbsp;&nbsp;</p></div>
+                    </li>
+                </div>
             </div>
         </div>
     </div>
@@ -250,7 +252,7 @@
                                     已发布
                                 </span>
                                 <span flex></span>
-                                <div ng-show="hasPostedApts||hasPostedCars" style="margin-left:10px;width:15px;height:15px;line-height:15px;background-image:url(/app/view/img/profile/posted.png);background-size:100% 100%;color:#62B5DB;">{{apts.length+cars.length}}</div>
+                                <div ng-show="hasPostedApts||hasPostedCars||hasPostedItems" style="margin-left:10px;width:15px;height:15px;line-height:15px;background-image:url(/app/view/img/profile/posted.png);background-size:100% 100%;color:#62B5DB;">{{apts.length+cars.length+items.length}}</div>
                             </div>
                         </a>
                     </menu-link>
@@ -293,7 +295,7 @@
         <div layout="row" style="margin-top:20px;">
             <input type="checkbox" ng-model="filterApt" style="margin-left:85px;margin-top:1px;" id="Apts" clickme/> <label for="Apts">吉屋</label>
             <input type="checkbox" ng-model="filterCar" style="margin-left:50px;margin-top:1px;" id="Cars" clickme/> <label for="Cars">车行</label>
-            <input type="checkbox" ng-model="filterGood" style="margin-left:50px;margin-top:1px;" id="Goods" clickme/> <label for="Goods">集市</label>
+            <input type="checkbox" ng-model="filterItem" style="margin-left:50px;margin-top:1px;" id="Goods" clickme/> <label for="Goods">集市</label>
             <input type="checkbox" ng-model="filterActivity" style="margin-left:50px;margin-top:1px;" id="Activities" clickme/> <label for="Activities">活动</label>    
         </div>
         <hr style="margin-left:40px;width:700px;"/>
@@ -321,6 +323,18 @@
             <img src="/app/view/img/profile/line2.png" style="height:38px;margin-left:40px;margin-top:19px;"/>
             <img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;margin-left:30px;margin-top:25px;" ng-click="deleteCar($index, car._id, 1)"/>
         </div>
+        <div class="post-item-div" layout="row" ng-repeat="item in localItems" ng-controller="HeaderController" ng-show="filterItem">
+            <a href="#/items/{{item._id}}"><img style="height:72px;width:105px; " ng-src="{{item.cover}}"/></a>
+            <div style="margin-left:45px;width:100px;height:50px;overflow:hidden;">Item title</div>
+            <div style="margin-left:30px;text-align:right;width:82px;">
+                <span>{{item.createAt | date}} </span>
+            </div>
+            <div style="margin-top:15px;margin-left:40px;height:45px;line-height:45px;width:95px;background:#F08C6A;text-align:center;color:white;">$price</div>
+            <span style="margin-left:40px;">state</span>
+            <!--span style="margin-left:40px;" ng-click="editCarPost($event, car._id,1)">编辑</span-->
+            <img src="/app/view/img/profile/line2.png" style="height:38px;margin-left:40px;margin-top:19px;"/>
+            <img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;margin-left:30px;margin-top:25px;" ng-click="deleteItem($index, item._id)"/>
+        </div>
     </div>
         
     <div layout="column" ng-show="postPage==2">
@@ -329,7 +343,7 @@
         <div layout="row" style="margin-top:20px;">
             <input type="checkbox" ng-model="filterApt" style="margin-left:85px;margin-top:1px;" id="Apts" clickme/> <label for="Apts">吉屋</label>
             <input type="checkbox" ng-model="filterCar" style="margin-left:50px;margin-top:1px;" id="Cars" clickme/> <label for="Cars">车行</label>
-            <input type="checkbox" ng-model="filterGood" style="margin-left:50px;margin-top:1px;" id="Goods" clickme/> <label for="Goods">集市</label>
+            
             <input type="checkbox" ng-model="filterActivity" style="margin-left:50px;margin-top:1px;" id="Activities" clickme/> <label for="Activities">活动</label>       
         </div>
         <hr style="margin-left:40px;width:700px;"/>

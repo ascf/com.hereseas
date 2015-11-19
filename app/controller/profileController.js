@@ -28,7 +28,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             
             $scope.filterApt = true;
             $scope.filterCar = true;
-            $scope.filterGood = true;
+            $scope.filterItem = true;
             $scope.filterActivity = true;
             $scope.postType2 = "Apts";
             $scope.content = "Hello World ";
@@ -57,7 +57,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             $scope.initProfiles = initProfiles;//初始化个人信息内容函数
             
             $scope.intiFavorite = intiFavorite;
-            $scope.deleteFavorite = deleteFavorite;
+
             
             $scope.deleteCar = deleteCar;
             $scope.getCars = getCars;
@@ -66,6 +66,10 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             $scope.deleteApt = deleteApt;
             $scope.getApts = getApts;
             $scope.getAptDrafts = getAptDrafts;
+            
+            $scope.deleteItem = deleteItem;
+            $scope.getItems = getItems;
+            
             
             $scope.upload = upload;
             
@@ -78,12 +82,12 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             $scope.getAptDrafts(true);
             $scope.getCars(true);
             $scope.getCarDrafts(true);
-            
+            $scope.getItems(true);
             
             
             function intiFavorite(){
                 requestService.GetFavList({action:''}, function(res){
-                    //console.log(res);
+                    console.log(res);
                     if(res.data.apartments !== null)
                         $scope.favoriteApts = res.data.apartments;
                     else $scope.favoriteApts = [];
@@ -103,29 +107,34 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             };
 
             
-            function deleteFavorite(index){
-                var id = $scope.favoriteApts[index]._id;
-                userService.deleteFavorite({
-                    id:id,
-                    category:"apartments"
-                }).then(function (res) {
-                    console.log(res);
-                    if (res.result) {
-                        //alert("Message has been sent");
-                    } else {
-                        //alert("err");
+            
+            
+            
+            
+            function getItems(init){
+                requestService.GetItems(function(res) {
+                    if(res.result==false)
+                    {
+                        $scope.hasPostedItems = false;
+                    }
+                    else
+                    {
+                        $scope.hasPostedItems = true;
+                        $scope.items = res.data;
+                        if(init == true)
+                            $scope.localItems = $scope.items;
+                        console.log($scope.localItems);
                     }
                 });
-                
-                $scope.favoriteApts.splice(index, 1);
-                
-                var temp = [];
-                angular.forEach($scope.favoriteApts, function(key){
-                    temp.push(key._id);
+            };
+            
+            
+            function deleteItem(index, id){
+                $scope.localItems.splice(index, 1);
+
+                requestService.DeleteItem({id:id}, function(res){
+                    console.log(id,res);
                 });
-                var favoriteList = userService.cookies2Favorite();
-                favoriteList.apartments = temp;
-                userService.saveFavorite2Cookies(favoriteList);
             };
             
             function deleteCar(index, id, type){
@@ -343,7 +352,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
 
                 requestService.GetSchools(function(res){
                     $scope.schools = res.data;
-                    console.log($scope.schools);
+                    //console.log($scope.schools);
                     $scope.schoolNames = [];
                     $scope.schoolIds = [];
                     for(var i=0; i<res.data.length; i++){
@@ -354,14 +363,12 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                 });
 
                 if(res.data.schoolId !== undefined){
-                    
                     $scope.basicInfo.schoolId = res.data.schoolId;
-                    console.log($scope.basicInfo.schoolId);
-
+                    //console.log($scope.basicInfo.schoolId);
                 }
 
                 $scope.$watch('basicInfo', function (newValue, oldValue) {
-                    console.log(1);
+                    //console.log(1);
                     if(newValue.schoolId!=='' && !angular.equals(newValue,oldValue)){
                         requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
                             console.log(res);
@@ -376,52 +383,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             });
             
             
-            /*$scope.$watch('details1', function(newValue){  //在地址合法之后的操作
-                if(newValue && $scope.validAddress(newValue)){//set the model 
-                    $scope.addressGot = true;
-                    $scope.addresses = [];
-                    var componentForm = {
-                      street_number: 'short_name',
-                      route: 'long_name',
-                      locality: 'long_name',
-                      administrative_area_level_1: 'short_name',
-                      postal_code: 'short_name'
-                    };
-
-                    for (var i = 0; i < $scope.details1.address_components.length; i++) {
-                        var addressType = $scope.details1.address_components[i].types[0];
-                        if (componentForm[addressType]) {
-                          var val = $scope.details1.address_components[i][componentForm[addressType]];
-                          $scope.addresses.push(val);
-                        }
-                    }
-                    
-                    $scope.address.street = $scope.addresses[0]+" "+$scope.addresses[1];
-                    console.log($scope.address.street);
-                    $scope.address.city = $scope.addresses[2];
-                    $scope.address.state = $scope.addresses[3];
-                    $scope.address.zipcode = $scope.addresses[4];
-                    if($scope.address.zipcode !== undefined){
-                        $scope.addressCorrect = true;
-                        geocoder.geocode({ 'address' : $scope.address.full}, function (results, status) {
-                            if (status == google.maps.GeocoderStatus.OK) {
-                                console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-                                console.log(results[0].formatted_address);
-                                $scope.address.latitude = results[0].geometry.location.lat();
-                                $scope.address.longitude = results[0].geometry.location.lng();
-                                console.log($scope.address);
-                                requestService.ChangeProfile({step:2}, {'address':$scope.address}, function(res){
-                                    console.log(res);
-                                });
-                            } else {}
-                        });   
-                    }
-                    else{
-                        $scope.addressCorrect = false;
-                    }
-                    
-                }
-            });*/
+            
         } else {
             $state.go('home');
         }

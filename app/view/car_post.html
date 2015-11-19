@@ -133,13 +133,13 @@
                         <p class="room_post_font_content">年款</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <input required ng-model="steps[0].basicInfo[0].year" name="year" aria-label="CarYear" style="border-radius:4px;width:80px;height:19px;border:1px solid #D5D4D2"/>
+                        <input required ng-model="steps[0].year" name="year" aria-label="CarYear" style="border-radius:4px;width:80px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                     <div flex="15">
                         <p class="room_post_font_content">车型</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <md-select required ng-model="steps[0].basicInfo[0].model" name="model" class="cp_select">
+                        <md-select required ng-model="steps[0].model" name="model" class="cp_select">
                             <md-option value="SUV">SUV</md-option>
                             <md-option value="Sedan">四门轿车</md-option>
                             <md-option value="Coupe">双门跑车</md-option>
@@ -155,13 +155,13 @@
                         <p class="room_post_font_content">制造商</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <input required ng-model="steps[0].basicInfo[0].make" name="make" aria-label="CarMake" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
+                        <input required ng-model="steps[0].make" name="make" aria-label="CarMake" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                     <div flex="15">
                         <p class="room_post_font_content">车系</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                         <input required ng-model="steps[0].basicInfo[0].style" name="style" aria-label="CarStyle" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
+                         <input required ng-model="steps[0].style" name="style" aria-label="CarStyle" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
@@ -169,7 +169,7 @@
                         <p class="room_post_font_content">里程</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <input required ng-model="steps[0].basicInfo[0].totalMiles" name="totalMiles" aria-label="CarMiles" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2;margin-right:10px"/>
+                        <input required ng-model="steps[0].totalMiles" name="totalMiles" aria-label="CarMiles" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2;margin-right:10px"/>
                         miles
                     </div>
                     <div flex="15">
@@ -177,7 +177,7 @@
                     </div>
                     <div flex="30" layout="row" layout-align="start end">
                         <md-input-container class="room_post_input">
-                          <input ng-model="steps[0].basicInfo[0].boughtDate" type="date" name="boughtDate"  aria-label="CarBoughtDate"/>
+                          <input ng-model="steps[0].boughtDate" type="date" name="boughtDate"  aria-label="CarBoughtDate"/>
                         </md-input-container>
                     </div>
                 </div>
@@ -186,7 +186,7 @@
                         <p class="room_post_font_content">型号</p>
                     </div>
                     <div flex="80" layout="row" layout-align="start end">
-                        <input ng-model="steps[0].basicInfo[0].category" name="category"  aria-label="CarCategory" style="border-radius:4px;width:180px;height:19px;border:1px solid #D5D4D2"/>
+                        <input ng-model="steps[0].category" name="category"  aria-label="CarCategory" style="border-radius:4px;width:180px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
@@ -194,7 +194,7 @@
                         <div class="room_post_font_content">价格</div>
                     </div>
                     <div flex="30" layout="row" layout-align="start end">
-                        $&nbsp;<input ng-model="steps[0].basicInfo[0].price" name="price"  aria-label="CarPrice" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2"/>
+                        $&nbsp;<input ng-model="steps[0].price" name="price"  aria-label="CarPrice" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
             </div>

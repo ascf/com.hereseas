@@ -12,72 +12,7 @@ hereseasApp.controller('ItemsController',function($stateParams,$scope,requestSer
         endPrice:'',
     };
     
-    $scope.favs = [];
     
-    $scope.savedItems = userService.cookies2Favorite().items;
-    
-    $scope.favsItems = [];
-    $scope.notFavsItems = [];
-    
-    $scope.addToFavs = function(index){
-        if(userService.getLoginState()){
-            var id = $scope.notFavsItems[index]._id;
-
-            $scope.savedItems.push(id);
-            $scope.favsItems.push(notFavsItems[index]);
-            $scope.notFavsItems.splice(index, 1);
-            //$scope.favs[index] = "/app/view/img/profile/favorite2.png";
-                
-            userService.postFavorite({
-                id: id,
-                category: "items"
-            }).then(function (res) {
-                console.log(res);
-                if (res.result) {
-                    //alert("Message has been sent");
-                } else {
-                    //alert("err");
-                }
-            });
-                
-            console.log($scope.savedItems);
-
-            var favoriteList = userService.cookies2Favorite();
-            favoriteList.items = $scope.savedItems;
-            userService.saveFavorite2Cookies(favoriteList);
-        }else{
-            console.log("需要登录");
-        }
-    };
-    
-     $scope.removeFavs = function(index){
-        if(userService.getLoginState()){
-            var id = $scope.favsItems[index]._id;
-            
-            $scope.notFavsItems.push(favsItems[index]);
-            $scope.favsItems.splice(index, 1);
-            $scope.savedItems.splice(pos, 1);
-            userService.deleteFavorite({
-                id: id,
-                category: "items"
-            }).then(function (res) {
-                console.log(res);
-                if (res.result) {
-                    //alert("Message has been sent");
-                } else {
-                    //alert("err");
-                }
-            });
-           
-            console.log($scope.savedItems);
-
-            var favoriteList = userService.cookies2Favorite();
-            favoriteList.items = $scope.savedItems;
-            userService.saveFavorite2Cookies(favoriteList);
-        }else{
-            console.log("需要登录");
-        }
-    };
     
     function updatePage(){
         requestService.GetItemsBySchool($scope.selectData,
@@ -87,25 +22,7 @@ hereseasApp.controller('ItemsController',function($stateParams,$scope,requestSer
                 console.log(res.data);
                 var items = res.data.items;
                 $scope.itemsResult = items;
-                $scope.favsItems = [];
-                $scope.notFavsItems = [];
-                if(userService.getLoginState()){
-                    //$scope.favs = [];
-                    angular.forEach(items, function(item){
-                        if($scope.savedItems.indexOf(item.id) !== -1){
-                            $scope.favsItems.push(item);
-                            //$scope.favs.push("/app/view/img/profile/favorite2.png");
-                        }else{
-                            $scope.notFavsItems.push(item);
-                            //$scope.favs.push("/app/view/img/profile/favorite1.png");
-                        }
-                    });
-                }else{
-                    angular.forEach(items, function(item){
-                        $scope.notFavsItems.push(item);
-                        //$scope.favs.push("/app/view/img/profile/favorite1.png");
-                    });
-                }
+                
                 // store number of max pages
                 max_page = res.data.totalPage;
                 $scope.pages = [];
@@ -192,11 +109,9 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
             $scope.lastPage = lastPage; 
             $scope.nextPage = nextPage;
             $scope.setActivePage = setActivePage;
-            $scope.arrUploads = [];
             $scope.name = name;  //获取中午名称函数
             $scope.doPost = doPost;
             $scope.canPost = false; //检测所有表格是否填完
-            $scope.arrUploads = [];
             //表格是否填完变量
             $scope.tableFilled = [
                 {filled: false},
@@ -231,16 +146,19 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
                             },
                             longitude :  '',
                             latitude :  ''
-                        }],
-                    draftId:''
+                        }]
                 };
                 $scope.items.push(val);
+                $scope.ready_upload_img.push(false); 
             }
             
-            $scope.ready_upload_img = false;
+            
+            $scope.ready_upload_img = [false];
     
-            $scope.add_img = function(num){
-                $scope.ready_upload_img = true;
+            $scope.add_img = function(){
+                for(var i = 0; i<$scope.ready_upload_img.length; i++)
+                    $scope.ready_upload_img[i] = true;
+                console.log($scope.files);
             }
     
             //details1 is the detail address provided by google address autocomplete 
@@ -334,25 +252,50 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
 //                }
             };
 
-            $scope.$watch('files', function (newValue,oldValue) {
-                //files:image upload model
-                //if(!angular.equals(newValue, oldValue)&& newValue !== [])
-                //    console.log(newValue);
+            /*$scope.$watch(function(){return JSON.stringify($scope.files)}, function (newValue,oldValue) {
+                //console.log(newValue);
                 if(!angular.equals(newValue, oldValue)&& newValue !== [])
-                   $scope.upload($scope.files);
-            });
+                   $scope.upload($scope.files, $scope.curItemIndex);
+            },true);*/
             
+            /*$scope.$watch(function(){return $scope.items.map(function(item){return item.files;});}, function (newValue,oldValue) {
+                //angular.forEach(newValue, function(key){
+                //    if(!angular.equals(key, oldValue[newValue.indexOf(key)])&& key !== [] && key !== null)
+                //        console.log(newValue, oldValue );
+                //});
+                console.log(newValue);
+            },true);   */
+    
+            
+    
+            $scope.changeFile = function(index){
+                if($scope.items.files !== undefined){
+
+                    
+                    angular.forEach($scope.items.files, function(file){
+                        var flag = true;
+                        angular.forEach($scope.items.uploadList, function(upload){
+                            if(angular.equals(upload.file, file) && index==upload.index){
+                                flag = false;
+                            }
+                        });
+                        if(flag){
+                            $scope.items.uploadList.push({file: file, prog: 0,saved : false, cancel: "", url:"", index:index});
+                        }
+                    });
+                    console.log($scope.items.uploadList);
+                    $scope.upload($scope.items.uploadList);
+                }
+            };
+    
             $scope.upload = function (files) {
-                if (files && files.length && (files.length<(11-$scope.arrUploads.length))) {
-                    //console.log(files);
-                    for (var i = $scope.arrUploads.length; i < files.length; i++) {  //ngf-keep为false时从0开始, false时处理重复图片较麻烦
-                        $scope.arrUploads.push({file: files[i], prog: 0, content: "default.png", saved : false, cancel: "", id:""});
-                    }                   
-                    angular.forEach($scope.arrUploads, function(key,index){
+                if (files && files.length) {
+                    
+                    angular.forEach(files, function(key){
                         if(key.saved == false)
                         {
                             fileReader.readAsDataUrl(key.file, $scope).then(function(result) {
-                                key.content = result;
+                                key.url = result;
                             });
                             var up = Upload.upload({
                                 url: 'http://52.25.82.212:8080/item/m_upload_image',
@@ -361,21 +304,20 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
                             }).progress(function (evt) {
                                 key.prog = parseInt(100.0 * evt.loaded / evt.total);
                             }).success(function (data, status, headers, config) {
-                                //console.log('file ' + config.file.name + 'uploaded. Response: ');
-                                console.log($scope.arrUploads);
                                 key.saved = true;
-                                key.id = 'https://s3.amazonaws.com/hereseas-public-images/'+data.data;
-                                console.log(key.id);
-                                console.log(index);
-                                $scope.items[index].steps[0].images.push(key.id);
-                                if($scope.items[index].steps[0].images.length == 1)
-                                    $scope.items[index].steps[0].cover = $scope.items[index].steps[0].images[0];
-                                //$scope.arrUploads.splice($scope.arrUploads.indexOf(key), 1);
-                                files.splice(files.indexOf(key.file), 1);
+                                key.url = 'https://s3.amazonaws.com/hereseas-public-images/'+data.data;
 
-                                requestService.ItemStepPost({id:$scope.items[index].draftIdget , step:1}, $scope.items[index].steps[0], function(res){
-                                    console.log(res);
-                                });
+                                $scope.items[key.index].steps[0].images.push(key.url);
+                                if($scope.items[key.index].steps[0].images.length == 1)
+                                    $scope.items[key.index].steps[0].cover = key.url;
+                                
+                                key.cancel = function(){
+                                    $scope.items.uploadList.splice($scope.items.uploadList.indexOf(key), 1);
+                                    $scope.items[key.index].steps[0].images.splice($scope.items[key.index].steps[0].images.indexOf(key.url), 1);
+                                    if($scope.items[key.index].steps[0].images.length == 0)
+                                        $scope.items[key.index].steps[0].cover = "";
+                                    //console.log("cancel after upload");
+                                };
                                 
                             }).error(function (data, status, headers, config) {
                                 console.log('error status: ' + status);
@@ -383,15 +325,14 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
                             
                             key.cancel = function(){
                                 up.abort();     
-                                $scope.arrUploads.splice($scope.arrUploads.indexOf(key), 1);
-                                files.splice(files.indexOf(key.file), 1);
-                                console.log("cancel during upload", files, $scope.arrUploads);
+                                $scope.items.uploadList.splice($scope.items.uploadList.indexOf(key), 1);
+                                //console.log("cancel during upload");
                             }
                         }
-                    });  
+                    });
                 }
             };
-
+            
             $scope.shared = {
                 expireAt : '',
                 address : {
@@ -429,100 +370,47 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
                             },
                             longitude :  '',
                             latitude :  ''
-                        }],
-                draftId:'',
-                files:[],
-                arrUploads:[]
+                        }]
             }];
-    
-            /*$scope.ifShowSubmit = function(){
-                return userService.getDraft().state !== "edit";
-            };
-    
-            $scope.setEditModel = function(data){
-                $scope.steps[0].beginDate = new Date(data.beginDate);
-                $scope.steps[0].endDate = new Date(data.endDate);
-                
-                
-                if(data.facilities !== undefined){
-                    $scope.steps[2].facilities = data.facilities;
-                }
-
-                if(data.fees !== undefined){
-                    $scope.steps[3].fees = data.fees;
-                }
-                
-                $scope.steps[4].title = data.title;
-                $scope.steps[4].description = data.description;
-
-
-                if(data.address !== undefined)
-                {
-                    $scope.steps[5].address = data.address;
-                    console.log($scope.steps[5].address);
-                    $scope.addressGot = true;
-                    $scope.addresses[0] = $scope.steps[5].address.street.split(' ')[0];
-                    $scope.addresses[1] = $scope.steps[5].address.street.split(' ')[1];
-                    $scope.addresses[2] = $scope.steps[5].address.city;
-                    $scope.addresses[3] = $scope.steps[5].address.state;
-                    $scope.addresses[4] = $scope.steps[5].address.zipcode;
-
-                }
-
-                if(data.cover !== undefined){
-                    $scope.steps[5].cover = data.cover;
-                    $scope.steps[5].images = data.images;
-                    console.log($scope.steps[5].images);
-                }
-            };
-    
             
-            if(!angular.equals(userService.getItemDraft(),[{}])){
-                if(userService.getItemDraft().state == 'edit'){
-                    requestService.getItemDraft({id:userService.getItemDraft().id}, function(res){
-                        console.log("EDIT", res);
-
-                        $scope.setEditModel(res.data[0]);                
-                    })
-                }
-                else if(userService.getItemDraft().state == 'update'){
-                    requestService.GetItem({id:userService.getItemDraft().id}, function(res){
-                        console.log("UPDATE", res);
-                        
-                        $scope.setEditModel(res.data[0]);                
-                    })
-                }
-            }*/
+            $scope.items.files = [];
+            $scope.items.uploadList = [];
+           
+            $scope.deleteItem = function(index){
+                $scope.items.splice(index,1);
+                $scope.ready_upload_img.splice(index,1);
+            };
+    
+    
             
             //表格是否填完显示变化函数
-            $scope.$watch('items', function(){
-                var s0 = 0; //initial step page 1
-                var s2 = 0; //initial step page 3
-                $scope.sn = 0; //initial whole pages
-                //test if step page 0 is filled
+            $scope.$watch(function(){ return{v1:$scope.shared, v2:$scope.items};}, function(newValue){
+
                 angular.forEach($scope.items, function(item){
-                    if($scope.shared.expireAt == '' || item.steps[0].itemName == '' || item.steps[0].category == '' || item.steps[0].price == ''){
+                    if($scope.shared.expireAt == '' || item.steps[0].itemName == '' || item.steps[0].category == '' || item.steps[0].price == '' || item.steps[0].images.length==0){
                         $scope.tableFilled[0].filled = false; 
                     }else{
                         $scope.tableFilled[0].filled = true;
                     }
                 });
- 
-                //test if step page 1 is filled
-                if($scope.shared.address.zipcode != '' && $scope.shared.address.zipcode != undefined){
-                    $scope.tableFilled[1].filled = true;
-                }else{
-                    $scope.tableFilled[1].filled = false;
-                }
-         
               
-                if($scope.sn == 0){
+                if(newValue.v1.address.zipcode == '' || newValue.v1.address.zipcode == undefined){
+                    $scope.tableFilled[1].filled = false;
+                }else{
+                    $scope.tableFilled[1].filled = true;
+                }
+                 
+                if(newValue.v1.address.zipcode != undefined) 
+                    $scope.addressCorrect = true;
+                else 
+                    $scope.addressCorrect = false;
+                 
+                
+                if($scope.tableFilled[0].filled && $scope.tableFilled[1].filled){
                     $scope.canPost = true;
                 }else{
                     $scope.canPost = false;
                 }
-                if($scope.shared.address.zipcode != undefined) $scope.addressCorrect = true;
-                else $scope.addressCorrect = false;
             }, true);
             
             
@@ -533,13 +421,18 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
                     item.steps[1].longitude = $scope.shared.longitude;
                     item.steps[1].latitude = $scope.shared.latitude;
                     
-                    requestService.ItemStepPost({id:item.draftId , step:1}, item.steps[0], function(res){
-                        requestService.ItemStepPost({id:item.draftId , step:2}, item.steps[1], function(res){
-                            console.log("step2",res);
-                            requestService.EndItempost({id:item.draftId}, function(res){
-                                console.log("final", res);
-                               // userService.setItemDraft({});
-                                $mdDialog.hide();
+                    
+                    requestService.StartItempost({schoolId:userService.getUser().schoolId}, function(res){
+                        var draftId = res.data._id;
+                        requestService.ItemStepPost({id:draftId , step:1}, item.steps[0], function(res){
+                            console.log("step1",res);
+                            requestService.ItemStepPost({id:draftId , step:2}, item.steps[1], function(res){
+                                console.log("step2",res);
+                                requestService.EndItempost({id:draftId}, function(res){
+                                    console.log("final", res);
+                                   // userService.setItemDraft({});
+                                    $mdDialog.hide();
+                                });
                             });
                         });
                     });
@@ -555,7 +448,7 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
             };
 
             function setActivePage(page) {
-                if($scope.activePage == page){
+                /*if($scope.activePage == page){
                     
                 } else{
                     console.log($scope.activePage);
@@ -590,7 +483,7 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
                             });
                         }
                     }
-                }
+                }*/
                 $scope.activePage = page;
             };
 
