@@ -690,18 +690,10 @@ function updateSchoolUser(userId, previousSchoolId, schoolId) {
 }
 
 
-
 //update user avatar and username 
 function updateUserApartments(userId) {
     var epUser = new EventProxy();
-    User.findById(userId, function(err, user) {
-        if (err) {
-            res.json(Results.ERR_DB_ERR);
-            return;
-        } else {
-            epUser.emit("findUser", user);
-        }
-    });
+
     epUser.all("findUser", function(user) {
         for (var i = 0; i < user.apartments.length; i++) {
             Apartment.findById(user.apartments[i], function(err, apartment) {
@@ -716,6 +708,16 @@ function updateUserApartments(userId) {
             });
         }
     });
+
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+
 }
 
 exports.activeUserSendEmail = function(req, res, next) {
@@ -856,6 +858,12 @@ function sendEmail(email, url) {
 exports.sendMessage = function(req, res, next) {
     var sender = req.user.id;
     var receiver = req.body.id;
+
+    if (tools.isEmpty(sender) || tools.isEmpty(receiver)) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
     if (sender == receiver) {
         res.json(Results.ERR_PARAM_ERR);
         return;
