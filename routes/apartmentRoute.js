@@ -107,9 +107,10 @@ exports.getApartmentList = function(req, res, next) {
         'available': true
     };
 
+    var resData = [];
     Apartment.find(
             query,
-            'id schoolId title cover type longitude latitude createAt updateAt')
+            'id schoolId title cover rooms type longitude latitude createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
@@ -121,9 +122,32 @@ exports.getApartmentList = function(req, res, next) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
             } else {
+                
+                 for (var i = 0; i < apartments.length; i++) {
+                    var apartment = apartments[i];
+                    var price = {
+                        maxPrice: calculatePrice(apartment.rooms).maxPrice,
+                        minPrice: calculatePrice(apartment.rooms).minPrice
+                    }
+                    resData.push({
+                        "id": apartment.id,
+                        "schoolId": apartment.schoolId,
+                        "title": apartment.title,
+                        "cover": apartment.cover,
+                        "type": apartment.type,
+                        "longitude": apartment.longitude,
+                        "latitude": apartment.latitude,
+                        "createAt": apartment.createAt,
+                        "updateAt": apartment.updateAt,
+                        "maxPrice": price.maxPrice,
+                        "minPrice": price.minPrice
+                    });
+                }
+
+
                 res.json({
                     result: true,
-                    data: apartments
+                    data: resData
                 });
                 return;
             }
