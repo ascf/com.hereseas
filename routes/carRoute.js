@@ -251,7 +251,7 @@ exports.getCarList = function(req, res, next) {
 
     Car.find(
             query,
-            'id schoolId title cover username longitude latitude createAt updateAt')
+            'id schoolId title cover price username longitude latitude createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, cars) {
