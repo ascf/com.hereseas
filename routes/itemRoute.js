@@ -227,7 +227,7 @@ exports.getItemList = function(req, res, next) {
         'available': true
     };
 
-    Item.find(query, 'id schoolId itemName cover expireAt longitude latitude createAt updateAt')
+    Item.find(query, 'id schoolId itemName cover price expireAt longitude latitude createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, items) {
