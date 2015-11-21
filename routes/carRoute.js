@@ -491,6 +491,7 @@ exports.searchCar = function(req, res, next) {
                                     "sameSchool": sameSchool,
                                     "username": car.username,
                                     "userAvatar": car.userAvatar,
+                                    "title": car.title,
                                     "latitude": car.latitude,
                                     "longitude": car.longitude,
                                     "cover": car.cover,

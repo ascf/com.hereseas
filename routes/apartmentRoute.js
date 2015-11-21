@@ -410,7 +410,7 @@ exports.searchApartment = function(req, res, next) {
                 totalPage = Math.ceil(count / pageSize);
 
                 var resData = [];
-                Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude createAt', pagination).populate('schoolId', 'schoolId name shortName cnName')
+                Apartment.find(aptQuery, 'userId username userAvatar title schoolId cover rooms longitude latitude createAt', pagination).populate('schoolId', 'name shortName cnName')
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, apartments) {
@@ -445,6 +445,7 @@ exports.searchApartment = function(req, res, next) {
                                     "sameSchool": sameSchool,
                                     "username": apartment.username,
                                     "userAvatar": apartment.userAvatar,
+                                    "title" : apartment.title,
                                     "latitude": apartment.latitude,
                                     "longitude": apartment.longitude,
                                     "cover": apartment.cover,

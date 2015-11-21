@@ -33,7 +33,7 @@ var UserSchema = new Schema({
 
     avatar: {
         type: String,
-        default: 'avatar/default.png'
+        default: 'https://s3.amazonaws.com/hereseas-public-images/avatar/default.png'
     },
 
     address: Schema.Types.Mixed,
