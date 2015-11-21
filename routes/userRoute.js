@@ -874,6 +874,9 @@ exports.sendMessage = function(req, res, next) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
             return;
+        } else if (user == null) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
         } else {
             user.chats.addToSet(receiver);
             message.senderUsername = user.username;
@@ -950,16 +953,22 @@ exports.getUserMessage = function(req, res, next) {
     var ep = new EventProxy();
     query.sender = user;
     query.receiver = contact;
-    Message.find(query, function(err, messages) {
-        if (err) {
-            res.json(Results.ERR_DB_ERR);
-            return;
-        } else {
-            for (var i = 0; i < messages.length; i++) {
-                userMessages.push(messages[i]);
-            }
-            ep.emit('findMessage')
-        }
+
+    if (tools.hasNull(query)) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    ep.all('Finish', function() {
+        //sort userMessages by createAt in ascending order
+        userMessages.sort(function(a, b) {
+            return a.createAt.valueOf() - b.createAt.valueOf();
+        });
+        res.json({
+            result: true,
+            data: userMessages
+        });
+        return;
     });
 
     ep.all('findMessage', function() {
@@ -978,25 +987,36 @@ exports.getUserMessage = function(req, res, next) {
         });
     });
 
-    ep.all('Finish', function() {
-        //sort userMessages by createAt in ascending order
-        userMessages.sort(function(a, b) {
-            return a.createAt.valueOf() - b.createAt.valueOf();
-        });
-        res.json({
-            result: true,
-            data: userMessages
-        });
-        return;
-    });
-}
-
-exports.readMessage = function(req, res, next) {
-    Message.findById(req.body.id, function(err, message) {
+    Message.find(query, function(err, messages) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
             return;
         } else {
+            for (var i = 0; i < messages.length; i++) {
+                userMessages.push(messages[i]);
+            }
+            ep.emit('findMessage')
+        }
+    });
+
+}
+
+exports.readMessage = function(req, res, next) {
+
+    if (tools.isEmpty(req.body.id)) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    Message.findById(req.body.id, function(err, message) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else if (message == null) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else {
+
             message.read = true;
             message.save(function(err, message) {
                 if (err) {
