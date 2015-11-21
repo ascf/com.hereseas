@@ -2,7 +2,7 @@ var hereseasApp = angular.module('hereseasApp', [
     'ngAnimate', 'ngCookies', 'ngSanitize','ui.select2',
     'ui.router', 'ngMaterial', 'ngMessages',
     'pascalprecht.translate', 'LocalStorageModule',
-    'pascalprecht.translate', 'angular-loading-bar', 'hereseasDirectives','uiGmapgoogle-maps','ngResource', 'ngFileUpload','ui.bootstrap','jkuri.gallery', 'mp.datePicker'
+    'pascalprecht.translate', 'angular-loading-bar', 'hereseasDirectives','uiGmapgoogle-maps','ngResource', 'ngFileUpload','ui.bootstrap','jkuri.gallery', 'mp.datePicker','textAngular'
 ]);
 
 hereseasApp.constant('APP', {
@@ -22,7 +22,6 @@ hereseasApp.constant('APP', {
 hereseasApp.config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.withCredentials = true;
 }]);
-
 
 hereseasApp.config(function ($stateProvider, $urlRouterProvider,
                              $translateProvider, $httpProvider,
@@ -61,12 +60,6 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
     $stateProvider.state('public', {
         url: '/public',
         templateUrl: '/app/view/partials/_public.html'
-    });
-
-    $stateProvider.state('chat', {
-        url: '/chat',
-        templateUrl: '/app/view/partials/_chat_window.html',
-        controller:'ChatCtrl'
     });
     
     $stateProvider.state('home', {
@@ -187,7 +180,7 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
     }); 
     
     $stateProvider.state('othersProfile', {
-        url: '/othersProfile/:othersId',
+        url: '/othersProfile/:othersId/:schoolId',
         templateUrl: '/app/view/othersProfile.html',
         controller: 'OthersProfileController'
     });  

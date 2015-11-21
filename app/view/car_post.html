@@ -1,4 +1,4 @@
-<md-dialog style="border-radius: 0 0 38px 0;">
+<md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;">
 
 <div layout="row" class="room_post" ng-controller="CarPostController">
     <!--Begin of left side nav_bar-->
@@ -139,14 +139,15 @@
                         <p class="room_post_font_content">车型</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <md-select required ng-model="steps[0].model" name="model" class="cp_select">
+                        <md-select required ng-model="steps[0].category" name="category" class="cp_select">
                             <md-option value="SUV">SUV</md-option>
                             <md-option value="Sedan">四门轿车</md-option>
                             <md-option value="Coupe">双门跑车</md-option>
                             <md-option value="Convertible">敞篷车</md-option>
-                            <md-option value="Hatchback">两厢车</md-option>
-                            <md-option value="Minivan">小货车</md-option>
-                            <md-option value="Wagon">货车</md-option>
+                            <md-option value="Wagon">两厢车</md-option>
+                            <md-option value="Van">面包车</md-option>
+                            <md-option value="Pickup">皮卡</md-option>
+                            <md-option value="Others">其他</md-option>
                         </md-select>
                     </div>
                 </div>
@@ -155,13 +156,14 @@
                         <p class="room_post_font_content">制造商</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <input required ng-model="steps[0].make" name="make" aria-label="CarMake" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
+<!--                        <input required ng-model="steps[0].make" name="make" aria-label="CarMake" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>-->
+                        <select required ng-model="steps[0].make" name="make"  class="cp_select"><option value="">Make</option><option value="Acura" oid="2">Acura</option><option value="Alfa Romeo" oid="3">Alfa Romeo</option><option value="Aston Martin" oid="54">Aston Martin</option><option value="Audi" oid="4">Audi</option><option value="Bentley" oid="57">Bentley</option><option value="BMW" oid="5">宝马</option><option value="Buick" oid="7">Buick</option><option value="Cadillac" oid="8">Cadillac</option><option value="Chevrolet" oid="9">Chevrolet</option><option value="Chrysler" oid="10">Chrysler</option><option value="Dodge" oid="13">Dodge</option><option value="Ferrari" oid="397">Ferrari</option><option value="FIAT" oid="430">FIAT</option><option value="Ford" oid="15">Ford</option><option value="Freightliner" oid="867">Freightliner</option><option value="GMC" oid="16">GMC</option><option value="Honda" oid="18">Honda</option><option value="Hyundai" oid="20">Hyundai</option><option value="Infiniti" oid="21">Infiniti</option><option value="Jaguar" oid="23">Jaguar</option><option value="Jeep" oid="24">Jeep</option><option value="Kia" oid="25">Kia</option><option value="Lamborghini" oid="59">Lamborghini</option><option value="Land Rover" oid="26">Land Rover</option><option value="Lexus" oid="27">Lexus</option><option value="Lincoln" oid="28">Lincoln</option><option value="Lotus" oid="55">Lotus</option><option value="Maserati" oid="61">Maserati</option><option value="Mazda" oid="30">Mazda</option><option value="McLaren" oid="799">McLaren</option><option value="Mercedes-Benz" oid="31">Mercedes-Benz</option><option value="MINI" oid="29">MINI</option><option value="Mitsubishi" oid="34">Mitsubishi</option><option value="Nissan" oid="35">Nissan</option><option value="Porsche" oid="41">Porsche</option><option value="Ram" oid="783">Ram</option><option value="Rolls-Royce" oid="58">Rolls-Royce</option><option value="Scion" oid="45">Scion</option><option value="smart" oid="507">smart</option><option value="SRT" oid="849">SRT</option><option value="Subaru" oid="47">Subaru</option><option value="Tesla" oid="834">Tesla</option><option value="Toyota" oid="49">Toyota</option><option value="Volkswagen" oid="50">Volkswagen</option><option value="Volvo" oid="51">沃尔沃</option></select>
                     </div>
                     <div flex="15">
-                        <p class="room_post_font_content">车系</p>
+                        <p class="room_post_font_content">型号</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                         <input required ng-model="steps[0].style" name="style" aria-label="CarStyle" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
+                         <input required ng-model="steps[0].model" name="model" aria-label="CarStyle" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
@@ -181,14 +183,16 @@
                         </md-input-container>
                     </div>
                 </div>
+<!--
                 <div layout="row" class="room_post_div_content" layout-align="start end">
                     <div flex="15">
                         <p class="room_post_font_content">型号</p>
                     </div>
                     <div flex="80" layout="row" layout-align="start end">
-                        <input ng-model="steps[0].category" name="category"  aria-label="CarCategory" style="border-radius:4px;width:180px;height:19px;border:1px solid #D5D4D2"/>
+                        <input ng-model="steps[0].model" name="model"  aria-label="CarModel" style="border-radius:4px;width:180px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
+-->
                 <div layout="row" class="room_post_div_content" layout-align="start end">
                     <div flex="15">
                         <div class="room_post_font_content">价格</div>
@@ -269,15 +273,15 @@
                             <div layout-align="start center" layout="row">
                                 <input required type="radio" ng-model="steps[1].driveSystem" id="fwd" name="carDriveSystem" value="FWD" style="margin:15px">
                                 <label for="fwd" class="room_post_font_content">
-                                    FWD
+                                    前驱
                                 </label>
                                 <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" id="BWD" value="BWD" style="margin:15px">
                                 <label for="BWD" class="room_post_font_content">
-                                    BWD
+                                    后驱
                                 </label>
                                 <input required type="radio" ng-model="steps[1].driveSystem" name="carDriveSystem" id="AWD" value="AWD" style="margin:15px">
                                 <label for="AWD" class="room_post_font_content">
-                                    AWD
+                                    四驱
                                 </label>
                             </div>
                         </div>
@@ -398,7 +402,7 @@
                 </div>
                 <div class="room_post_div">
                     <md-input-container class="rp_title">
-                    <input type="text" name="title" ng-model="steps[3].title" md-maxlength="35" aria-label="title">
+                    <input type="text" name="title" ng-model="steps[3].title" md-maxlength="12" maxlength="12" aria-label="title">
                     </md-input-container>
                     <br>
                     <br>
@@ -408,14 +412,14 @@
                         <p class="room_post_font_content">描述：</p>
                     </div>
                     <div flex>
-                        <p class="room_post_font_content">向其他用户介绍任何您需要补充的信息，如距学校距离、交通信息、周边、现有室友等。</p>
+                        <p class="room_post_font_content">向其他用户介绍任何您需要补充的信息。</p>
                     </div>
                 </div>
+                
                 <div class="room_post_div" >
-                    <md-input-container flex>
-                    <input ng-model="steps[3].description" columns="1" md-maxlength="300" aria-label="description">
-                    </md-input-container>
+                     <textarea ng-model="steps[3].description" placeholder="最多输入300个字符" rows="8" cols="77"maxlength="300" aria-label="description" style="margin-top:20px;border-radius:4px; outline:none;"></textarea>
                 </div>
+                
             </div>
         </div>
         <!--End of 描述 Page-->

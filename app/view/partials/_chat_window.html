@@ -1,7 +1,24 @@
-<div>
-    <div ng-repeat="msg in messages">
-        {{msg.senderUsername}}:{{msg.content}}&nbsp;&nbsp;&nbsp;&nbsp;{{msg.createAt | date}}
+<md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;">
+<div layout="row" style="height: 520px;width:850px;background-color:rgb(245,245,245)">
+    <div flex="25" style="border:1px rgb(169,169,169) solid;">
+        <div style="outline:none;" ng-repeat="(key,value) in messages" layout="column"  ng-click="setCurContact(key)">
+            <div layout="row" style="margin:5 5 5 5;">
+                <img style="height:70px;width:70px;border: 1px rgb(169,169,169) solid;" ng-src="{{contactDetails[key].avatar}}"class="img-circle"/>
+                <div style="padding-top:25px; margin-left:10px;"><strong>{{contactDetails[key].username}}</strong></div>
+            </div>
+        </div>
     </div>
-    
-    <input type="text" ng-model="content"/><button ng-click="sendMessage()">发送</button>
+    <div flex="75" style="border:1px rgb(169,169,169) solid;">
+        <div ng-repeat="(key,value) in messages" layout="column"  ng-show="key == curContact">        
+            <div ng-repeat="msg in value" layout="column" >
+                <p>{{msg.senderUsername}}:{{msg.content}}&nbsp;&nbsp;&nbsp;&nbsp;{{msg.createAt | date}}</p>
+            </div>
+            
+            <input ng-model="contents[key]" />
+            <button ng-click="sendMessage(key)">发送</button>
+            
+        </div>
+
+    </div>
 </div>
+</md-dialog>

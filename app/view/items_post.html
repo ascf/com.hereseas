@@ -1,4 +1,4 @@
-<md-dialog style="border-radius: 0 0 38px 0;">
+<md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;">
 
 <div layout="row" class="room_post" ng-controller="ItemsPostController">
     <!--Begin of left side nav_bar-->
@@ -48,17 +48,18 @@
                     </div>
                 </button>
             </div>
-            <!--div ng-hide="canPost" class="div_steps">
+            <div ng-hide="canPost" class="div_steps">
                 <p class="rp_font_steps font">还剩&nbsp;</p>
                 <p class="rp_font_steps font"><strong>{{sn}}</strong></p>
                 <p class="rp_font_steps font">&nbsp;步骤未填写</p>
-            </div-->
+            </div>
         </div>
     </md-sidenav>
     <!--End of side nav bar-->
     <md-dialog-content style="min-height:90%;">
         <div layout="column" id="post_wrapper">
         <!--Begin of 房屋设施 Page-->
+        <div layout="column" id="post_content">
         <div ng-show="activePage == 1" class="room_post_listing_content">
             <div style="border-bottom:1px solid #000000">
                 <div layout="row">
@@ -97,12 +98,18 @@
                 <div ng-repeat="item in items">
                 <div layout="row" class="room_post_div_content" layout-align="start end" style="margin-top:10px">
                     <div flex="15">
-                        <p class="room_post_font_content">物品</p>
+                        <p class="room_post_font_content">标题</p>
                     </div>
                     <div flex="75" layout="row" layout-align="start end">
-                        <input ng-model="item.steps[0].itemName"  name="items_name"  aria-label="price" style="width:250px;border-radius:4px;border:1px solid #D5D4D2"/>
+                        <input ng-model="item.steps[0].itemName" maxlength="12"  name="items_name"  aria-label="price" style="width:250px;border-radius:4px;border:1px solid #D5D4D2"/>
                     </div>
-                    <p ng-click="deleteItem($index)" ng-show="items.length>1 && $index!==0">删除</p>
+                    <div ng-hide="items.length == 1" flex layout="row">
+                        <div>
+                            <md-button ng-click="deleteItem($index)" class="md-icon-button">
+                                <i class="rp_icon icon_delete material-icons">delete</i>
+                            </md-button>
+                         </div>
+                    </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end" style="margin-top:10px">
                     <div flex="15">
@@ -110,7 +117,7 @@
                     </div>
                     <div flex="25" layout="row" layout-align="start end">
                         <div>
-                            <select name="room_number" placeholder="" ng-model="item.steps[0].category" required class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2">
+                            <select name="room_number" placeholder="" ng-model="item.steps[0].category" required class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;">
                                 <option value="furniture">家具</option>
                                 <option value="equipment">电器</option>
                                 <option value="electric">电子产品</option>
@@ -168,7 +175,7 @@
                 </div>
                
                 <div layout="row" class="room_post_div_content" layout-align="start end" ng-click="add_item()">
-                    <div  style="width:33px;height:33px;background-image:url(/app/view/img/icon/post_add.png);background-size:cover">
+                    <div  style="width:33px;height:33px;background-image:url(/app/view/img/icon/post_add.png);background-size:100% 100%">
                     </div>
                     <div layout="row" layout-align="start end" style="padding-left:20px">
                         <p class="room_post_font_content">添加物品</p>
@@ -245,6 +252,7 @@
             </div>
         </div>
         <!--End of step buttons-->
+        </div>
         </div>
     </md-dialog-content>
 </div>

@@ -72,12 +72,7 @@
                             <div layout="row">
                                 <div flex="50" style="margin-bottom:10px;height:40px;">
                                     <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         具体型号：{{data.style}}
-                                    </div>
-                                </div>
-                                <div flex="50" style="margin-bottom:10px;height:40px;">
-                                    <div layout="row" style="margin-bottom:10px;height:40px;">
-                                         价格：{{data.price}} $
+                                         价格：${{data.price}} 
                                     </div>
                                 </div>
                              </div>
@@ -219,46 +214,39 @@
                             </div>
                         </div>
 
-                                <div layout="row">
-                                    <div flex="100" class="withBorderRdius roomsBotton" style="background-color:rgb(71,175,150);" ng-click="sendMessage()"><h4>即刻联系</h4></div>   
-                                   <!-- <div flex="10"></div>
-                                    <div flex="45"  class="withBorderRdius roomsBotton" style="background-color:rgb(231,132,110);"><h4>预订<h4></div>   -->
-                                </div>
-                                <div layout="row">
-                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;" ng-click="addFav()" ng-hide="isFav"><p>添加收藏</p></div>  
-                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;" ng-click="delFav()" ng-show="isFav"><p>取消收藏</p></div>  
-                                </div>
+                                <div layout="row" class="withBorderRdius roomsBotton"  style="outline:none; background-color:rgb(71,175,150);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF" ng-click="sendMessage()">
+                            <div class="center-block" style="width:105px;">
+                                <div style="background:url(/app/view/img/items/tele.png);background-size:cover;width:27px;height:27px;margin-top:0px;margin-right:5px;float:left"></div>
+                                <h4 style="margin-top:5px;">即刻联系</h4>
+                            </div>
+                        </div>
+                        
+                        <div ng-hide="isFav" ng-click="addFav()" layout="row" class="withBorderRdius roomsBotton"  style="outline:none;border:1px rgb(169,169,169) solid; outline:none;padding-top:5px;padding-bottom:5px;border-radius:3px;color:black;">
+                            <div class="center-block" style="width:105px;">
+                                <div style="background:url(/app/view/img/profile/favorite1.png);background-size:100% 100%;width:27px;height:27px;margin-top:0px;margin-right:5px;float:left;"></div>
+                                <p style="font-size:18px;" >添加收藏</p>
+                            </div>
+                        </div>
+                        
+                        <div ng-show="isFav" ng-click="delFav()" layout="row" class="withBorderRdius roomsBotton"  style="outline:none;border:1px rgb(169,169,169) solid; outline:none;padding-top:5px;padding-bottom:5px;border-radius:3px;color:black;">
+                            <div class="center-block" style="width:105px;">
+                                <div  style="background:url(/app/view/img/profile/favorite2.png);background-size:100% 100%;width:27px;height:27px;margin-top:0px;margin-right:5px;float:left;"></div>
+                                <p style="font-size:18px;" >取消收藏</p>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
                             </div>
                         </div>
                     </div>
                 </div>
             <!--地图显示-->
         <div layout="row"  style="background-color:rgb(77,77,78); margin:0 0 53 0;padding:30 30 30 30;">
-                <div flex="70" id="map-canvas" class="application" style="height:480px;"> </div>
-                <div flex="30" layout="row">   
-                    <div flex="35"></div>
-                    <div flex layout="column" style="margin-top:100;">
-                        <div style="color:white;">
-                            <md-button aria-label="driving" class="md-icon-button md-raised"   ng-click="SetMethod('driving')" style="height:60px;width:60px;">
-                                <md-icon md-svg-icon="/app/view/img/room/driving.svg"  style="height:50px;width:50px"></md-icon>
-                            </md-button>
-                          {{durations.driving}}
-                        </div>
-                        <div style="margin-top:20px;color:white;">
-                            <md-button aria-label="bicycling" class="md-icon-button md-raised"  ng-click="SetMethod('bicycling')" style="height:60px;width:60px;">
-                                <md-icon md-svg-icon="/app/view/img/room/bicycling.svg"  style="height:50px;width:50px"></md-icon>
-                            </md-button>
-                          {{durations.bicycling}}
-                        </div>
-                        <div style="margin-top:20px;color:white;">
-                            <md-button aria-label="walking" class="md-icon-button md-raised"   ng-click="SetMethod('walking')" style="height:60px;width:60px;">
-                                <md-icon md-svg-icon="/app/view/img/room/walking.svg"  style="height:50px;width:50px"></md-icon>
-                            </md-button>
-                          {{durations.walking}}
-                        </div>
-                    </div>
-                </div>
-                     </div>
+                <div flex=100 id="carMap" class="application" style="height:480px;"></div>
+                
+        </div>
     </div>
     <div footer></div>
 </div>

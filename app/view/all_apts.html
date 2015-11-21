@@ -49,7 +49,7 @@
                     
                     <div ng-show="aptResult.length==0" style="margin-left:20px;">没有任何结果, ╮(╯_╰)╭ </div>
                     <a href="#/rooms/{{apt.id}}" style="declaration:none;color:inherit;" ng-repeat="apt in aptResult"> 
-                    <div  class="col-xs-6 col-sm-6" style="width:260px;height:180px;background-size:cover;background-repeat:no-repeat;margin-left:15px;margin-right:10px;margin-bottom:45px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+apt.cover+')'} " >
+                    <div  class="col-xs-6 col-sm-6" style="width:260px;height:180px;background-size:cover;background-repeat:no-repeat;margin-left:5px;margin-right:10px;margin-bottom:45px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+apt.cover+')'} " >
                         <div layout="row">
                             
                             <div style="margin-top:20px;min-width:70px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" >
@@ -59,8 +59,8 @@
                             </div>
                         </div>
                         <div layout="row" style="margin-top:80px;margin-left:10px;">
-                            <img style="height:52px;width:52px; border:2px solid white;margin-right:10px;" class="img-circle" ng-src="{{apt.userAvatar}}"/>
-                            <span style="margin-top:auto;margin-bottom:0;margin-right:10px;" ng-repeat="type in apt.type">{{type}}</span>
+                            <div ng-style="{'background-image':'url('+apt.userAvatar+')'}" class="mates_wrapper small"></div>
+                            <span style="margin-top:auto;margin-bottom:0;margin-right:10px;">{{apt.title}}</span>
                         </div>
                     </div>  
                         </a>

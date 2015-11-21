@@ -5,7 +5,7 @@
     <div class="container" style="padding-top:27.7px;padding-bottom:29.5px;width:1000px">
             <div layout="row">
                 <div style="width:650px;border-right:1px solid #D4D4D2;padding-right:auto;padding-right:30px;">
-                    <div style="background-repeat:no-repeat;background-size:cover;width:615px;height:250px" ng-style="{'background-image':'url('+schlImg+')'}"></div>
+                    <div style="background-repeat:no-repeat;background-size:cover;width:615px;height:250px" ng-style="{'background-image':'url('+image+')'}"></div>
                 </div>
                 <div style="padding-left:20px;">
                     <div layout="column">
@@ -26,7 +26,8 @@
                     </div>-->
                         <div layout="row" layout-wrap>
                             <div layout="column" ng-repeat="schoolMate in newSchoolMates | limitTo: 9" style="padding-top:10px;">
-                                <img style="margin-left:8px;margin-right:8px;width:59.73px;height:59.73px;"src="{{schoolMate.avatar}}" class="img-circle"></img><div style="width:75px; font-size:14px;" align="center">{{schoolMate.username}}</div>
+                                <div ng-style="{'background-image':'url('+schoolMate.avatar+')'}" class="center-block mates_wrapper school"></div>
+                                <div style="width:75px; font-size:14px;" align="center">{{schoolMate.username}}</div>
                             </div>
                         </div>
                         <div layout="row"  style="margin-top:15px;">

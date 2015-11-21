@@ -1,8 +1,11 @@
-hereseasApp.controller('AccountCtrl', function($scope, requestService, userService, $mdDialog, $cookies){
+hereseasApp.controller('AccountCtrl', function($scope, requestService, userService, $mdDialog, $cookies,alertService){
     $scope.state = userService.getSignupOrLogin();//1 for login 2 for signup
     $scope.login_err = false; //登陆时用户名密码是否匹配变量
+    $scope.nonedu_err = false;
+    $scope.exist_err = false;
     $scope.emailerr = false; //注册时错误变量
     $scope.psworderr = false; //注册时错误变量
+    $scope.usererr = false;
     $scope.need_activate = false;
     $scope.signUpData = {};
     
@@ -50,6 +53,7 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
         $mdDialog.hide();
     };
     
+    
     $scope.goSignup = function(){
         $scope.state = 'signup';
         userService.setSignupOrLogin('signup');
@@ -61,7 +65,11 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
     $scope.goReset = function(){
         $scope.state = 'reset';
         $scope.emailerr = false;
-        
+        $scope.login_err = false;
+        $scope.psworderr = false;
+        $scope.usererr = false;
+        $scope.nonedu_err = false;
+        $scope.exist_err = false;
     };
     
     $scope.goLogin = function(){
@@ -69,6 +77,9 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
         userService.setSignupOrLogin('login');
         $scope.emailerr = false;
         $scope.psworderr = false;
+        $scope.usererr = false;
+        $scope.nonedu_err = false;
+        $scope.exist_err = false;
     };
     
     $scope.rememberMe = function(){
@@ -92,11 +103,6 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
                         userService.setUser(res.data);
                         userService.setLoginState(true);
 
-                        /*requestService.GetFavList(function(res){
-                            console.log(res);
-                            userService.saveFavorite2Cookies(res.data);
-
-                        });*/
                         $scope.hide();
                         $scope.login_err = false;
                     });                    
@@ -119,30 +125,25 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
             else{$scope.emailerr = false;}
         if($scope.signUpData.password == undefined){$scope.psworderr = true;}
             else{$scope.psworderr = false}
-        if(!$scope.psworderr && !$scope.emailerr)
+        if($scope.signUpData.username == undefined){$scope.usererr = true;}
+            else{$scope.usererr = false}
+        if(!$scope.psworderr && !$scope.emailerr && !$scope.usererr)
         {
             requestService.DoRegister($scope.signUpData, function(res) {
                 console.log(res);
                 if (res.result) {
-                    alert("注册成功，您已登录");
-                    requestService.DoLogin($scope.signUpData, function(res){
-                        if(res.result){
-                            requestService.GetUserSelf(function(res){
-                                console.log(res.data);
-                                userService.setUser(res.data);
-                                userService.setLoginState(true);
-
-                                /*requestService.GetFavList(function(res){
-                                    console.log(res);
-                                    userService.saveFavorite2Cookies(res.data);
-                                });*/
-                                //$scope.hide();
-                            });
-                        }
-                    });
+                    alertService.alert("注册成功，请登录您的邮箱进行验证！");
+                    
                     $scope.hide();
                 } else {
-                    alert('The email has already been registered!'); 
+                    if(res.err=="ERR_NOT_EDUEMAIL_ERR"){
+                        $scope.exist_err = false;
+                        $scope.nonedu_err = true;
+                    }
+                    else if(res.err=="ERR_EXISTED_EMAIL "){
+                        $scope.nonedu_err = false;
+                        $scope.exist_err = true;
+                    }
                 }
             });
         }
@@ -154,16 +155,53 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
     }
 });
 
-hereseasApp.controller('ChatCtrl',function($scope, $window, userService, requestService){
+/*hereseasApp.controller('ChatCtrl',function($scope, $window, userService, requestService,$cookies){
     console.log($window.senderId);
-    $scope.recvId = $window.senderId;
-    $scope.content = "";
     
-    requestService.GetMsgs({userid:$scope.recvId}, function(res){
-        console.log(res);
-        $scope.messages = res.data;
-    });
+    $scope.initMsgs = initMsgs;
     
+    $window.onbeforeunload = function(){
+        console.log($cookies);
+        delete $cookies[$window.senderId];
+        $scope.$apply();
+        
+        return "bbb";
+    };
+    
+    $scope.setCurContact = function(contactId){
+        $scope.curContact = contactId;
+    };
+    
+    $scope.contactDetails = {};
+    $scope.messages = {};
+    
+    initMsgs();
+    function initMsgs(){
+        requestService.GetContact(function(res){
+            console.log(res.contacts);
+            $scope.contacts = res.contacts;
+            $scope.curContact = $scope.contacts[0];
+            angular.forEach(res.contacts, function(key){
+                
+                requestService.GetUser({id:key}, function(res){
+                    console.log("contact", res.data);
+                    $scope.contactDetails[key] = res.data;
+                });
+                
+                
+                requestService.GetMsgs({userid:key}, function(res){
+                    console.log(res.data);
+                    if(!angular.equals(res.data,[])){
+                        $scope.messages[key] = res.data;
+                        console.log($scope.messages);
+                    }
+                });
+            });
+        });
+        
+    };
+    
+   
     
     $scope.sendMessage = function(){
         console.log($scope.content);
@@ -184,4 +222,4 @@ hereseasApp.controller('ChatCtrl',function($scope, $window, userService, request
         });
     };
     
-});
+});*/

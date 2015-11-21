@@ -172,7 +172,7 @@
                                 <div layout="row">
                                     <div ng-show="room.type == '卧室'" flex="20" class="withBorderRdius roomTypeBottonBedroom"><h5>{{room.type}}</h5></div>
                                     <div ng-show="room.type == '客厅'" flex="20" class="withBorderRdius roomTypeBottonLivingroom"><h5>{{room.type}}</h5></div>
-                                    <div ng-show="room.type == '其他'" flex="20" class="withBorderRdius roomTypeBottonOthers"><h5>{{room.type}}</h5></div>
+                                    <div ng-show="room.type == '其它'" flex="20" class="withBorderRdius roomTypeBottonOthers"><h5>{{room.type}}</h5></div>
                                     <div flex="20" style="font-size:16px;height:35px; padding-top:6px; margin-left:28px;"><p>{{room.price}}$</p></div>
                                     <div flex="20" style="font-size:16px;height:35px; padding-top:6px; text-align:center;"><p>{{name(room.priceType)}}</p></div>
                                 </div>
@@ -215,16 +215,28 @@
                                 <div><p>{{data.endDate | date:"yyyy-MM-dd"}}</p></div>
                             </div>
                         </div>
-
-                                <div layout="row">
-                                    <div flex="100" class="withBorderRdius roomsBotton" style="background-color:rgb(71,175,150);" ng-click="sendMessage()"><h4>即刻联系</h4></div>   
-                                   <!-- <div flex="10"></div>
-                                    <div flex="45"  class="withBorderRdius roomsBotton" style="background-color:rgb(231,132,110);"><h4>预订<h4></div>   -->
-                                </div>
-                                <div layout="row">
-                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;" ng-click="addFav()" ng-hide="isFav"><p>添加收藏</p></div> 
-                                    <div flex="100" class="withBorderRdius hs_frame" style="font-size:18px;margin-top:15px;height: 38px;text-align: center;padding-top:5px;" ng-click="delFav()" ng-show="isFav"><p>取消收藏</p></div>   
-                                </div>
+                        <div layout="row" class="withBorderRdius roomsBotton"  style="outline:none; background-color:rgb(71,175,150);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF" ng-click="sendMessage()">
+                            <div class="center-block" style="width:105px;">
+                                <div style="background:url(/app/view/img/items/tele.png);background-size:cover;width:27px;height:27px;margin-top:0px;margin-right:5px;float:left"></div>
+                                <h4 style="margin-top:5px;">即刻联系</h4>
+                            </div>
+                        </div>
+                        
+                         <div ng-hide="isFav" ng-click="addFav()" layout="row" class="withBorderRdius roomsBotton"  style="outline:none;border:1px rgb(169,169,169) solid; outline:none;padding-top:5px;padding-bottom:5px;border-radius:3px;color:black;">
+                            <div class="center-block" style="width:105px;">
+                                <div style="background:url(/app/view/img/profile/favorite1.png);background-size:100% 100%;width:27px;height:27px;margin-top:0px;margin-right:5px;float:left;"></div>
+                                <p style="font-size:18px;" >添加收藏</p>
+                            </div>
+                        </div>
+                        
+                        <div ng-show="isFav" ng-click="delFav()" layout="row" class="withBorderRdius roomsBotton"  style="outline:none;border:1px rgb(169,169,169) solid; outline:none;padding-top:5px;padding-bottom:5px;border-radius:3px;color:black;">
+                            <div class="center-block" style="width:105px;">
+                                <div  style="background:url(/app/view/img/profile/favorite2.png);background-size:100% 100%;width:27px;height:27px;margin-top:0px;margin-right:5px;float:left;"></div>
+                                <p style="font-size:18px;" >取消收藏</p>
+                            </div>
+                        </div>
+                        
+                        
                             </div>
                         </div>
                     </div>
@@ -233,7 +245,7 @@
         <div layout="row"  style="background-color:rgb(77,77,78); margin:0 0 53 0;padding:30 30 30 30;">
                 <div flex="70" id="map-canvas" class="application" style="height:480px;"> </div>
                 <div flex="30" layout="row">   
-                    <div flex="35"></div>
+                    <div flex="25"></div>
                     <div flex layout="column" style="margin-top:100;">
                         <div style="color:white;">
                             <md-button aria-label="driving" class="md-icon-button md-raised"   ng-click="SetMethod('driving')" style="height:60px;width:60px;">

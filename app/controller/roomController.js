@@ -31,7 +31,7 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
         requestService.GetAptsBySchool($scope.selectData,
         function(res){
             if(res.result){
-                //console.log(res.data);
+                console.log(res.data);
                 var apts = res.data.apartments;
                 $scope.aptResult = apts;
                 
@@ -56,7 +56,8 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
                 var map = new google.maps.Map(document.getElementById('aptsMap'), {
                     center: myLatLng[0],
                     scrollwheel: true,
-                    zoom: 12
+                    zoom: 12,
+                    scrollwheel: false
                 });
 
                 // Origins, anchor positions and coordinates of the marker increase in the X
@@ -140,7 +141,7 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
     }
 });
 
-hereseasApp.controller('RoomPostController', function ($scope, languageService, userService, alertService, $state, $mdDialog, roomService, Upload, fileReader, requestService, $filter) {
+hereseasApp.controller('RoomPostController', function ($scope,$location, languageService, userService, alertService, $state, $mdDialog, roomService, Upload, fileReader, requestService, $filter) {
     
     var geocoder = new google.maps.Geocoder();
     //地址自动完成相关变量
@@ -168,6 +169,17 @@ hereseasApp.controller('RoomPostController', function ($scope, languageService, 
         {filled: false},
         {filled: false}
     ];
+    $scope.nofees = 
+        {
+            deposit: false,
+            leasing: false,
+            park: false,
+            utilities: false,
+            insurance: false,
+            network: false,
+            clean: false
+        }
+    ;
     
     //the main model 
     $scope.steps = [
@@ -473,6 +485,7 @@ hereseasApp.controller('RoomPostController', function ($scope, languageService, 
                 console.log("final", res);
                 userService.setDraft({});
                 $mdDialog.hide();
+                $location.path('/rooms/'+res.data._id);
             });
         });  
     };
@@ -552,6 +565,33 @@ hereseasApp.controller('RoomPostController', function ($scope, languageService, 
             }
         }
     }, true);
+    
+    //附加费用判断
+    $scope.$watch('nofees',function(newValue,oldValue){
+        console.log($scope.nofees);
+        if(newValue.deposit !== oldValue.deposit)
+            $scope.steps[3].fees.deposit = newValue.deposit ? 0 : null;
+        
+        if(newValue.clean !== oldValue.clean)
+            $scope.steps[3].fees.clean = newValue.clean ? 0 : null;
+        
+        if(newValue.insurance !== oldValue.insurance)
+            $scope.steps[3].fees.insurance = newValue.insurance ? 0 : null;
+        
+        if(newValue.leasing !== oldValue.leasing)
+            $scope.steps[3].fees.leasing = newValue.leasing ? 0 : null;
+        
+        if(newValue.network !== oldValue.network)
+            $scope.steps[3].fees.network = newValue.network ? 0 : null;
+        
+        if(newValue.park !== oldValue.park)
+            $scope.steps[3].fees.park = newValue.park ? 0 : null;
+        
+        if(newValue.utilities !== oldValue.utilities)
+            $scope.steps[3].fees.utilities = newValue.utilities ? 0 : null;
+        
+    },true);
+    
     
     //表格是否填完显示变化函数
     $scope.$watch('steps', function(){
@@ -681,9 +721,10 @@ hereseasApp.controller('RoomPostController', function ($scope, languageService, 
 
 
 
-hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,userService,$mdDialog) {         
+hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,userService,$mdDialog,alertService) {         
     requestService.GetApt({id: $stateParams.aptId}, function(res){
         if(res.result){
+            $scope.aptId = $stateParams.aptId;
             $scope.apt_true = 0;
             $scope.room_true = 0;
             $scope.fees_true = 0;
@@ -774,15 +815,20 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
                         //http get school id error
                     }
                 }); 
-                
-                requestService.GetFavList(function(res){
-                    console.log(res);
-                    if(res.data.apartments !== null)
-                        $scope.favoriteApts = res.data.apartments;
-                    else $scope.favoriteApts = [];
-                    
-                    $scope.isFav = $scope.favoriteApts.indexOf($stateParams.aptId) !== -1;
+                requestService.GetUserSelf(function(res){
+                    if(res.result){
+                        $scope.logged = true;
+                        requestService.GetFavList(function(res){
+                            console.log(res);
+                            if(res.data.apartments !== null)
+                                $scope.favoriteApts = res.data.apartments;
+                            else $scope.favoriteApts = [];
+
+                            $scope.isFav = $scope.favoriteApts.indexOf($stateParams.aptId) !== -1;
+                        });
+                    }
                 });
+                
                 
                 
                 count();
@@ -806,27 +852,61 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
             };
             
             function addFav(){
-                userService.postFavorite({
-                    id: $stateParams.aptId,
-                    category: "apartments"
-                }).then(function (res) {
-                    console.log(res);
-                    if (res.result) {
-                        $scope.isFav = true;
-                        //alert("Message has been sent");
-                    } else {
-                        //alert("err");
-                    }
-                });
+                if($scope.logged){
+                    userService.postFavorite({
+                        id: $stateParams.aptId,
+                        category: "apartments"
+                    }).then(function (res) {
+                        console.log(res);
+                        if (res.result) {
+                            $scope.isFav = true;
+                            //alert("Message has been sent");
+                        } else {
+                            //alert("err");
+                        }
+                    });
+                }else{
+                    alertService.alert("请登录").then(function() {
+                        $scope.$broadcast('login', '1');
+                    });
+                }
+                
             }
 
             function sendMessage(ev) {
-                $mdDialog.show({
-                    templateUrl: '/app/view/message.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose:true
-                });
+                if($scope.logged){
+                    $mdDialog.show({
+                        controller:['$scope', 'recvId', function($scope, recvId) { 
+                            $scope.content = '';
+                            $scope.sendmessage = function() {
+                                console.log($scope.content);
+                                
+                                userService.sendmessage({
+                                    id: recvId,
+                                    content: $scope.content
+                                }).then(function (res) {
+                                    if (res.result) {
+                                        alert("Message has been sent");
+                                    } else {
+                                        alert("err");
+                                    }
+                                });
+                            }
+                        }],
+                        templateUrl: '/app/view/message.html',
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose:true,
+                        locals : {
+                            recvId : $scope.data.userId
+                        }
+                        
+                    });
+                }else{
+                    alertService.alert("请登录").then(function() {
+                        $scope.$broadcast('login', '1');
+                    });
+                }
             };
 
             function count() {

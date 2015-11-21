@@ -18,10 +18,61 @@
 	min-height:90%;
 	position:relative;
 }
+#post_content {
+	padding-bottom:55px; /* Height of the footer element */
+}
+#apost_content {
+	padding-bottom:80px; /* Height of the footer element */
+}
 #post_ft{
     position:absolute;
 	bottom:15px;
     right:0;
+}
+
+.mates_wrapper{  
+    width:80px;
+    height:80px;
+    background-color: inherit;
+    background-size:cover;
+    border-radius:50%;
+    overflow:hidden;
+}
+.mates_wrapper.other{  
+    height: 120px;
+    width: 120px;
+}
+.mates_wrapper.school{
+    margin-left:8px;
+    margin-right:8px;
+    width:59.73px;
+    height:59.73px;
+}
+.mates_wrapper.small{
+    height:52px;
+    width:52px;
+    border:2px solid white;
+    margin-right:10px;
+}
+.mates_wrapper.head{
+    height:130px;
+    width:130px;
+    margin-top:20px;
+    margin-left:20px;
+}
+.mask{
+    border-radius:50%;
+    background:rgba(0,0,0,.5);
+    text-align:center;
+    opacity:0;
+    padding:26px 0 26px 0;
+    -webkit-transition: opacity .25s ease;
+    -moz-transition: opacity .25s ease;
+}
+
+.mates_wrapper:hover .mask {
+    border-radius:50%;
+    opacity:1;
 }
 
 .top_bar{
@@ -96,14 +147,18 @@ a.school{
 
 /*--begin of 2.5 & favorite--*/
 .half_li{
+    width:160px; 
+    height:120px;
     padding-top:15px; 
     padding-bottom: 0px; 
-    margin-left: 40px;
+    margin-left: 20px;
+    margin-bottom: 20px;
     display: block;
 }
 a.half_pic{
+    width:160px; 
+    height:120px;
     z-index: 1;
-    padding-bottom: 75%;
     display: block;
     background-size: cover; 
     position: relative;
@@ -265,7 +320,7 @@ a, h4{
 
 .rp_add_btn{
     background-image:url(/app/view/img/icon/post_add.png);
-    background-size:cover;
+    background-size:100% 100%;
     width:53px;
     height:53px;
     padding-top:16px;
@@ -633,6 +688,7 @@ md-select{
     margin-bottom: 0px;
     width: 570px;
     height: 30px;
+    outline:none;
 }
 .room_post_div_content.stepButton{
     position:absolute;
@@ -653,6 +709,9 @@ md-select{
     margin: 0px;
     color:black;
     font-weight: normal;
+}
+.room_post_font_content.fees{
+    margin-top: 5px;
 }
 .room_post_font_content.err{
     color: red;
@@ -678,7 +737,7 @@ md-select{
 }
 
 .room_post_input.fees{
-    width:160px;
+    width:80px;
 }
 .room_post_input.title{
     width:100%;
@@ -909,3 +968,49 @@ margin-left:45px;width:150px;height:50px;
 }
 <!--end of profile css-->
 
+<!--Typeahead-->
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999
+}
+
+.tt-pic {
+    text-align: left;
+}
+
+.tt-menu {    /* used to be tt-dropdown-menu in older versions */
+  width: 383px;
+  margin-top: 4px;
+  padding: 4px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    color: black;
+  padding: 3px 12px;
+  line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor,.tt-suggestion:hover {
+  color: #fff;
+  background-color: #ADD8E6;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+<!-- End of Typeahead-->

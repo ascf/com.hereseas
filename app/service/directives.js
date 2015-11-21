@@ -58,10 +58,10 @@ hereseasApp.directive('topBar', function(){
         replace: true,
         scope: {}, // This is one of the cool things :). Will be explained in post.
         templateUrl: "/app/view/partials/_top-bar.html",
-        controller: TopBarCtrl       
+        controller: TopBarCtrl,
     };
     
-    function TopBarCtrl($window, $scope, $state,$stateParams){
+    function TopBarCtrl($window, $scope, $state,$stateParams,requestService){
         $scope.startPos = 0;
         $scope.path = "/app/view/img/topBar/";
         $scope.icons = [
@@ -71,10 +71,16 @@ hereseasApp.directive('topBar', function(){
             {img :$scope.path+"actitivies.svg", value:"活动"}
         ];
         
+        requestService.GetSchool({id:$stateParams.schoolId}, function(res){
+            console.log(res);
+            $scope.avatar = res.data.avatar;
+            console.log($scope.avatar);
+        });
+        
+        
         $scope.showAll = function (id){
             console.log($stateParams.schoolId);
-            var index = $scope.icons.indexOf($scope.iconsToShow[id]);
-            //console.log($scope.iconsToShow[id]);
+
             if(id==0) $state.go('school', { schoolId:$stateParams.schoolId });
             if(id==1) $state.go('allApts', { schoolId:$stateParams.schoolId });
             if(id==2) $state.go('allCars', { schoolId:$stateParams.schoolId });
@@ -82,55 +88,6 @@ hereseasApp.directive('topBar', function(){
             if(id==4) $state.go('allActivs', { schoolId:$stateParams.schoolId });
             if(id==6) $state.go('forum', { schoolId:$stateParams.schoolId });
         };
-        
-
-        $scope.numOfShowed = function() {
-            if($scope.windowWidth>810) return 4;
-            else if($scope.windowWidth>670) return 3;
-            else if($scope.windowWidth>530) return 2;
-            else if($scope.windowWidth>420) return 1;
-            else return 0;
-        };
-
-        $scope.setIconsToShow = function(start, num) {
-            var end = start + num;
-            var len = $scope.icons.length;
-            if(end > len)
-                $scope.iconsToShow= $scope.icons.slice(start, len).concat($scope.icons.slice(0, end-len));
-            else
-                $scope.iconsToShow = $scope.icons.slice(start, end);
-        };
-
-        $scope.forward = function(){
-            $scope.startPos = ($scope.startPos+1) % $scope.icons.length;
-            $scope.setIconsToShow($scope.startPos, $scope.numOfShowed());
-        };
-
-        $scope.back = function(){
-            if($scope.startPos == 0)
-            {
-                $scope.startPos = $scope.icons.length-1;
-            }
-            else{
-                $scope.startPos -= 1;
-            }
-            $scope.setIconsToShow($scope.startPos, $scope.numOfShowed());
-        };
-
-
-        var w = angular.element($window);
-        $scope.getWindowWidth = function () {
-            return  w.width();
-        };
-
-        $scope.$watch($scope.getWindowWidth, function (newValue) {
-            $scope.windowWidth = newValue;
-            $scope.setIconsToShow($scope.startPos, $scope.numOfShowed());
-        }, true);
-
-        w.bind('resize', function () {
-            $scope.$apply();
-        });
     }
 });
 

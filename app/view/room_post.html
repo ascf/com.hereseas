@@ -1,4 +1,4 @@
-<md-dialog style="border-radius: 0 0 38px 0;">
+<md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;">
 
 <div layout="row" class="room_post" ng-controller="RoomPostController">
     <!--Begin of left side nav_bar-->
@@ -126,6 +126,7 @@
     <!--End of side nav bar-->
     <md-dialog-content style="min-height:520px;">
         <div layout="column" id="post_wrapper">
+        <div layout="column" id="post_content">
         <!--Begin of 房屋设施 Page-->
         <div ng-show="activePage == 1" class="room_post_listing_content">
             <div>
@@ -335,19 +336,26 @@
                     <p >附加费用</p>
                     <br>
                 </div>
-                <div layout="column"  ng-repeat="(key,value) in steps[3].fees">
-                    <div class="room_post_font_content"  layout="row" >
-                    <div flex="20" style="text-align:right;">
-                        <p class="room_post_font_content">{{name(key)}}</p>
-                    </div>
-                    <div flex="10"></div>
-                    <div layout="row" flex="50">
-                        <p class="room_post_font_content">$</p>
-                        <md-input-container class="room_post_input fees">
-                        <input required type="number" name="fees" ng-model="steps[3].fees[key]" aria-label="fees">
-                        </md-input-container>
-                        <p class="room_post_font_content">每人每月</p>
-                    </div>
+                <div layout="column" ng-repeat="(key,value) in steps[3].fees">
+                    <div class="room_post_div_content" layout="row" >
+                        <div flex="20" style="text-align:right;">
+                            <p class="room_post_font_content">{{name(key)}}</p>
+                        </div>
+                        <div flex="10"></div>
+                        <div layout="row" flex="50">
+                            <p class="room_post_font_content fees">$</p>
+                            <md-input-container class="room_post_input fees">
+                            <input required type="number" min="1" name="fees" ng-model="steps[3].fees[key]" ng-disabled="nofees[key]" aria-label="fees">
+                            </md-input-container>
+                            <p class="room_post_font_content fees">每人每月</p>
+                            <fieldset>
+                                <div layout="row" layout-wrap>
+                                    <md-checkbox ng-model="nofees[key]">
+                                        <p class="room_post_font_content">无此项费用</p>
+                                    </md-checkbox>
+                                </div>
+                            </fieldset>
+                        </div>
                     </div>
                 </div>
             <!--End of 具体附加费用-->
@@ -366,7 +374,7 @@
                 </div>
                 <div class="room_post_div">
                     <md-input-container class="rp_title">
-                    <input type="text" name="title" ng-model="steps[4].title" md-maxlength="35" aria-label="title">
+                    <input type="text" name="title" ng-model="steps[4].title" md-maxlength="12" maxlength="12" aria-label="title">
                     </md-input-container>
                     <br>
                     <br>
@@ -380,9 +388,7 @@
                     </div>
                 </div>
                 <div class="room_post_div" >
-                    <md-input-container flex>
-                    <input ng-model="steps[4].description" columns="1" md-maxlength="300" aria-label="description">
-                    </md-input-container>
+                     <textarea ng-model="steps[4].description" placeholder="最多输入300个字符" rows="8" cols="77"maxlength="300" aria-label="description" style="margin-top:20px;border-radius:4px; outline:none;"></textarea>
                 </div>
             </div>
         </div>
@@ -488,7 +494,7 @@
             <!--End of step buttons-->
         </div>
         <!--End of 图片页 Page-->
-    
+        </div>
         <div class="room_post_div_content stepButton"layout="row" layout-align="end" id="post_ft">
             <div ng-show="activePage >= 2" ng-click="lastPage()" class="rp_last_btn">
                 上一步

@@ -14,25 +14,25 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
     });
     
     $scope.selectData = {
-        schoolId : $stateParams.schoolId, 
-//        page : cur_page, 
-//        pageSize : 3,
-//        price:'',
-        style:'all',
-//        year: '',
-//        miles: '',
+        id : $stateParams.schoolId, 
+        page : cur_page, 
+        pageSize : 6,
+        startPrice:'',
+        endPrice:'',
+        category:''
     };
     
+    $scope.schoolId = $stateParams.schoolId;
     
     
     function updatePage(){
-        requestService.GetCars($scope.selectData,
+        requestService.GetCarsBySchool($scope.selectData,
         function(res){
             console.log(res);
             if(res.result){
                 //console.log(res.data);
-                var cars = res.data;
-                $scope.carResult = cars;
+                var cars = res.data.cars;
+                $scope.carsResult = cars;
                 
                 // store number of max pages
                 max_page = res.data.totalPage;
@@ -54,7 +54,8 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
                 var map = new google.maps.Map(document.getElementById('carsMap'), {
                     center: myLatLng[0],
                     scrollwheel: true,
-                    zoom: 12
+                    zoom: 12,
+                    scrollwheel: false
                 });
 
                 // Origins, anchor positions and coordinates of the marker increase in the X
@@ -76,42 +77,123 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
                     type: 'poly'
                 };
 
-                var price;
+                var curPrice;
                 for(var i=0; i<cars.length; i++){
                     // Create a marker and set its position.
+                    if (typeof cars[i].price == "undefined"){
+                        curPrice = 'No Price';
+                    }else{
+                        curPrice = cars[i].price;
+                    }
                     var marker = new MarkerWithLabel({
                         map: map,
                         position: myLatLng[i],
                         icon: image,
                         shape: shape,
-                        labelContent: cars[i].price,
+                        labelContent: curPrice,
                         draggable: false,
                         labelClass: "labels",
                         labelAnchor: new google.maps.Point(30, 22)
                     });   
                 }
             }else{
-                $scope.carResult = []; 
+                $scope.carsResult = []; 
             }
         });
     };
     updatePage();
     
     $scope.setStyle = function(style){
-        $scope.selectData.style = style;
+        $scope.selectData.category = style;
         updatePage();
     };
+    
+    $scope.setPage = function(pg){
+        cur_page = pg+1;
+        $scope.selectData.page = cur_page;
+        updatePage();
+    };
+    
+    $scope.previous = function(){
+        if(cur_page - 1 > 0){
+            cur_page = cur_page - 1;
+        }
+        $scope.selectData.page = cur_page;
+        updatePage();
+    };
+    
+    $scope.next = function(){
+        if(cur_page + 1 <= max_page){
+            cur_page = cur_page + 1;
+        }
+        $scope.selectData.page = cur_page;
+        updatePage();
+    };
+    
+    $scope.changeSearch = function() {
+        console.log($scope.selectData.hasPark);
+        updatePage();
+    }
 
 });
 
-hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateParams, languageService, requestService,$mdDialog,userService) {         
+hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateParams, languageService, requestService,$mdDialog,userService,alertService) {         
     requestService.GetCar({id: $stateParams.carId}, function(res){
         
         if(res.result){
             console.log(res);
-            $scope.data= res.data[0];
+            $scope.data = res.data[0];
             $scope.addFav = addFav;
             $scope.delFav = delFav;
+            $scope.sendMessage = sendMessage;
+            var car = $scope.data;
+            
+            //set map
+            myLatLng={};
+            myLatLng.lat = parseFloat(car.latitude);
+            myLatLng.lng = parseFloat(car.longitude);             
+
+            // Create a map object and specify the DOM element for display.
+            var map = new google.maps.Map(document.getElementById('carMap'), {
+                center: myLatLng,
+                scrollwheel: true,
+                zoom: 12,
+                scrollwheel: false
+            });
+
+            // Origins, anchor positions and coordinates of the marker increase in the X
+            // direction to the right and in the Y direction down.
+            var image = {
+                url: '/app/view/img/apts/marker.png',
+                    // This marker is 58 pixels wide by 24 pixels high.
+                size: new google.maps.Size(58, 24),
+                    // The origin for this image is (0, 0).
+                origin: new google.maps.Point(0, 0),
+                    // The anchor for this image is the base of the flagpole at (0, 24).
+                anchor: new google.maps.Point(36, 24)
+            };
+                // Shapes define the clickable region of the icon. The type defines an HTML
+                // <area> element 'poly' which traces out a polygon as a series of X,Y points.
+                // The final coordinate closes the poly by connecting to the first coordinate.
+            var shape = {
+                coords: [0, 0, 0, 24, 58, 24, 58, 0],
+                type: 'poly'
+            };
+
+            var price;
+                // Create a marker and set its position.
+            price = car.price;
+            var marker = new MarkerWithLabel({
+                map: map,
+                position: myLatLng,
+                icon: image,
+                shape: shape,
+                labelContent: price,
+                draggable: false,
+                labelClass: "labels",
+                labelAnchor: new google.maps.Point(18, 22)
+            });
+            
             
             function delFav(){
                
@@ -131,18 +213,24 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
             };
             
             function addFav(){
-                userService.postFavorite({
-                    id: $stateParams.carId,
-                    category: "cars"
-                }).then(function (res) {
-                    //console.log(res);
-                    if (res.result) {
-                        $scope.isFav = true;
-                        //alert("Message has been sent");
-                    } else {
-                        //alert("err");
-                    }
-                });
+                if($scope.logged){
+                    userService.postFavorite({
+                        id: $stateParams.carId,
+                        category: "cars"
+                    }).then(function (res) {
+                        //console.log(res);
+                        if (res.result) {
+                            $scope.isFav = true;
+                            //alert("Message has been sent");
+                        } else {
+                            //alert("err");
+                        }
+                    });
+                }else{
+                    alertService.alert("请登录").then(function() {
+                        $scope.$broadcast('login', '1');
+                    });
+                }
             }
 
 //                {
@@ -211,13 +299,18 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
                 $scope.images.push({thumb:$scope.data.images[i], img: $scope.data.images[i]});
             //console.log($scope.images);
             
-            requestService.GetFavList(function(res){
-                console.log(res);
-                if(res.data.cars !== null)
-                    $scope.favoriteCars = res.data.cars;
-                else $scope.favoriteCars = [];
+            requestService.GetUserSelf(function(res){
+                if(res.result){
+                    $scope.logged = true;
+                    requestService.GetFavList(function(res){
+                        console.log(res);
+                        if(res.data.cars !== null)
+                            $scope.favoriteCars = res.data.cars;
+                        else $scope.favoriteCars = [];
 
-                $scope.isFav = $scope.favoriteCars.indexOf($stateParams.carId) !== -1;
+                        $scope.isFav = $scope.favoriteCars.indexOf($stateParams.carId) !== -1;
+                    });
+                }
             });
             
             
@@ -234,21 +327,42 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
                     clickOutsideToClose:true
                 });
             };
+
             
-            $scope.sendMsg = function(){
-                requestService.SendMsg({id:'56147dee8eecbd0d06c8970b', content:'hahahaha'}, function(res){
-                    console.log(res);
-                });
-            };
-            
-            
-            $scope.sendMessage = function(ev) {
-                $mdDialog.show({
-                    templateUrl: '/app/view/message.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose:true
-                });
+            function sendMessage(ev) {
+                if($scope.logged){
+                    $mdDialog.show({
+                        controller:['$scope', 'recvId', function($scope, recvId) { 
+                            $scope.content = '';
+                            $scope.sendmessage = function() {
+                                console.log($scope.content);
+                                
+                                userService.sendmessage({
+                                    id: recvId,
+                                    content: $scope.content
+                                }).then(function (res) {
+                                    if (res.result) {
+                                        alert("Message has been sent");
+                                    } else {
+                                        alert("err");
+                                    }
+                                });
+                            }
+                        }],
+                        templateUrl: '/app/view/message.html',
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose:true,
+                        locals : {
+                            recvId : $scope.data.userId
+                        }
+                        
+                    });
+                }else{
+                    alertService.alert("请登录").then(function() {
+                        $scope.$broadcast('login', '1');
+                    });
+                }
             };
 
             /*$scope.aprPowIcons = [
@@ -385,7 +499,7 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
     });
 });
 
-hereseasApp.controller('CarPostController', function($scope, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter){
+hereseasApp.controller('CarPostController', function($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter){
     
             var geocoder = new google.maps.Geocoder();
             //地址自动完成相关变量
@@ -577,9 +691,9 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                     year : '',
                     make : '',
                     totalMiles : '',
-                    style : '',
-                    category : '',
-                    model : 'Sedan',
+                    category : 'Sedan',
+                    model : '',
+                    style:'',
                     price : '',
                     boughtDate : undefined,
                  // available : true
@@ -726,8 +840,8 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                 var s2 = 0; //initial step page 3
                 $scope.sn = 0; //initial whole pages
                 //test if step page 0 is filled
-                if($scope.steps[0].year == '' || $scope.steps[0].model == '' || $scope.steps[0].make ==
-                   ''||$scope.steps[0].style == ''||$scope.steps[0].totalMiles == ''||$scope.steps[0].boughtDate ==
+                if($scope.steps[0].year == '' || $scope.steps[0].category == '' || $scope.steps[0].make ==
+                   ''||$scope.steps[0].totalMiles == ''||$scope.steps[0].boughtDate ==
                    undefined||$scope.steps[0].price == ''){
                     $scope.tableFilled[0].filled = false;
                 }else{
@@ -778,8 +892,13 @@ hereseasApp.controller('CarPostController', function($scope, languageService, us
                     console.log("step6",res);
                     requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
                         console.log("final", res);
-                        userService.setCarDraft({});
-                        $mdDialog.hide();
+                        if(res.result){
+                            userService.setCarDraft({});
+                            $mdDialog.hide();
+                            $location.path('/cars/'+res.data._id);
+                        }else{
+                            alert('发布失败');
+                        }
                     });
                 });  
             };

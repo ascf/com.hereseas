@@ -1,4 +1,8 @@
 hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,requestService,userService, Upload, fileReader, $window,$cookies) {
+    $scope.$on('logout',function(){
+        $state.go('home');
+    });
+    
     requestService.GetUserSelf(function (res) {
         console.log("userself", res);
         if (res.result){            
@@ -42,7 +46,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
 
             $scope.messages = [];
             $scope.numNotify = 0;
-            var popWindows = [];
+            
             $scope.img = undefined;
             
             $scope.validAddress = validAddress; //判断地址是否合法
@@ -50,7 +54,6 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             $scope.setActivePage = setActivePage;
             
             $scope.setActiveTab = setActiveTab;
-            $scope.updateMsgs = updateMsgs;
             $scope.getUnreadMsgsNum = getUnreadMsgsNum;
             $scope.initMessages = initMessages;
             
@@ -105,10 +108,6 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     else $scope.favoriteItems = [];
                 });
             };
-
-            
-            
-            
             
             
             function getItems(init){
@@ -204,6 +203,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     {
                         $scope.hasPostedApts = true;
                         $scope.apts = res.data;
+                        console.log(res.data);
                         if(init == true)
                             $scope.localApts = $scope.apts;
                     }
@@ -252,11 +252,12 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     })
                 }
             };
+            
             function initMessages(){
                 requestService.GetContact(function(res){
                     //console.log(res.contacts);
                     angular.forEach(res.contacts, function(key){
-                        popWindows.push(null);
+                        
                         requestService.GetMsgs({userid:key}, function(res){
                             //console.log(res.data);
                             if(!angular.equals(res.data,[])){
@@ -282,31 +283,9 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     num += key.num;
                 });
                 return num;
-            };
+            };            
             
-            function updateMsgs(index) {
-                if(angular.equals(popWindows[index], null)){
-                    popWindows[index] = $window.open('#/chat');
-                    popWindows[index].senderId = $scope.messages[index].userId;
-                }
-                $scope.messages[index].num =0;
-                angular.forEach($scope.messages[index].msgs, function(key){
-                    if(key.read == false && key.sender !== $scope.basicInfo.username)
-                    {
-                        userService.updateMessages({
-                            id: key.id
-                        }).then(function (res) {
-                            if (res.result) {
-                                console.log("Message updated");
-                                key.read = true;
-                            } else {
-                                console.log("err");
-                            }
-                        });
-                    }
-                });
-            };
-
+            
             function validAddress(value) {
                 var num = 0;
                 angular.forEach( value, function() {

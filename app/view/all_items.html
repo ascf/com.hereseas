@@ -37,11 +37,11 @@
         </div>
         <div layout="row" style="padding-top:20px;">
             <div layout="column">
-                <div id="apts_panel" style="overflow-y:scroll;width:585px;min-height:670px;margin-right:10px;" class="row">
+                <div id="items_panel" style="overflow-y:scroll;width:585px;min-height:670px;margin-right:10px;" class="row">
                     
-                    <div ng-show="favsItems.length==0 && notFavsItems.length==0">没有任何结果, ╮(╯_╰)╭ </div>
-                    <a href="#/items/{{item._id}}" style="declaration:none;color:inherit;" ng-repeat="item in notFavsItems">
-                    <div class="col-xs-6 col-sm-6" style="width:260px;height:180px;background-size:cover;background-repeat:no-repeat;margin-left:15px;margin-right:10px;margin-bottom:45px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+item.cover+')'} " >
+                    <div ng-show="itemsResult.length==0">没有任何结果, ╮(╯_╰)╭ </div>
+                    <a href="#/items/{{item.id}}" style="declaration:none;color:inherit;" ng-repeat="item in itemsResult">
+                    <div class="col-xs-6 col-sm-6" style="width:260px;height:180px;background-size:cover;background-repeat:no-repeat;margin-left:5px;margin-right:10px;margin-bottom:45px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+item.cover+')'} " >
                         <div layout="row">
                                     <!--
                                     <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;"  src="/app/view/img/profile/favorite1.png" ng-click="addToFavs($index)"/>
@@ -55,27 +55,31 @@
                             </div>
                                 </div>
                                 <div layout="row" style="margin-top:80px;margin-left:10px;">
-                                    <img style="height:52px;width:52px;border:2px solid white;margin-right:10px;" class="img-circle" ng-src="{{item.userAvatar}}"/>
-                                    <span style="margin-top:auto;margin-bottom:0;margin-right:10px;">{{item.itemName}}</span>
+                                    <div ng-style="{'background-image':'url('+item.userAvatar+')'}" class="mates_wrapper small"></div>
+                                    <div style="margin-top:auto;margin-bottom:0;margin-right:10px;">{{item.itemName}}</div>
                                 </div>
                             </div>
                             </a>
-                        <div layout="column">
-                            <a href="#/items/{{item._id}}" ng-repeat="item in favsItems">
-                            <div style="width:250px;height:250px;background-size:cover;background-repeat:no-repeat;margin-left:10px;margin-right:10px;margin-bottom:35px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+item.cover+')'}">
-                                <div layout="row">
-                                    <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;" src="/app/view/img/profile/favorite2.png" ng-click="removeFavs($index)"/>
-                                    <div style="width:52px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;" ng-style="{'background-image':'url(/app/view/img/profile/price.png)'} ">
-                                        <div class="rotate" style="font-size:9px;padding-top:5px;padding-left:30px">{{item.price}}</div>
-                                    </div>
-                                </div>
-                                <div layout="row" style="margin-top:170px;margin-left:10px;">
-                                    <img style="height:52px;width:52px;" class="img-circle" ng-src="{{item.userAvatar}}"/>
-                                </div>
-                            </div> 
-                            </a>
-                        </div>
                     </div>
+                <div layout="row">
+                    <nav>
+                      <ul class="pagination" style="margin-left:10px;">
+                        <li>
+                          <a href="#/allItems/{{schoolId}}" aria-label="Previous" ng-click="previous()">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                            <li ng-repeat="page in pages">
+                                <a href="#/allItems/{{schoolId}}" ng-click="setPage($index)">{{page.id}}</a>
+                            </li>
+                        <li>
+                          <a href="#/allItems/{{schoolId}}" aria-label="Next" ng-click="next()">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                </div>
                 </div>
             <div id="itemsMap" class="application" style="height:725px;width:480px;"> </div>
         </div>

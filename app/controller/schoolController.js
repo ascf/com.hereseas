@@ -1,8 +1,8 @@
-hereseasApp.controller('SchoolController', function ($stateParams,$scope, roomService, requestService, $window, $state) {
+hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookies,roomService, requestService, $window, $state) {
     $scope.schoolId = $stateParams.schoolId;
     
-    $scope.bgImg = "/app/view/img/school/bg1.svg";
-    $scope.schlImg = "/app/view/img/school/gwu_title.JPG";
+//    $scope.bgImg = "/app/view/img/school/bg1.svg";
+//    $scope.schlImg = "/app/view/img/school/gwu_title.JPG";
 
     $scope.new_users = [
             {img :"/app/view/img/user/img1.JPG"},
@@ -125,7 +125,7 @@ hereseasApp.controller('SchoolController', function ($stateParams,$scope, roomSe
 
 
 hereseasApp.controller('SchoolSearchCtrl', function($scope, $state,requestService) {
-
+/*
     $scope.selected = undefined;
     
     requestService.GetSchools(function(res){
@@ -141,7 +141,16 @@ hereseasApp.controller('SchoolSearchCtrl', function($scope, $state,requestServic
             $scope.selected = result;
         });
         
-        */
+        $scope.clicked = false;
+        $scope.clickSearch = function() {
+            //console.log("chaned");
+            if ($scope.selected == undefined || $scope.selected == "") {
+                console.log("haha");
+                //$state.go('school',{schoolId:$scope.ids[$scope.schools.indexOf(0)]}); 
+            }
+        }
+        
+
         $scope.$watch(
           function() { return $scope.selected; },
           function(newValue, oldValue) {
@@ -153,8 +162,109 @@ hereseasApp.controller('SchoolSearchCtrl', function($scope, $state,requestServic
         );
     });
 
+*/
+
+    
+
+    requestService.GetSchools(function(res){
+        var schools = [];
+
+        for(var i=0; i<res.data.length; i++){
+            schools.push(res.data[i]);
+        }
+        
+        var substringMatcher = function(strs) {
+          return function findMatches(q, cb) {
+                
+                var matches, substringRegex;
+
+                // an array that will be populated with substring matches
+                matches = [];
+
+                // regex used to determine if a string contains the substring `q`
+                substrRegex = new RegExp(q, 'i');
+
+                // iterate through the pool of strings and for any string that
+                // contains the substring `q`, add it to the `matches` array
+                $.each(strs, function(i, str) {
+                    
+                  if (substrRegex.test(str.name)) {
+                    matches.push(str);
+                  }
+                });
+
+                cb(matches);
+          };
+        };
+
+
+        $('#the-basics .typeahead').typeahead({minLength: 0}, {
+          name: 'best-pictures',
+          display: 'value',
+          source: substringMatcher(schools),
+          templates: {
+            empty: [
+              '<div class="empty-message" style="text-align: center; color: black; padding: 5px, 10px;">',
+                'unable to find any Best Picture winners that match the current query',
+              '</div>'
+            ].join('\n'),
+            //suggestion: Handlebars.compile('<div><strong>{{name}}</strong> – {{name}}</div>')
+            
+            suggestion:  function(data) {
+                //console.log(data);
+                //return '<p><strong>' + data.name + '</strong> – ' + data.shortName + '</p>';
+                //return '<img src="app/view/img/school/avt_gwu.png">' + '<p><strong>' + data.name + '</strong> – ' + data.shortName + '</p>';
+                return '<div class="tt-pic">' + '<img src="' + data.avatar + '" width=20 height= 20/>' + '<strong>&nbsp&nbsp' + data.name + '</strong>' + '</div>';
+            }
+            
+          }
+        });
+
+        $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+          $state.go('school',{schoolId:suggestion._id}); 
+        });
+
+    });
+
+
 });
 
+/*
+//This code is to show typeahead when focus on input.
+hereseasApp.directive('typeaheadFocus', function () {
+  return {
+    require: 'ngModel',
+    link: function (scope, element, attr, ngModel) {
+
+      //trigger the popup on 'click' because 'focus'
+      //is also triggered after the item selection
+      element.bind('click', function () {
+
+        var viewValue = ngModel.$viewValue;
+
+        //restore to null value so that the typeahead can detect a change
+        if (ngModel.$viewValue == ' ') {
+          ngModel.$setViewValue(null);
+        }
+
+        //force trigger the popup
+        ngModel.$setViewValue(' ');
+
+        //set the actual value in case there was already a value in the input
+        ngModel.$setViewValue(viewValue || ' ');
+      });
+
+      //compare function that treats the empty space as a match
+      scope.emptyOrMatch = function (actual, expected) {
+        if (expected == ' ') {
+          return true;
+        }
+        return actual.indexOf(expected) > -1;
+      };
+    }
+  };
+});
+*/
 hereseasApp.controller('SchoolMatesCtrl', function($scope, $stateParams, $state, requestService) {
 
     requestService.GetSchoolMates({id: $stateParams.schoolId}, function(res){
@@ -164,7 +274,7 @@ hereseasApp.controller('SchoolMatesCtrl', function($scope, $stateParams, $state,
     
     $scope.seeOthersProfile = function(index){
         console.log(index);
-        $state.go('othersProfile',{othersId:$scope.schoolMates[index]._id}); 
+        $state.go('othersProfile',{othersId:$scope.schoolMates[index]._id, schoolId:$stateParams.schoolId}); 
     }
 
 });

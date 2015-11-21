@@ -1,7 +1,7 @@
-<div style="background-color:rgb(248,248,249);" style="min-width:1000px;">
+<div style="background-color:rgb(248,248,249);" style="min-width:1000px;" id="wrapper">
     <header ng-include="'app/view/partials/_header-one.html'"></header>
     <div top-bar></div>
-    <div layout="row">
+    <div layout="row" id="content">
         <div class="container" style="width:1000px;" layout="row">          
             <!--items left-->
             <div flex=70 layout="column" style="padding-right:20px">
@@ -65,7 +65,7 @@
             </div>
         </div>
     </div>
-    <div footer></div>
+    <div footer id="footer"></div>
 </div>
 <style>
     h4{

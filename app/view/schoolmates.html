@@ -2,28 +2,7 @@
 /* CSS3 EFFECTS */
 
 /* THIRD EFFECTS */
-.mates_wrapper{  
-    width:80px;
-    height:80px;
-    background-color: inherit;
-    background-size:cover;
-    border-radius:50%;
-    overflow:hidden;
-}
-.mask{
-    border-radius:50%;
-    background:rgba(0,0,0,.5);
-    text-align:center;
-    opacity:0;
-    padding:26px 0 26px 0;
-    -webkit-transition: opacity .25s ease;
-    -moz-transition: opacity .25s ease;
-}
 
-.mates_wrapper:hover .mask {
-    border-radius:50%;
-    opacity:1;
-}
 
 </style>
 <div style="background-color:#FFFFFF;min-width:1000px" id="wrapper">
@@ -31,8 +10,8 @@
     <div id="content">
         <div top-bar></div>
         <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
-            <div layout="row" style="overflow-y:scroll;margin-left:-5px;margin-right:50px">
-                <div layout="column" flex="20" ng-repeat="mate in schoolMates" style="padding:10px;" ng-click="seeOthersProfile($index)">
+            <div class="row" style="overflow-y:scroll;margin-left:-5px;margin-right:50px;">
+                <div class="col-xs-3 col-sm-3" layout="column" ng-repeat="mate in schoolMates" style="padding:10px;min-height:138px;" ng-click="seeOthersProfile($index)">
                     <div ng-style="{'background-image':'url('+mate.avatar+')'}" class="center-block mates_wrapper">
                         <div class="mask">
                             <a href="#" class="info" style="color:rgba(255,255,255,.85);font-size:20px">联系</a>

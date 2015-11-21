@@ -6,13 +6,13 @@ hereseasApp.controller('ItemsController',function($stateParams,$scope,requestSer
     $scope.selectData = {
         id : $stateParams.schoolId, 
         page:1,
-        pageSize:4,
+        pageSize:6,
         category:'',
         startPrice:'',
         endPrice:'',
     };
     
-    
+    $scope.schoolId = $stateParams.schoolId;
     
     function updatePage(){
         requestService.GetItemsBySchool($scope.selectData,
@@ -43,7 +43,8 @@ hereseasApp.controller('ItemsController',function($stateParams,$scope,requestSer
                 var map = new google.maps.Map(document.getElementById('itemsMap'), {
                     center: myLatLng[0],
                     scrollwheel: true,
-                    zoom: 12
+                    zoom: 12,
+                    scrollwheel: false
                 });
 
                 // Origins, anchor positions and coordinates of the marker increase in the X
@@ -80,8 +81,7 @@ hereseasApp.controller('ItemsController',function($stateParams,$scope,requestSer
                     });   
                 }
             }else{
-                $scope.favsItems = [];
-                $scope.notFavsItems = []; 
+                $scope.itemsResult = [];
             }
         });
     };
@@ -92,9 +92,36 @@ hereseasApp.controller('ItemsController',function($stateParams,$scope,requestSer
         updatePage();
     };
     
+    $scope.setPage = function(pg){
+        cur_page = pg+1;
+        $scope.selectData.page = cur_page;
+        updatePage();
+    };
+    
+    $scope.previous = function(){
+        if(cur_page - 1 > 0){
+            cur_page = cur_page - 1;
+        }
+        $scope.selectData.page = cur_page;
+        updatePage();
+    };
+    
+    $scope.next = function(){
+        if(cur_page + 1 <= max_page){
+            cur_page = cur_page + 1;
+        }
+        $scope.selectData.page = cur_page;
+        updatePage();
+    };
+    
+    $scope.changeSearch = function() {
+        console.log($scope.selectData.hasPark);
+        updatePage();
+    }
+    
 });
 
-hereseasApp.controller('ItemsPostController', function ($scope, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter) {
+hereseasApp.controller('ItemsPostController', function ($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter) {
    var geocoder = new google.maps.Geocoder();
             //地址自动完成相关变量
             $scope.options1 = null;
@@ -406,7 +433,11 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
                     $scope.addressCorrect = false;
                  
                 
-                if($scope.tableFilled[0].filled && $scope.tableFilled[1].filled){
+                //test if all tables are filled
+                if(!$scope.tableFilled[0].filled && !$scope.tableFilled[1].filled){$scope.sn = 2;}
+                else if($scope.tableFilled[0].filled && $scope.tableFilled[1].filled){$scope.sn = 0;}
+                else $scope.sn = 1;
+                if($scope.sn == 0){
                     $scope.canPost = true;
                 }else{
                     $scope.canPost = false;
@@ -431,7 +462,12 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
                                 requestService.EndItempost({id:draftId}, function(res){
                                     console.log("final", res);
                                    // userService.setItemDraft({});
-                                    $mdDialog.hide();
+                                    if(res.result){
+                                        $mdDialog.hide();
+                                        $location.path('/items/'+res.data._id);
+                                    }else{
+                                        alert('发布失败');                       
+                                    }
                                 });
                             });
                         });
@@ -493,7 +529,98 @@ hereseasApp.controller('ItemsPostController', function ($scope, languageService,
 
 });
 
-hereseasApp.controller('ItemsDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,$mdDialog) {
+hereseasApp.controller('ItemsDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,$mdDialog,userService,alertService) {
+    
+    $scope.addFav = addFav;
+    $scope.delFav = delFav;
+    $scope.sendMessage = sendMessage;
+    requestService.GetUserSelf(function(res){
+        if(res.result){
+            $scope.logged = true;
+            requestService.GetFavList(function(res){
+                console.log(res);
+                if(res.data.items !== null)
+                    $scope.favoriteItems = res.data.items;
+                else $scope.favoriteItems = [];
+
+                $scope.isFav = $scope.favoriteItems.indexOf($stateParams.itemId) !== -1;
+            });
+        }
+    });
+    
+    function delFav(){ 
+        userService.deleteFavorite({
+            id:$stateParams.itemId,
+            category:"items"
+        }).then(function (res) {
+            console.log(res);
+            if (res.result) {
+                //alert("Message has been sent");
+                $scope.isFav = false;
+            } else {
+                //alert("err");
+            }
+        });
+
+    };
+
+    function addFav(){
+        if($scope.logged){
+            userService.postFavorite({
+                id: $stateParams.itemId,
+                category: "items"
+            }).then(function (res) {
+                console.log(res);
+                if (res.result) {
+                    $scope.isFav = true;
+                    //alert("Message has been sent");
+                } else {
+                    //alert("err");
+                }
+            });
+        }else{
+            alertService.alert("请登录").then(function() {
+                $scope.$broadcast('login', '1');
+            });
+        }
+
+    }
+    
+    function sendMessage(ev) {
+        if($scope.logged){
+            $mdDialog.show({
+                controller:['$scope', 'recvId', function($scope, recvId) { 
+                    $scope.content = '';
+                    $scope.sendmessage = function() {
+                        console.log($scope.content);
+
+                        userService.sendmessage({
+                            id: recvId,
+                            content: $scope.content
+                        }).then(function (res) {
+                            if (res.result) {
+                                alert("Message has been sent");
+                            } else {
+                                alert("err");
+                            }
+                        });
+                    }
+                }],
+                templateUrl: '/app/view/message.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals : {
+                    recvId : $scope.data.userId
+                }
+
+            });
+        }else{
+            alertService.alert("请登录").then(function() {
+                $scope.$broadcast('login', '1');
+            });
+        }
+    };
     // display single old stuff 
     $scope.goToEach = function(index){
         console.log(index);
@@ -503,6 +630,9 @@ hereseasApp.controller('ItemsDisplayController', function ($state, $scope, roomS
             case 3:$state.go('items',{itemId:$scope.otherItems[index].content._id});break;
         }
     };
+    
+    
+    
     
     function itemSetMap(){
         requestService.GetItem({id: $stateParams.itemId}, function(res) {
@@ -537,7 +667,8 @@ hereseasApp.controller('ItemsDisplayController', function ($state, $scope, roomS
                 var map = new google.maps.Map(document.getElementById('itemMap'), {
                     center: myLatLng,
                     scrollwheel: true,
-                    zoom: 12
+                    zoom: 12,
+                    scrollwheel: false
                 });
 
                 // Origins, anchor positions and coordinates of the marker increase in the X

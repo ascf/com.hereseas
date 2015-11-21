@@ -39,7 +39,8 @@
                         <a class="hd nav-li-a" ng-click="goProfile()" href="#" style="color:black;outline:none;">{{username}}</a>
                     </li>
                     <li ng-show="logged()">
-                        <img src="/app/view/img/header/msg2.png" style="margin-top:20px;margin-right:10px;margin-left:10px;"/>
+                        <img ng-click="openChatWindow()" src="/app/view/img/header/msg2.png" style="margin-top:20px;margin-right:10px;margin-left:10px;"/>
+                        <img ng-show="newMsg" src="/app/view/img/profile/msg2.png"/>
                     </li>
                     <li class="nav-li" ng-show="logged()">
                         <a class="hd nav-li-a" ng-click="logOut()" href="#" style="color:black;outline:none;">退出</a>

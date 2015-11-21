@@ -8,41 +8,49 @@
             <i class="material-icons">error</i>
             请先进注册邮箱激活账号！
         </div>
+        <div class="login_err" layout="row" ng-show="(state=='signup') && nonedu_err">
+            <i class="material-icons">error</i>
+            需要使用edu邮箱进行注册！
+        </div>
+        <div class="login_err" layout="row" ng-show="(state=='signup') && exist_err">
+            <i class="material-icons">error</i>
+            该邮箱已被注册！
+        </div>
         <div style="text-align:center;">
             <h1 style="color:rgb(121,122,118);font-size:70px;">hereseas</h1>
         </div>
         <!--<form name="sl">-->
             <div class="block-content block-content-full block-content-narrow" style="padding:0 20 0 20; margin-bottom:0px;">
                 <!-- Login Title -->     
-                <div class="sl_err" ng-show="emailerr">
-                    邮箱格式错误，请重试。
-                </div>
                 <div ng-show="state=='resetFalse'" class="sign_form_row" style="text-align:center;margin-bottom:0px;"><p style="padding-top:7px;">您的邮箱还没有注册, 请重新输入, 或<a href="" ng-click="goSignup()" style="outline:none;">注册一个新的帐号<a></p></div>
                 <div ng-show="state=='login'" class="sign_form_row input-group input-group-lg" >
                     <input style="border-radius:3px;" class="form-control" type="email" placeholder="Email" ng-model="user.email" id="login-username" name="email" ng-pattern="/^.+@.+\..+$/">
                 </div>
                 <div ng-show="state=='signup'" class="sign_form_row input-group input-group-lg" >
-                    <input style="border-radius:3px;" class="form-control withBorderRdius" type="email" placeholder="Email" ng-model="signUpData.email" id="login-username" name="login-username">
+                    <input style="border-radius:3px;" class="form-control withBorderRdius" type="email" placeholder="Email (仅限edu邮箱)" ng-model="signUpData.email" id="login-username" name="login-username">
                 </div>
                 <div ng-show="(state=='reset')||(state == 'resetFalse')" class="sign_form_row input-group input-group-lg" >
                     <input style="border-radius:3px;" class="form-control withBorderRdius" type="email" placeholder="Email" ng-model="userData.email" name="username">
                 </div>
-                <div class="sl_err" ng-show="psworderr">
-                    密码至少为6位，请重试。
-                </div>
-                
+                <div class="sl_err" ng-show="emailerr">
+                    邮箱格式错误，请重试。
+                </div>                
                 <div ng-show="state=='login'" class="sign_form_row input-group input-group-lg">
                     <input style="border-radius:3px;" class="form-control" type="password"  placeholder="Password" id="login-password"  ng-model="user.password" name="login-password">
                 </div>
 
                 <div ng-show="state=='signup'" class="sign_form_row input-group input-group-lg">
-                    <input style="border-radius:3px;" class="form-control" type="password"  placeholder="Password" id="login-password"  ng-model="signUpData.password" name="s_password" minlength="6">
+                    <input style="border-radius:3px;" class="form-control" type="password"  placeholder="Password (注册密码至少6位)" id="login-password"  ng-model="signUpData.password" name="s_password" minlength="6">
                 </div>
-
+                <div class="sl_err" ng-show="psworderr">
+                    密码至少为6位，请重试。
+                </div>
                 <div ng-show="state=='signup'" class="sign_form_row input-group input-group-lg">
-                <input style="border-radius:3px;" class="form-control" type="text" placeholder="Username" data-required="required" maxlength="32" autocorrect="off" autocapitalize="off" ng-model="signUpData.username">
+                <input style="border-radius:3px;" class="form-control" type="text" maxlength="6" placeholder="Username (必填, 不能超过6个字符)" data-required="required" maxlength="32" autocorrect="off" autocapitalize="off" ng-model="signUpData.username">
                 </div>
-
+                <div class="sl_err" ng-show="usererr">
+                    请填写用户名。
+                </div>
                  <div ng-show="state=='login'" class="withBorderRdius sign_form_row sign_log_botton"  style="background-color:rgb(222,89,81);outline:none;" ng-click="loginClick()"><h3 style="padding-top:7px;">Log in</h3></div> 
 
                 <div ng-show="state=='signup'" class="withBorderRdius sign_form_row sign_log_botton" style="background-color:rgb(95,168,185);outline:none;" ng-click="signUpSubmit()"><h3 style="padding-top:7px;">Sign up</h3></div> 
@@ -58,8 +66,8 @@
                 </div>
                 
                 <div class="sign_form_row" flex="100" layout="row">
-                    <input type="checkbox" id="sm" ng-show="state=='login'" name="remember" ng-model="user.remember" style="margin-top:10px;" ng-click="rememberMe()">
-                    <label for="sm" style="margin-left:5px;margin-top:10px;font-weight:normal;color:rgb(121,122,118);" ng-show="state=='login'">记住我</label>                    
+                    <!--input type="checkbox" id="sm" ng-show="state=='login'" name="remember" ng-model="user.remember" style="margin-top:10px;" ng-click="rememberMe()">
+                    <label for="sm" style="margin-left:5px;margin-top:10px;font-weight:normal;color:rgb(121,122,118);" ng-show="state=='login'">记住我</label-->                    
                     <p ng-show="(state=='signup') || (state == 'login')" ng-click="goReset()" class="sl_font sign a">忘记密码？</p>
                     <p class="sl_font sign" ng-show="state=='login'" ng-click="goSignup()">还未注册？</p>
                
