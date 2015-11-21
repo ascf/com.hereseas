@@ -344,7 +344,7 @@ exports.searchItem = function(req, res, next) {
     var connection;
     var ep = new EventProxy();
 
-    ep.all('findSchoolConnection', function() {
+    ep.all('findSchoolConnection', function(school) {
 
         if (tools.isEmpty(connection)) {
             res.json(Results.ERR_PARAM_ERR);
@@ -402,7 +402,7 @@ exports.searchItem = function(req, res, next) {
                 totalPage = Math.ceil(count / pageSize);
 
                 var resData = [];
-                Item.find(query, 'id userId username userAvatar schoolId itemName cover price category longitude latitude createAt', pagination)
+                Item.find(query, 'id userId username userAvatar schoolId itemName cover price category longitude latitude createAt', pagination).populate('schoolId', 'name shortName cnName')
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, items) {
@@ -415,10 +415,35 @@ exports.searchItem = function(req, res, next) {
                             return;
                         } else {
 
+                            for (var i = 0; i < items.length; i++) {
+
+                                var item = items[i];
+                                var sameSchool = true;
+                                if (school.id != item.schoolId._id) {
+                                    sameSchool = false;
+                                }
+                                resData.push({
+                                    "id": item.id,
+                                    "schoolId": item.schoolId._id,
+                                    "schoolName": item.schoolId.name,
+                                    "schoolShortName": item.schoolId.shortName,
+                                    "schoolCnName": item.schoolId.cnName,
+                                    "sameSchool": sameSchool,
+                                    "username": item.username,
+                                    "userAvatar": item.userAvatar,
+                                    "latitude": item.latitude,
+                                    "longitude": item.longitude,
+                                    "cover": item.cover,
+                                    "price": item.price,
+                                    "category": item.category,
+                                });
+
+                            }
+
                             res.json({
                                 result: true,
                                 data: {
-                                    "items": items,
+                                    "items": resData,
                                     "totalPage": totalPage,
                                     "currentPage": currentPage
                                 }
@@ -439,7 +464,7 @@ exports.searchItem = function(req, res, next) {
         } else if (school) {
             if (school.status == 1) {
                 connection = school.connection;
-                ep.emit('findSchoolConnection');
+                ep.emit('findSchoolConnection', school);
             } else {
                 res.json(Results.ERR_ACTIVATED_ERR);
                 return;

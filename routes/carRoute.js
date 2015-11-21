@@ -403,7 +403,7 @@ exports.searchCar = function(req, res, next) {
     var connection;
     var ep = new EventProxy();
 
-    ep.all('findSchoolConnection', function() {
+    ep.all('findSchoolConnection', function(school) {
 
         if (tools.isEmpty(connection)) {
             res.json(Results.ERR_PARAM_ERR);
@@ -462,7 +462,7 @@ exports.searchCar = function(req, res, next) {
                 totalPage = Math.ceil(count / pageSize);
 
                 var resData = [];
-                Car.find(query, 'id userId username userAvatar schoolId title cover price category longitude latitude createAt', pagination)
+                Car.find(query, 'id userId username userAvatar schoolId title cover price category longitude latitude createAt', pagination).populate('schoolId', 'name shortName cnName')
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, cars) {
@@ -475,10 +475,34 @@ exports.searchCar = function(req, res, next) {
                             return;
                         } else {
 
+                            for (var i = 0; i < cars.length; i++) {
+
+                                var car = cars[i];
+                                var sameSchool = true;
+                                if (school.id != car.schoolId._id) {
+                                    sameSchool = false;
+                                }
+                                resData.push({
+                                    "id": car.id,
+                                    "schoolId": car.schoolId._id,
+                                    "schoolName": car.schoolId.name,
+                                    "schoolShortName": car.schoolId.shortName,
+                                    "schoolCnName": car.schoolId.cnName,
+                                    "sameSchool": sameSchool,
+                                    "username": car.username,
+                                    "userAvatar": car.userAvatar,
+                                    "latitude": car.latitude,
+                                    "longitude": car.longitude,
+                                    "cover": car.cover,
+                                    "price": car.price,
+                                    "category": car.category,
+                                });
+                            }
+
                             res.json({
                                 result: true,
                                 data: {
-                                    "cars": cars,
+                                    "cars": resData,
                                     "totalPage": totalPage,
                                     "currentPage": currentPage
                                 }
@@ -499,7 +523,7 @@ exports.searchCar = function(req, res, next) {
         } else if (school) {
             if (school.status == 1) {
                 connection = school.connection;
-                ep.emit('findSchoolConnection');
+                ep.emit('findSchoolConnection', school);
             } else {
                 res.json(Results.ERR_ACTIVATED_ERR);
                 return;
