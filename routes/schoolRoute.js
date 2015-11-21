@@ -119,7 +119,7 @@ exports.getSchoolNewStudents = function(req, res, next) {
     var schoolId = req.param('id');
     var query = {};
     var resData = {};
-    var NUMOFUSERS = 6;
+    var NUMOFUSERS = 8;
 
     var ep = new EventProxy();
 
