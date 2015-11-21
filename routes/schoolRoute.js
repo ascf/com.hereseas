@@ -306,6 +306,8 @@ exports.adminAddSchool = function(req, res, next) {
         // execute admin function
         var reqData = {
             name: req.body.name,
+            shortName: req.body.shortName,
+            cnName: req.body.cnName,
             description: req.body.description,
             avatar: req.body.avatar,
             image: req.body.image,

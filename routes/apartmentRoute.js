@@ -30,28 +30,6 @@ exports.getThreeApartments = function(req, res, next) {
     var connection;
     var ep = new EventProxy();
 
-    School.findById(schoolId, function(err, school) {
-        if (err) {
-            console.log(err);
-            res.json(Results.ERR_DB_ERR);
-            return;
-
-        } else if (school) {
-            if (school.status == 1) {
-                connection = school.connection;
-                ep.emit('findSchoolConnection');
-            } else {
-                res.json(Results.ERR_ACTIVATED_ERR);
-                return;
-            }
-        } else {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            return;
-        }
-
-    });
-
-
     ep.all('findSchoolConnection', function() {
 
         var subQuery = {};
@@ -87,6 +65,29 @@ exports.getThreeApartments = function(req, res, next) {
             }
         });
     });
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+                connection = school.connection;
+                ep.emit('findSchoolConnection');
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+
+    });
+
+
 };
 
 
@@ -297,10 +298,6 @@ exports.searchApartment = function(req, res, next) {
     var totalPage;
     var pageSize = 6;
 
-
-    console.log(req.query);
-    // var page = false;
-
     var schoolId = req.param('schoolId');
 
     if (!schoolId) {
@@ -310,27 +307,6 @@ exports.searchApartment = function(req, res, next) {
 
     var connection;
     var ep = new EventProxy();
-
-    School.findById(schoolId, function(err, school) {
-        if (err) {
-            console.log(err);
-            res.json(Results.ERR_DB_ERR);
-            return;
-
-        } else if (school) {
-            if (school.status == 1) {
-                connection = school.connection;
-                ep.emit('findSchoolConnection', school);
-            } else {
-                res.json(Results.ERR_ACTIVATED_ERR);
-                return;
-            }
-        } else {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            return;
-        }
-    });
-
 
     ep.all('findSchoolConnection', function(school) {
 
@@ -421,33 +397,6 @@ exports.searchApartment = function(req, res, next) {
         aptQuery['status'] = 1;
         aptQuery['available'] = true;
 
-        // console.log("aptQuery", aptQuery);
-
-        /*
-            Apartment.find(
-                    aptQuery,
-                    'userId username userAvatar schoolId title description cover images type rooms description favorite available fees facilities address longitude latitude create_at update_at', pagination)
-                .sort({
-                    createAt: 'desc'
-                }).exec(function(err, apartments) {
-                    if (err) {
-                        console.log(err);
-                        res.json(Results.ERR_NOTFOUND_ERR);
-                        return;
-                    } else if (!apartments.length) {
-                        res.json(Results.ERR_NOTFOUND_ERR);
-                        return;
-                    } else {
-                        res.json({
-                            result: true,
-                            data: apartments
-                        });
-                        return;
-                    }
-                })
-        */
-        console.log(school.id)
-
         Apartment.count(aptQuery, function(err, count) {
             if (err) {
                 console.log(err);
@@ -519,8 +468,26 @@ exports.searchApartment = function(req, res, next) {
             }
         });
 
+    });
 
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
 
+        } else if (school) {
+            if (school.status == 1) {
+                connection = school.connection;
+                ep.emit('findSchoolConnection', school);
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
     });
 
 
