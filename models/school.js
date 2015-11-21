@@ -9,6 +9,14 @@ var SchoolSchema = new Schema({
 		type: String
 	},
 
+	cnName: {
+		type: String
+	},
+
+	shortName: {
+		type: String
+	},
+
 	avatar: {
 		type: String
 	},

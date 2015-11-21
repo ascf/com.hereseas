@@ -122,8 +122,8 @@ exports.getApartmentList = function(req, res, next) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
             } else {
-                
-                 for (var i = 0; i < apartments.length; i++) {
+
+                for (var i = 0; i < apartments.length; i++) {
                     var apartment = apartments[i];
                     var price = {
                         maxPrice: calculatePrice(apartment.rooms).maxPrice,
@@ -320,7 +320,7 @@ exports.searchApartment = function(req, res, next) {
         } else if (school) {
             if (school.status == 1) {
                 connection = school.connection;
-                ep.emit('findSchoolConnection');
+                ep.emit('findSchoolConnection', school);
             } else {
                 res.json(Results.ERR_ACTIVATED_ERR);
                 return;
@@ -332,7 +332,7 @@ exports.searchApartment = function(req, res, next) {
     });
 
 
-    ep.all('findSchoolConnection', function() {
+    ep.all('findSchoolConnection', function(school) {
 
         if (tools.isEmpty(connection)) {
             res.json(Results.ERR_PARAM_ERR);
@@ -446,6 +446,7 @@ exports.searchApartment = function(req, res, next) {
                     }
                 })
         */
+        console.log(school.id)
 
         Apartment.count(aptQuery, function(err, count) {
             if (err) {
@@ -460,7 +461,7 @@ exports.searchApartment = function(req, res, next) {
                 totalPage = Math.ceil(count / pageSize);
 
                 var resData = [];
-                Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude createAt', pagination)
+                Apartment.find(aptQuery, 'userId username userAvatar schoolId cover rooms longitude latitude createAt', pagination).populate('schoolId', 'schoolId name shortName')
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, apartments) {
@@ -479,18 +480,30 @@ exports.searchApartment = function(req, res, next) {
                                     minPrice: calculatePrice(apartment.rooms).minPrice
                                 }
                                 var type = getType(apartment.rooms);
+
+                                var sameSchool = true;
+
+                                if (school.id != apartment.schoolId._id) {
+                                    sameSchool = false;
+                                }
+
                                 resData.push({
                                     "id": apartment.id,
-                                    "schoolId": apartment.schoolId,
+                                    "schoolId": apartment.schoolId._id,
+                                    "schoolName": apartment.schoolId.name,
+                                    "schoolShortName": apartment.schoolId.shortName,
+                                    "sameSchool": sameSchool,
                                     "username": apartment.username,
                                     "userAvatar": apartment.userAvatar,
                                     "latitude": apartment.latitude,
                                     "longitude": apartment.longitude,
                                     "cover": apartment.cover,
                                     "price": price,
-                                    "type": type
+                                    "type": type,
+                                    "sameSchool": sameSchool
                                 });
                             }
+
                             res.json({
                                 result: true,
                                 data: {

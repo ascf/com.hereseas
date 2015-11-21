@@ -26,7 +26,7 @@ exports.getSchoolList = function(req, res, next) {
 
     School.find(
         query,
-        'id name avatar',
+        'id name avatar shortName cnName',
         function(err, schools) {
             if (err) {
                 res.json(Results.ERR_NOTFOUND_ERR);
@@ -52,7 +52,7 @@ exports.getSchoolListThree = function(req, res, next) {
 
     School.find(
         query,
-        'id name image').
+        'id name image shortName cnName').
     limit(3).exec(
         function(err, schools) {
             if (err) {
@@ -86,6 +86,8 @@ exports.getSchoolById = function(req, res, next) {
         } else if (school) {
             if (school.status == 1) {
                 resData.name = school.name;
+                resData.shortName = school.shortName;
+                resData.cnName = school.cnName;
                 resData.description = school.description;
                 resData.avatar = school.avatar;
                 resData.image = school.image;
@@ -158,8 +160,6 @@ exports.getSchoolNewStudents = function(req, res, next) {
                         ep.emit('findUser', user);
                     });
                 }
-
-
 
             } else {
                 res.json(Results.ERR_ACTIVATED_ERR);
@@ -354,6 +354,8 @@ exports.adminUpdateSchoolById = function(req, res, next) {
 
         var reqData = {
             name: req.body.name,
+            shortName: req.body.shortName,
+            cnName: req.body.cnName,
             description: req.body.description,
             avatar: req.body.avatar,
             image: req.body.image,
@@ -368,11 +370,10 @@ exports.adminUpdateSchoolById = function(req, res, next) {
             return;
         }
 
-        if (tools.hasNull(reqData)) {
-            res.json(Results.ERR_PARAM_ERR);
-            return;
-        }
-
+        // if (tools.hasNull(reqData)) {
+        //     res.json(Results.ERR_PARAM_ERR);
+        //     return;
+        // }
         var query = {
             id: schoolId
         };
@@ -387,7 +388,8 @@ exports.adminUpdateSchoolById = function(req, res, next) {
             } else {
 
                 for (var key in reqData) {
-                    school[key] = reqData[key];
+                    if (reqData[key] != undefined && reqData[key] != null)
+                        school[key] = reqData[key];
                 }
 
                 school.save(function(err, schoolSave) {
