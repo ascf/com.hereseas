@@ -424,6 +424,7 @@ exports.searchItem = function(req, res, next) {
                                 }
                                 resData.push({
                                     "id": item.id,
+                                    "itemName" : item.itemName,
                                     "schoolId": item.schoolId._id,
                                     "schoolName": item.schoolId.name,
                                     "schoolShortName": item.schoolId.shortName,
