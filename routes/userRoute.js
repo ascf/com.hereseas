@@ -881,6 +881,11 @@ exports.sendMessage = function(req, res, next) {
             res.json(Results.ERR_NOTFOUND_ERR);
             return;
         } else {
+            if (tools.isEmpty(user.chats)) {
+                res.json(Results.ERR_PARAM_ERR);
+                return;
+            }
+
             user.chats.addToSet(receiver);
             message.senderUsername = user.username;
             message.senderSchool = user.schoolId;
