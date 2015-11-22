@@ -328,28 +328,6 @@ exports.getThreeCars = function(req, res, next) {
     var connection;
     var ep = new EventProxy();
 
-    School.findById(schoolId, function(err, school) {
-        if (err) {
-            console.log(err);
-            res.json(Results.ERR_DB_ERR);
-            return;
-
-        } else if (school) {
-            if (school.status == 1) {
-                connection = school.connection;
-                ep.emit('findSchoolConnection');
-            } else {
-                res.json(Results.ERR_ACTIVATED_ERR);
-                return;
-            }
-        } else {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            return;
-        }
-
-    });
-
-
     ep.all('findSchoolConnection', function() {
 
         var subQuery = {};
@@ -358,7 +336,7 @@ exports.getThreeCars = function(req, res, next) {
         var query = {
             'status': 1,
             'available': true,
-            'schoolId': subQuery
+            'schoolId': schoolId
         };
 
         Car.find(
@@ -384,6 +362,27 @@ exports.getThreeCars = function(req, res, next) {
                 return;
             }
         });
+    });
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+                connection = school.connection;
+                ep.emit('findSchoolConnection');
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+
     });
 
 };
@@ -419,8 +418,8 @@ exports.searchCar = function(req, res, next) {
         }
 
         var subQuery = {};
-        subQuery['$in'] = connection;
-        query['schoolId'] = subQuery;
+        //subQuery['$in'] = connection;
+        query['schoolId'] = schoolId;
 
         if (req.query.pageSize > 0 && req.query.page > 0) {
             pageSize = req.query.pageSize;

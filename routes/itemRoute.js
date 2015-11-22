@@ -176,7 +176,7 @@ exports.getThreeItems = function(req, res, next) {
         var query = {
             'status': 1,
             'available': true,
-            'schoolId': subQuery
+            'schoolId': schoolId
         };
 
         Item.find(query, 'id userId username userAvatar schoolId cover').sort({
@@ -359,8 +359,8 @@ exports.searchItem = function(req, res, next) {
         }
 
         var subQuery = {};
-        subQuery['$in'] = connection;
-        query['schoolId'] = subQuery;
+        //subQuery['$in'] = connection;
+        query['schoolId'] = schoolId;
 
         if (req.query.pageSize > 0 && req.query.page > 0) {
             pageSize = req.query.pageSize;

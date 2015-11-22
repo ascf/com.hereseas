@@ -38,7 +38,7 @@ exports.getThreeApartments = function(req, res, next) {
         var query = {
             'status': 1,
             'available': true,
-            'schoolId': subQuery
+            'schoolId': schoolId
         };
 
         Apartment.find(
@@ -316,8 +316,8 @@ exports.searchApartment = function(req, res, next) {
         }
 
         var subQuery = {};
-        subQuery['$in'] = connection;
-        aptQuery['schoolId'] = subQuery;
+        //subQuery['$in'] = connection;
+        aptQuery['schoolId'] = schoolId;
 
 
         if (req.query.pageSize > 0 && req.query.page > 0) {
