@@ -38,8 +38,7 @@
         "imagemagick": "*",
         "node-uuid": "*",
         "easyimage": "*",
-        "aws-sdk": "*"
-
-
+        "aws-sdk": "*",
+        "sanitize-html": "*"
     }
 }

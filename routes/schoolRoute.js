@@ -88,6 +88,7 @@ exports.getSchoolById = function(req, res, next) {
                 resData.name = school.name;
                 resData.shortName = school.shortName;
                 resData.cnName = school.cnName;
+                resData.userCount = school.userCount;
                 resData.description = school.description;
                 resData.avatar = school.avatar;
                 resData.image = school.image;

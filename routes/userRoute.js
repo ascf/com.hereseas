@@ -659,6 +659,7 @@ function updateSchoolUser(userId, previousSchoolId, schoolId) {
                 return;
             } else {
                 school.users.addToSet(userId);
+                school.userCount = school.userCount + 1;
                 school.save(function() {});
             }
         });
@@ -679,6 +680,7 @@ function updateSchoolUser(userId, previousSchoolId, schoolId) {
                     if (index > -1) {
                         console.log(index);
                         school.users.splice(index, 1);
+                        school.userCount = school.userCount - 1;
                         school.save(function() {});
                     }
                 }

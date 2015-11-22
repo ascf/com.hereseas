@@ -50,13 +50,30 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 		return;
 	}
 
+	var currentPage = 1;
+	var totalPage;
+	var pageSize = 20;
+
+	if (req.query.pageSize > 0 && req.query.page > 0) {
+		pageSize = req.query.pageSize;
+		currentPage = parseInt(req.query.page, 10);
+
+		if (!tools.checkPositiveNumber(currentPage)) {
+			currentPage = 1;
+		}
+	}
+
+	pagination['skip'] = (currentPage - 1) * pageSize;
+	pagination['limit'] = pageSize;
+
 	var query = {
 		'schoolId': schoolId,
 		'status': 1
 	};
 
+
 	Thread.find(query,
-		'userId username userAvatar schoolId title createAt lastReplayUserId replayCount updateAt').sort({
+		'userId username userAvatar schoolId title preview createAt lastReplayUserId replayCount updateAt',pagination).sort({
 		updateAt: 'desc'
 	}).populate('lastReplayUserId', 'username').exec(function(err, threads) {
 
@@ -155,6 +172,13 @@ exports.createThread = function(req, res, next) {
 		for (var key in reqData) {
 			thread[key] = reqData[key];
 		}
+
+		var sanitizeHtml = require('sanitize-html');
+		var dirty = reqData.content;
+		var clean = sanitizeHtml(dirty);
+		clean = clean.replace('<p>', '').replace('</p>', '');
+		clean = clean.substring(0, 20);
+		thread["preview"] = clean;
 
 		thread.save(function(err, thread) {
 			if (err) {

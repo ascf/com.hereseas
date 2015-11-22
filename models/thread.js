@@ -29,6 +29,10 @@ var ThreadSchema = new Schema({
         type: String
     },
 
+    preview: {
+        type: String
+    },
+
     lastReplayUserId: {
         type: Schema.ObjectId,
         ref: 'User'

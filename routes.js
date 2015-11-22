@@ -22,10 +22,16 @@ module.exports = function(app) {
 
     app.get('/test', function(req, res, next) {
 
-        res.json({
-            test: 'this is testing',
-            userId: req.user.id
-        });
+
+        // var sanitizeHtml = require('sanitize-html');
+        // var dirty = '<p><span class="rangySelectionBoundary">&#65279;</span><img src="https://s3.amazonaws.com/hereseas-public-images/forum/69d4a0e4-ca7b-410c-92b9-a753b6c2a6c6.png"/></p><p>这个吊！</p>';
+        // var clean = sanitizeHtml(dirty);
+
+        // res.json({
+        //     test: 'this is testing',
+
+        //     clean: clean
+        // });
     });
 
 
@@ -33,7 +39,7 @@ module.exports = function(app) {
 
 
     /*   user */
-    app.get('/users', userRoute.getUserList);
+    //app.get('/users', userRoute.getUserList);
     app.get('/user/:id', userRoute.getUser);
     app.get('/userself', sign.ensureAuthenticated, userRoute.getSelfInfo);
     app.post('/user', userRoute.createUser);
