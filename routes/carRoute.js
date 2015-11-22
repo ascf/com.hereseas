@@ -32,6 +32,14 @@ exports.createCar = function(req, res, next) {
             username: user.username,
             userAvatar: user.avatar,
             schoolId: req.body.schoolId,
+            year: req.body.year,
+            make: req.body.make,
+            totalMiles: req.body.totalMiles,
+            style: req.body.style,
+            category: req.body.category,
+            model: req.body.model,
+            price: req.body.price,
+            boughtDate: req.body.boughtDate,
         };
 
         if (tools.hasNull(reqData)) {
