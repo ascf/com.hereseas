@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var utility = require('utility');
+var mongoosePaginate = require('mongoose-paginate');
 
 var CommentSchema = new Schema({
     userId: {
@@ -46,6 +47,6 @@ var CommentSchema = new Schema({
     }
 });
 
-
+CommentSchema.plugin(mongoosePaginate);
 mongoose.model('Comment', CommentSchema);
 exports.Comment = mongoose.model('Comment');

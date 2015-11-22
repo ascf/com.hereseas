@@ -97,8 +97,7 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 
 exports.getCommentsByThreadId = function(req, res, next) {
 	var threadId = req.param('id');
-	Comment.plugin(mongoosePaginate);
-
+	
 
 	if (tools.isEmpty(threadId)) {
 		res.json(Results.ERR_PARAM_ERR);
