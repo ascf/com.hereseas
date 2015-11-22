@@ -148,7 +148,7 @@ exports.getCommentsByThreadId = function(req, res, next) {
 			'page': currentPage,
 			'limit': 100,
 			'sortBy': {
-				'createAt': 1
+				'createAt': -1
 			}
 		}
 
