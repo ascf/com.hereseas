@@ -39,6 +39,7 @@
         "node-uuid": "*",
         "easyimage": "*",
         "aws-sdk": "*",
-        "sanitize-html": "*"
+        "sanitize-html": "*",
+        "mongoose-paginate": "*"
     }
 }

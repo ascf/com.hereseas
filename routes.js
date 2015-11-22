@@ -24,19 +24,21 @@ module.exports = function(app) {
     app.get('/test', function(req, res, next) {
 
 
-        // var sanitizeHtml = require('sanitize-html');
-        // var dirty = '<p><img src="https://s3.amazonaws.com/hereseas-public-images/forum/26de3a81-d73e-4370-8b2b-ddca35d5f2b1.gif"/><span class="rangySelectionBoundary">&#65279;</span><span class="rangySelectionBoundary">&#65279;</span></p><p><br/></p><p><br/></p><p>为了显示部分内容</p><p>   test!!!</p><p>蛤蛤 蛤蛤 蛤蛤</p';
-        // var clean = sanitizeHtml(dirty);
-        // clean = clean.replace('<p>', '');
-        // clean = tools.replaceAll(clean, '<p>', '');
-        // clean = tools.replaceAll(clean, '</p>', '');
-        // clean = tools.replaceAll(clean, '<br />', '');
+        var sanitizeHtml = require('sanitize-html');
 
-        // res.json({
-        //     test: 'this is testing',
+        var dirty = '<p><img src="https://s3.amazonaws.com/hereseas-public-images/forum/26de3a81-d73e-4370-8b2b-ddca35d5f2b1.gif"/><span class="rangySelectionBoundary">&#65279;</span><span class="rangySelectionBoundary">&#65279;</span></p><p><br/></p><p><br/></p><p>为了显示部分内容</p><p>   test!!!</p><p>蛤蛤 蛤蛤 蛤蛤</p';
+        var clean = sanitizeHtml(dirty, {
+            allowedTags: [],
+            allowedAttributes: []
+        });
 
-        //     clean: clean
-        // });
+
+
+        res.json({
+            test: 'this is testing',
+
+            clean: clean
+        });
     });
 
 

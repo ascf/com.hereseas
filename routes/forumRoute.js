@@ -6,6 +6,7 @@ var Thread = require('../models').Thread;
 var School = require('../models').School;
 var Thread = require('../models').Thread;
 var Comment = require('../models').Comment;
+var mongoosePaginate = require('mongoose-paginate');
 
 
 
@@ -96,6 +97,8 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 
 exports.getCommentsByThreadId = function(req, res, next) {
 	var threadId = req.param('id');
+	Comment.plugin(mongoosePaginate);
+
 
 	if (tools.isEmpty(threadId)) {
 		res.json(Results.ERR_PARAM_ERR);
@@ -108,13 +111,15 @@ exports.getCommentsByThreadId = function(req, res, next) {
 
 		var commentQuery = {
 			'threadId': thread.id,
-			'status': 1
+			'status': 1,
+			'page': 1,
+			'limit': 2,
+			'sortBy': {
+				'createAt': 1
+			}
 		}
 
-		Comment.find(commentQuery, "userId username userAvatar content createAt").sort({
-			createAt: 'asc'
-		}).exec(function(err, comments) {
-
+		Comment.paginate("userId username userAvatar content createAt", commentQuery, function(err, results, pageCount, itemCount) {
 			if (err) {
 				res.json(Results.ERR_DB_ERR);
 				return;
@@ -122,13 +127,35 @@ exports.getCommentsByThreadId = function(req, res, next) {
 				res.json({
 					result: true,
 					data: {
-						comments: comments
+						comments: results
 					}
 				});
 				return;
 			}
 		});
+
+
 	});
+
+
+	// 	Comment.find(commentQuery, "userId username userAvatar content createAt").sort({
+	// 		createAt: 'asc'
+	// 	}).exec(function(err, comments) {
+
+	// 		if (err) {
+	// 			res.json(Results.ERR_DB_ERR);
+	// 			return;
+	// 		} else {
+	// 			res.json({
+	// 				result: true,
+	// 				data: {
+	// 					comments: comments
+	// 				}
+	// 			});
+	// 			return;
+	// 		}
+	// 	});
+	// });
 
 	var query = {
 		'threadId': threadId,
@@ -175,10 +202,10 @@ exports.createThread = function(req, res, next) {
 
 		var sanitizeHtml = require('sanitize-html');
 		var dirty = reqData.content;
-		var clean = sanitizeHtml(dirty);
-		clean = tools.replaceAll(clean, '<p>', '');
-		clean = tools.replaceAll(clean, '</p>', '');
-		clean = tools.replaceAll(clean, '<br />', '');
+		var clean = sanitizeHtml(dirty, {
+			allowedTags: [],
+			allowedAttributes: []
+		});
 
 		clean = clean.substring(0, 70);
 		clean = clean + " ...";
