@@ -937,19 +937,6 @@ exports.sendMessage = function(req, res, next) {
 
 
 exports.getUserContact = function(req, res, next) {
-    /*
-    var contacts = [];
-    for (var i = 0; i < req.user.chats.length; i++) {
-        contacts.push(req.user.chats[i]);
-    }
-    res.json({
-        result: true,
-        contacts: contacts
-    });
-    return;
-    */
-
-    //var ep = new EventProxy();
     var userId = req.user.id;
     var contacts = [];
     User.findById(userId, function(err, user) {
@@ -968,8 +955,6 @@ exports.getUserContact = function(req, res, next) {
             return;
         }
     });
-
-
 }
 
 exports.getUserMessage = function(req, res, next) {
