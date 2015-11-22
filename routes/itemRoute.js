@@ -353,10 +353,10 @@ exports.searchItem = function(req, res, next) {
 
     ep.all('findSchoolConnection', function(school) {
 
-        if (tools.isEmpty(connection)) {
-            res.json(Results.ERR_PARAM_ERR);
-            return;
-        }
+        // if (tools.isEmpty(connection)) {
+        //     res.json(Results.ERR_PARAM_ERR);
+        //     return;
+        // }
 
         var subQuery = {};
         //subQuery['$in'] = connection;
