@@ -17,6 +17,13 @@ exports.createItem = function(req, res, next) {
             username: user.username,
             userAvatar: user.avatar,
             schoolId: req.body.schoolId,
+            expireAt: req.body.expireAt,
+            itemName: req.body.itemName,
+            category: req.body.category,
+            price: req.body.price,
+            description: req.body.description,
+            cover: req.body.cover,
+            images: req.body.images
         };
         if (tools.hasNull(reqData)) {
             res.json(Results.ERR_PARAM_ERR);
