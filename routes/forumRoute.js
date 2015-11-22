@@ -176,8 +176,12 @@ exports.createThread = function(req, res, next) {
 		var sanitizeHtml = require('sanitize-html');
 		var dirty = reqData.content;
 		var clean = sanitizeHtml(dirty);
-		clean = clean.replace('<p>', '').replace('</p>', '');
-		clean = clean.substring(0, 20);
+		clean = tools.replaceAll(clean, '<p>', '');
+		clean = tools.replaceAll(clean, '</p>', '');
+		clean = tools.replaceAll(clean, '<br />', '');
+
+		clean = clean.substring(0, 70);
+		clean = clean + " ...";
 		thread["preview"] = clean;
 
 		thread.save(function(err, thread) {

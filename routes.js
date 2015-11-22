@@ -7,6 +7,7 @@ var adminRoute = require('./routes/adminRoute');
 var forgetterRoute = require('./routes/forgetterRoute');
 var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
+var tools = require('./common/tools');
 
 var multer = require('multer');
 var upload = multer({
@@ -24,8 +25,12 @@ module.exports = function(app) {
 
 
         // var sanitizeHtml = require('sanitize-html');
-        // var dirty = '<p><span class="rangySelectionBoundary">&#65279;</span><img src="https://s3.amazonaws.com/hereseas-public-images/forum/69d4a0e4-ca7b-410c-92b9-a753b6c2a6c6.png"/></p><p>这个吊！</p>';
+        // var dirty = '<p><img src="https://s3.amazonaws.com/hereseas-public-images/forum/26de3a81-d73e-4370-8b2b-ddca35d5f2b1.gif"/><span class="rangySelectionBoundary">&#65279;</span><span class="rangySelectionBoundary">&#65279;</span></p><p><br/></p><p><br/></p><p>为了显示部分内容</p><p>   test!!!</p><p>蛤蛤 蛤蛤 蛤蛤</p';
         // var clean = sanitizeHtml(dirty);
+        // clean = clean.replace('<p>', '');
+        // clean = tools.replaceAll(clean, '<p>', '');
+        // clean = tools.replaceAll(clean, '</p>', '');
+        // clean = tools.replaceAll(clean, '<br />', '');
 
         // res.json({
         //     test: 'this is testing',

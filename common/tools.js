@@ -117,3 +117,7 @@ Array.prototype.minusAsString = function(list) {
 exports.checkPositiveNumber = function(n) {
     return Number(n) === n && n % 1 === 0 && n > 0;
 };
+
+exports.replaceAll = function(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+};
