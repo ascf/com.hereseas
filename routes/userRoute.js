@@ -942,15 +942,24 @@ exports.sendMessage = function(req, res, next) {
 
 
 exports.getUserContact = function(req, res, next) {
+    var userId = req.user.id;
     var contacts = [];
-    for (var i = 0; i < req.user.chats.length; i++) {
-        contacts.push(req.user.chats[i]);
-    }
-    res.json({
-        result: true,
-        contacts: contacts
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            //console.log(user);
+            for (var i = 0; i < user.chats.length; i++) {
+                contacts.push(user.chats[i]);
+            }
+            res.json({
+                result: true,
+                contacts: contacts
+            });
+            return;
+        }
     });
-    return;
 }
 
 exports.getUserMessage = function(req, res, next) {
