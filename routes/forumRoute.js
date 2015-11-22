@@ -49,7 +49,7 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 		res.json(Results.ERR_PARAM_ERR);
 		return;
 	}
-
+	var pagination = {};
 	var currentPage = 1;
 	var totalPage;
 	var pageSize = 20;
@@ -73,7 +73,7 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 
 
 	Thread.find(query,
-		'userId username userAvatar schoolId title preview createAt lastReplayUserId replayCount updateAt',pagination).sort({
+		'userId username userAvatar schoolId title preview createAt lastReplayUserId replayCount updateAt', pagination).sort({
 		updateAt: 'desc'
 	}).populate('lastReplayUserId', 'username').exec(function(err, threads) {
 
