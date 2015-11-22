@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var utility = require('utility');
+var mongoosePaginate = require('mongoose-paginate');
 
 var ThreadSchema = new Schema({
     userId: {
@@ -59,6 +60,6 @@ var ThreadSchema = new Schema({
     }
 });
 
-
+ThreadSchema.plugin(mongoosePaginate);
 mongoose.model('Thread', ThreadSchema);
 exports.Thread = mongoose.model('Thread');

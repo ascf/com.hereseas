@@ -63,20 +63,25 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 		}
 	}
 
-	pagination['skip'] = (currentPage - 1) * pageSize;
-	pagination['limit'] = pageSize;
-
 	var query = {
 		'schoolId': schoolId,
 		'status': 1
 	};
 
+	var option = {
+		'columns': 'userId username userAvatar schoolId title preview createAt lastReplayUserId replayCount updateAt',
+		'page': currentPage,
+		'limit': pageSize,
+		'sortBy': {
+			'updateAt': -1
+		},
+		populate: [{
+			path: 'lastReplayUserId',
+			select: 'username'
+		}]
+	}
 
-	Thread.find(query,
-		'userId username userAvatar schoolId title preview createAt lastReplayUserId replayCount updateAt', pagination).sort({
-		updateAt: 'desc'
-	}).populate('lastReplayUserId', 'username').exec(function(err, threads) {
-
+	Thread.paginate(query, option, function(err, results, pageCount, itemCount) {
 		if (err) {
 			res.json(Results.ERR_DB_ERR);
 			return;
@@ -84,12 +89,35 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 			res.json({
 				result: true,
 				data: {
-					threads: threads
+					threads: results,
+					currentPage: currentPage,
+					totalPage: pageCount
 				}
 			});
 			return;
 		}
+
 	});
+
+
+	// Thread.find(query,
+	// 	'userId username userAvatar schoolId title preview createAt lastReplayUserId replayCount updateAt', pagination).sort({
+	// 	updateAt: 'desc'
+	// }).populate('lastReplayUserId', 'username').exec(function(err, threads) {
+
+	// 	if (err) {
+	// 		res.json(Results.ERR_DB_ERR);
+	// 		return;
+	// 	} else {
+	// 		res.json({
+	// 			result: true,
+	// 			data: {
+	// 				threads: threads
+	// 			}
+	// 		});
+	// 		return;
+	// 	}
+	// });
 
 };
 
@@ -140,7 +168,9 @@ exports.getCommentsByThreadId = function(req, res, next) {
 				res.json({
 					result: true,
 					data: {
-						comments: results
+						comments: results,
+						currentPage: currentPage,
+						totalPage: pageCount
 					}
 				});
 				return;
