@@ -949,7 +949,11 @@ exports.getUserContact = function(req, res, next) {
             res.json(Results.ERR_DB_ERR);
             return;
         } else {
-            //console.log(user);
+            if (user == null) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            }
+
             for (var i = 0; i < user.chats.length; i++) {
                 contacts.push(user.chats[i]);
             }

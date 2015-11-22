@@ -165,7 +165,7 @@ function uploadImageToS3(file, fileName, category, callback) {
         ContentType: contentType
     };
 
-    console.log(params);
+    //console.log(params);
     s3.putObject(params, callback);
 
 }

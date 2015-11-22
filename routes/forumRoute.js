@@ -250,7 +250,7 @@ exports.createThread = function(req, res, next) {
 			allowedAttributes: []
 		});
 
-		clean = clean.substring(0, 70);
+		clean = clean.substring(0, 140);
 		clean = clean + " ...";
 		thread["preview"] = clean;
 
