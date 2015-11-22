@@ -6,7 +6,6 @@ var Thread = require('../models').Thread;
 var School = require('../models').School;
 var Thread = require('../models').Thread;
 var Comment = require('../models').Comment;
-var mongoosePaginate = require('mongoose-paginate');
 
 
 
@@ -97,32 +96,47 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 
 exports.getCommentsByThreadId = function(req, res, next) {
 	var threadId = req.param('id');
-	
+	var currentPage = 1;
 
 	if (tools.isEmpty(threadId)) {
 		res.json(Results.ERR_PARAM_ERR);
 		return;
 	}
 
+	if (req.query.page > 0) {
+		currentPage = parseInt(req.query.page, 10);
+
+		if (!tools.checkPositiveNumber(currentPage)) {
+			currentPage = 1;
+		}
+	}
+
 	var ep = new EventProxy();
 
 	ep.all("findThread", function(thread) {
 
-		var commentQuery = {
-			'threadId': thread.id,
-			'status': 1,
-			'page': 1,
-			'limit': 2,
+		var option = {
+			'columns': 'userId username userAvatar content createAt',
+			'page': currentPage,
+			'limit': 100,
 			'sortBy': {
 				'createAt': 1
 			}
 		}
 
-		Comment.paginate("userId username userAvatar content createAt", commentQuery, function(err, results, pageCount, itemCount) {
+		var commentQuery = {
+			'threadId': thread.id,
+			'status': 1,
+		};
+
+		Comment.paginate(commentQuery, option, function(err, results, pageCount, itemCount) {
 			if (err) {
 				res.json(Results.ERR_DB_ERR);
 				return;
 			} else {
+
+				console.log(pageCount, itemCount);
+
 				res.json({
 					result: true,
 					data: {
