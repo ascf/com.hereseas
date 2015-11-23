@@ -39,7 +39,6 @@ var MessageSchema = new Schema({
         type: Boolean
     }
 });
-MessageSchema.set('versionKey', false);
 
 mongoose.model('Message', MessageSchema);
 exports.Message = mongoose.model('Message');

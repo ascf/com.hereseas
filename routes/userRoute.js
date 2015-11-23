@@ -917,34 +917,37 @@ exports.sendMessage = function(req, res, next) {
         }
     });
 
-    User.findById(receiver, function(err, user) {
-        if (err) {
-            res.json(Results.ERR_DB_ERR);
-            return;
-        } else if (user == null) {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            return;
-        } else {
-            user.chats.addToSet(sender);
+    ep.after("findSender", 1, function(userS) {
 
-            var indexS = user.chats.indexOf(sender);
+        User.findById(receiver, function(err, user) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (user == null) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                user.chats.addToSet(sender);
 
-            user.chats.splice(indexS, 1);
+                var indexS = user.chats.indexOf(sender);
 
-            user.chats.push(sender);
+                user.chats.splice(indexS, 1);
 
-            message.receiverUsername = user.username;
-            message.receiverSchool = user.schoolId;
-            user.save(function(err, userR) {
-                if (err) {
-                    console.log("receiver");
-                    console.log(err);
-                    return next();
-                } else {
-                    ep.emit("findReceiver", userR);
-                }
-            });
-        }
+                user.chats.push(sender);
+
+                message.receiverUsername = user.username;
+                message.receiverSchool = user.schoolId;
+                user.save(function(err, userR) {
+                    if (err) {
+                        console.log("receiver");
+                        console.log(err);
+                        return next();
+                    } else {
+                        ep.emit("findReceiver", userR);
+                    }
+                });
+            }
+        });
     });
 
     ep.all("findSender", "findReceiver", function(userS, userR) {
