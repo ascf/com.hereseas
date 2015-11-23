@@ -11,8 +11,7 @@ var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 var md5 = require('MD5');
 var cors = require('cors')
-
-
+var emailTool = require('./common/email');
 
 
 
@@ -151,7 +150,7 @@ passport.use(new LocalStrategy({
                 if (user.password != md5(password)) {
                     return done(null, false, 'ERR_INVALID_PASSWORD');
                 }
-                if (user.verified != true || user.status != 1){
+                if (user.verified != true || user.status != 1) {
                     return done(null, false, 'ERR_ACTIVATED_ERR');
                 }
 
@@ -248,6 +247,14 @@ function eduChecker(email) {
     var str = email.substring(email.indexOf('@') + 1);
     return str.indexOf(".edu") > -1
 }
+
+// process.on('uncaughtException', function(err) {
+//     console.log(err);
+
+//     var email = "hhz1992@gmail.com"
+//     emailTool.sendCrashEmail(email, err);
+
+// })
 
 
 module.exports = app;
