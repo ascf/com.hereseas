@@ -449,9 +449,9 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                         console.log(item.steps[0],res);
                         var draftId = res.data._id;
                         requestService.ItemStepPost({id:draftId , step:2}, item.steps[1], function(res){
-                            //console.log("step2",res);
+                            console.log("step2",res);
                             requestService.EndItempost({id:draftId}, function(res){
-                                //console.log("final", res);
+                                console.log("final", res);
                                 if(res.result){
                                     $scope.postedNum = $scope.postedNum + 1;
                                     if($scope.postedNum == $scope.items.length){
