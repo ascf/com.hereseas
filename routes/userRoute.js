@@ -22,7 +22,7 @@ var passport = require('passport');
 var md5 = require('MD5');
 var AWS = require('aws-sdk');
 
-var APIHOST = "http://dev.hereseas.com/#";
+var APIHOST = "http://52.25.82.212:8080/#";
 
 
 exports.test = function(req, res, next) {
@@ -830,7 +830,7 @@ function sendEmail(email, url) {
     ses_mail = ses_mail + "Content-Type: multipart/mixed; boundary=\"NextPart\"\n\n";
     ses_mail = ses_mail + "--NextPart\n";
     ses_mail = ses_mail + "Content-Type: text/html; charset=us-ascii\n\n";
-    ses_mail = ses_mail + "Thank you for joining Hereseas community ! Please click the link below to verify that this is your edu email address: " + url + '\n\n';
+    ses_mail = ses_mail + "Thank you for joining Hereseas community ! Please click the link below to verify your EDU email address: " + url + '\n\n';
     // ses_mail = url + "\n\n";
 
 
