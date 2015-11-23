@@ -4,7 +4,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
     });
     
     requestService.GetUserSelf(function (res) {
-        console.log("userself", res);
+        //console.log("userself", res);
         if (res.result){            
             var geocoder = new google.maps.Geocoder();
             $scope.options1 = null;
@@ -90,7 +90,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             
             function intiFavorite(){
                 requestService.GetFavList({action:''}, function(res){
-                    console.log(res);
+                    //console.log(res);
                     if(res.data.apartments !== null)
                         $scope.favoriteApts = res.data.apartments;
                     else $scope.favoriteApts = [];
@@ -122,31 +122,37 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                         $scope.items = res.data;
                         if(init == true)
                             $scope.localItems = $scope.items;
-                        console.log($scope.localItems);
+                        //console.log("local items",$scope.localItems);
                     }
                 });
             };
             
             
             function deleteItem(index, id){
-                $scope.localItems.splice(index, 1);
+                var deleteConfirm = window.confirm("确定要删除吗？");
+                if(deleteConfirm){
+                    $scope.localItems.splice(index, 1);
 
-                requestService.DeleteItem({id:id}, function(res){
-                    console.log(id,res);
-                });
+                    requestService.DeleteItem({id:id}, function(res){
+                        //console.log(id,res);
+                    });
+                }
             };
             
             function deleteCar(index, id, type){
-                if(type == 1){
-                    $scope.localCars.splice(index, 1);
+                var deleteConfirm = window.confirm("确定要删除吗？");
+                if(deleteConfirm){
+                    if(type == 1){
+                        $scope.localCars.splice(index, 1);
+                    }
+                    else{
+                        $scope.localDraftCars.splice(index, 1);
+                    }
+
+                    requestService.DeleteCar({id:id}, function(res){
+                        //console.log(id,res);
+                    });
                 }
-                else{
-                    $scope.localDraftCars.splice(index, 1);
-                }
-                
-                requestService.DeleteCar({id:id}, function(res){
-                    console.log(id,res);
-                });
             };
             
             function getCars(init){
@@ -161,7 +167,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                         $scope.cars = res.data;
                         if(init == true)
                             $scope.localCars = $scope.cars;
-                        console.log($scope.localCars);
+                        //console.log("local cars",$scope.localCars);
                     }
                 });
             };
@@ -180,16 +186,19 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             };
             
             function deleteApt(index, id, type){
-                if(type == 1){
-                    $scope.localApts.splice(index, 1);
+                var deleteConfirm = window.confirm("确定要删除吗？");
+                if(deleteConfirm){
+                    if(type == 1){
+                        $scope.localApts.splice(index, 1);
+                    }
+                    else{
+                        $scope.localDraftApts.splice(index, 1);
+                    }
+
+                    requestService.DeleteApt({id:id}, function(res){
+                        //console.log(id,res);
+                    });
                 }
-                else{
-                    $scope.localDraftApts.splice(index, 1);
-                }
-                
-                requestService.DeleteApt({id:id}, function(res){
-                    console.log(id,res);
-                });
             };
             
             
@@ -203,7 +212,8 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     {
                         $scope.hasPostedApts = true;
                         $scope.apts = res.data;
-                        console.log(res.data);
+                        
+                        //console.log("apts",res.data);
                         if(init == true)
                             $scope.localApts = $scope.apts;
                     }
@@ -217,6 +227,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     }else{
                         $scope.hasDraftApts = true;
                         $scope.aptDrafts = res.data;
+                        //console.log("apt drafts",res.data);
                         if(init == true)
                             $scope.localDraftApts = $scope.aptDrafts;
                     }
@@ -227,9 +238,9 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             
             function upload(file) {
                 if (file) {
-                    console.log(file);
+                    //console.log(file);
                    
-                    console.log("111");
+                    //console.log("111");
                     fileReader.readAsDataUrl(file, $scope).then(function(result) {
                         $scope.img = result;
                         //key.content = result;
@@ -241,14 +252,14 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     }).progress(function (evt) {
                         $scope.prog = parseInt(100.0 * evt.loaded / evt.total);
                     }).success(function (data, status, headers, config) {
-                        console.log('file ' + config.file.name + 'uploaded. Response: ');
-                        console.log(data);
+                        //console.log('file ' + config.file.name + 'uploaded. Response: ');
+                        //console.log(data);
                         $scope.avatar = "https://s3.amazonaws.com/hereseas-public-images/"+data.data;
                         requestService.ChangeProfile({step:3}, {'avatar':$scope.avatar}, function(res){
-                                console.log(res);
+                                //console.log(res);
                             });
                     }).error(function (data, status, headers, config) {
-                        console.log('error status: ' + status);
+                        //console.log('error status: ' + status);
                     })
                 }
             };
@@ -267,10 +278,22 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                                     tempMsgs.push({id:msg._id, content:msg.content, read:msg.read, sender:msg.senderUsername,senderId:msg.sender, time:msg.createAt});
                                     if(msg.read == false && msg.senderUsername !== $scope.basicInfo.username) num++;
                                 });
+                                
+                                requestService.GetUser({id:key},function(res2){
+                                    var avatar = res2.data.avatar;
+                                    var user = res2.data.username;
+                                    
+                                    var content = res.data[res.data.length-1].content;
+                                    content = content.length>14?content.substring(0,14)+"...":content;
 
-                                $scope.messages.push({userId:key, user:tempMsgs[0].sender, favorite:false, msgs:tempMsgs, lastMsg:res.data[res.data.length-1].content, num:num});
-                                tempMsgs = [];
-                                num=0;
+                                    $scope.messages.push({avatar:avatar,userId:key, user:user,favorite:false, msgs:tempMsgs, lastMsg:content, time:res.data[res.data.length-1].createAt, num:num});
+                                    
+                                    
+                                    tempMsgs = [];
+                                    num=0;
+                                });
+                                
+                                
                             }
                         });
                     });
@@ -346,14 +369,24 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     //console.log($scope.basicInfo.schoolId);
                 }
 
-                $scope.$watch('basicInfo', function (newValue, oldValue) {
+              /*  $scope.$watch('basicInfo', function (newValue, oldValue) {
                     //console.log(1);
                     if(newValue.schoolId!=='' && !angular.equals(newValue,oldValue)){
                         requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
-                            console.log(res);
+                            //console.log(res);
+                            //$state.reload();
                         });
                     }
                 }, true);
+                $scope.$watch('basicInfo.schoolId', function (newValue, oldValue) {
+                    //console.log(1);
+                    if(newValue.schoolId!=='' && !angular.equals(newValue,oldValue)){
+                        requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
+                            //console.log(res);
+                            $state.reload();
+                        });
+                    }
+                }, true);*/
             };
             
             $scope.$watch('file', function (newValue, oldValue) {
@@ -361,6 +394,12 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     $scope.upload($scope.file);
             });
             
+            $scope.updateInfo = function(res){
+                requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
+                    //console.log(res);
+                    $state.reload();
+                });
+            }
             
             
         } else {
@@ -373,7 +412,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
 hereseasApp.controller('OthersProfileController', function ($state, $scope, $stateParams, requestService) {
     $scope.hasSelling = false;
     $scope.goToEach = function(index){
-        console.log(index);
+        //console.log(index);
         switch($scope.onSelling[index].identity){
             case 1:$state.go('rooms',{aptId:$scope.onSelling[index].content._id});break;
             case 2:$state.go('cars',{carId:$scope.onSelling[index].content._id});break;
@@ -384,13 +423,13 @@ hereseasApp.controller('OthersProfileController', function ($state, $scope, $sta
     $scope.pageReturn = function(){
         $state.go('schoolMates',{schoolId:$scope.othersInfo.schoolId});
     };
-    
+    $scope.userId = $stateParams.othersId;
     requestService.GetUser({id:$stateParams.othersId}, function(res){
         if(res.result){
-            console.log(res.data);
+            //console.log(res.data);
             $scope.othersInfo = res.data;
             requestService.GetUserAllPost({id:$stateParams.othersId}, function(res){
-                console.log(res.data);
+                //console.log(res.data);
                 if(res.data.length!=0){
                     $scope.hasSelling = true;
                     $scope.onSelling = res.data;

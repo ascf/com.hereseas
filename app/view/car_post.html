@@ -19,7 +19,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(2)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -34,7 +34,7 @@
                     </menu-link>
                 </li>
                 
-                <li>
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(3)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -46,7 +46,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(4)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -60,7 +60,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(5)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -74,7 +74,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link class="ng-scope ng-isolate-scope" ng-click="setActivePage(6)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -133,21 +133,18 @@
                         <p class="room_post_font_content">年款</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <input required ng-model="steps[0].year" name="year" aria-label="CarYear" style="border-radius:4px;width:80px;height:19px;border:1px solid #D5D4D2"/>
+                        <input  ng-model="steps[0].year" name="year" aria-label="CarYear" style="border-radius:4px;width:80px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                     <div flex="15">
                         <p class="room_post_font_content">车型</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <md-select required ng-model="steps[0].category" name="category" class="cp_select">
+                        <md-select ng-model="steps[0].category" name="category" class="cp_select">
                             <md-option value="SUV">SUV</md-option>
-                            <md-option value="Sedan">四门轿车</md-option>
-                            <md-option value="Coupe">双门跑车</md-option>
-                            <md-option value="Convertible">敞篷车</md-option>
-                            <md-option value="Wagon">两厢车</md-option>
-                            <md-option value="Van">面包车</md-option>
-                            <md-option value="Pickup">皮卡</md-option>
-                            <md-option value="Others">其他</md-option>
+                            <md-option value="轿车">轿车</md-option>
+                            <md-option value="跑车">跑车</md-option>
+                            <md-option value="皮卡">皮卡</md-option>
+                            <md-option value="其他">其他</md-option>
                         </md-select>
                     </div>
                 </div>
@@ -157,13 +154,13 @@
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
 <!--                        <input required ng-model="steps[0].make" name="make" aria-label="CarMake" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>-->
-                        <select required ng-model="steps[0].make" name="make"  class="cp_select"><option value="">Make</option><option value="Acura" oid="2">Acura</option><option value="Alfa Romeo" oid="3">Alfa Romeo</option><option value="Aston Martin" oid="54">Aston Martin</option><option value="Audi" oid="4">Audi</option><option value="Bentley" oid="57">Bentley</option><option value="BMW" oid="5">宝马</option><option value="Buick" oid="7">Buick</option><option value="Cadillac" oid="8">Cadillac</option><option value="Chevrolet" oid="9">Chevrolet</option><option value="Chrysler" oid="10">Chrysler</option><option value="Dodge" oid="13">Dodge</option><option value="Ferrari" oid="397">Ferrari</option><option value="FIAT" oid="430">FIAT</option><option value="Ford" oid="15">Ford</option><option value="Freightliner" oid="867">Freightliner</option><option value="GMC" oid="16">GMC</option><option value="Honda" oid="18">Honda</option><option value="Hyundai" oid="20">Hyundai</option><option value="Infiniti" oid="21">Infiniti</option><option value="Jaguar" oid="23">Jaguar</option><option value="Jeep" oid="24">Jeep</option><option value="Kia" oid="25">Kia</option><option value="Lamborghini" oid="59">Lamborghini</option><option value="Land Rover" oid="26">Land Rover</option><option value="Lexus" oid="27">Lexus</option><option value="Lincoln" oid="28">Lincoln</option><option value="Lotus" oid="55">Lotus</option><option value="Maserati" oid="61">Maserati</option><option value="Mazda" oid="30">Mazda</option><option value="McLaren" oid="799">McLaren</option><option value="Mercedes-Benz" oid="31">Mercedes-Benz</option><option value="MINI" oid="29">MINI</option><option value="Mitsubishi" oid="34">Mitsubishi</option><option value="Nissan" oid="35">Nissan</option><option value="Porsche" oid="41">Porsche</option><option value="Ram" oid="783">Ram</option><option value="Rolls-Royce" oid="58">Rolls-Royce</option><option value="Scion" oid="45">Scion</option><option value="smart" oid="507">smart</option><option value="SRT" oid="849">SRT</option><option value="Subaru" oid="47">Subaru</option><option value="Tesla" oid="834">Tesla</option><option value="Toyota" oid="49">Toyota</option><option value="Volkswagen" oid="50">Volkswagen</option><option value="Volvo" oid="51">沃尔沃</option></select>
+                        <select  ng-model="steps[0].make" name="make"  class="cp_select"><option value="">请选择</option><option value="Acura" oid="2">Acura</option><option value="阿尔法-罗密欧" oid="3">阿尔法-罗密欧</option><option value="阿斯顿-马丁" oid="54">阿斯顿-马丁</option><option value="奥迪" oid="4">奥迪</option><option value="宾利" oid="57">宾利</option><option value="宝马" oid="5">宝马</option><option value="别克" oid="7">别克</option><option value="凯迪拉克" oid="8">凯迪拉克</option><option value="雪佛兰" oid="9">雪佛兰</option><option value="克莱斯勒" oid="10">克莱斯勒</option><option value="道奇" oid="13">道奇</option><option value="法拉利" oid="397">法拉利</option><option value="菲亚特" oid="430">菲亚特</option><option value="福特" oid="15">福特</option><option value="Freightliner" oid="867">Freightliner</option><option value="GMC" oid="16">GMC</option><option value="本田" oid="18">本田</option><option value="现代" oid="20">现代</option><option value="英菲尼迪" oid="21">英菲尼迪</option><option value="捷豹" oid="23">捷豹</option><option value="吉普" oid="24">吉普</option><option value="起亚" oid="25">起亚</option><option value="兰博基尼" oid="59">兰博基尼</option><option value="陆虎" oid="26">陆虎</option><option value="雷克萨斯" oid="27">雷克萨斯</option><option value="林肯" oid="28">林肯</option><option value="莲花" oid="55">莲花</option><option value="玛莎拉蒂" oid="61">玛莎拉蒂</option><option value="马自达" oid="30">马自达</option><option value="McLaren" oid="799">McLaren</option><option value="梅赛德斯-奔驰" oid="31">梅赛德斯-奔驰</option><option value="MINI" oid="29">MINI</option><option value="三菱" oid="34">三菱</option><option value="尼桑" oid="35">尼桑</option><option value="保时捷" oid="41">保时捷</option><option value="Ram" oid="783">Ram</option><option value="劳斯莱斯" oid="58">劳斯莱斯</option><option value="Scion" oid="45">Scion</option><option value="smart" oid="507">smart</option><option value="SRT" oid="849">SRT</option><option value="斯巴鲁" oid="47">斯巴鲁</option><option value="特斯拉" oid="834">特斯拉</option><option value="丰田" oid="49">丰田</option><option value="大众" oid="50">大众</option><option value="沃尔沃" oid="51">沃尔沃</option></select>
                     </div>
                     <div flex="15">
                         <p class="room_post_font_content">型号</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                         <input required ng-model="steps[0].model" name="model" aria-label="CarStyle" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
+                         <input ng-model="steps[0].model" name="model" aria-label="CarStyle" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
@@ -171,7 +168,7 @@
                         <p class="room_post_font_content">里程</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <input required ng-model="steps[0].totalMiles" name="totalMiles" aria-label="CarMiles" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2;margin-right:10px"/>
+                        <input ng-model="steps[0].totalMiles" name="totalMiles" aria-label="CarMiles" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2;margin-right:10px"/>
                         miles
                     </div>
                     <div flex="15">
@@ -218,37 +215,37 @@
                     <div class="room_post_div" style="margin-top:5px;">
                         <div layout="column" layout-wrap>                  
                                 <div layout-align="start center" layout="row">
-                                    <input required name="carColor" type="radio" id="white" ng-model="steps[1].color" style="margin:15px" value="white">
+                                    <input required name="carColor" type="radio" id="white" ng-model="steps[1].color" style="margin:15px" value="白色">
                                     <label for="white" class="room_post_font_content">
                                         白色
                                     </label>
                                     <label layout-align="start center" layout="row">
-                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="silver">
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="银色">
                                         <p class="room_post_font_content">银色</p>
                                     </label>
                                     <label layout-align="start center" layout="row">
-                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="gray">
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="灰色">
                                         <p class="room_post_font_content">灰色</p>
                                     </label>
                                     <label layout-align="start center" layout="row">
-                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="yellow">
+                                    <input required name="carColor" type="radio" ng-model="steps[1].color" style="margin:15px" value="黄色">
                                         <p class="room_post_font_content">黄色</p>
                                     </label>
                                 </div>
                                 <div layout-align="start center" layout="row">
-                                    <input required name="carColor" type="radio" id="green" ng-model="steps[1].color" style="margin:15px" value="green">
+                                    <input required name="carColor" type="radio" id="green" ng-model="steps[1].color" style="margin:15px" value="绿色">
                                     <label for="green" class="room_post_font_content">
                                         绿色
                                     </label>
-                                    <input required name="carColor" type="radio" id="blue" ng-model="steps[1].color" style="margin:15px" value="bluw">
+                                    <input required name="carColor" type="radio" id="blue" ng-model="steps[1].color" style="margin:15px" value="蓝色">
                                     <label for="blue" class="room_post_font_content">
                                         蓝色
                                     </label>
-                                    <input required name="carColor" type="radio" id="red" ng-model="steps[1].color" style="margin:15px" value="red">
+                                    <input required name="carColor" type="radio" id="red" ng-model="steps[1].color" style="margin:15px" value="红色">
                                     <label for="red" class="room_post_font_content">
                                         红色
                                     </label>
-                                    <input required name="carColor" type="radio" id="black" ng-model="steps[1].color" style="margin:15px" value="black">
+                                    <input required name="carColor" type="radio" id="black" ng-model="steps[1].color" style="margin:15px" value="黑色">
                                     <label for="black" class="room_post_font_content">
                                         黑色
                                     </label>
@@ -261,7 +258,7 @@
                         <p class="room_post_font_content">无事故</p>
                     </div>
                     <div class="room_post_div">
-                        <input required type="checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[1].noAccident"></input>
+                        <input type="checkbox" style="margin-top:20px;margin-left:14px;margin-bottom:20px" ng-model="steps[1].noAccident"></input>
                     </div>
                 </div>
                 <div layout="row">
@@ -316,6 +313,9 @@
                                     <md-option value="2.5">2.5</md-option>
                                     <md-option value="3.0">3.0</md-option>
                                     <md-option value="3.5">3.5</md-option>
+                                    <md-option value="3.5">4.0</md-option>
+                                    <md-option value="3.5">4.5</md-option>
+                                    <md-option value="3.5">5.0</md-option>
                                 </md-select>
                             </div>
                             <div>
@@ -417,7 +417,7 @@
                 </div>
                 
                 <div class="room_post_div" >
-                     <textarea ng-model="steps[3].description" placeholder="最多输入300个字符" rows="8" cols="77"maxlength="300" aria-label="description" style="margin-top:20px;border-radius:4px; outline:none;"></textarea>
+                     <textarea ng-model="steps[3].description" rows="8" cols="70"  aria-label="description" style="margin-top:20px;border-radius:4px; outline:none;"></textarea>
                 </div>
                 
             </div>
@@ -480,7 +480,7 @@
             <div layout="column" flex>
                 <div class="room_post_font_content">图片</div>
                 <div layout="row" layout-wrap>
-                    <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in steps[5].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic)">删除</p></div>
+                    <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in steps[5].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic)" ng-show="steps[5].images.length!=1">删除</p></div>
 
                     <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="img in arrUploads" ng-style="{'background-image':'url('+img.content+')'}">
                         <div layout="row">

@@ -1,4 +1,4 @@
-hereseasApp.controller('AccountCtrl', function($scope, requestService, userService, $mdDialog, $cookies,alertService){
+hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestService, userService, $mdDialog, $cookies,alertService){
     $scope.state = userService.getSignupOrLogin();//1 for login 2 for signup
     $scope.login_err = false; //登陆时用户名密码是否匹配变量
     $scope.nonedu_err = false;
@@ -83,8 +83,8 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
     };
     
     $scope.rememberMe = function(){
-        console.log("before",$scope.user.remember);
-        console.log($scope.user.remember);
+        //console.log("before",$scope.user.remember);
+        //console.log($scope.user.remember);
     }
     // controller to handle login check
     $scope.loginClick = function () {
@@ -102,7 +102,8 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
                      requestService.GetUserSelf(function(res){
                         userService.setUser(res.data);
                         userService.setLoginState(true);
-
+                        $cookies.login = true;
+                        $state.reload()
                         $scope.hide();
                         $scope.login_err = false;
                     });                    
@@ -130,7 +131,7 @@ hereseasApp.controller('AccountCtrl', function($scope, requestService, userServi
         if(!$scope.psworderr && !$scope.emailerr && !$scope.usererr)
         {
             requestService.DoRegister($scope.signUpData, function(res) {
-                console.log(res);
+                //console.log(res);
                 if (res.result) {
                     alertService.alert("注册成功，请登录您的邮箱进行验证！");
                     

@@ -248,13 +248,13 @@ function eduChecker(email) {
     return str.indexOf(".edu") > -1
 }
 
-// process.on('uncaughtException', function(err) {
-//     console.log(err);
+process.on('uncaughtException', function(err) {
+    console.log(err);
 
-//     var email = "hhz1992@gmail.com"
-//     emailTool.sendCrashEmail(email, err);
+    var email = "hhz1992@gmail.com"
+    emailTool.sendCrashEmail(email, err);
 
-// })
+})
 
 
 module.exports = app;

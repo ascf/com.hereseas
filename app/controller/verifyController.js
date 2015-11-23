@@ -15,7 +15,7 @@ hereseasApp.controller('VerifyController',
                     code: $location.$$search.code
                 })
                     .then(function (res) {
-                        console.log(res.result);
+                        //console.log(res.result);
                         $scope.activating = false;
                         if (res.result) {
                             $scope.activated = true;
@@ -31,5 +31,9 @@ hereseasApp.controller('VerifyController',
         else {
             $scope.brokenLink = true;
         }
+
+        $scope.goHome = function() {
+            $state.go('home');    
+        };
         //$scope.activating = true;
     });

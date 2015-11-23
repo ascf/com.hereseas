@@ -20,16 +20,16 @@
                   
                     <div layout="row" style="margin-top:10px;">
                         <!--div class="img-circle" style="width:80px;height:80px;background-color:#3CB49E;margin-top:20px;margin-left:25px;padding-top:25px;padding-left:20px;color:#ffffff;"><h4>关注</h4></div-->
-                        <div class="img-circle" style="width:80px;height:80px;background-color:#F08C6A;margin-top:10px;margin-left:30px;padding-top:25px;padding-left:23px;color:#ffffff;"><h4>联系</h4></div>
+                        <div ng-controller="HeaderController" ng-click="openChatWindow($event, userId)" class="img-circle" style="width:80px;height:80px;background-color:#F08C6A;margin-top:10px;margin-left:30px;padding-top:25px;padding-left:23px;color:#ffffff;"><h4>联系</h4></div>
                     </div>
                 </div>
                 <div layout="column" style="padding-top:20px;">
                     <div layout="row">
                         <div style="margin-left:5px;"><h4><b>正在出售</b></h4></div>
-                        <div ng-show="hasSelling" style="margin-left:8px;margin-top:8px;padding-left:0px;padding-top:1px;width:17px;height:17px;line-height:15px;background-image:url(/app/view/img/profile/topost.png);background-size:100% 100%;color:#EA5743;font-size:10px;text-align:center;"><strong>{{onSelling.length}}</strong></div>
+                        <div ng-if="hasSelling" style="margin-left:8px;margin-top:8px;padding-left:0px;padding-top:1px;width:17px;height:17px;line-height:15px;background-image:url(/app/view/img/profile/topost.png);background-size:100% 100%;color:#EA5743;font-size:10px;text-align:center;"><strong>{{onSelling.length}}</strong></div>
                     </div>
                     <div>
-                        <div ng-hide="hasSelling"><h4>&gt;_&lt;该用户还没有任何发布</h4></div>
+                        <div ng-if="!hasSelling"><h4>&gt;_&lt;该用户还没有任何发布</h4></div>
                         <div ng-repeat="each in onSelling" style="padding:15px;float:left;outline:none;" ng-click="goToEach($index)">
                             
                                 <div style="background-size:cover;width:160px;height:120px;margin-top:-10px;margin-left:-10px;"  ng-style="{'background-image':'url('+each.content.cover+')'}"></div>

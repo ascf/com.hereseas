@@ -15,13 +15,14 @@ hereseasApp.factory('alertService', function ($http,$mdDialog) {
 
     return {
         alert: function (msg, $event) {
-            console.log("$event",$event);
+            //console.log("$event",$event);
             var mAlert = $mdDialog.alert()
                 .parent(angular.element(document.body))
-                .title('This is an alert title')
+                .title('hereseas')
                 .content(msg)
                 .ariaLabel('Alert Dialog Demo')
-                .ok('Got it!');
+                .clickOutsideToClose(true)
+                .ok('转到');
 
             if($event){
                 mAlert.targetEvent($event);
@@ -67,6 +68,8 @@ hereseasApp.factory('requestService', ['$resource', function($resource){
         GetAptsBySchool: {method:"GET", params:{dir:"apartments", search:"search"}},
         GetCarsBySchool: {method:"GET", params:{dir:"cars", search:"search"}},
         GetItemsBySchool: {method:"GET", params:{dir:"items", search:"search"}},
+        GetForumBySchool: {method:"GET", params:{dir:"forum", search:"threads"}},
+        GetCommentsByForum: {method:"GET", params:{dir:"items", search:"search"}},
         ChangeProfile: {method:"PUT", params:{dir:"user"}},
         GetAptDrafts:{ method: "GET", params: { dir: "apartments", action:"draft"}},
         GetAptDraft:{ method: "GET", params: { dir: "apartment", action:"draft"}},

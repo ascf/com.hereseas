@@ -1,20 +1,61 @@
 hereseasApp.controller('ForumController', function ($stateParams,$scope, $mdDialog, userService, requestService, alertService, $window, $state) {
-
-    requestService.GetForumThreads({id:$stateParams.schoolId},function(res){
-        console.log(res);
-        if(res.result){
-            $scope.threads = res.data.threads;
-            console.log($scope.threads);
-        }
-    });
+    $scope.pages = 0;
+    $scope.threads = [];
+    var cur_page = 1;
+    var max_page = 1;
+    $scope.schoolId = $stateParams.schoolId;
+    function updatepage(){
+        requestService.GetForumBySchool({id:$stateParams.schoolId,page:cur_page,pageSize:20},function(res){
+            //console.log(res);
+            if(res.result){
+                $scope.pages = res.data.totalPages;
+                $scope.threads = res.data.threads;
+                // store number of max pages
+                max_page = res.data.totalPage;
+                $scope.pages = [];
+//                $scope.pages_pre_dot = false;
+//                $scope.pages_end_dot = false;
+                for(var i=0; i<max_page; i++){
+                    $scope.pages[i] = {};
+                    $scope.pages[i].id = i+1;
+                    
+                    if(i == cur_page-1){
+                        $scope.pages[i].selected = true;
+                        $scope.pages[i].show = true;
+                    }else{
+                        $scope.pages[i].selected = false;
+                    }
+                    
+                    if(i < cur_page -1){
+                        if(i > cur_page-4){
+                            $scope.pages[i].show = true;
+                        }else{
+                            $scope.pages[i].show = false;
+                            $scope.pages_pre_dot = true;
+                        }
+                    }
+                    
+                    if(i > cur_page -1){
+                        if(i < cur_page+2){
+                            $scope.pages[i].show = true;
+                        }else{
+                            $scope.pages[i].show = false;
+                            $scope.pages_end_dot = true;
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
     
     $scope.goToArticle = function(threadId){
-        $state.go('article',{id:threadId});
+        $state.go('article',{schoolId:$scope.schoolId,id:threadId});
         
     };
     
     $scope.showArticlePost = function showArticlePost(ev) {
-        console.log(1);
+        //console.log(1);
         var flag = userService.getLoginState();
         //should have logged in to post room
         if(flag)
@@ -48,13 +89,42 @@ hereseasApp.controller('ForumController', function ($stateParams,$scope, $mdDial
           clickOutsideToClose:true
         });
     };
+        
+    $scope.setPage = function(pg){
+        cur_page = pg+1;
+        $scope.page = cur_page;
+        updatepage();
+    };
     
+    $scope.previous = function(){
+        if(cur_page - 1 > 0){
+            cur_page = cur_page - 1;
+        }
+        $scope.page = cur_page;
+        updatepage();
+    };
+    
+    $scope.next = function(){
+        if(cur_page + 1 <= max_page){
+            cur_page = cur_page + 1;
+        }
+        $scope.page = cur_page;
+        updatepage();
+    };
+    
+    $scope.setPage(0);
 });
 
-hereseasApp.controller('ArticleController', function ($sce,$stateParams,$scope, roomService, requestService, $window, $state) {
+hereseasApp.controller('ArticleController', function (userService,$sce,$stateParams,$scope,alertService,$mdDialog,requestService, $window, $state) {
 
+    $scope.pages = 0;
+    var cur_page = 1;
+    var max_page = 1;
+    
+    $scope.hasLogind = userService.getLoginState();
+    
     requestService.GetForumThreadById({id:$stateParams.id},function(res){
-        console.log(res);
+        //console.log(res);
         if(res.result){
             $scope.thread = res.data;
             $scope.thread.content = $sce.trustAsHtml($scope.thread.content);
@@ -62,26 +132,76 @@ hereseasApp.controller('ArticleController', function ($sce,$stateParams,$scope, 
         }
     });
     
-    requestService.GetForumCommentsById({id:$stateParams.id},function(res){
-        console.log(res);
-        if(res.result){
-            $scope.threadComments = res.data.comments;
-            console.log($scope.threadComments);
-        }
-    });
+    function updateComments(){
+        requestService.GetForumCommentsById({id:$stateParams.id,page:cur_page,pageSize:100},function(res){
+            //console.log(res);
+            if(res.result){
+                $scope.pages = res.data.totalPages;
+                $scope.threadComments = res.data.comments;
+                //console.log($scope.threadComments);
+            }
+        });
+    }
     
-    if($stateParams.style == "long"){
-        console.log(0);
-        $scope.isLong = true;
+    $scope.showOtherUserInfo = function(othersId){
+        $state.go('othersProfile',{schoolId:$stateParams.schoolId,othersId:othersId}); 
     }
     
     $scope.postComment = function(){
-        
-        requestService.PostForumComment({schoolId:$scope.thread.schoolId,threadId:$scope.thread._id,content:$scope.content},function(res){
-            console.log(res);
-            
-        })
+        if(userService.getLoginState())
+        {
+            requestService.PostForumComment({schoolId:$scope.thread.schoolId,threadId:$scope.thread._id,content:$scope.content},
+            function(res){
+                //console.log(res);
+                if(res.result){
+                    $state.go('article',{schoolId:$scope.schoolId,id:$scope.thread._id});
+                }else{
+                    alert('留言发布失败。');
+                }
+
+            });
+        }
+        else alertService.alert("请先登录").then(function() {
+                $scope.showLogin();
+        });
+    
     }
+
+    $scope.showLogin = function(ev) {
+        userService.setSignupOrLogin('login');
+        $mdDialog.show({
+          templateUrl: '/app/view/signup_login.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose:true
+        });
+    };
+    
+    $scope.setPage = function(pg){
+        cur_page = pg+1;
+        $scope.page = cur_page;
+        updateComments();
+    };
+    
+    $scope.previous = function(){
+        if(cur_page - 1 > 0){
+            cur_page = cur_page - 1;
+        }
+        $scope.page = cur_page;
+        updateComments();
+    };
+    
+    $scope.next = function(){
+        if(cur_page + 1 <= max_page){
+            cur_page = cur_page + 1;
+        }
+        $scope.page = cur_page;
+        updateComments();
+    };
+    $scope.goToForum = function(){
+        $state.go('forum', { schoolId:$stateParams.schoolId });
+    };
+    $scope.setPage(0);
     
 });
 
@@ -91,10 +211,13 @@ hereseasApp.controller('ArticlePostController', function ($stateParams, $scope, 
     $scope.postArticle = function(){
         
         requestService.PostForumThread({schoolId:$stateParams.schoolId,title:$scope.title,content:$scope.htmlVariable},function(res){
-            console.log(res);
+            //console.log(res);
             if(res.result){
                 $mdDialog.hide();
-                //$location.path('/forum/article/'+res.data._id);
+                $state.go('article',{schoolId:$stateParams.schoolId,id:res.data.id});
+                
+            }else{
+                alert('发帖失败。');
             }
             
         })
@@ -177,14 +300,15 @@ hereseasApp.config(['$provide',
                                         $scope.files.splice($scope.files.indexOf(key.file), 1);
 
                                     }).error(function (data, status, headers, config) {
-                                        console.log('error status: ' + status);
+                                        alert('上传失败'+data);
+                                        //console.log('error status: ' + status);
                                     })
 
                                     key.cancel = function(){
                                         up.abort();     
                                         $scope.arrUploads.splice($scope.arrUploads.indexOf(key), 1);
                                         $scope.files.splice($scope.files.indexOf(key.file), 1);
-                                        console.log("cancel during upload", $scope.files, $scope.arrUploads);
+                                        //console.log("cancel during upload", $scope.files, $scope.arrUploads);
                                     }
                                 }
                             });  

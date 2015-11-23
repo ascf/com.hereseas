@@ -1,3 +1,4 @@
+<!--
 <div header></div>
 <div>
     <header ng-include="'app/view/partials/_header-one.html'" ></header>
@@ -22,3 +23,54 @@
         </div>
     </div>
 </div>
+-->
+
+<div style="height: 100vh; background-image:url(/app/view/img/home/3.jpg);background-size:cover;">
+
+    
+    <div style="height: 20vh"></div>
+    <p ng-hide="activated" class="reset-text">页面错误</p>
+    <p ng-show="activated" class="reset-text">验证成功</p>
+    <div style="height: 20vh"></div>
+    <div class="centered text-center">
+        <button class="reset-button" ng-click="goHome()"><p style="font-size: 15px; margin: 0">回到主页</p></button>
+    </div>
+    
+
+</div>
+<style type="text/css">
+.reset-button {
+    font-family: "Gotham Book", Helvetica;
+    border-radius: 10px;
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    height:40px;
+    width:100px;
+}
+.reset-button:hover{
+    font-family: "Gotham Book", Helvetica;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+}
+.reset-text {
+    font-family: "Gotham Book", Helvetica !important;
+    font-size: 3vh;
+    line-height: 3vh;
+    padding: 0% !important;
+    color: white;
+    text-align: center;
+}
+.centered{
+    margin: 0 auto;
+}
+.reset-input input[type="password"] {
+    width: 200px;
+    height: 30px;
+    padding: 2px;
+    border:solid 1 px white;
+
+}
+</style>

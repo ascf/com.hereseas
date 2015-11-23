@@ -1,25 +1,59 @@
-<h3> There are {{users.length}} users in Hereseas </h3>
-<div class="row">
-	<div ng-repeat="user in users" class="col-xs-3 col-md-2" style="height: 40vh; padding-top: 5vh" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
-		<div class="thumbnail" style="position: relative">
-		<!--
-			<div ng-show="hoverInfo" class="userHover">
-	      		<div style="height: 50%"></div>
-	      		<div style="height: 50%">{{user.createAt}}</div>
-	      	</div>
-	    -->
-    		<img ng-src="{{user.avatar}}" style="height: 10vh">
-			<div class="caption">
-	        	<h5>{{user.username}}</h5>
-	        	<p>{{user.email}}</p>
-	        	<p>{{user.createAt}}</p>
-	        	<p>{{user.verified}}</p>
-	      	</div>  
+<div style="background-image:url(/app/view/img/home/3.jpg);background-size:cover;">
+	<div style="height: 10%"></div>
+	<!--
+	<p class="text-white" style="text-align: center"> There are {{users.length}} users in Hereseas </p>
+	-->
+	<p class="reset-text">There are {{users.length}} users in Hereseas</p>
+	<div style="height: 5%"></div>
+	<div class="centered text-center">
+        <button class="reset-button" ng-click="goHome()"><p style="font-size: 15px; margin: 0">回到主页</p></button>
+    </div>
+	<div class="row">
+		<div ng-repeat="user in users" class="col-xs-3 col-md-2" style="height: 40vh; padding-top: 5vh" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()">
+			<div class="thumbnail" style="position: relative; background-color: transparent;">
+			<!--
+				<div ng-show="hoverInfo" class="userHover">
+		      		<div style="height: 50%"></div>
+		      		<div style="height: 50%">{{user.createAt}}</div>
+		      	</div>
+		    -->
+	    		<img ng-src="{{user.avatar}}" style="height: 10vh; border-radius: 50%; margin-top: 1vh;">
+				<div class="caption">
+		        	<h5 class="text-white">{{user.username}}</h5>
+		        	<p class="text-white">{{user.email}}</p>
+		        	<p class="text-white">{{user.createAt}}</p>
+		        	<p class="text-white">{{user.school}}</p>
+		      	</div>  
+			</div>
 		</div>
 	</div>
-</div>
 
+</div>
 <style type="text/css">
+.reset-button {
+    font-family: "Gotham Book", Helvetica;
+    border-radius: 10px;
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    height:40px;
+    width:100px;
+}
+.reset-button:hover{
+    font-family: "Gotham Book", Helvetica;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+}
+.reset-text {
+    font-family: "Gotham Book", Helvetica !important;
+    font-size: 3vh;
+    line-height: 3vh;
+    padding: 0% !important;
+    color: white;
+    text-align: center;
+}
 
 .userHover {
   	position: absolute;

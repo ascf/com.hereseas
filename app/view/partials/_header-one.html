@@ -7,28 +7,20 @@
 <nav class="navbar navbar-default" style="border-radius:0px;background-color:rgb(229,229,224);height:60px;margin-bottom:28px;min-width:1000px;">
     <div class="container-fluid headerdiv" style="height:60px;min-width:1000px;" ng-controller="HeaderController">
         <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#" style="padding-top:8px;padding-left:5px"><img class="logo" clickme ng-click="goHome()" style="width:140px;height:42px"  src="/app/view/img/header/hereseas.svg"></img></a>
-        </div>
+          <a class="hdlogo" href="#" style="padding-top:8px;padding-left:5px"><img class="logo" clickme ng-click="goHome()" style="width:140px;height:42px"  src="/app/view/img/header/hereseas.svg"></img></a>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right:0px; margin-right:0px;">
-            <form class="navbar-form navbar-left" role="search" >
+        <div style="padding-right:0px; margin-right:0px;">
+            <form class="hdform" role="search" >
                 <div class="" style="margin-top:3px;border-radius:3px; width:343px;height:38px;background-color:#FFFFFF;border:1px solid rgb(199,198,194)">
                     <div ng-style="{'background-image':'url(/app/view/img/header/search.png)'}" style=" background-size:100%;background-repeat:no-repeat;float:left;width:20px;height:20px;margin-top:9px;margin-left:8px;margin-right:5px;">
 
                     </div>
                     <p style="float:left;color:rgb(182,182,182);font-size:23px;margin-right:6px;padding-bottom:5px;">|</p>
-                    <input style="color:rgb(86,90,92);margin-top:6px;" type="text" ng-controller="SchoolSearchCtrl" ng-model="selected" typeahead="school for school in schools | filter:$viewValue | limitTo:3" class="hd_search" placeholder="寻找你的">
+                    <input style="color:rgb(86,90,92);margin-top:6px;" type="text" ng-controller="SchoolSearchCtrl" ng-model="selected" typeahead="school for school in hschools | filter:$viewValue | limitTo:3" class="hd_search" placeholder="寻找你的大学">
+
                 </div>
             </form>
-            <div class="collapse navbar-collapse">
-               <ul class="nav navbar-nav navbar-right">
+               <ul class="hdul">
                     <li class="nav-li" ng-hide="logged()">
                         <a class="hd nav-li-a" ng-click="showLogin()" href="#" style="color:black;outline:none;">登录</a>
                     </li>
@@ -39,15 +31,16 @@
                         <a class="hd nav-li-a" ng-click="goProfile()" href="#" style="color:black;outline:none;">{{username}}</a>
                     </li>
                     <li ng-show="logged()">
-                        <img ng-click="openChatWindow()" src="/app/view/img/header/msg2.png" style="margin-top:20px;margin-right:10px;margin-left:10px;"/>
-                        <img ng-show="newMsg" src="/app/view/img/profile/msg2.png"/>
+                        <div ng-click="openChatWindow($event, '')" class="hdmsg">
+                            <img ng-show="newMsg" src="/app/view/img/profile/msg2.png" class="newmsg"/>
+                        </div>
                     </li>
                     <li class="nav-li" ng-show="logged()">
                         <a class="hd nav-li-a" ng-click="logOut()" href="#" style="color:black;outline:none;">退出</a>
                     </li>
                     <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:#FFFFFF;padding:0 0 0 0;background-color:inherit"><div class="hd_div_post" style="padding-top:7px;font-size:20px;">发布你的</div></a>
-                      <ul class="dropdown-menu" style="border-radius:0 0px 8px 8px;border:1px solid #b3b3b4;background-color:#f3f3f3;margin-left:10px;margin-right:10px;min-width:100px; padding:0 0 0 0;">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:#FFFFFF;padding:0 0 0 0;background-color:inherit"><div class="hd_div_post" style="font-size:20px;">发布你的</div></a>
+                      <ul class="dropdown-menu" style="border-radius:0 0px 8px 8px;border:1px solid #b3b3b4;background-color:#f3f3f3;margin-left:15px;margin-right:10px;min-width:100px; padding:0 0 0 0;">
                         <li class="post_list" ng-click="showRoompost()">发布房子</li>
                         <li class="post_list" ng-click="showCarpost()">发布车子</li>
                         <li class="post_list" ng-click="showItemspost()">发布旧货</li>
@@ -55,7 +48,6 @@
                       </ul>
                     </li>
                 </ul>
-            </div>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>

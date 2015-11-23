@@ -13,9 +13,9 @@
                 </div>
                 <div style="margin-right:53px;">
                     <!--发布者信息-->
-                    <div layout="row" style="padding-top:20px; padding-bottom:20px;">
+                    <div ng-click="showOtherUserInfo(sellerId)" layout="row" style="padding-top:20px; padding-bottom:20px;">
                         <div>
-                            <img class="md-whiteframe-z1" ng-src="{{avatar}}" style="border-radius:50%; width:80px;height:80px; border:1px solid rgb(220,224,224);"/>
+                            <div style="border-radius:50%; width:80px;height:80px; border:1px solid rgb(220,224,224);" ng-style="{'background-image':'url('+avatar+')'}" class="center-block mates_wrapper"></div>
                         </div>
                         <div layout="row" style="padding-left:30px; padding-top:40px;">
                             <div>{{username}}</div>
@@ -119,7 +119,7 @@
                             <div flex="33">
                                 <h3 class="hs_subtitle"><b>信息描述</b></h3>
                             </div>
-                            <div flex="66" style="margin-top:21px;" >
+                            <div flex="66" style="margin-top:21px;WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all" >
                                 <p>{{data.description}}</p>
                             </div>
                         </div>       
@@ -169,40 +169,64 @@
                         </div>
                         <div class="md-padding hs_frame withBorderRdius">
                             <div ng-repeat="room in data.rooms" style="margin-bottom:18px;">
-                                <div layout="row">
-                                    <div ng-show="room.type == '卧室'" flex="20" class="withBorderRdius roomTypeBottonBedroom"><h5>{{room.type}}</h5></div>
-                                    <div ng-show="room.type == '客厅'" flex="20" class="withBorderRdius roomTypeBottonLivingroom"><h5>{{room.type}}</h5></div>
-                                    <div ng-show="room.type == '其它'" flex="20" class="withBorderRdius roomTypeBottonOthers"><h5>{{room.type}}</h5></div>
-                                    <div flex="20" style="font-size:16px;height:35px; padding-top:6px; margin-left:28px;"><p>{{room.price}}$</p></div>
-                                    <div flex="20" style="font-size:16px;height:35px; padding-top:6px; text-align:center;"><p>{{name(room.priceType)}}</p></div>
+                                <div layout="column">
+                                    <div layout="row">
+                                        <div ng-show="room.type == '卧室'" flex="20" class="withBorderRdius roomTypeBottonBedroom"><h5>{{room.type}}</h5></div>
+                                        <div ng-show="room.type == '客厅'" flex="20" class="withBorderRdius roomTypeBottonLivingroom"><h5>{{room.type}}</h5></div>
+                                        <div ng-show="room.type == '其它'" flex="20" class="withBorderRdius roomTypeBottonOthers"><h5>{{room.type}}</h5></div>
+                                        <div flex="20" style="font-size:16px;height:35px; padding-top:6px; margin-left:28px;"><p>{{room.price}}$</p></div>
+                                        <div flex="20" style="font-size:16px;height:35px; padding-top:6px; text-align:center;"><p>{{name(room.priceType)}}</p></div>
+                                        <div style="margin-top:2px;width:50px;" ng-click="showInfo($index)" ng-show="!hasShowInfo[$index]">
+                                            <a id="moreInfo" style="color:#E95743;outline:none;margin-left:8px;" href="" ng-show="!hasShowInfo[$index]">
+                                                <strong ng-show="!hasShowInfo[$index]" style="font-size:20px;"> + </strong>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div layout="row">
+                                        <div flex="20"></div>
+                                        <div ng-show="hasShowInfo[$index]" style="margin:8px 0px 0px 28px;">
+                                            <hr style="margin:-5 0 5 0;color:rgb(233,233,233);">
+                                            <span ng-show="room.bathroom">
+                                                含独立卫生间
+                                            </span>
+                                            <span ng-show="!room.bathroom">
+                                                无独立卫生间
+                                            </span>
+                                            <span ng-show="room.walkInCloset">
+                                                含衣帽间
+                                            </span>
+                                            <span ng-show="!room.walkInCloset">
+                                                无衣帽间
+                                            </span>
+                                            <br>
+                                            <div layout="row">
+                                            <span ng-show="room.closet">
+                                                含壁橱
+                                            </span>
+                                            <span ng-show="!room.closet">
+                                                无壁橱
+                                            </span>
+                                                <span ng-show="room.share">
+                                                 &nbsp;合租
+                                            </span>
+                                            <span ng-show="!room.share">
+                                                 &nbsp;整租
+                                            </span>
+                                            <div id="moreInfo" style="color:rgb(71,175,150);margin-left:30px;width:50px;" href="" ng-show="hasShowInfo[$index]" ng-click="hideInfo($index)">
+                                                <strong ng-show="hasShowInfo[$index]" style="font-size:20px;margin-left:20px;"> - </strong>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div layout="row">
                                 <div flex="30">
-                                    房间信息：
+                                    房屋信息：
                                 </div>
                                 <div>
                                     <span>
                                         {{data.type}} 
-                                    </span>
-                                    <span ng-show="theRoom.bathroom">
-                                        含独立卫生间
-                                    </span>
-                                    <span ng-show="!theRoom.bathroom">
-                                        无独立卫生间
-                                    </span>
-                                    <br>
-                                    <span ng-show="theRoom.walkInCloset">
-                                        含衣帽间
-                                    </span>
-                                    <span ng-show="!theRoom.walkInCloset">
-                                        无衣帽间
-                                    </span>
-                                    <span ng-show="theRoom.closet">
-                                        含壁橱
-                                    </span>
-                                    <span ng-show="!theRoom.closet">
-                                        无壁橱
                                     </span>
                                 </div>
                             </div>
@@ -215,7 +239,7 @@
                                 <div><p>{{data.endDate | date:"yyyy-MM-dd"}}</p></div>
                             </div>
                         </div>
-                        <div layout="row" class="withBorderRdius roomsBotton"  style="outline:none; background-color:rgb(71,175,150);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF" ng-click="sendMessage()">
+                        <div layout="row" class="withBorderRdius roomsBotton"  style="outline:none; background-color:rgb(71,175,150);padding-top:5px;padding-bottom:5px;border-radius:3px;color:#FFFFFF" ng-controller="HeaderController" ng-click="openChatWindow($event, data.userId)">
                             <div class="center-block" style="width:105px;">
                                 <div style="background:url(/app/view/img/items/tele.png);background-size:cover;width:27px;height:27px;margin-top:0px;margin-right:5px;float:left"></div>
                                 <h4 style="margin-top:5px;">即刻联系</h4>

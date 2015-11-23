@@ -1,5 +1,6 @@
 #wrapper {
 	min-height:100%;
+    min-width: 1000px;
 	position:relative;
 }
 #header {
@@ -390,6 +391,29 @@ a, h4{
 
 /*--begin of header--*/
 
+.hdmsg{
+    margin-top:20px;
+    margin-right:10px;
+    margin-left:10px;
+    background-image:url(/app/view/img/header/msg2.png);
+    background-size: 100% 100%;
+    height: 18px;
+    width: 27px;
+    position: relative;
+}
+.hdmsg.home{
+    background-image:url(/app/view/img/header/msg1.png);
+}
+.newmsg{
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    height: 12px;
+}
+.newmsg.home{
+    top: -5px;
+    right: -5px;
+}
 .container-fluid.headerdiv{
     padding-left:13px;
     padding-right:0px;
@@ -430,8 +454,9 @@ a, h4{
     height:55px;
     color:#000000;
     padding: 20px 10px 10px 10px;
-    margin-left: 10;
-    margin-right: 10;
+    margin-left: 10px;
+    margin-right: 10px;
+    line-height: 20px;
 }
 
 .hd_div_post{
@@ -452,6 +477,42 @@ a, h4{
     font-size:18px;
     outline:none;
     color:rgb(182,182,182);
+}
+.hdlogo{
+    margin-left: -15px;
+    padding: 8px 15px 15px 13px;
+    float: left;
+    height: 50px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.hdform{
+    float:left!important;
+    width: auto;
+    padding: 0px 15px 0px 15px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.hdul{
+    float: right!important;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.hdul>li{
+    display: block;
+    position: relative;
+    float: left;
+}
+.hdul>li>a{
+    display: block;
+    position: relative;
 }
 /*--end of header--*/
 
@@ -629,6 +690,12 @@ md-sidenav.md-locked-open{
     background-color:white;
     width:115px;
 }
+.update{
+    color: white;
+    background-color: rgb(60,180,157);
+    width:115px; 
+}
+
 .div_submit{
     position:absolute;
     bottom:20px;
@@ -805,7 +872,15 @@ body a:visited{
     text-decoration: none;
 }
 
-
+body div{
+    outline: none;
+}
+body img{
+    outline: none;
+}
+body button{
+    outline:none;
+}
 
 .verify-input{
     width:180px;
@@ -904,7 +979,7 @@ input[type=checkbox]:focus{
 
 .ft{
     height:300px;
-    background:rgb(222,89,81);
+    background:rgb(234,87,67);
 }
 .footer_div{
     margin-top: 30px;
@@ -984,8 +1059,9 @@ margin-left:45px;width:150px;height:50px;
 }
 
 .tt-menu {    /* used to be tt-dropdown-menu in older versions */
-  width: 383px;
+  width: 440px;
   margin-top: 4px;
+  margin-left:-54px;
   padding: 4px 0;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -1014,3 +1090,9 @@ margin-left:45px;width:150px;height:50px;
   margin: 0;
 }
 <!-- End of Typeahead-->
+
+<!-- Begin of item -->
+.carousel-control.nav{
+    height: 100%;
+}
+<!-- End of item -->

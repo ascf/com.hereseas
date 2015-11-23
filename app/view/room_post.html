@@ -19,7 +19,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li >
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link ng-click="setActivePage(2)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -33,7 +33,7 @@
                         </a>
                     </menu-link>
                 </li>       
-                <li>
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link ng-click="setActivePage(3)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -45,7 +45,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li >
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link ng-click="setActivePage(4)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -59,7 +59,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li >
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link ng-click="setActivePage(5)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -73,7 +73,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link ng-click="setActivePage(6)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -87,7 +87,7 @@
                         </a>
                     </menu-link>
                 </li>
-                <li>
+                <li ng-show='tableFilled[0].filled'>
                     <menu-link ng-click="setActivePage(7)">
                         <a class="md-button md-default-theme" tabindex="0">
                             <div layout="row" layout-align="center center">
@@ -262,7 +262,7 @@
                     <div flex="20" layout="row">
                         <p class="room_post_font_content">$</p>
                         <md-input-container class="room_post_input text_input">
-                        <input required type="text" name="rate" ng-model="room.price" aria-label="price">
+                        <input required type="number" min="1" name="rate" ng-model="room.price" aria-label="price">
                         </md-input-container>
                     </div>
                     <div flex layout="row">
@@ -273,7 +273,7 @@
                     </div>
                 </div>
             </div>
-            <div class="room_post_div_content" style="margin-top:40px;" layout="row" layout-align="begin">
+            <div class="room_post_div_content" style="margin-top:40px;" layout="row" layout-align="begin" ng-show="steps[1].rooms.length<6">
                 <div ng-click="AddRoom()" class="rp_add_btn">
                     
                 </div>
@@ -388,7 +388,7 @@
                     </div>
                 </div>
                 <div class="room_post_div" >
-                     <textarea ng-model="steps[4].description" placeholder="最多输入300个字符" rows="8" cols="77"maxlength="300" aria-label="description" style="margin-top:20px;border-radius:4px; outline:none;"></textarea>
+                     <textarea ng-model="steps[4].description" rows="8" cols="70"maxlength="" aria-label="description" style="margin-top:20px;border-radius:4px; outline:none;"></textarea>
                 </div>
             </div>
         </div>
@@ -451,7 +451,7 @@
                 <div layout="column" flex>
                     <div class="room_post_font_content">图片</div>
                     <div layout="row" layout-wrap>
-                        <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in steps[6].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic)">删除</p></div>
+                        <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in steps[6].images" ng-style="{'background-image':'url('+pic+')'}"><p ng-click="removeImage(pic)" ng-show="steps[6].images.length!=1">删除</p></div>
                         
                         <div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="img in arrUploads" ng-style="{'background-image':'url('+img.content+')'}">
                             <div layout="row">

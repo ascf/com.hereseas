@@ -28,7 +28,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     
     
     $scope.$watch(function(){return $cookies['newmsg'];}, function(newValue){
-         console.log(newValue);
+         //console.log(newValue);
          if(newValue == 0 || newValue ==undefined) $scope.newMsg = false;
          else $scope.newMsg = true;
     });
@@ -39,6 +39,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
         //console.log(res,userService.getUser());
         if (res.result){ 
             userService.setLoginState(true);
+            $cookies.login = true;
             userService.setUser(res.data);
             $cookies['newmsg'] = 0;
             requestService.GetContact(function(res){
@@ -61,13 +62,15 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     });
 
     function logged() {
-        return userService.getLoginState();
+        return $cookies.login=='true';
     };
 
     function logOut() {
         requestService.LogOut(function() {
             userService.setLoginState(false);
+            $cookies.login = false;
             $scope.$emit('logout','1');
+            $state.reload();
         });
     };
 
@@ -117,11 +120,9 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
 
     //when "发布你的" clicked 
     function showRoompost(ev) {
-        var flag = userService.getLoginState();
-        //should have logged in to post room
-        if(flag)
+        if(logged())
         {
-            console.log(userService.getUser());
+            //console.log(userService.getUser());
             if(userService.getUser().schoolId==undefined)
                 alertService.alert("请先填写你的学校").then(function(){
                     $state.go('profile');
@@ -145,9 +146,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     };
 
     function showCarpost(ev) {
-        var flag = userService.getLoginState();
-        //should have logged in to post room
-        if(flag)
+        if(logged())
         {
             if(userService.getUser().schoolId==undefined)
                 alertService.alert("请先填写你的学校").then(function(){
@@ -172,9 +171,8 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     };
 
     function showItemspost(ev) {
-        var flag = userService.getLoginState();
         //should have logged in to post room
-        if(flag)
+        if(logged())
         {
             if(userService.getUser().schoolId==undefined)
                 alertService.alert("请先填写你的学校").then(function(){
@@ -201,9 +199,8 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
 
 
     function showActivspost(ev) {
-        var flag = userService.getLoginState();
         //should have logged in to post room
-        if(flag)
+        if(logged())
         {
             if(userService.getUser().schoolId==undefined)
                 alertService.alert("请先填写你的学校").then(function(){
@@ -249,49 +246,87 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
         });
     };
     
-    $scope.openChatWindow = function(ev){
-        var flag = userService.getLoginState();
+    $scope.openChatWindow = function(ev, receiver){
         //should have logged in to post room
-        if(flag)
+        if(logged())
         {
             $mdDialog.show({
-                controller:['$scope','userService','requestService','$cookies','userId', function($scope,userService, requestService,$cookies,userId) { 
-                    console.log(userId);
+                controller: function($scope ,userService, requestService,$cookies,$mdDialog,userId) { 
+                    //console.log(userId);
     
+                    $scope.hide = function(){
+                        $mdDialog.hide();
+                    };
+                    
                     $scope.initMsgs = initMsgs;
                     $scope.updateMsgs = updateMsgs;
                     $scope.setCurContact = setCurContact;
                     $scope.sendMessage = sendMessage;
-                    function setCurContact(contactId){
-                        $scope.curContact = contactId;
-                        updateMsgs(contactId);
+                    function setCurContact(index){
+                        $scope.curContact = index;
+                        updateMsgs(index);
                     };
 
-                    $scope.contactDetails = {};
-                    $scope.messages = {};
+                    $scope.contactDetails = [];
+                    $scope.messages = [];
                     
-                    $scope.contents = {};
+                    $scope.contents = [];
                     initMsgs();
                     function initMsgs(){
                         requestService.GetContact(function(res){
-                            console.log(res.contacts);
-                            $scope.contacts = res.contacts;
-                            $scope.curContact = $scope.contacts[0];
-                            angular.forEach(res.contacts, function(key){
-
-                                requestService.GetUser({id:key}, function(res){
-                                    console.log("contact", res.data);
-                                    $scope.contactDetails[key] = res.data;
-                                });
-
-
-                                requestService.GetMsgs({userid:key}, function(res){
-                                    console.log(res.data);
-                                    if(!angular.equals(res.data,[])){
-                                        $scope.messages[key] = res.data;
-                                        updateMsgs(key);
-                                        console.log($scope.messages);
+                            //console.log(res);
+                            
+                            if(res.contacts[0] == undefined){
+                                $scope.contacts = [];
+                                if(receiver!==''){ 
+                                    $scope.contacts.push(receiver);
+                                }
+                                $scope.curContact = 0;
+                            }
+                            else{
+                                $scope.contacts = res.contacts;
+                                if(receiver!==''){ 
+                                    if($scope.contacts.indexOf(receiver) !== -1){
+                                        $scope.contacts.splice($scope.contacts.indexOf(receiver),1);
                                     }
+                                    
+                                    $scope.contacts.push(receiver);
+                                    $scope.contacts = $scope.contacts.reverse();
+                                    $scope.curContact = 0;
+                                }else{
+                                    $scope.contacts = $scope.contacts.reverse();
+                                    $scope.curContact = 0;
+                                }
+                                
+                            }
+                            //console.log($scope.contacts);
+                            
+                            angular.forEach($scope.contacts, function(key){
+                                $scope.contents.push('');
+                                $scope.messages.push([]);
+                                $scope.contactDetails.push({});
+                            });
+                            
+                            
+                            angular.forEach($scope.contacts, function(key){
+                                //console.log(key);
+                                requestService.GetUser({id:key}, function(user){
+                                    //console.log(key);
+                                    $scope.contactDetails[$scope.contacts.indexOf(key)] = user.data;
+                                    
+                                    requestService.GetMsgs({userid:key}, function(res){
+                                        if(!angular.equals(res.data,[])){
+                                            $scope.messages[$scope.contacts.indexOf(key)] =res.data;
+                                            //console.log(key,"msgs", $scope.messages);
+                                            if($scope.curContact==0){
+                                                updateMsgs(0);
+                                            }
+                                        }
+                                        else{
+                                            $scope.messages[$scope.contacts.indexOf(key)] =[];
+                                        }
+                                        
+                                    }); 
                                 });
                             });
                         });
@@ -300,17 +335,16 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                     
                     function sendMessage(id){
                         
-                        console.log($scope.contents[id]);
+                        //console.log($scope.contacts[id]);
                         
                         userService.sendmessage({
-                            id: id,
+                            id: $scope.contacts[id],
                             content: $scope.contents[id]
                         }).then(function (res) {
-                            console.log(res);
+                            //console.log(res);
                             if (res.result) {
-                                //alert("Message has been sent");
-                                requestService.GetMsgs({userid:id}, function(res){
-                                    console.log(res);
+                                requestService.GetMsgs({userid:$scope.contacts[id]}, function(res){
+                                    //console.log(res);
                                     $scope.messages[id] = res.data;
                                     $scope.contents[id] = "";
                                 });
@@ -321,9 +355,9 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                     };
                     
                     
-                    function updateMsgs(contactId){
+                    function updateMsgs(index){
                         //console.log($scope.messages[contactId]);
-                        angular.forEach($scope.messages[contactId], function(msg){
+                        angular.forEach($scope.messages[index], function(msg){
                             if(msg.read == false && msg.sender !== userService.getUser().id)
                             {
                                 //console.log(msg);
@@ -332,18 +366,18 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                                 }).then(function (res) {
                                     //console.log(res);
                                     if (res.result) {
-                                        console.log("Message updated");
+                                        //console.log("Message updated");
                                         msg.read = true;
                                         $cookies['newmsg'] = parseInt($cookies['newmsg']) - 1;
                                     } else {
-                                        console.log("err");
+                                        //console.log("err");
                                     }
                                 });
                             }
                         });
                     };
                     
-                }],
+                },
                 templateUrl: '/app/view/partials/_chat_window.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -366,11 +400,12 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                    requestService.GetUserSelf(function (res) { 
                         if (res.result){
                             sessionCtrl();
-                            console.log('checked');
+                            //console.log('checked');
                         }else{
                             alert('Session time out, please login again!');
                             requestService.LogOut(function() {
                                 userService.setLoginState(false);
+                                $cookies.login = false;
                                 $scope.$emit('logout','1');
                             });
                         }
@@ -384,9 +419,9 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     sessionCtrl();
 });
 
-hereseasApp.controller('TopBarController', function($scope, $stateParams,requestService){
+hereseasApp.controller('TopBarController', function($state, $scope, $stateParams,requestService){
     requestService.GetSchool({id:$stateParams.schoolId}, function(res){
         $scope.avatar = res.data.avatar;
-        console.log($scope.avatar);
+        //console.log($scope.avatar);
     });
 });

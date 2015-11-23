@@ -93,14 +93,14 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
     });
     
     $stateProvider.state('forum', {
-        url: '/forum/:schoolId/',
+        url: '/forum/:schoolId',
         templateUrl: '/app/view/forum.html',
         controller: 'ForumController',
         
     });
     
     $stateProvider.state('article', {
-        url: '/forum/article/:id',
+        url: '/forum/article/:schoolId/:id',
         templateUrl: '/app/view/article.html',
         controller: 'ArticleController',
         
@@ -254,8 +254,8 @@ hereseasApp.config(function ($stateProvider, $urlRouterProvider,
  * loading bar options
  */
 hereseasApp.config(function (cfpLoadingBarProvider) {
-    cfpLoadingBarProvider.includeBar = true;
-    cfpLoadingBarProvider.includeSpinner = true;
+    cfpLoadingBarProvider.includeBar = false;
+    cfpLoadingBarProvider.includeSpinner = false;
     cfpLoadingBarProvider.latencyThreshold = 100;
 });
 

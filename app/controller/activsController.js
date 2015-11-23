@@ -118,7 +118,7 @@ hereseasApp.controller('ActivsPostController', function ($state, $scope, roomSer
 });
 
 hereseasApp.controller('ActivsDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,$mdDialog) {
-    console.log($stateParams.activId);
+    //console.log($stateParams.activId);
     
     // display single old stuff
     function activSetMap(){

@@ -61,8 +61,9 @@ hereseasApp.directive('topBar', function(){
         controller: TopBarCtrl,
     };
     
-    function TopBarCtrl($window, $scope, $state,$stateParams,requestService){
-        $scope.startPos = 0;
+    $scope.bk_bar = [];
+    
+    function TopBarCtrl($location,$window, $scope, $state,$stateParams,requestService){
         $scope.path = "/app/view/img/topBar/";
         $scope.icons = [
             {img :$scope.path+"apartments.svg", value:"吉屋"},
@@ -71,22 +72,48 @@ hereseasApp.directive('topBar', function(){
             {img :$scope.path+"actitivies.svg", value:"活动"}
         ];
         
-        requestService.GetSchool({id:$stateParams.schoolId}, function(res){
-            console.log(res);
-            $scope.avatar = res.data.avatar;
-            console.log($scope.avatar);
-        });
         
+        requestService.GetSchool({id:$stateParams.schoolId}, function(res){
+            //console.log(res);
+            $scope.avatar = res.data.avatar;
+            //console.log($scope.avatar);
+        });
+        $scope.bk_bar = [];
+        if($location.path().indexOf('apts')!=-1){
+            $scope.bk_bar[0]='/app/view/img/topBar/apt_selected.svg';
+        }else{
+            $scope.bk_bar[0]='/app/view/img/topBar/apartments.svg';
+        }
+        if($location.path().indexOf('allCars')!=-1){
+            $scope.bk_bar[1]='/app/view/img/topBar/car_selected.svg';
+        }else{
+            $scope.bk_bar[1]='/app/view/img/topBar/cars.svg';
+        }
+        if($location.path().indexOf('allItems')!=-1){
+            $scope.bk_bar[2]='/app/view/img/topBar/item_selected.svg';
+        }else{
+            $scope.bk_bar[2]='/app/view/img/topBar/goods.svg';
+        }
+        if($location.path().indexOf('allActivs')!=-1){
+            $scope.bk_bar[3]='/app/view/img/topBar/activ_selected.svg';
+        }else{
+            $scope.bk_bar[3]='/app/view/img/topBar/actitivies.svg';
+        }
+        if($location.path().indexOf('forum')!=-1){
+            $scope.bk_bar[4]='/app/view/img/topBar/forum_selected.svg';
+        }else{
+            $scope.bk_bar[4]='/app/view/img/topBar/life.svg';
+        }       
         
         $scope.showAll = function (id){
-            console.log($stateParams.schoolId);
-
-            if(id==0) $state.go('school', { schoolId:$stateParams.schoolId });
-            if(id==1) $state.go('allApts', { schoolId:$stateParams.schoolId });
-            if(id==2) $state.go('allCars', { schoolId:$stateParams.schoolId });
-            if(id==3) $state.go('allItems', { schoolId:$stateParams.schoolId });
-            if(id==4) $state.go('allActivs', { schoolId:$stateParams.schoolId });
-            if(id==6) $state.go('forum', { schoolId:$stateParams.schoolId });
+            //console.log($stateParams.schoolId);
+            
+            if(id==0) {$state.go('school', { schoolId:$stateParams.schoolId });}
+            if(id==1) {$state.go('allApts', { schoolId:$stateParams.schoolId });}
+            if(id==2) {$state.go('allCars', { schoolId:$stateParams.schoolId });}
+            if(id==3) {$state.go('allItems', { schoolId:$stateParams.schoolId });}
+            if(id==4) {$state.go('allActivs', { schoolId:$stateParams.schoolId });}
+            if(id==6) {$state.go('forum', { schoolId:$stateParams.schoolId });}
         };
     }
 });

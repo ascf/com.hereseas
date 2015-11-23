@@ -5,7 +5,8 @@ hereseasApp.controller('HomeController', function ($scope, userService, alertSer
         //console.log(res.data);
         $scope.schools = res.data;
     });
-    
+   
+
     
 });
 

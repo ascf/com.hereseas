@@ -1,62 +1,53 @@
-<div style="background-color:rgb(248,248,249);min-width:1000px">
+<div style="background-color:rgb(248,248,249);min-width:1000px" id="wrapper">
     <header ng-include="'app/view/partials/_header-one.html'"></header>
     <div top-bar></div>
     
-    <div class="container" style="padding-top:15px;padding-bottom:27.7px;width:1000px">
-        <div style="width:1000px" layout="row">
+    <div class="container" style="padding-top:15px;padding-bottom:97.7px;width:1000px">
+        <div style="width:970px" layout="row">
                 <div class="filter-bar" style="width:165px">筛选栏</div>
                 <div layout="row" style="margin-top:5px;padding-left:15px;padding-right:15px;">
                         <div style="padding-right:20px;">
                             <img style="width:22px;height:22px;" src="/app/view/img/apts/price.png"/>
                         </div> 
                         <div layout="column">
-                            <input id="price-slider" type="text" class="span2" data-slider-min="0" data-slider-max="40000" data-slider-step="1000" data-slider-value="[0,40000]" style="width:130px"/>
-                            <div><span style="margin-left:-10px;padding-right:90px;">$0</span><span>$40000</span></div>
-                        </div>
-                        <div>
-                            <span>价格</span>
+                            <input id="price-slider" type="text" class="span2" data-slider-min="0" data-slider-max="50000" data-slider-step="1000" data-slider-value="[0,50000]" style="width:200px"/>
+                            <div><span style="margin-left:-10px;padding-right:165px;">$0</span><span>$50000+</span></div>
                         </div>
                 </div>
 
                 <div layout="row" style="height:25px;padding-top:5px">
-                    <div style="padding:0 2 0 2;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
-                        <div ng-hide="selectData.category==''" ng-click="setStyle('')">所有</div><div ng-show="selectData.category==''" style="color:#3CB49E">所有</div>
+                    <div  style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:8px;width:45px">
+                        <div ng-hide="selectData.category==''" ng-click="setStyle('')">所&nbsp;&nbsp;有</div><div ng-show="selectData.category==''" style="color:#3CB49E">所&nbsp;&nbsp;有</div>
                      </div>
-                    <div style="padding:0 2 0 2;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
-                        <div ng-hide="selectData.category=='Sedan'" ng-click="setStyle('Sedan')">四门轿车</div><div ng-show="selectData.category=='Sedan'" style="color:#3CB49E">四门轿车</div>
+                    <div  style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:8px;width:45px">
+                        <div ng-hide="selectData.category=='轿车'" ng-click="setStyle('轿车')">轿&nbsp;&nbsp;车</div><div ng-show="selectData.category=='轿车'"  ng-click="setStyle('')" style="color:#3CB49E">轿&nbsp;&nbsp;车</div>
                     </div>
-                    <div style="padding:0 2 0 2;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
-                        <div ng-hide="selectData.category=='Wagon'" ng-click="setStyle('Wagon')">两厢车</div><div ng-show="selectData.category=='Wagon'" style="color:#3CB49E">两厢车</div>
+                    <div  style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:8px;width:45px">
+                        <div ng-hide="selectData.category=='跑车'" ng-click="setStyle('跑车')">跑&nbsp;&nbsp;车</div><div ng-show="selectData.category=='跑车'" ng-click="setStyle('')" style="color:#3CB49E">跑&nbsp;&nbsp;车</div>
                     </div>
-                    <div style="padding:0 2 0 2;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
-                        <div ng-hide="selectData.category=='Coupe'" ng-click="setStyle('Coupe')">双门跑车</div><div ng-show="selectData.category=='Coupe'" style="color:#3CB49E">双门跑车</div>
+                    <div  style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:8px;width:45px">
+                        <div ng-hide="selectData.category=='SUV'" ng-click="setStyle('SUV')">S&nbsp;U&nbsp;V</div><div ng-show="selectData.category=='SUV'"  ng-click="setStyle('')" style="color:#3CB49E">S&nbsp;U&nbsp;V</div>
                     </div>
-                    <div style="padding:0 2 0 2;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
-                        <div ng-hide="selectData.category=='SUV'" ng-click="setStyle('SUV')">SUV</div><div ng-show="selectData.category=='SUV'" style="color:#3CB49E">SUV</div>
+                    <div  style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:8px;width:45px">
+                        <div ng-hide="selectData.category=='皮卡'" ng-click="setStyle('皮卡')">皮&nbsp;&nbsp;卡</div><div ng-show="selectData.category=='皮卡'" ng-click="setStyle('')" style="color:#3CB49E">皮&nbsp;&nbsp;卡</div>
                     </div>
-                    <div style="padding:0 2 0 2;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
-                        <div ng-hide="selectData.category=='Pickup'" ng-click="setStyle('Pickup')">皮卡</div><div ng-show="selectData.category=='Pickup'" style="color:#3CB49E">皮卡</div>
-                    </div>
-                    <div style="padding:0 2 0 2;border-radius:2px;border:1px solid #A19F9B;margin-right:3px;">
-                        <div ng-hide="selectData.category=='Van'" ng-click="setStyle('Van')">面包车</div><div ng-show="selectData.category=='Van'" style="color:#3CB49E">面包车</div>
-                    </div>
-                    <div style="padding:0 2 0 2;border-radius:2px;border:1px solid #A19F9B">
-                        <div ng-hide="selectData.category=='Others'" ng-click="setStyle('Others')">其他</div><div ng-show="selectData.category=='Others'" style="color:#3CB49E">其他</div>
+                    <div style="padding:0 5 0 5;border-radius:2px;border:1px solid #A19F9B;margin-right:8px;width:45px">
+                        <div ng-hide="selectData.category=='其他'" ng-click="setStyle('其他')">其&nbsp;&nbsp;他</div><div ng-show="selectData.category=='其他'" ng-click="setStyle('')" style="color:#3CB49E">其&nbsp;&nbsp;他</div>
                     </div>
                 </div>
             
             <div layout="row" style="padding-left:10px;margin-top:5px;">
                 <div style="width:20px;height:20px;background-image:url(/app/view/img/header/search.png);background-size:cover"></div>
-                <input ng-model="searchCont" style="margin-left:10px;border-radius:4px;width:140px;height:25px;border:1px solid #D5D4D2" placeholder="搜索你要的汽车"></input>
+                <input disabled="disabled" ng-model="searchCont" style="margin-left:10px;border-radius:4px;width:140px;height:25px;border:1px solid #D5D4D2" placeholder="  "></input>
             </div>
         </div>
         <div layout="row" style="padding-top:20px">          
             <div layout="column">
-                 <div id="cars_panel" style="overflow-y:scroll;width:585px;min-height:670px;margin-right:10px;" class="row">
+                 <div id="cars_panel" style="overflow-y:scroll;width:585px;min-height:670px;margin-left:0px;" class="row">
                     
-                    <div ng-show="carsResult.length==0">没有任何结果, ╮(╯_╰)╭ </div>
-                    <a href="#/cars/{{car.id}}" style="declaration:none;color:inherit;" ng-repeat="car in carsResult">
-                    <div class="col-xs-6 col-sm-6" style="width:260px;height:180px;background-size:cover;background-repeat:no-repeat;margin-left:5px;margin-right:10px;margin-bottom:45px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+car.cover+')'} " >
+                    <div ng-if="carsResult.length==0">没有任何结果, ╮(╯_╰)╭ </div>
+                    <a href="#/cars/{{car.id}}" style="declaration:none;color:inherit;" ng-repeat="car in carsResult track by $index">
+                    <div class="col-xs-6 col-sm-6" style="width:260px;height:180px;background-size:cover;background-repeat:no-repeat;margin-left:0px;margin-right:15px;margin-bottom:45px;padding-left:0;padding-right:0;" ng-style="{'background-image':'url('+car.cover+')'} " >
                         <div layout="row">
                                     <!--
                                     <img style="height:22px;width:22px;margin-top:10px;margin-left:10px;"  src="/app/view/img/profile/favorite1.png" ng-click="addToFavs($index)"/>
@@ -64,7 +55,7 @@
                                         <div class="rotate" style="font-size:9px;padding-top:5px;padding-left:30px">{{item.price}}</div>
 
                                     </div-->
-                            <div style="margin-top:20px;min-width:70px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;">
+                            <div style="opacity:0.7;margin-top:20px;min-width:70px;height:52px;background-size:100% 100%;background-repeat:no-repeat;margin-right:0;margin-left:auto;">
                                 <div style="font-size:18px;color:white;background-color:black;text-align: center;">&nbsp;${{car.price}}&nbsp;</div>
 
                             </div>
@@ -76,7 +67,7 @@
                             </div>
                             </a>
                     </div>
-                <div layout="row">
+                <div layout="row" ng-if="pages.length>1">
                     <nav>
                       <ul class="pagination" style="margin-left:10px;">
                         <li>
@@ -84,9 +75,15 @@
                               <span aria-hidden="true">&laquo;</span>
                           </a>
                         </li>
-                            <li ng-repeat="page in pages">
-                                <a href="#/allCars/{{schoolId}}" ng-click="setPage($index)">{{page.id}}</a>
+                          
+                            <li>
+                                <a ng-if="pages_pre_dot" >...</a>
+                                <span ng-if="page.show" ng-repeat="page in pages" ng-click="setPage($index)">
+                                    <a ng-if="!page.selected" href="#/allCars/{{schoolId}}">{{page.id}}</a>                                    <a style="color:rgb(222,89,81)" ng-if="page.selected" href="#/allCars/{{schoolId}}">{{page.id}}</a>
+                                    </span>
+                                <a ng-if="pages_end_dot" >...</a>
                             </li>
+                          
                         <li>
                           <a href="#/allCars/{{schoolId}}" aria-label="Next" ng-click="next()">
                             <span aria-hidden="true">&raquo;</span>
@@ -101,7 +98,7 @@
         </div>
     </div>
     
-<div footer></div>
+<div footer id="footer"></div>
 </div>
 
 <style>

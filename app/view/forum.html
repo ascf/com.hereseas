@@ -1,4 +1,4 @@
-<div style="background-color:rgb(248,248,249);" style="min-width:1000px;" id="wrapper">
+<div style="background-color:rgb(248,248,249);min-width:1000px;" id="wrapper">
     <header ng-include="'app/view/partials/_header-one.html'"></header>
     <div top-bar></div>
     <div layout="row" id="content">
@@ -22,16 +22,43 @@
                             <div style="background-color:rgb(229,229,224);height:40px;font-size:18px;margin-bottom:10px;padding:0px 0px 0px 15px;" layout="row">
                                 <div style="padding-top:7px;">{{thread.title}}</div>
                             </div>
-                            <div style="float:left;margin-bottom:10px;color:rgb(55,120,106);">
-                                <img style="margin:0px 10px 0px 0px; padding:0px 0px 0px 0px; width:40px;height:40px;"src="{{thread.userAvatar}}" class="img-circle"></img>{{thread.username}} &nbsp;&nbsp; {{thread.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                            <div style="float:left;margin-bottom:10px;color:rgb(55,120,106);" layout="row">
+                                <div style="margin:0px 10px 0px 0px; padding:0px 0px 0px 0px; width:40px;height:40px;"ng-style="{'background-image':'url('+thread.userAvatar+')'}" class="img-circle center-block mates_wrapper"></div>
+                                <div style="margin-left:10px;padding-top:10px;">{{thread.username}} &nbsp;&nbsp; {{thread.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                            </div>
                             <div style="margin-bottom:10px;">
-                                <div>我看到第一批影评出来说这部略差于Skyfall的时候我就觉得药丸，因为我一直觉得Skyfall非常麻麻地，唯一亮点就是感谢门导引进了一个年轻的Q，从此开启了随缘热门同人文区的一个新分支，不得不服。 当我开始看片头之前的墨西哥长镜头的时候我就觉得乙烷，因为很多友邻说这个长镜头是整片的亮点，我就跪了，这长镜头太平庸了，毫无意义，跟鸟人什么的就先不比了基本属于欺负人......</div>
+                                <div>{{thread.preview}}</div>
                                 <!--div>
                                     <div style="float:right"><img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;" ng-click=""/></div>
                                 </div-->
                             </div>
                             <div style="margin-bottom:10px; color:rgb(55,120,106)">{{thread.replayCount}}回复</div>
                         </div>
+                    </div>
+                    <div layout="row" ng-if="pages.length>1">
+                        <nav>
+                          <ul class="pagination" style="margin-left:10px;">
+                            <li>
+                              <a href="#/forum/{{schoolId}}" aria-label="Previous" ng-click="previous()">
+                                  <span aria-hidden="true">&laquo;</span>
+                              </a>
+                            </li>
+
+                                <li>
+                                    <a ng-show="pages_pre_dot" >...</a>
+                                    <span ng-show="page.show" ng-repeat="page in pages" ng-click="setPage($index)">
+                                        <a ng-show="!page.selected" href="#/forum/{{schoolId}}">{{page.id}}</a>                                    <a style="color:rgb(222,89,81)" ng-show="page.selected" href="#/forum/{{schoolId}}">{{page.id}}</a>
+                                        </span>
+                                    <a ng-show="pages_end_dot" >...</a>
+                                </li>
+
+                            <li>
+                              <a href="#/forum/{{schoolId}}" aria-label="Next" ng-click="next()">
+                                <span aria-hidden="true">&raquo;</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -69,7 +96,6 @@
 </div>
 <style>
     h4{
-        color:#6A6966;
         margin-top:0px;margin-bottom:0px;
     }
 </style>

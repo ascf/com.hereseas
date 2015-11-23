@@ -3,6 +3,7 @@
 		<p>Please type your message here!</p>
 		<textarea ng-model="content" columns="1" aria-label="description"></textarea>
 		{{content}}
-		<button ng-click="sendmessage()">SEND</button>
+		<button ng-click="sendmessage()">发布</button>
+		<button ng-click="cancel()">取消</button>
 	</div>
 </md-dialog>

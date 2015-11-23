@@ -22,7 +22,7 @@ hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookie
         {exist: false},
         {exist: false},
     ];
-    $scope.hasSchool = [
+    $scope.hasApt = [
         {exist: false},
         {exist: false},
         {exist: false},
@@ -38,8 +38,13 @@ hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookie
         });
 
         requestService.GetNewSchoolMates({id:id}, function(res){
-            console.log(res.data);
+            //console.log(res.data);
             $scope.newSchoolMates = res.data;
+        });
+        
+        requestService.GetSchoolMates({id: $stateParams.schoolId}, function(res){
+            //console.log(res.data);
+            $scope.schoolMates = res.data;
         });
 
         requestService.GetThreeApts({schoolId: id}, function(res){
@@ -47,20 +52,23 @@ hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookie
             if(res.result){
                 $scope.aptImg1 = res.data[0].cover;
                 $scope.aptId1 = res.data[0]._id;
+                $scope.hasApt[0].exist = true;
                 if(res.data.length >= 2){
                     $scope.aptImg2 = res.data[1].cover;
                     $scope.aptId2 = res.data[1]._id;
+                    $scope.hasApt[1].exist = true;
                 }
                 if(res.data.length >= 3)
                 {
                     $scope.aptImg3 = res.data[2].cover;
                     $scope.aptId3 = res.data[2]._id;
+                    $scope.hasApt[2].exist = true;
                 }
             }
         });
         
         requestService.GetThreeItems({schoolId: id}, function(res){
-            console.log(res);
+            //console.log(res);
             if(res.result){
                 $scope.itemImg1 = res.data[0].cover;
                 $scope.itemId1 = res.data[0]._id;
@@ -81,7 +89,7 @@ hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookie
         });
         
         requestService.GetThreeCars({schoolId: id}, function(res){
-            console.log(res); 
+            //console.log(res); 
             if(res.result){
                 $scope.carImg1 = res.data[0].cover;
                 $scope.carId1 = res.data[0]._id;
@@ -119,6 +127,10 @@ hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookie
     $scope.showAllActivs = function(){
         $state.go('allActivs',{schoolId:$stateParams.schoolId}); 
     };
+    
+    $scope.showOtherUserInfo = function(othersId){
+        $state.go('othersProfile',{schoolId:$stateParams.schoolId,othersId:othersId}); 
+    }
     
     
 });
@@ -167,11 +179,26 @@ hereseasApp.controller('SchoolSearchCtrl', function($scope, $state,requestServic
     
 
     requestService.GetSchools(function(res){
+        $scope.hschools = [];
+        $scope.ids = [];
+
         var schools = [];
 
         for(var i=0; i<res.data.length; i++){
+            $scope.hschools.push(res.data[i].name);
+            $scope.ids.push(res.data[i]._id);
             schools.push(res.data[i]);
         }
+      
+
+        $scope.$watch(
+          function() { return $scope.selected; },
+          function(newValue, oldValue) {
+            if ( (newValue !== oldValue) && (newValue !== undefined) && (newValue !== "") &&($scope.hschools.indexOf(newValue) !== -1) ) {
+                $state.go('school',{schoolId:$scope.ids[$scope.hschools.indexOf(newValue)]}); 
+            }
+          }
+        );
         
         var substringMatcher = function(strs) {
           return function findMatches(q, cb) {
@@ -205,16 +232,11 @@ hereseasApp.controller('SchoolSearchCtrl', function($scope, $state,requestServic
           templates: {
             empty: [
               '<div class="empty-message" style="text-align: center; color: black; padding: 5px, 10px;">',
-                'unable to find any Best Picture winners that match the current query',
+                '您的学校正在开通，请先到附近的学校逛逛吧',
               '</div>'
             ].join('\n'),
-            //suggestion: Handlebars.compile('<div><strong>{{name}}</strong> – {{name}}</div>')
-            
             suggestion:  function(data) {
-                //console.log(data);
-                //return '<p><strong>' + data.name + '</strong> – ' + data.shortName + '</p>';
-                //return '<img src="app/view/img/school/avt_gwu.png">' + '<p><strong>' + data.name + '</strong> – ' + data.shortName + '</p>';
-                return '<div class="tt-pic">' + '<img src="' + data.avatar + '" width=20 height= 20/>' + '<strong>&nbsp&nbsp' + data.name + '</strong>' + '</div>';
+                return '<div class="tt-pic">' + '<img src="' + data.avatar + '" width=30 height= 30/>' + '<strong>&nbsp&nbsp' + data.name + '</strong>' + '</div>';
             }
             
           }
@@ -268,12 +290,13 @@ hereseasApp.directive('typeaheadFocus', function () {
 hereseasApp.controller('SchoolMatesCtrl', function($scope, $stateParams, $state, requestService) {
 
     requestService.GetSchoolMates({id: $stateParams.schoolId}, function(res){
-        console.log(res.data);
+        //console.log(res.data);
+
         $scope.schoolMates = res.data;
     });
     
     $scope.seeOthersProfile = function(index){
-        console.log(index);
+        //console.log(index);
         $state.go('othersProfile',{othersId:$scope.schoolMates[index]._id, schoolId:$stateParams.schoolId}); 
     }
 

@@ -5,12 +5,12 @@
             <!--items left-->
             <div flex=70 layout="column" style="padding-right:20px">
                 <div style="float:left;font-size:25px;margin-bottom:10px;"><strong>{{thread.title}}</strong></div>
-                <div style="height:auto;background-size:cover;margin-bottom:10px;" layout="row">
-                    <img style="margin:0px 10px 0px 0px; padding:0px 0px 0px 0px; width:40px;height:40px;"src="{{thread.userAvatar}}"  class="img-circle"></img>
+                <div ng-click="showOtherUserInfo(thread.userId)" style="height:auto;background-size:cover;margin-bottom:10px;" layout="row">
+                    <div style="margin:0px 10px 0px 0px; padding:0px 0px 0px 0px; width:40px;height:40px;" ng-style="{'background-image':'url('+thread.userAvatar+')'}" class="img-circle center-block mates_wrapper"></div>
                     <div style="margin-top:10px;"><p>{{thread.username}}&nbsp;&nbsp;{{thread.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</p>
                     </div>
                 </div>
-                <div style="margin-bottom:10px;">
+                <div style="margin-bottom:10px;WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all">
                     <div ng-bind-html="thread.content"></div>
                 </div>
             
@@ -21,7 +21,7 @@
                 <div style="margin-bottom:50px;">
                     <div  id="comments_panel" style="overflow-y:scroll;height:auto;margin-top:20px;">
                         <div ng-repeat="comment in threadComments" style="padding:10 0 10 10;" layout="row">
-                            <div> <img style="margin:0px 10px 0px 0px; padding:0px 0px 0px 0px; width:40px;height:40px;"src="{{comment.userAvatar}}"  class="img-circle"></img>
+                            <div> <div ng-click="showOtherUserInfo(comment.userId)" style="margin:0px 10px 0px 0px; padding:0px 0px 0px 0px; width:40px;height:40px;" ng-style="{'background-image':'url('+comment.userAvatar+')'}"  class="img-circle center-block mates_wrapper"></div>
                             </div>
                             <div style="height:auto;width:100%;" layout="column">
                                
@@ -29,55 +29,65 @@
                                     <p>{{comment.username}}&nbsp;&nbsp;{{comment.createAt| date:'yyyy-MM-dd HH:mm:ss'}}</p>
                                 </div>
                                  <div style="margin-top:20px;">
-                                <p>{{comment.content}}</p>
+                                <p style="WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all;">{{comment.content}}</p>
                                 </div>
                             </div>
                         </div>                   
                     </div>
-                    <div layout="column" style="margin-top:20px;">
-                        <div style="margin-bottom:10px;"><h4>发布留言</h4></div>
-                        <div><textarea ng-model="content" rows="8" cols="91" style="border-radius:4px"></textarea></div>
+                    <div layout="row" ng-if="pages.length>1">
+                        <nav>
+                          <ul class="pagination" style="margin-left:10px;">
+                            <li>
+                              <a href="#/forum/{{schoolId}}" aria-label="Previous" ng-click="previous()">
+                                  <span aria-hidden="true">&laquo;</span>
+                              </a>
+                            </li>
+
+                                <li>
+                                    <a ng-show="pages_pre_dot" >...</a>
+                                    <span ng-show="page.show" ng-repeat="page in pages" ng-click="setPage($index)">
+                                        <a ng-show="!page.selected" href="#/forum/{{schoolId}}">{{page.id}}</a>                                    <a style="color:rgb(222,89,81)" ng-show="page.selected" href="#/forum/{{schoolId}}">{{page.id}}</a>
+                                        </span>
+                                    <a ng-show="pages_end_dot" >...</a>
+                                </li>
+
+                            <li>
+                              <a href="#/forum/{{schoolId}}" aria-label="Next" ng-click="next()">
+                                <span aria-hidden="true">&raquo;</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                    </div>
+                    <div ng-if="!hasLogind" layout="column" style="margin-top:20px;">
+                        <div style="margin-bottom:10px;"><h4 style="color:#6A6966;">发布留言</h4></div>
+                        <div><textarea disabled="disabled" placeholder="  请先登录后再发布评论" ng-model="content" rows="8" cols="91" style="border-radius:4px"></textarea></div>
+                        <div ng-click="postComment()"  style="margin-left:620px;margin-top:10px;padding-left:10px;padding-top:10px;width:42px;height:42px;border-radius:4px;color:#ffffff;background-color:#3CB49E"><h4 style="color:#ffffff">go</h4></div>
+                    </div>
+                    <div ng-if="hasLogind" layout="column" style="margin-top:20px;">
+                        <div style="margin-bottom:10px;"><h4 style="color:#6A6966;">发布留言</h4></div>
+                        <div><textarea ng-model="content" rows="8" cols="82" style="border-radius:4px"></textarea></div>
                         <div ng-click="postComment()"  style="margin-left:620px;margin-top:10px;padding-left:10px;padding-top:10px;width:42px;height:42px;border-radius:4px;color:#ffffff;background-color:#3CB49E"><h4 style="color:#ffffff">go</h4></div>
                     </div>
                 </div>
             </div>
         
             <!--items right-->
-            <!--div flex=26 layout="column">
-                <div layout="row">
-                    <div flex= 25>
-                        <img style="height:50px;width:50px;" class="img-circle" ng-src="{{item.userAvatar}}"/>
-                    </div>
-                    <div flex= 20>
-                        <h5>{{item.username}}</h5>
-                    </div>
-                    <div flex= 55>
-                        <h5>{{schoolName}}</h5>
-                    </div>
+            <div flex=26 layout="column">
+                
+                <div ng-click="goToForum()" style="margin-top:30px;font-size:18px; margin-left:80px; text-align:center;">
+                    >>返回学校论坛
                 </div>
-                <div class="center-block">
-                    参与者<span style="margin-left:5px;width:15px;height:15px;line-height:15px;background-image:url(/app/view/img/profile/posted.png);background-size:100% 100%;color:#62B5DB;">12</span>
-                </div>
-                <div style="width:310px;height:350px;">
-                    <div ng-repeat="otherItem in otherItems" style="padding:1px;float:left" ng-click="goToEach($index)">
-                        <div ng-style="{'background-image':'url('+otherItem.content.cover+')'}" style="width:75px;height:100px;background-size:cover;margin-top:-1px;margin-left:-1px;"></div>
-                    </div>
-                </div>
-                <div style="padding:10px;border:1px solid #6A6966;height:210px;width:300px;">
-                    <h4>详情</h4>        
-                </div>
-            </div-->
+            </div>
         </div>
     </div>
     <div footer id="footer"></div>
 </div>
 <style>
     h3{
-        color:#6A6966;
         margin-top:0px;
     }
     h4{
-        color:#6A6966;
         margin-top:0px;margin-bottom:0px;
     }
     img{
