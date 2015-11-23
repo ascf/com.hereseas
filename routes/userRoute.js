@@ -22,7 +22,7 @@ var passport = require('passport');
 var md5 = require('MD5');
 var AWS = require('aws-sdk');
 
-var APIHOST = "http://52.25.82.212:8080/#";
+var APIHOST = "http://www.hereseas.com/#";
 
 
 exports.test = function(req, res, next) {
@@ -917,11 +917,11 @@ exports.sendMessage = function(req, res, next) {
             user.chats.addToSet(sender);
 
             var indexS = user.chats.indexOf(sender);
-    
+
             user.chats.splice(indexS, 1);
-        
+
             user.chats.push(sender);
-            
+
             message.receiverUsername = user.username;
             message.receiverSchool = user.schoolId;
             user.save(function(err, userR) {
