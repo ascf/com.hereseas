@@ -2,7 +2,7 @@ hereseasApp.factory('userService', function ($http, $state, $cookies) {
 
 
     var userService = this;
-    var host = "http://54.84.228.184";
+    var host = "http://www.hereseas.com";
     
     
     var toSignup = false;
@@ -17,6 +17,10 @@ hereseasApp.factory('userService', function ($http, $state, $cookies) {
     
     var signupOrLogin = 'login';
     
+    this.getHost = function(){
+        
+        return host;
+    };
     /*var favoriteList = {
         apartments:[],
         activities:[],

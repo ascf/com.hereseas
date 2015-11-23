@@ -159,6 +159,7 @@ hereseasApp.controller('ArticleController', function (userService,$sce,$statePar
             requestService.PostForumComment({schoolId:$scope.thread.schoolId,threadId:$scope.thread._id,content:$scope.content},function(res){
                 console.log(res);
                 if(res.result){
+                    console.log($scope.thread.schoolId);
                     $state.go('article',{schoolId:$scope.thread.schoolId,id:$scope.thread._id});
                 }else{
                     alert('留言发布失败。');
@@ -256,8 +257,8 @@ hereseasApp.config(['$provide',
             var modalInstance = $modal.open({
               // Put a link to your template here or whatever
               template: '<div layout="row" layout-wrap><div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="pic in images" ng-style="{\'background-image\':\'url(\'+pic.url+\')\'}"><p ng-click="removeImage(pic)">删除</p></div><div style="margin:10 10 10 10;border:1px solid; height:180;width:140px; background-color:rgb(248,248,248);background-repeat:no-repeat; background-size:cover;" layout="column" ng-repeat="img in arrUploads" ng-style="{\'background-image\':\'url(\'+img.content+\')\'}"><div layout="row"><progress ng-show="img.prog > 0" value="{{img.prog/100}}">{{img.prog}}%</progress><div ng-show="img.prog==100">上传成功！</div><div ng-click="img.cancel()">取消</div></div></div><div style="height:180;width:140px;" ngf-drop ngf-select ng-model="files" class="drop-box"  ngf-keep="true" ngf-keep-distinct="true" ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true" accept="image/*"><br />拖动您想要的照片进框中，或者点击以上传，可同时选择多张图片</div></div><button ng-click="submit()">OK</button>',
-              controller: ['$modalInstance', '$scope', 'Upload', 'fileReader', 'requestService',
-                function($modalInstance, $scope, Upload, fileReader, requestService) {
+              controller: ['$modalInstance', '$scope', 'Upload', 'fileReader', 'requestService','userService',
+                function($modalInstance, $scope, Upload, fileReader, requestService,userService) {
                     
                     $scope.$watch('files', function (newValue, oldValue) {
                         //files:image upload model
@@ -285,7 +286,7 @@ hereseasApp.config(['$provide',
                                         key.content = result;
                                     });
                                     var up = Upload.upload({
-                                        url: 'http://www.hereseas.com/forum/m_upload_image',
+                                        url:userService.getHost()+'/forum/m_upload_image',
                                         file: key.file,
                                         fileFormDataName: 'forum'
                                     }).progress(function (evt) {

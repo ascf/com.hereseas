@@ -315,7 +315,7 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                                 key.url = result;
                             });
                             var up = Upload.upload({
-                                url: 'http://www.hereseas.com/item/m_upload_image',
+                                url: userService.getHost()+'/item/m_upload_image',
                                 file: key.file,
                                 fileFormDataName: 'item'
                             }).progress(function (evt) {

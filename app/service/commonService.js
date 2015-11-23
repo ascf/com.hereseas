@@ -34,8 +34,8 @@ hereseasApp.factory('alertService', function ($http,$mdDialog) {
 });
 
 
-hereseasApp.factory('requestService', ['$resource', function($resource){
-    var host = "http://www.hereseas.com/";
+hereseasApp.factory('requestService', ['$resource','userService', function($resource,userService){
+    var host = userService.getHost()+'/';
     
     return $resource(host+':dir/:action/:id/:search', {dir: "@dir", id: "@id", action:"@action"}, {
         GetInit: { method: "GET", params: { dir: "init" } }, 

@@ -487,7 +487,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                                 key.content = result;
                             });
                             var up = Upload.upload({
-                                url: 'http://www.hereseas.com/car/m_upload_image',
+                                url: userService.getHost()+'/car/m_upload_image',
                                 file: key.file,
                                 fileFormDataName: 'car'
                             }).progress(function (evt) {

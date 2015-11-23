@@ -246,7 +246,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                         //key.content = result;
                     });
                     var up = Upload.upload({
-                        url: 'http://www.hereseas.com/avatar/m_upload_image',
+                        url: userService.getHost()+'/avatar/m_upload_image',
                         file: file,
                         fileFormDataName: 'avatar'
                     }).progress(function (evt) {
