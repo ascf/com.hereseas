@@ -866,11 +866,12 @@ exports.sendMessage = function(req, res, next) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
-
+    /*
     if (sender == receiver) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
+    */
     var ep = new EventProxy();
     var message = new Message();
     User.findById(sender, function(err, user) {
