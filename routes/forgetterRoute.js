@@ -3,7 +3,7 @@ var EventProxy = require('eventproxy');
 var Forgetter = require('../models').Forgetter;
 var Results = require('./commonResult');
 var emailService = require('../common/email');
-var APIHOST = "http://dev.hereseas.com/#";
+var APIHOST = "http://www.hereseas.com/#";
 var md5 = require('MD5');
 
 exports.createForgetter = function (req, res, next) {
