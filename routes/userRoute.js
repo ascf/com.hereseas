@@ -914,6 +914,13 @@ exports.sendMessage = function(req, res, next) {
             return;
         } else {
             user.chats.addToSet(sender);
+            
+            var index = user.chats.indexOf(sender);
+    
+            user.chats.splice(index, 1);
+        
+            user.chats.push(sender);
+            
             message.receiverUsername = user.username;
             message.receiverSchool = user.schoolId;
             user.save(function(err, userR) {
