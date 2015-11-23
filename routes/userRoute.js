@@ -887,10 +887,10 @@ exports.sendMessage = function(req, res, next) {
             }
             user.chats.addToSet(receiver);
 
-            var index = user.chats.indexOf(receiver);
+            var indexR = user.chats.indexOf(receiver);
             //console.log(index);
             //console.log(user.chats);
-            user.chats.splice(index, 1);
+            user.chats.splice(indexR, 1);
             //console.log(user.chats);
             user.chats.push(receiver);
             //console.log(user.chats);
@@ -914,10 +914,10 @@ exports.sendMessage = function(req, res, next) {
             return;
         } else {
             user.chats.addToSet(sender);
-            
-            var index = user.chats.indexOf(sender);
+
+            var indexS = user.chats.indexOf(sender);
     
-            user.chats.splice(index, 1);
+            user.chats.splice(indexS, 1);
         
             user.chats.push(sender);
             
