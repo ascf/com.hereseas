@@ -246,7 +246,7 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                         //key.content = result;
                     });
                     var up = Upload.upload({
-                        url: 'http://52.25.82.212:8080/avatar/m_upload_image',
+                        url: 'http://54.84.228.184/avatar/m_upload_image',
                         file: file,
                         fileFormDataName: 'avatar'
                     }).progress(function (evt) {
@@ -369,24 +369,6 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
                     //console.log($scope.basicInfo.schoolId);
                 }
 
-              /*  $scope.$watch('basicInfo', function (newValue, oldValue) {
-                    //console.log(1);
-                    if(newValue.schoolId!=='' && !angular.equals(newValue,oldValue)){
-                        requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
-                            //console.log(res);
-                            //$state.reload();
-                        });
-                    }
-                }, true);
-                $scope.$watch('basicInfo.schoolId', function (newValue, oldValue) {
-                    //console.log(1);
-                    if(newValue.schoolId!=='' && !angular.equals(newValue,oldValue)){
-                        requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
-                            //console.log(res);
-                            $state.reload();
-                        });
-                    }
-                }, true);*/
             };
             
             $scope.$watch('file', function (newValue, oldValue) {

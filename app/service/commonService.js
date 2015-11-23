@@ -35,7 +35,7 @@ hereseasApp.factory('alertService', function ($http,$mdDialog) {
 
 
 hereseasApp.factory('requestService', ['$resource', function($resource){
-    var host = "http://52.25.82.212:8080/";
+    var host = "http://54.84.228.184/";
     
     return $resource(host+':dir/:action/:id/:search', {dir: "@dir", id: "@id", action:"@action"}, {
         GetInit: { method: "GET", params: { dir: "init" } }, 

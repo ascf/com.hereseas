@@ -12,7 +12,7 @@ hereseasApp.controller('ResetController',
             token: $location.$$search.token
         }).then(function (res) {
         	//console.log(res);
-            console.log(res.result);
+            //console.log(res.result);
             if (res.result) {
                 $scope.activated = true;
             } else {

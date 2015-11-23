@@ -280,7 +280,7 @@ hereseasApp.config(['$provide',
                                         key.content = result;
                                     });
                                     var up = Upload.upload({
-                                        url: 'http://52.25.82.212:8080/forum/m_upload_image',
+                                        url: 'http://54.84.228.184/forum/m_upload_image',
                                         file: key.file,
                                         fileFormDataName: 'forum'
                                     }).progress(function (evt) {

@@ -2,7 +2,7 @@ hereseasApp.controller('AdminController', function ($scope, requestService, user
     $scope.users = [];
     requestService.AdminGetUserInfo(function(res){
         angular.forEach(res.data, function (key){
-            console.log(res.data);
+            //console.log(res.data);
             var tmp = {};
             tmp.email = key.email;
             tmp.username = key.username;

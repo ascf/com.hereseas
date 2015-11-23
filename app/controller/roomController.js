@@ -398,7 +398,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                         key.content = result;
                     });
                     var up = Upload.upload({
-                        url: 'http://52.25.82.212:8080/apartment/m_upload_image',
+                        url: 'http://54.84.228.184/apartment/m_upload_image',
                         file: key.file,
                         fileFormDataName: 'apartment'
                     }).progress(function (evt) {

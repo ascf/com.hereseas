@@ -315,7 +315,7 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                                 key.url = result;
                             });
                             var up = Upload.upload({
-                                url: 'http://52.25.82.212:8080/item/m_upload_image',
+                                url: 'http://54.84.228.184/item/m_upload_image',
                                 file: key.file,
                                 fileFormDataName: 'item'
                             }).progress(function (evt) {
@@ -445,11 +445,13 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                     item.steps[1].latitude = $scope.shared.latitude;
                     
                     
-                    requestService.StartItempost(item.steps[0], function(res){    
+                    requestService.StartItempost(item.steps[0], function(res){
                         console.log(item.steps[0],res);
                         var draftId = res.data._id;
                         requestService.ItemStepPost({id:draftId , step:2}, item.steps[1], function(res){
+                            //console.log("step2",res);
                             requestService.EndItempost({id:draftId}, function(res){
+                                //console.log("final", res);
                                 if(res.result){
                                     $scope.postedNum = $scope.postedNum + 1;
                                     if($scope.postedNum == $scope.items.length){
