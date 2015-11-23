@@ -797,8 +797,12 @@ md-select{
     padding: 0px;
     width: 135px;
     margin-bottom: 0px;
+    outline: none;
 }
-
+.room_post_input.date{
+    margin-bottom: -5px;
+    border: 0;
+}
 .room_post_input.text_input{
     width:80px;
 }

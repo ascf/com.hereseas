@@ -76,7 +76,7 @@
                     </div>
                     <div flex="75" layout="row" layout-align="start end">
                         <div style="margin-right:10px">
-                            <input required ng-model="shared.expireAt" name="Date" type="date" aria-label="ItemsDate" style="border-radius:10px;height:19px;border:1px solid #D5D4D2"/>
+                            <input required ng-model="shared.expireAt" name="Date" type="date" aria-label="ItemsDate" style="border-radius:10px;height:19px;border:1px solid #D5D4D2;outline:none;"/>
                         </div>
                         <div style="width:21px;height:19px;background-image:url(/app/view/img/icon/post_calendar.png);">
 
@@ -140,7 +140,7 @@
                         <p class="room_post_font_content">说明</p>
                     </div>
                     <div flex="75" layout="row" layout-align="start end">
-                        <textarea rows="3" cols="70" style="border-radius:4px;color:#A19F9B;border-color:#D5D4D2" ng-model="item.steps[0].description"></textarea>
+                        <textarea rows="3" cols="70" style="border-radius:4px;color:#A19F9B;border-color:#D5D4D2; resize:none;" ng-model="item.steps[0].description"></textarea>
                     </div>
                 </div>
                 

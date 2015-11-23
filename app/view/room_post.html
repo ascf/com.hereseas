@@ -177,9 +177,7 @@
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
                         <div>
-                            <md-input-container class="room_post_input">
-                              <input ng-model="steps[0].beginDate" type="date" name="invoiceDate"  aria-label="beginDate"/>
-                            </md-input-container>
+                          <input class="room_post_input date" ng-model="steps[0].beginDate" type="date" name="invoiceDate"  aria-label="beginDate"/>
                         </div>
                         <div>
                         <i class="rp_icon material-icons">event_available</i>  
@@ -193,11 +191,9 @@
                         </div>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <div>
-                        <md-input-container class="room_post_input">
-                          <input ng-model="steps[0].endDate" type="date" name="invoiceDate" aria-label="endDate"/>
-                        </md-input-container>
-                            </div>
+                        <div class="room_post_input">
+                          <input class="room_post_input date" ng-model="steps[0].endDate" type="date" name="invoiceDate" aria-label="endDate"/>
+                        </div>
                         <div>
                         <i class="rp_icon material-icons">event_busy</i>  
                         </div>
@@ -388,7 +384,7 @@
                     </div>
                 </div>
                 <div class="room_post_div" >
-                     <textarea ng-model="steps[4].description" rows="8" cols="70"maxlength="" aria-label="description" style="margin-top:20px;border-radius:4px; outline:none;"></textarea>
+                     <textarea ng-model="steps[4].description" rows="8" maxlength="" aria-label="description" style="width:570px;margin-top:20px;border-radius:4px; outline:none;resize:none;"></textarea>
                 </div>
             </div>
         </div>

@@ -175,9 +175,7 @@
                         <p class="room_post_font_content">购买日期</p>
                     </div>
                     <div flex="30" layout="row" layout-align="start end">
-                        <md-input-container class="room_post_input">
-                          <input ng-model="steps[0].boughtDate" type="date" name="boughtDate"  aria-label="CarBoughtDate"/>
-                        </md-input-container>
+                      <input class="room_post_input date" ng-model="steps[0].boughtDate" type="date" name="boughtDate"  aria-label="CarBoughtDate"/>
                     </div>
                 </div>
 <!--
@@ -417,7 +415,7 @@
                 </div>
                 
                 <div class="room_post_div" >
-                     <textarea ng-model="steps[3].description" rows="8" cols="70"  aria-label="description" style="margin-top:20px;border-radius:4px; outline:none;"></textarea>
+                     <textarea ng-model="steps[3].description" rows="8" aria-label="description" style="width:570px;margin-top:20px;border-radius:4px; outline:none;resize:none;"></textarea>
                 </div>
                 
             </div>

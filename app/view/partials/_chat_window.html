@@ -1,46 +1,46 @@
-<md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;" aria-label="x">
-<div layout="column" style="min-height:520px;width:850px;background-color:rgb(245,245,245);overflow:hidden;">
-    <div style="height:36px;border:1px rgb(169,169,169) solid;" layout="row" layout-align="end">
-        <div style="background-color:rgb(233,87,86);margin:4;width:26px;height:26px;border-radius:50%;" ng-click="hide()"></div>
-    </div>
-    <div flex layout="row">
-        <div flex="25" style="padding-bottom:0px;border:1px rgb(169,169,169) solid;overflow:scroll;">
-        <div style="outline:none;" ng-repeat="message in messages" layout="column"  ng-click="setCurContact($index)">
-            
-            <div layout="row" style="margin:15 10 0 10;">
-                <div  flex="30" style="margin-right:5px;">
-                <div style="height:60px;width:60px;border: 1px rgb(169,169,169) solid;" ng-style="{'background-image':'url('+contactDetails[$index].avatar+')'}" class="center-block mates_wrapper"></div>
-                    </div>
-                <div ng-show="$index == curContact" flex="70" style="color: rgb(55,120,106);padding-top:20px; margin-left:10px;font-size:12px;"><strong>{{contactDetails[$index].username}}</strong></div>
-                <div ng-hide="$index == curContact" flex="70" style="padding-top:20px; margin-left:10px;font-size:12px;"><strong>{{contactDetails[$index].username}}</strong></div>
-            </div>
+<md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;min-height:480px;" aria-label="x">
+    <div layout="column" style="height:100%;width:850px;background-color:rgb(245,245,245);overflow:scroll;">
+        <div style="height:36px;border:1px rgb(169,169,169) solid;" layout="row" layout-align="end">
+            <div style="background-color:rgb(233,87,86);margin:4;width:26px;height:26px;border-radius:50%;" ng-click="hide()"></div>
         </div>
-        </div>
-        <div flex="75" style="border:1px rgb(169,169,169) solid;overflow:hidden;">
-            <div ng-repeat="message in messages" layout="column"  ng-show="$index == curContact">        
-               <div flex="80" style="padding:10;overflow:scroll;">
-                <div  ng-repeat="msg in message" layout="column" >
-                    <p style="font-size:12px;color:rgb(55,120,106);"><strong>{{msg.senderUsername}}&nbsp;&nbsp;&nbsp;&nbsp;{{msg.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</strong></p>
-                    <p style="WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all">
-                    {{msg.content}}
-                    </p>
-                </div>
-                </div>
-                <div flex="20" layout="row" style="height:56px;border-top:2px rgb(169,169,169) solid;background-color:white;">
-                    
-                    <div flex="90" style="padding:20 20 0 20;">
-                        <md-input-container>
-                        <input ng-model="contents[$index]" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()" aria-label="contents"/>
-                        </md-input-container>
-                    </div>
-                    <div flex="10" >
-                    <div id="btnSearch" style="margin:7 5 2 5;border:1px rgb(169,169,169) solid;padding-top:15px;text-align:center;color:white;width:50px;height:50px;border-radius:50%; background-color:rgb(72,182,160);" ng-click="sendMessage($index)">
-                        <strong>发送</strong>
-                    </div>
+        <div layout="row">
+            <div flex="25" style="padding-bottom:0px;border:1px rgb(169,169,169) solid;overflow:scroll;">
+                <div style="outline:none;" ng-repeat="message in messages" layout="column"  ng-click="setCurContact($index)">
+                    <div layout="row" style="margin:15 10 0 10;">
+                        <div  flex="30" style="margin-right:5px;">
+                            <div style="height:60px;width:60px;border: 1px rgb(169,169,169) solid;" ng-style="{'background-image':'url('+contactDetails[$index].avatar+')'}" class="center-block mates_wrapper"></div>
+                        </div>
+                        <div ng-show="$index == curContact" flex="70" style="color: rgb(55,120,106);padding-top:20px; margin-left:10px;font-size:12px;">
+                            <strong>{{contactDetails[$index].username}}</strong>
+                        </div>
+                        <div ng-hide="$index == curContact" flex="70" style="padding-top:20px; margin-left:10px;font-size:12px;">
+                            <strong>{{contactDetails[$index].username}}</strong>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div flex="75" style="border:1px rgb(169,169,169) solid;">
+                <div layout="column"  ng-show="$index == curContact" ng-repeat="message in messages">        
+                   <div style="padding:10;overflow:scroll;max-height:440px;min-height:440px;">
+                        <div  ng-repeat="msg in message" layout="column" >
+                            <p style="font-size:12px;color:rgb(55,120,106);"><strong>{{msg.senderUsername}}&nbsp;&nbsp;&nbsp;&nbsp;{{msg.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</strong></p>
+                            <p style="WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all">
+                            {{msg.content}}
+                            </p>
+                        </div>
+                    </div>
+                    <div layout="row" style="max-height:85px;min-height:85px;border-top:2px rgb(169,169,169) solid;background-color:white;">
+                        <div flex="90" style="padding:20 20 0 20;">
+                            <textarea ng-model="contents[$index]" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()" aria-label="contents" style="width:540px;resize:none;border:0;outline:none;"></textarea>
+                        </div>
+                        <div flex="10" >
+                            <div id="btnSearch" style="margin:18 2 5;border:1px rgb(169,169,169) solid;padding-top:15px;text-align:center;color:white;width:50px;height:50px;border-radius:50%; background-color:rgb(72,182,160);" ng-click="sendMessage($index)">
+                                <strong>发送</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 </md-dialog>

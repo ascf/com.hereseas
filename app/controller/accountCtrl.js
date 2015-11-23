@@ -87,7 +87,6 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
         //console.log($scope.user.remember);
     }
     
-    console.log(userService.getLoginState());
     // controller to handle login check
     $scope.loginClick = function () {
         //console.log($scope.user);

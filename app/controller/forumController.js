@@ -154,7 +154,7 @@ hereseasApp.controller('ArticleController', function (userService,$sce,$statePar
     }
     
     $scope.postComment = function(){
-        if(userService.getLoginState())
+        if($scope.hasLogind)
         {
             requestService.PostForumComment({schoolId:$scope.thread.schoolId,threadId:$scope.thread._id,content:$scope.content},function(res){
                 console.log(res);
