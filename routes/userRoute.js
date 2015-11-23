@@ -907,6 +907,7 @@ exports.sendMessage = function(req, res, next) {
             message.senderSchool = user.schoolId;
             user.save(function(err, userS) {
                 if (err) {
+                    console.log("sender");
                     console.log(err);
                     return next();
                 } else {
@@ -936,6 +937,7 @@ exports.sendMessage = function(req, res, next) {
             message.receiverSchool = user.schoolId;
             user.save(function(err, userR) {
                 if (err) {
+                    console.log("receiver");
                     console.log(err);
                     return next();
                 } else {
