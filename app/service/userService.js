@@ -2,7 +2,7 @@ hereseasApp.factory('userService', function ($http, $state, $cookies) {
 
 
     var userService = this;
-    var host = "http://54.84.228.184/";
+    var host = "http://54.84.228.184";
     
     
     var toSignup = false;
