@@ -9,6 +9,8 @@ var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
 var tools = require('./common/tools');
 
+var User = require('./models').User;
+
 var multer = require('multer');
 var upload = multer({
     dest: 'uploads/'
@@ -23,21 +25,22 @@ module.exports = function(app) {
 
     app.get('/test', function(req, res, next) {
 
+        // var sanitizeHtml = require('sanitize-html');
+        // var dirty = '<p><img src="https://s3.amazonaws.com/hereseas-public-images/forum/26de3a81-d73e-4370-8b2b-ddca35d5f2b1.gif"/><span class="rangySelectionBoundary">&#65279;</span><span class="rangySelectionBoundary">&#65279;</span></p><p><br/></p><p><br/></p><p>为了显示部分内容</p><p>   test!!!</p><p>蛤蛤 蛤蛤 蛤蛤</p';
+        // var clean = sanitizeHtml(dirty, {
+        //     allowedTags: [],
+        //     allowedAttributes: []
+        // });
+        // User.findOne({
+        //     id: "req.user.id"
+        // }, function(err, user) {
+        //     console.log(user.id);
+        // });
 
-        var sanitizeHtml = require('sanitize-html');
-
-        var dirty = '<p><img src="https://s3.amazonaws.com/hereseas-public-images/forum/26de3a81-d73e-4370-8b2b-ddca35d5f2b1.gif"/><span class="rangySelectionBoundary">&#65279;</span><span class="rangySelectionBoundary">&#65279;</span></p><p><br/></p><p><br/></p><p>为了显示部分内容</p><p>   test!!!</p><p>蛤蛤 蛤蛤 蛤蛤</p';
-        var clean = sanitizeHtml(dirty, {
-            allowedTags: [],
-            allowedAttributes: []
-        });
-
-
+        // console.log(asd.sad);
 
         res.json({
-            test: 'this is testing',
-
-            clean: clean
+            test: 'this is testing'
         });
     });
 
