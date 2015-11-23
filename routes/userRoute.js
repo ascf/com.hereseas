@@ -108,6 +108,7 @@ exports.createUser = function(req, res, next) {
     user.activecode = randomstring.generate();
 
 
+
     if (tools.isEmpty(user.email) || tools.isEmpty(user.password) || tools.isEmpty(user.username)) {
         return res.json(Results.ERR_PARAM_ERR);
     }
@@ -131,6 +132,10 @@ exports.createUser = function(req, res, next) {
                     result: true,
                     id: user.id
                 });
+
+                user.chats.addToSet(user.id);
+                user.save(function(err, user) {})
+
             }
         });
     });
@@ -884,7 +889,7 @@ exports.sendMessage = function(req, res, next) {
             res.json(Results.ERR_NOTFOUND_ERR);
             return;
         } else {
-            if (tools.isEmpty(user.chats)) {
+            if (user.chats == undefined) {
                 res.json(Results.ERR_PARAM_ERR);
                 return;
             }
