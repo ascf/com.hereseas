@@ -180,7 +180,7 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
     requestService.GetCar({id: $stateParams.carId}, function(res){
         
         if(res.result){
-            //console.log(res);
+            console.log(res);
             $scope.data = res.data[0];
             $scope.addFav = addFav;
             $scope.delFav = delFav;
@@ -813,16 +813,16 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 } else{
                     if($scope.activePage == 1){
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:1}, $scope.steps[0], function(res){
-                            //console.log(res);
+                            console.log(res);
                         });
                     }else if($scope.activePage == 3){
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                            //console.log(res);
+                            console.log(res);
                         });
                     }else{
                         if(!angular.equals(userService.getCarDraft(),{}) && $scope.tableFilled[$scope.activePage-1].filled){
                             requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                                //console.log(res);
+                                console.log(res);
                             });
                         }
                     }

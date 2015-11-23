@@ -212,7 +212,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
 
                 $mdDialog.show({
                     //controller: RoomPostController,
-                    templateUrl: '/app/view/activ_post.html',
+                    templateUrl: '/app/view/activ_post_temp.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
                     clickOutsideToClose:false
