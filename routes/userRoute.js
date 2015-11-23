@@ -920,6 +920,9 @@ exports.sendMessage = function(req, res, next) {
         if (err) {
             res.json(Results.ERR_DB_ERR);
             return;
+        } else if (user == null) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
         } else {
             user.chats.addToSet(sender);
 
@@ -949,6 +952,7 @@ exports.sendMessage = function(req, res, next) {
         message.content = req.body.content;
         message.save(function(err, message) {
             if (err) {
+                console.log(message);
                 console.log(err);
                 return next();
             } else {
