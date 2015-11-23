@@ -108,33 +108,33 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
 
                 // Origins, anchor positions and coordinates of the marker increase in the X
                 // direction to the right and in the Y direction down.
-                var image = {
-                    url: '/app/view/img/apts/marker_big.png',
-                    // This marker is 58 pixels wide by 24 pixels high.
-                    size: new google.maps.Size(116, 48),
-                    // The origin for this image is (0, 0).
-                    origin: new google.maps.Point(0, 0),
-                    // The anchor for this image is the base of the flagpole at (0, 24).
-                    anchor: new google.maps.Point(70, 48)
-                };
+//                var image = {
+//                    url: '/app/view/img/apts/marker_big.png',
+//                    // This marker is 58 pixels wide by 24 pixels high.
+//                    size: new google.maps.Size(116, 48),
+//                    // The origin for this image is (0, 0).
+//                    origin: new google.maps.Point(0, 0),
+//                    // The anchor for this image is the base of the flagpole at (0, 24).
+//                    anchor: new google.maps.Point(70, 48)
+//                };
                 // Shapes define the clickable region of the icon. The type defines an HTML
                 // <area> element 'poly' which traces out a polygon as a series of X,Y points.
                 // The final coordinate closes the poly by connecting to the first coordinate.
-                var shape = {
-                    coords: [0, 0, 0, 48, 116, 48, 116, 0],
-                    type: 'poly'
-                };
+//                var shape = {
+//                    coords: [0, 0, 0, 48, 116, 48, 116, 0],
+//                    type: 'poly'
+//                };
 
+                var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                var labelIndex = 0;
+                
                 for(var cll in cluster_ll){
-                    var marker = new MarkerWithLabel({
+                    var marker = new google.maps.Marker({
                         map: map,
                         position: cluster_ll[cll].ll,
-                        icon: image,
-                        shape: shape,
-                        labelContent: cluster_ll[cll].text,
+                        label: labels[labelIndex++ % labels.length],
                         draggable: false,
-                        labelClass: "labels",
-                        labelAnchor: new google.maps.Point(60, 44)
+        
                     });
                 }
             }else{
