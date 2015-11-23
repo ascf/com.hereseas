@@ -1,4 +1,4 @@
-hereseasApp.controller('ForumController', function ($stateParams,$scope, $mdDialog, userService, requestService, alertService, $window, $state) {
+hereseasApp.controller('ForumController', function ($stateParams,$scope, $cookies,$mdDialog, userService, requestService, alertService, $window, $state) {
     $scope.pages = 0;
     $scope.threads = [];
     var cur_page = 1;
@@ -157,7 +157,7 @@ hereseasApp.controller('ArticleController', function (userService,$sce,$statePar
                 //console.log(res);
                 if(res.result){
                     //console.log($scope.thread.schoolId);
-                    $state.go('article',{schoolId:$scope.thread.schoolId,id:$scope.thread._id});
+                    $state.reload();
                 }else{
                     alert('留言发布失败。');
                 }

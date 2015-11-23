@@ -3,7 +3,7 @@ hereseasApp.factory('userService', function ($http, $state, $cookies) {
 
     var userService = this;
     var host = "http://www.hereseas.com";
-    
+    //var host = "http://52.25.82.212:8080";
     
     var toSignup = false;
     var toLogin = false;
