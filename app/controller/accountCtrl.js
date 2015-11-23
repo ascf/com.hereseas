@@ -86,6 +86,8 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
         //console.log("before",$scope.user.remember);
         //console.log($scope.user.remember);
     }
+    
+    console.log(userService.getLoginState());
     // controller to handle login check
     $scope.loginClick = function () {
         //console.log($scope.user);
@@ -100,8 +102,10 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
                 //console.log(res);
                 if(res.result){
                      requestService.GetUserSelf(function(res){
-                        userService.setUser(res.data);
-                        userService.setLoginState(true);
+                        console.log(res);
+                        $cookies['schoolId'] = res.data.schoolId;
+                        $cookies['userId'] = res.data.id;
+
                         $cookies.login = true;
                         $state.reload()
                         $scope.hide();

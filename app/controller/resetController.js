@@ -38,7 +38,6 @@ hereseasApp.controller('ResetController',
 	                $scope.reset = true;
 
 			        requestService.LogOut(function() {
-			            userService.setLoginState(false);
 			            $cookies.login = false;
 			            $scope.$emit('logout','1');
 			            //$state.reload();

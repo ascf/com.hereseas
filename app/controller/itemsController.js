@@ -166,7 +166,7 @@ hereseasApp.controller('ItemsController',function($stateParams,$scope,requestSer
     
 });
 
-hereseasApp.controller('ItemsPostController', function ($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter) {
+hereseasApp.controller('ItemsPostController', function ($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter,$cookies) {
    var geocoder = new google.maps.Geocoder();
             //地址自动完成相关变量
             $scope.options1 = null;
@@ -198,7 +198,7 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
             $scope.add_item = function(){
                 var val = {
                     steps:[{
-                            schoolId :userService.getUser().schoolId,
+                            schoolId :$cookies['schoolId'],
                             expireAt : '',
                             itemName: '',
                             category: '',
@@ -315,7 +315,7 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                                 key.url = result;
                             });
                             var up = Upload.upload({
-                                url: 'http://54.84.228.184/item/m_upload_image',
+                                url: 'http://www.hereseas.com/item/m_upload_image',
                                 file: key.file,
                                 fileFormDataName: 'item'
                             }).progress(function (evt) {
@@ -367,7 +367,7 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
             //the main model 
 	       $scope.items = [{
                 steps:[{
-                            schoolId :userService.getUser().schoolId,
+                            schoolId :$cookies['schoolId'],
                             expireAt : '',
                             itemName: '',
                             category: '',

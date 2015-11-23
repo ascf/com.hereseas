@@ -148,7 +148,7 @@
                     </div>
                     <div flex="30" layout="row" layout-align="start end">
                         <div>
-                            <md-select name="room_number" placeholder="" ng-model="numBedrooms" required class="rp_select">
+                            <md-select name="room_number" placeholder="" ng-model="numBedrooms" required class="rp_select" aria-label="room_number">
                             <md-option value="0">Studio</md-option>
                             <md-option value="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</md-option>
                             <md-option value="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</md-option>
@@ -161,7 +161,7 @@
                         </div>
                     </div>
                     <div flex="30" layout="row" ng-hide="isStudio">
-                      <md-select name="bathroom_number" placeholder="" ng-model="numBathrooms" required class="rp_select">
+                      <md-select name="bathroom_number" placeholder="" ng-model="numBathrooms" required class="rp_select" aria-label="bathroom_number">
                         <md-option value="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</md-option>
                         <md-option value="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</md-option>
                         <md-option value="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3</md-option>
@@ -217,7 +217,7 @@
                         <p class="room_post_font_content">房屋类型</p>
                     </div>
                     <div flex="20" layout="row">
-                      <md-select name="room_type"  ng-model="room.type" required class="rp_select">
+                      <md-select name="room_type"  ng-model="room.type" required class="rp_select" aria-label="room_type">
                         <md-option value="卧室">卧室</md-option>
                         <md-option value="客厅">客厅</md-option>
                         <md-option value="其它">其它</md-option>
@@ -253,7 +253,7 @@
                     </div>
                     <div flex="20" layout="row" layout-align="start end">
                         <div>
-                            <md-select name="rent_type" placeholder="" ng-model="room.share" required class="rp_select">
+                            <md-select name="rent_type" placeholder="" ng-model="room.share" required class="rp_select" aria-label="rent_type">
                             <md-option value="false">整租</md-option>
                             <md-option value="true">合租</md-option>
                             </md-select>
@@ -266,7 +266,7 @@
                         </md-input-container>
                     </div>
                     <div flex layout="row">
-                        <md-select name="rent_time_m_d" ng-model="room.priceType" required class="rp_select">
+                        <md-select name="rent_time_m_d" ng-model="room.priceType" required class="rp_select" aria-label="rent_time_m_d">
                             <md-option value="month">每月</md-option>
                             <md-option value="day">每天</md-option>
                         </md-select>
@@ -410,31 +410,31 @@
                                 <div class="room_post_font_content">Street Address</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addNum">
-                                <input type="text" ng-model="addresses[0]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[0]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addAdd">
-                                <input type="text" ng-model="addresses[1]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[1]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                             </div>
                             <div layout="row" style="margin-top:20px;">
                                 <div class="room_post_font_content">City</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addCity">
-                                <input type="text" ng-model="addresses[2]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[2]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                             </div>
                             <div layout="row" style="margin-top:20px;">
                                 <div class="room_post_font_content">State</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addSta">
-                                <input type="text" ng-model="addresses[3]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[3]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                                 <div flex="5"></div>
                                 <div class="room_post_font_content">Zipcode</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addZip">
-                                <input type="text" ng-model="addresses[4]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[4]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                             </div>
                         </div>

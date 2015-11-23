@@ -60,7 +60,7 @@ hereseasApp.controller('ForumController', function ($stateParams,$scope, $mdDial
         //should have logged in to post room
         if(flag)
         {
-            if(userService.getUser().schoolId=="")
+            if($cookies['schoolId'] =="")
                 alertService.alert("请先完善个人信息（first name 和 last name）");
             else
             {
@@ -121,8 +121,14 @@ hereseasApp.controller('ArticleController', function (userService,$sce,$statePar
     var cur_page = 1;
     var max_page = 1;
     
-    $scope.hasLogind = userService.getLoginState();
-    
+    requestService.GetUserSelf(function (res) { 
+        if (res.result){
+            $scope.hasLogind = true;
+        }else{
+            $scope.hasLogind = false;    
+        }
+    });
+
     requestService.GetForumThreadById({id:$stateParams.id},function(res){
         //console.log(res);
         if(res.result){
@@ -150,9 +156,8 @@ hereseasApp.controller('ArticleController', function (userService,$sce,$statePar
     $scope.postComment = function(){
         if(userService.getLoginState())
         {
-            requestService.PostForumComment({schoolId:$scope.thread.schoolId,threadId:$scope.thread._id,content:$scope.content},
-            function(res){
-                //console.log(res);
+            requestService.PostForumComment({schoolId:$scope.thread.schoolId,threadId:$scope.thread._id,content:$scope.content},function(res){
+                console.log(res);
                 if(res.result){
                     $state.go('article',{schoolId:$scope.schoolId,id:$scope.thread._id});
                 }else{
@@ -280,7 +285,7 @@ hereseasApp.config(['$provide',
                                         key.content = result;
                                     });
                                     var up = Upload.upload({
-                                        url: 'http://54.84.228.184/forum/m_upload_image',
+                                        url: 'http://www.hereseas.com/forum/m_upload_image',
                                         file: key.file,
                                         fileFormDataName: 'forum'
                                     }).progress(function (evt) {

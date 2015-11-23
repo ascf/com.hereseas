@@ -18,9 +18,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     $scope.showSignup = showSignup;
     $scope.showLogin = showLogin;
     
-    $scope.$watch(function(){return userService.getUser().username}, function(newValue){
-         $scope.username = newValue;
-    });
+
     
     $scope.$on('login', function(){
         $scope.showLogin();
@@ -36,11 +34,13 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     
     //set login state to set the header (logged:user&exit, not logged:login&signup)
     requestService.GetUserSelf(function (res) {
-        //console.log(res,userService.getUser());
         if (res.result){ 
-            userService.setLoginState(true);
             $cookies.login = true;
-            userService.setUser(res.data);
+            console.log(res.data);
+            
+            $scope.username = res.data.username;
+            $cookies['userId'] = res.data.id;
+            $cookies['schoolId'] = res.data.schoolId;
             $cookies['newmsg'] = 0;
             requestService.GetContact(function(res){
                 angular.forEach(res.contacts, function(key){
@@ -48,7 +48,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                         //console.log(res.data);
                         if(!angular.equals(res.data,[])){
                             angular.forEach(res.data, function(msg){
-                                if(msg.receiver == userService.getUser().id && msg.read == false){
+                                if(msg.receiver == $cookies['userId'] && msg.read == false){
                                     $cookies['newmsg'] = parseInt($cookies['newmsg']) + 1;
                                 }
                             });
@@ -67,8 +67,9 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
 
     function logOut() {
         requestService.LogOut(function() {
-            userService.setLoginState(false);
             $cookies.login = false;
+            $cookies['schoolId'] = undefined;
+            $cookies['userId'] = undefined;
             $scope.$emit('logout','1');
             $state.reload();
         });
@@ -122,8 +123,8 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     function showRoompost(ev) {
         if(logged())
         {
-            //console.log(userService.getUser());
-            if(userService.getUser().schoolId==undefined)
+            console.log($cookies);
+            if($cookies['schoolId'] == undefined)
                 alertService.alert("请先填写你的学校").then(function(){
                     $state.go('profile');
                 });
@@ -148,7 +149,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     function showCarpost(ev) {
         if(logged())
         {
-            if(userService.getUser().schoolId==undefined)
+            if($cookies['schoolId']==undefined)
                 alertService.alert("请先填写你的学校").then(function(){
                     $state.go('profile');
                 });
@@ -174,7 +175,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
         //should have logged in to post room
         if(logged())
         {
-            if(userService.getUser().schoolId==undefined)
+            if($cookies['schoolId']==undefined)
                 alertService.alert("请先填写你的学校").then(function(){
                     $state.go('profile');
                 });
@@ -202,7 +203,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
         //should have logged in to post room
         if(logged())
         {
-            if(userService.getUser().schoolId==undefined)
+            if($cookies['schoolId']==undefined)
                 alertService.alert("请先填写你的学校").then(function(){
                     $state.go('profile');
                 });
@@ -358,7 +359,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                     function updateMsgs(index){
                         //console.log($scope.messages[contactId]);
                         angular.forEach($scope.messages[index], function(msg){
-                            if(msg.read == false && msg.sender !== userService.getUser().id)
+                            if(msg.read == false && msg.sender !== $cookies['userId'])
                             {
                                 //console.log(msg);
                                 userService.updateMessages({
@@ -383,7 +384,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals : {
-                    userId : userService.getUser().id
+                    userId : $cookies['userId']
                 }
             });
         }
@@ -404,8 +405,9 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                         }else{
                             alert('Session time out, please login again!');
                             requestService.LogOut(function() {
-                                userService.setLoginState(false);
                                 $cookies.login = false;
+                                $cookies['userId'] = undefined;
+                                $cookies['schoolId'] = undefined;
                                 $scope.$emit('logout','1');
                             });
                         }

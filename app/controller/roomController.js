@@ -184,7 +184,7 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
     }
 });
 
-hereseasApp.controller('RoomPostController', function ($scope,$location, languageService, userService, alertService, $state, $mdDialog, roomService, Upload, fileReader, requestService, $filter) {
+hereseasApp.controller('RoomPostController', function ($scope,$location, languageService, userService, alertService, $state, $mdDialog, roomService, Upload, fileReader, requestService, $filter,$cookies) {
     
     var geocoder = new google.maps.Geocoder();
     //地址自动完成相关变量
@@ -230,7 +230,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             type : undefined,
             beginDate:undefined,
             endDate :undefined,
-            schoolId : userService.getUser().schoolId
+            schoolId : $cookies['schoolId']
         },
         {
             rooms:[
@@ -398,7 +398,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                         key.content = result;
                     });
                     var up = Upload.upload({
-                        url: 'http://54.84.228.184/apartment/m_upload_image',
+                        url: 'http://www.hereseas.com/apartment/m_upload_image',
                         file: key.file,
                         fileFormDataName: 'apartment'
                     }).progress(function (evt) {

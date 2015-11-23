@@ -139,7 +139,7 @@
                         <p class="room_post_font_content">车型</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <md-select ng-model="steps[0].category" name="category" class="cp_select">
+                        <md-select ng-model="steps[0].category" name="category" class="cp_select" aria-label="category">
                             <md-option value="SUV">SUV</md-option>
                             <md-option value="轿车">轿车</md-option>
                             <md-option value="跑车">跑车</md-option>
@@ -306,7 +306,7 @@
                     <div class="room_post_div" layout-align="start end">
                         <div layout="row" layout-align="start end">
                             <div style="margin-left:17px;">
-                                <md-select name="car_output" ng-model="steps[1].output" required class="rp_select">
+                                <md-select name="car_output" ng-model="steps[1].output" required class="rp_select" aria-label="car_output">
                                     <md-option value="1.5">1.5</md-option>
                                     <md-option value="1.8">1.8</md-option>
                                     <md-option value="2.0">2.0</md-option>
@@ -440,31 +440,31 @@
                                 <div class="room_post_font_content">Street Address</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addNum">
-                                <input type="text" ng-model="addresses[0]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[0]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addAdd">
-                                <input type="text" ng-model="addresses[1]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[1]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                             </div>
                             <div layout="row" style="margin-top:20px;">
                                 <div class="room_post_font_content">City</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addCity">
-                                <input type="text" ng-model="addresses[2]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[2]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                             </div>
                             <div layout="row" style="margin-top:20px;">
                                 <div class="room_post_font_content">State</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addSta">
-                                <input type="text" ng-model="addresses[3]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[3]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                                 <div flex="5"></div>
                                 <div class="room_post_font_content">Zipcode</div>
                                 <div flex="5"></div>
                                 <md-input-container class="room_post_input addZip">
-                                <input type="text" ng-model="addresses[4]" disabled="disabled"/>
+                                <input type="text" ng-model="addresses[4]" disabled="disabled" aria-label="address"/>
                                 </md-input-container>
                             </div>
                         </div>

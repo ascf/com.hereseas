@@ -59,14 +59,9 @@
                           </ul>
                         </nav>
                     </div>
-                    <div ng-if="!hasLogind" layout="column" style="margin-top:20px;">
+                    <div layout="column" style="margin-top:20px;">
                         <div style="margin-bottom:10px;"><h4 style="color:#6A6966;">发布留言</h4></div>
-                        <div><textarea disabled="disabled" placeholder="  请先登录后再发布评论" ng-model="content" rows="8" cols="91" style="border-radius:4px"></textarea></div>
-                        <div ng-click="postComment()"  style="margin-left:620px;margin-top:10px;padding-left:10px;padding-top:10px;width:42px;height:42px;border-radius:4px;color:#ffffff;background-color:#3CB49E"><h4 style="color:#ffffff">go</h4></div>
-                    </div>
-                    <div ng-if="hasLogind" layout="column" style="margin-top:20px;">
-                        <div style="margin-bottom:10px;"><h4 style="color:#6A6966;">发布留言</h4></div>
-                        <div><textarea ng-model="content" rows="8" style="width:100%; border-radius:4px"></textarea></div>
+                        <div><div ng-if="!hasLogind">请先登录再发布评论</div><textarea ng-disabled="!hasLogind" ng-model="content" rows="8" style="width:100%; border-radius:4px;resize:none;"></textarea></div>
                         <div ng-click="postComment()"  style="margin-left:620px;margin-top:10px;padding-left:10px;padding-top:10px;width:42px;height:42px;border-radius:4px;color:#ffffff;background-color:#3CB49E"><h4 style="color:#ffffff">go</h4></div>
                     </div>
                 </div>

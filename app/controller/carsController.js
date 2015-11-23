@@ -340,7 +340,7 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
     });
 });
 
-hereseasApp.controller('CarPostController', function($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter){
+hereseasApp.controller('CarPostController', function($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter,$cookies){
     
             var geocoder = new google.maps.Geocoder();
             //地址自动完成相关变量
@@ -487,7 +487,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                                 key.content = result;
                             });
                             var up = Upload.upload({
-                                url: 'http://54.84.228.184/car/m_upload_image',
+                                url: 'http://www.hereseas.com/car/m_upload_image',
                                 file: key.file,
                                 fileFormDataName: 'car'
                             }).progress(function (evt) {
@@ -538,7 +538,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                     style:'',
                     price : '',
                     boughtDate : undefined,
-                    schoolId : userService.getUser().schoolId
+                    schoolId : $cookies['schoolId'] = undefined
                  // available : true
                        
                 },
