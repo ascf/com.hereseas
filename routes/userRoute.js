@@ -625,6 +625,8 @@ exports.editUser = function(req, res, next) {
             } else {
                 if (req.query.step == 1 || req.query.step == 3) {
                     updateUserApartments(user.id);
+                    updateUserCars(user.id);
+                    updateUserItems(user.id);
                 }
 
                 if (req.query.step == 1)
