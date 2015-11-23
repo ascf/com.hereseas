@@ -885,8 +885,16 @@ exports.sendMessage = function(req, res, next) {
                 res.json(Results.ERR_PARAM_ERR);
                 return;
             }
-
             user.chats.addToSet(receiver);
+
+            var index = user.chats.indexOf(receiver);
+            //console.log(index);
+            //console.log(user.chats);
+            user.chats.splice(index, 1);
+            //console.log(user.chats);
+            user.chats.push(receiver);
+            //console.log(user.chats);
+
             message.senderUsername = user.username;
             message.senderSchool = user.schoolId;
             user.save(function(err, userS) {

@@ -194,6 +194,9 @@ exports.getSchoolStudents = function(req, res, next) {
             if (school.status == 1) {
 
                 ep.after("findUser", school.users.length, function(users) {
+                    users.sort(function(a, b) {
+                        return a.createAt.valueOf() - b.createAt.valueOf();
+                    });
                     res.json({
                         result: true,
                         data: users
