@@ -101,7 +101,7 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
                 //console.log(res);
                 if(res.result){
                      requestService.GetUserSelf(function(res){
-                        console.log(res);
+                        //console.log(res);
                         $cookies['schoolId'] = res.data.schoolId;
                         $cookies['userId'] = res.data.id;
 

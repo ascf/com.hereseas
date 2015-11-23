@@ -48,7 +48,6 @@ hereseasApp.controller('ForumController', function ($stateParams,$scope, $mdDial
         });
     }
     
-    
     $scope.goToArticle = function(threadId){
         $state.go('article',{schoolId:$scope.schoolId,id:threadId});
         
@@ -56,27 +55,25 @@ hereseasApp.controller('ForumController', function ($stateParams,$scope, $mdDial
     
     $scope.showArticlePost = function showArticlePost(ev) {
         //console.log(1);
-        var flag = userService.getLoginState();
-        //should have logged in to post room
-        if(flag)
-        {
-            if($cookies['schoolId'] =="")
-                alertService.alert("请先完善个人信息（first name 和 last name）");
-            else
-            {
-                //userService.setDraft({});                   
+        requestService.GetUserSelf(function (res) { 
+            if (res.result){
+                //should have logged in to post room
+                if($cookies['schoolId'] =="")
+                    alertService.alert("请先完善个人信息（first name 和 last name）");
+                else{
+                    //userService.setDraft({});                   
 
-                $mdDialog.show({
-                    //controller: RoomPostController,
-                    templateUrl: '/app/view/article_post.html',
-                    parent: angular.element(document.body),
-                    targetEvent: ev,
-                    clickOutsideToClose:false
-                });
-            }
-        }
-        else alertService.alert("请先登录").then(function() {
-                $scope.showLogin();
+                    $mdDialog.show({
+                        //controller: RoomPostController,
+                        templateUrl: '/app/view/article_post.html',
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose:false
+                    });
+                }
+            }else alertService.alert("请先登录").then(function() {
+                    $scope.showLogin();
+            });
         });
     };
     
@@ -157,9 +154,9 @@ hereseasApp.controller('ArticleController', function (userService,$sce,$statePar
         if($scope.hasLogind)
         {
             requestService.PostForumComment({schoolId:$scope.thread.schoolId,threadId:$scope.thread._id,content:$scope.content},function(res){
-                console.log(res);
+                //console.log(res);
                 if(res.result){
-                    console.log($scope.thread.schoolId);
+                    //console.log($scope.thread.schoolId);
                     $state.go('article',{schoolId:$scope.thread.schoolId,id:$scope.thread._id});
                 }else{
                     alert('留言发布失败。');

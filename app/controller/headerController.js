@@ -36,7 +36,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     requestService.GetUserSelf(function (res) {
         if (res.result){ 
             $cookies.login = true;
-            console.log(res.data);
+            //console.log(res.data);
             
             $scope.username = res.data.username;
             $cookies['userId'] = res.data.id;
@@ -123,7 +123,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
     function showRoompost(ev) {
         if(logged())
         {
-            console.log($cookies);
+            //console.log($cookies);
             if($cookies['schoolId'] == undefined)
                 alertService.alert("请先填写你的学校").then(function(){
                     $state.go('profile');
