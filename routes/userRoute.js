@@ -623,8 +623,9 @@ exports.editUser = function(req, res, next) {
                 console.log(err);
                 return next();
             } else {
-                if (req.query.step == 1 || req.query.step == 3)
+                if (req.query.step == 1 || req.query.step == 3) {
                     updateUserApartments(user.id);
+                }
 
                 if (req.query.step == 1)
                     updateSchoolUser(user.id, previousSchoolId, reqData.schoolId);
@@ -729,6 +730,65 @@ function updateUserApartments(userId) {
     });
 
 }
+
+
+function updateUserCars(userId) {
+    var epUser = new EventProxy();
+
+    epUser.all("findUser", function(user) {
+        for (var i = 0; i < user.cars.length; i++) {
+            Car.findById(user.cars[i], function(err, car) {
+                if (err) {
+                    console.log(err);
+                    return false;
+                } else {
+                    car.username = user.username;
+                    car.userAvatar = user.avatar;
+                    car.save(function() {});
+                }
+            });
+        }
+    });
+
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+}
+
+function updateUserItems(userId) {
+    var epUser = new EventProxy();
+
+    epUser.all("findUser", function(user) {
+        for (var i = 0; i < user.items.length; i++) {
+            Item.findById(user.items[i], function(err, item) {
+                if (err) {
+                    console.log(err);
+                    return false;
+                } else {
+                    item.username = user.username;
+                    item.userAvatar = user.avatar;
+                    item.save(function() {});
+                }
+            });
+        }
+    });
+
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+}
+
+
 
 exports.activeUserSendEmail = function(req, res, next) {
 

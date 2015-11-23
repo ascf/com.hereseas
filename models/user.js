@@ -93,19 +93,21 @@ var UserSchema = new Schema({
     },
 
     apartments: [Schema.ObjectId],
+    cars: [Schema.ObjectId],
+    items: [Schema.ObjectId],
     chats: [Schema.ObjectId]
-/*
-    chats: [{
-        userId: {
-            type: Schema.ObjectId,
-            ref: 'User'
-        },
-        lastMessageTime: {
-            type: Date,
-            default: Date.now
-        }
-    }]
-*/
+        /*
+            chats: [{
+                userId: {
+                    type: Schema.ObjectId,
+                    ref: 'User'
+                },
+                lastMessageTime: {
+                    type: Date,
+                    default: Date.now
+                }
+            }]
+        */
 });
 
 // UserSchema.virtual('avatar_url').get(function() {

@@ -39,6 +39,8 @@ exports.createItem = function(req, res, next) {
                 console.log(err);
                 return next();
             } else {
+
+                updateUserItems(item._id, req.user.id);
                 res.json({
                     result: true,
                     data: item
@@ -63,6 +65,28 @@ exports.createItem = function(req, res, next) {
         }
     });
 };
+
+
+function updateUserItems(itemId, userId) {
+    var epUser = new EventProxy();
+    epUser.all("findUser", function(user) {
+
+        user.items.addToSet(itemId);
+        user.save(function() {});
+        return;
+    });
+
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+
+}
+
 
 exports.editItemById = function(req, res, next) {
     var itemId = req.param('id');
@@ -431,7 +455,7 @@ exports.searchItem = function(req, res, next) {
                                 }
                                 resData.push({
                                     "id": item.id,
-                                    "itemName" : item.itemName,
+                                    "itemName": item.itemName,
                                     "schoolId": item.schoolId._id,
                                     "schoolName": item.schoolId.name,
                                     "schoolShortName": item.schoolId.shortName,

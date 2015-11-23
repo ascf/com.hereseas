@@ -51,11 +51,14 @@ exports.createCar = function(req, res, next) {
             car[key] = reqData[key];
         }
         car['status'] = 2;
+
         car.save(function(err, car) {
             if (err) {
                 console.log(err);
                 return next();
             } else {
+                updateUserCars(car._id, req.user.id);
+
                 res.json({
                     result: true,
                     data: car
@@ -64,6 +67,27 @@ exports.createCar = function(req, res, next) {
         });
     });
 }
+
+function updateUserCars(carId, userId) {
+    var epUser = new EventProxy();
+    epUser.all("findUser", function(user) {
+
+        user.cars.addToSet(carId);
+        user.save(function() {});
+        return;
+    });
+
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+
+}
+
 
 exports.editCarById = function(req, res, next) {
     var carId = req.param('id');
@@ -691,8 +715,8 @@ exports.deleteCarById = function(req, res, next) {
         });
 
     });
-
 }
+
 
 
 exports.adminGetCars = function(req, res, next) {
