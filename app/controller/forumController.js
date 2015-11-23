@@ -159,7 +159,7 @@ hereseasApp.controller('ArticleController', function (userService,$sce,$statePar
             requestService.PostForumComment({schoolId:$scope.thread.schoolId,threadId:$scope.thread._id,content:$scope.content},function(res){
                 console.log(res);
                 if(res.result){
-                    $state.go('article',{schoolId:$scope.schoolId,id:$scope.thread._id});
+                    $state.go('article',{schoolId:$scope.thread.schoolId,id:$scope.thread._id});
                 }else{
                     alert('留言发布失败。');
                 }
