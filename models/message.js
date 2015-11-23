@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var MessageSchema = new Schema({
-	receiver: {
+    receiver: {
         type: Schema.ObjectId
     },
 
@@ -15,8 +15,8 @@ var MessageSchema = new Schema({
     },
 
     sender: {
-		type: Schema.ObjectId
-	},
+        type: Schema.ObjectId
+    },
 
     senderUsername: {
         type: String
@@ -26,19 +26,20 @@ var MessageSchema = new Schema({
         type: Schema.ObjectId
     },
 
-	createAt: {
+    createAt: {
         type: Date,
         default: Date.now
     },
 
     content: {
-    	type: String
+        type: String
     },
 
     read: {
-    	type: Boolean
+        type: Boolean
     }
 });
+MessageSchema.set('versionKey', false);
 
 mongoose.model('Message', MessageSchema);
 exports.Message = mongoose.model('Message');
