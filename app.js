@@ -52,9 +52,7 @@ app.use('/app', express.static(path.join(__dirname, 'app')));
 
 app.use(session({
     secret: config.session_secret,
-    store: new MongoStore({
-        url: config.db
-    }),
+
     // cookie: { maxAge: 60000,secure: true },
     cookie: {
         maxAge: 43200000,
