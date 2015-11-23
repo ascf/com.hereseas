@@ -22,7 +22,9 @@ var passport = require('passport');
 var md5 = require('MD5');
 var AWS = require('aws-sdk');
 
-var APIHOST = "http://www.hereseas.com/#";
+//var APIHOST = "http://www.hereseas.com/#";
+var APIHOST = "http://52.25.82.212:8080/#";
+
 
 
 exports.test = function(req, res, next) {
