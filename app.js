@@ -65,7 +65,7 @@ app.use(session({
 
 
 
-//app.use(cors());
+app.use(cors());
 
 // var allowCrossDomain = function(req, res, next) {
 //     res.header("Access-Control-Allow-Credentials", true);
@@ -91,15 +91,16 @@ app.use(session({
 //     next();
 // });
 
-app.use(function(req, res, next) {
-    // res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Origin", "*");
 
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization,X-Prototype-Version,Allow,*, Content-Length");
-    res.header("Access-Control-Allow-Credentials", false);
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-    next();
-});
+// app.use(function(req, res, next) {
+//     // res.header("Access-Control-Allow-Origin", req.headers.origin);
+//     res.header("Access-Control-Allow-Origin", "*");
+
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization,X-Prototype-Version,Allow,*, Content-Length");
+//     //res.header("Access-Control-Allow-Credentials", false);
+//     //res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+//     next();
+// });
 
 
 
