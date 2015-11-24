@@ -194,7 +194,12 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                 //userService.setItemDraft([{}]);
                 $mdDialog.hide();
             };
-            
+            $scope.eAt = {
+                date:'',
+                year : '',
+                month : '',
+                day : ''
+            };
             $scope.add_item = function(){
                 var val = {
                     steps:[{
@@ -287,8 +292,6 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
     
             $scope.changeFile = function(index){
                 if($scope.items.files !== undefined){
-
-                    
                     angular.forEach($scope.items.files, function(file){
                         var flag = true;
                         angular.forEach($scope.items.uploadList, function(upload){
@@ -402,10 +405,12 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
     
             
             //表格是否填完显示变化函数
-            $scope.$watch(function(){ return{v1:$scope.shared, v2:$scope.items};}, function(newValue){
-
+            $scope.$watch(function(){ return{v1:$scope.shared, v2:$scope.items, v3:$scope.eAt};}, function(newValue){
+                newValue.v3.date = newValue.v3.year + "/" + newValue.v3.month + "/" + newValue.v3.day;
+                $scope.shared.expireAt = new Date(newValue.v3.date);
                 angular.forEach($scope.items, function(item){
-                    if($scope.shared.expireAt == '' || item.steps[0].itemName == '' || item.steps[0].category == '' || item.steps[0].price == '' || item.steps[0].images.length==0){
+                    if($scope.shared.expireAt == '' || item.steps[0].itemName == '' || item.steps[0].category == '' || item.steps[0].price == '' || item.steps[0].images.length==0 || $scope.eAt.year == '' || $scope.eAt.month == '' || $scope.eAt.day == '')
+                    {
                         $scope.tableFilled[0].filled = false; 
                     }else{
                         $scope.tableFilled[0].filled = true;
@@ -645,20 +650,15 @@ hereseasApp.controller('ItemsDisplayController', function ($state, $scope, roomS
                     coords: [0, 0, 0, 24, 58, 24, 58, 0],
                     type: 'poly'
                 };
-
-                var price;
-                // Create a marker and set its position.
-                price = item.price;
-                var marker = new MarkerWithLabel({
+                
+                var marker = new google.maps.Marker({
                     map: map,
                     position: myLatLng,
-                    icon: image,
-                    shape: shape,
-                    labelContent: price,
+                    label: 'A',
                     draggable: false,
-                    labelClass: "labels",
-                    labelAnchor: new google.maps.Point(18, 22)
-                });  
+
+                });
+                
             }else{
                  $state.go('home');      
             } 

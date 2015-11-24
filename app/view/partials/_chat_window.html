@@ -1,10 +1,10 @@
 <md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;min-height:480px;" aria-label="x">
-    <div layout="column" style="height:100%;width:850px;background-color:rgb(245,245,245);overflow:scroll;">
+    <div layout="column" style="width:850px;background-color:rgb(245,245,245);overflow:scroll;">
         <div style="height:36px;border:1px rgb(169,169,169) solid;" layout="row" layout-align="end">
             <div style="background-color:rgb(233,87,86);margin:4;width:26px;height:26px;border-radius:50%;" ng-click="hide()"></div>
         </div>
         <div layout="row">
-            <div flex="25" style="padding-bottom:0px;border:1px rgb(169,169,169) solid;overflow:scroll;">
+            <div flex="25" style="padding-bottom:0px;border:1px rgb(169,169,169) solid;overflow:scroll;max-height:525px;min-height:525px;">
                 <div style="outline:none;" ng-repeat="message in messages" layout="column"  ng-click="setCurContact($index)">
                     <div layout="row" style="margin:15 10 0 10;">
                         <div  flex="30" style="margin-right:5px;">
@@ -29,7 +29,7 @@
                             </p>
                         </div>
                     </div>
-                    <div layout="row" style="max-height:85px;min-height:85px;border-top:2px rgb(169,169,169) solid;background-color:white;">
+                    <div layout="row" style="max-height:82px;min-height:82px;border-top:2px rgb(169,169,169) solid;background-color:white;">
                         <div flex="90" style="padding:20 20 0 20;">
                             <textarea ng-model="contents[$index]" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()" aria-label="contents" style="width:540px;resize:none;border:0;outline:none;"></textarea>
                         </div>

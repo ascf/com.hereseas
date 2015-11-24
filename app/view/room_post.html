@@ -1,8 +1,27 @@
+<script type="text/javascript">
+            // When the document is ready
+            $(document).ready(function () {
+                
+                $('#example1').datepicker({
+                    format: "dd/mm/yyyy"
+                });  
+            
+            });
+    $(document).ready(function () {
+                
+                $('#example2').datepicker({
+                    format: "dd/mm/yyyy"
+                });  
+            
+            });
+</script>
+
+
 <md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;">
 
 <div layout="row" class="room_post" ng-controller="RoomPostController">
     <!--Begin of left side nav_bar-->
-    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" >
+    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" style="min-height:520px;">
         <md-content role="navigation" class="md-default-theme">
             <ul class="docs-menu"  >
                 <li style="margin-top:12px;">
@@ -131,7 +150,7 @@
         <div ng-show="activePage == 1" class="room_post_listing_content">
             <div>
                 <div layout="row">
-                    <h4>您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校的页面中</h4>
+                    <h4>发布您的房源</h4>
                 </div>
             </div>
             <div>
@@ -160,13 +179,17 @@
                             <p ng-hide="isStudio" class="room_post_font_content">卧室</p>
                         </div>
                     </div>
-                    <div flex="30" layout="row" ng-hide="isStudio">
-                      <md-select name="bathroom_number" placeholder="" ng-model="numBathrooms" required class="rp_select" aria-label="bathroom_number">
-                        <md-option value="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</md-option>
-                        <md-option value="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</md-option>
-                        <md-option value="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3</md-option>
-                      </md-select>
-                        <p class="room_post_font_content">卫生间</p>
+                    <div flex="30" layout="row" ng-hide="isStudio" layout-align="start end">
+                        <div>
+                          <md-select name="bathroom_number" placeholder="" ng-model="numBathrooms" required class="rp_select" aria-label="bathroom_number">
+                            <md-option value="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</md-option>
+                            <md-option value="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</md-option>
+                            <md-option value="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3</md-option>
+                          </md-select>
+                        </div>
+                        <div>
+                            <p class="room_post_font_content">卫生间</p>
+                        </div>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content">
@@ -176,11 +199,34 @@
                         </div>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <div>
-                            <input style="border:0;margin-bottom:-5px;outline:none;" type="date" ng-model="steps[0].beginDate"  >
+                        <div layout="row" >
+                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;"ng-model="beginDate.year">
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            </select>年
+                        </div> 
+                        <div layout="row" >
+                            <select class="rp_select"  style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;"ng-model="beginDate.month">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            </select>月
                         </div>
-                        <div>
-                        <i class="rp_icon material-icons">event_available</i>  
+                        <div layout="row" ng-show="showBeginDay">
+                            <select class="rp_select" value="1" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="beginDate.day">
+                            <option ng-repeat="day in beginDays" value="{{day}}">{{day}}</option>   
+                            </select>日
                         </div>
                     </div>
                 </div>
@@ -191,11 +237,34 @@
                         </div>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <div>
-                            <input style="border:0;margin-bottom:-5px;outline:none;" type="date" ng-model="steps[0].endDate"  >
+                        <div layout="row" >
+                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="endDate.year">
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            </select>年
+                        </div> 
+                        <div layout="row" >
+                            <select class="rp_select"  style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="endDate.month">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            </select>月
                         </div>
-                        <div>
-                        <i class="rp_icon material-icons">event_busy</i>  
+                        <div layout="row" ng-show="showEndDay">
+                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="endDate.day">
+                                <option ng-repeat="day in endDays" value="{{day}}">{{day}}</option>   
+                            </select>日
                         </div>
                     </div>
                 </div>
@@ -491,11 +560,11 @@
         </div>
         <!--End of 图片页 Page-->
         </div>
-        <div class="room_post_div_content stepButton"layout="row" layout-align="end" id="post_ft">
+        <div class="room_post_div_content stepButton" layout="row" layout-align="end" id="post_ft">
             <div ng-show="activePage >= 2" ng-click="lastPage()" class="rp_last_btn">
                 上一步
             </div>
-            <div ng-show="activePage <= 6" ng-click="nextPage()" class="rp_next_btn">
+            <div ng-show="activePage <= 6 &&tableFilled[0].filled" ng-click="nextPage()" class="rp_next_btn">
                 下一步
             </div>
             <div ng-click="hide()" class="rp_cancel_btn">

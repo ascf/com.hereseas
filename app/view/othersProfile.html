@@ -1,6 +1,6 @@
 <div style="background-color:rgb(248,248,249);min-width:1000px" id="wrapper">
     <header ng-include="'app/view/partials/_header-one.html'"></header>
-    <div top-bar></div>
+    <div ng-if="otherHasSchoold" stop-bar></div>
     <div layout="row" id="content">
     <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
         <div layout="row">
@@ -14,9 +14,10 @@
                         <p><strong>{{othersInfo.username}}</strong></p>
                         <p>{{schoolName}}</p>
                     </div>
-                    <div style="margin-top:90px;width:140px;outline:none;" ng-click="pageReturn()" layout="row">
+                    <div ng-if="otherHasSchoold" style="margin-top:90px;width:140px;outline:none;" ng-click="pageReturn()" layout="row">
                         <div><img style="width:24;height:24;" src="/app/view/img/icon/othersInfo_return.png"></img></div>
-                        <div style="padding-left:10px;padding-top:5px;padding-bottom:5px;font-size:16px;">返回校友列表</div>                       </div>
+                        <div  style="padding-left:10px;padding-top:5px;padding-bottom:5px;font-size:16px;">返回校友列表</div>                       </div>
+                <div ng-if="!otherHasSchoold" style="margin-top:90px;width:140px;outline:none;"></div>
                   
                     <div layout="row" style="margin-top:10px;">
                         <!--div class="img-circle" style="width:80px;height:80px;background-color:#3CB49E;margin-top:20px;margin-left:25px;padding-top:25px;padding-left:20px;color:#ffffff;"><h4>关注</h4></div-->

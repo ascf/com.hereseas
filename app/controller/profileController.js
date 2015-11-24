@@ -410,6 +410,7 @@ hereseasApp.controller('OthersProfileController', function ($state, $scope, $sta
         if(res.result){
             //console.log(res.data);
             $scope.othersInfo = res.data;
+            
             requestService.GetUserAllPost({id:$stateParams.othersId}, function(res){
                 //console.log(res.data);
                 if(res.data.length!=0){
@@ -420,9 +421,10 @@ hereseasApp.controller('OthersProfileController', function ($state, $scope, $sta
             
             requestService.GetSchool({id:$scope.othersInfo.schoolId}, function(res) {
                 if (res.result) {
+                    $scope.otherHasSchoold = true;
                     $scope.schoolName = res.data.name;
                 } else {
-                    
+                    $scope.otherHasSchoold = false;
                 }
             });
         };   

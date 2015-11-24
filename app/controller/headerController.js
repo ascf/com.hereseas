@@ -130,7 +130,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                 });
             else
             {
-                userService.setDraft({});                   
+                userService.setDraft({id:'',state:'post'});                   
 
                 $mdDialog.show({
                     //controller: RoomPostController,
@@ -155,7 +155,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                 });
             else
             {
-                userService.setCarDraft({});                   
+                userService.setCarDraft({id:'',state:'post'});                   
 
                 $mdDialog.show({
                     //controller: RoomPostController,

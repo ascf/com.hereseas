@@ -313,7 +313,7 @@
         </div>
         <hr style="margin-left:40px;width:700px;"/>
         <div class="post-item-div" layout="row" ng-repeat="apt in localApts" ng-controller="HeaderController" ng-show="filterApt">
-            <a href="#/rooms/{{apt.id}}"><img style="height:72px;width:105px; " ng-src="{{apt.cover}}"/></a>
+            <a href="#/rooms/{{apt.id}}" style="border:1px solid rgb(202,204,205);height:72px;width:105px;text-align:center;background-color:rgb(202,204,205)" ><img style="height:100%;width:auto; " ng-src="{{apt.cover}}"/></a>
             <div style="margin-left:25px;width:180px;height:50px;overflow:hidden;">{{apt.title}}</div>
             <div style="margin-left:15px;text-align:right;width:90px;">
                 <span>{{apt.createAt | date:'yyyy-MM-dd'}} </span>
@@ -325,7 +325,7 @@
             <img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;margin-left:30px;margin-top:25px;" ng-click="deleteApt($index, apt.id, 1)"/>
         </div>
         <div class="post-item-div" layout="row" ng-repeat="car in localCars" ng-controller="HeaderController" ng-show="filterCar">
-            <a href="#/cars/{{car._id}}"><img style="height:72px;width:105px; " ng-src="{{car.cover}}"/></a>
+            <a href="#/cars/{{car._id}}" style="border:1px solid rgb(202,204,205);height:72px;width:105px;text-align:center;background-color:rgb(202,204,205)" ><img style="height:100%;width:auto; " ng-src="{{car.cover}}"/></a>
             <div style="margin-left:25px;width:180px;height:50px;overflow:hidden;">{{car.title}}</div>
             <div style="margin-left:15px;text-align:right;width:90px;">
                 <span>{{car.createAt | date:'yyyy-MM-dd'}} </span>
@@ -336,7 +336,7 @@
             <img src="/app/view/img/profile/delete.png" style="width:12px;height:24px;margin-left:30px;margin-top:25px;" ng-click="deleteCar($index, car._id, 1)"/>
         </div>
         <div class="post-item-div" layout="row" ng-repeat="item in localItems" ng-controller="HeaderController" ng-show="filterItem">
-            <a href="#/items/{{item._id}}"><img style="height:72px;width:105px; " ng-src="{{item.cover}}"/></a>
+            <a href="#/items/{{item._id}}" style="border:1px solid rgb(202,204,205);height:72px;width:105px;text-align:center;background-color:rgb(202,204,205)" ><img style="height:100%;width:auto; " ng-src="{{item.cover}}"/></a>
             <div style="margin-left:25px;width:180px;height:50px;overflow:hidden;">{{item.itemName}}</div>
             <div style="margin-left:15px;text-align:right;width:90px;">
                 <span>{{item.createAt | date:'yyyy-MM-dd'}} </span>

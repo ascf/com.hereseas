@@ -2,7 +2,7 @@
 
 <div layout="row" class="room_post" ng-controller="CarPostController">
     <!--Begin of left side nav_bar-->
-    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" >
+    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" style="min-height:520px;">
         <md-content role="navigation" class="md-default-theme">
             <ul class="docs-menu">
                 <li style="margin-top:12px;">
@@ -117,7 +117,7 @@
         <div ng-show="activePage == 1" class="room_post_listing_content">
             <div>
                 <div layout="row">
-                    <h4 class="text-muted" style="color:black">您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校页面中</h4>
+                    <h4 class="text-muted" style="color:black">发布您的车辆</h4>
                 </div>
             </div>
             <div>
@@ -139,13 +139,13 @@
                         <p class="room_post_font_content">车型</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <md-select ng-model="steps[0].category" name="category" class="cp_select" aria-label="category">
-                            <md-option value="SUV">SUV</md-option>
-                            <md-option value="轿车">轿车</md-option>
-                            <md-option value="跑车">跑车</md-option>
-                            <md-option value="皮卡">皮卡</md-option>
-                            <md-option value="其他">其他</md-option>
-                        </md-select>
+                        <select ng-model="steps[0].category" name="category" class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" aria-label="category">
+                            <option value="SUV">SUV</option>
+                            <option value="轿车">轿车</option>
+                            <option value="跑车">跑车</option>
+                            <option value="皮卡">皮卡</option>
+                            <option value="其他">其他</option>
+                        </select>
                     </div>
                 </div>
                 <div layout="row" class="room_post_div_content" layout-align="start end">
@@ -154,7 +154,7 @@
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
 <!--                        <input required ng-model="steps[0].make" name="make" aria-label="CarMake" style="border-radius:4px;width:150px;height:19px;border:1px solid #D5D4D2"/>-->
-                        <select  ng-model="steps[0].make" name="make"  class="cp_select"><option value="">请选择</option><option value="Acura" oid="2">Acura</option><option value="阿尔法-罗密欧" oid="3">阿尔法-罗密欧</option><option value="阿斯顿-马丁" oid="54">阿斯顿-马丁</option><option value="奥迪" oid="4">奥迪</option><option value="宾利" oid="57">宾利</option><option value="宝马" oid="5">宝马</option><option value="别克" oid="7">别克</option><option value="凯迪拉克" oid="8">凯迪拉克</option><option value="雪佛兰" oid="9">雪佛兰</option><option value="克莱斯勒" oid="10">克莱斯勒</option><option value="道奇" oid="13">道奇</option><option value="法拉利" oid="397">法拉利</option><option value="菲亚特" oid="430">菲亚特</option><option value="福特" oid="15">福特</option><option value="Freightliner" oid="867">Freightliner</option><option value="GMC" oid="16">GMC</option><option value="本田" oid="18">本田</option><option value="现代" oid="20">现代</option><option value="英菲尼迪" oid="21">英菲尼迪</option><option value="捷豹" oid="23">捷豹</option><option value="吉普" oid="24">吉普</option><option value="起亚" oid="25">起亚</option><option value="兰博基尼" oid="59">兰博基尼</option><option value="陆虎" oid="26">陆虎</option><option value="雷克萨斯" oid="27">雷克萨斯</option><option value="林肯" oid="28">林肯</option><option value="莲花" oid="55">莲花</option><option value="玛莎拉蒂" oid="61">玛莎拉蒂</option><option value="马自达" oid="30">马自达</option><option value="McLaren" oid="799">McLaren</option><option value="梅赛德斯-奔驰" oid="31">梅赛德斯-奔驰</option><option value="MINI" oid="29">MINI</option><option value="三菱" oid="34">三菱</option><option value="尼桑" oid="35">尼桑</option><option value="保时捷" oid="41">保时捷</option><option value="Ram" oid="783">Ram</option><option value="劳斯莱斯" oid="58">劳斯莱斯</option><option value="Scion" oid="45">Scion</option><option value="smart" oid="507">smart</option><option value="SRT" oid="849">SRT</option><option value="斯巴鲁" oid="47">斯巴鲁</option><option value="特斯拉" oid="834">特斯拉</option><option value="丰田" oid="49">丰田</option><option value="大众" oid="50">大众</option><option value="沃尔沃" oid="51">沃尔沃</option></select>
+                        <select  ng-model="steps[0].make" name="make"  class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ><option value="">请选择</option><option value="Acura" oid="2">Acura</option><option value="阿尔法-罗密欧" oid="3">阿尔法-罗密欧</option><option value="阿斯顿-马丁" oid="54">阿斯顿-马丁</option><option value="奥迪" oid="4">奥迪</option><option value="宾利" oid="57">宾利</option><option value="宝马" oid="5">宝马</option><option value="别克" oid="7">别克</option><option value="凯迪拉克" oid="8">凯迪拉克</option><option value="雪佛兰" oid="9">雪佛兰</option><option value="克莱斯勒" oid="10">克莱斯勒</option><option value="道奇" oid="13">道奇</option><option value="法拉利" oid="397">法拉利</option><option value="菲亚特" oid="430">菲亚特</option><option value="福特" oid="15">福特</option><option value="Freightliner" oid="867">Freightliner</option><option value="GMC" oid="16">GMC</option><option value="本田" oid="18">本田</option><option value="现代" oid="20">现代</option><option value="英菲尼迪" oid="21">英菲尼迪</option><option value="捷豹" oid="23">捷豹</option><option value="吉普" oid="24">吉普</option><option value="起亚" oid="25">起亚</option><option value="兰博基尼" oid="59">兰博基尼</option><option value="陆虎" oid="26">陆虎</option><option value="雷克萨斯" oid="27">雷克萨斯</option><option value="林肯" oid="28">林肯</option><option value="莲花" oid="55">莲花</option><option value="玛莎拉蒂" oid="61">玛莎拉蒂</option><option value="马自达" oid="30">马自达</option><option value="McLaren" oid="799">McLaren</option><option value="梅赛德斯-奔驰" oid="31">梅赛德斯-奔驰</option><option value="MINI" oid="29">MINI</option><option value="三菱" oid="34">三菱</option><option value="尼桑" oid="35">尼桑</option><option value="保时捷" oid="41">保时捷</option><option value="Ram" oid="783">Ram</option><option value="劳斯莱斯" oid="58">劳斯莱斯</option><option value="Scion" oid="45">Scion</option><option value="smart" oid="507">smart</option><option value="SRT" oid="849">SRT</option><option value="斯巴鲁" oid="47">斯巴鲁</option><option value="特斯拉" oid="834">特斯拉</option><option value="丰田" oid="49">丰田</option><option value="大众" oid="50">大众</option><option value="沃尔沃" oid="51">沃尔沃</option></select>
                     </div>
                     <div flex="15">
                         <p class="room_post_font_content">型号</p>
@@ -168,32 +168,89 @@
                         <p class="room_post_font_content">里程</p>
                     </div>
                     <div flex="35" layout="row" layout-align="start end">
-                        <input ng-model="steps[0].totalMiles" name="totalMiles" aria-label="CarMiles" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2;margin-right:10px"/>
-                        miles
+                        <input ng-model="steps[0].totalMiles" name="totalMiles" type="number" min="1" aria-label="CarMiles" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2;margin-right:10px"/>
+                        英里
                     </div>
-                    <div flex="15">
-                        <p class="room_post_font_content">购买日期</p>
-                    </div>
-                    <div flex="30" layout="row" layout-align="start end">
-                      <input class="room_post_input date" ng-model="steps[0].boughtDate" type="date" name="boughtDate"  aria-label="CarBoughtDate"/>
-                    </div>
-                </div>
-<!--
-                <div layout="row" class="room_post_div_content" layout-align="start end">
-                    <div flex="15">
-                        <p class="room_post_font_content">型号</p>
-                    </div>
-                    <div flex="80" layout="row" layout-align="start end">
-                        <input ng-model="steps[0].model" name="model"  aria-label="CarModel" style="border-radius:4px;width:180px;height:19px;border:1px solid #D5D4D2"/>
-                    </div>
-                </div>
--->
-                <div layout="row" class="room_post_div_content" layout-align="start end">
-                    <div flex="15">
+                     <div flex="15">
                         <div class="room_post_font_content">价格</div>
                     </div>
                     <div flex="30" layout="row" layout-align="start end">
-                        $&nbsp;<input ng-model="steps[0].price" name="price"  aria-label="CarPrice" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2"/>
+                        <input ng-model="steps[0].price" name="price" type="number" min="1"  aria-label="CarPrice" style="border-radius:4px;width:100px;height:19px;border:1px solid #D5D4D2"/>&nbsp;$美元
+                    </div>
+                    
+                </div>
+                <div layout="row" class="room_post_div_content" layout-align="start end">
+                   <div flex="15">
+                        <p class="room_post_font_content">购买日期</p>
+                    </div>
+                    <div flex="30" layout="row" layout-align="start end">
+                        <div layout="row">
+                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="bDate.year">
+                            <option value="2005">2005</option>
+                            <option value="2006">2006</option>
+                            <option value="2007">2007</option>
+                            <option value="2008">2008</option>
+                            <option value="2009">2009</option>
+                            <option value="2010">2010</option>
+                            <option value="2011">2011</option>
+                            <option value="2012">2012</option>
+                            <option value="2013">2013</option>
+                            <option value="2014">2014</option>
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            </select>年
+                        </div> 
+                        <div layout="row">
+                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;margin-left:10px;"  ng-model="bDate.month">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            </select>月
+                        </div>
+                        <div layout="row">
+                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;margin-left:10px;"  ng-model="bDate.day">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            </select>日
+                        </div>
                     </div>
                 </div>
             </div>
@@ -499,7 +556,7 @@
             <div ng-show="activePage >= 2" ng-click="lastPage()" class="rp_last_btn">
                 上一步
             </div>
-            <div ng-show="activePage <= 5" ng-click="nextPage()" class="rp_next_btn">
+            <div ng-show="activePage <= 5 &&tableFilled[0].filled" ng-click="nextPage()" class="rp_next_btn">
                 下一步
             </div>
             <div ng-click="hide()" class="rp_cancel_btn">

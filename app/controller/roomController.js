@@ -224,6 +224,55 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         }
     ;
     
+    $scope.beginDate ={};
+    
+    $scope.endDate ={};
+    
+    $scope.beginDays = [];
+    $scope.endDays = [];
+    
+    $scope.getDays = function(year, month, flag){
+        var num =  new Date(year, month, 0).getDate();
+        if(flag ==1){
+            $scope.beginDays = [];
+            for(var i = 1; i<=num; i++)
+                $scope.beginDays.push(i);
+        }else{
+            $scope.endDays = [];
+            for(var i = 1; i<=num; i++)
+                $scope.endDays.push(i);
+        }
+    };
+    
+    $scope.$watch(function(){return $scope.beginDate;},function(newValue){
+        console.log(newValue);
+        if(newValue.year !== undefined && newValue.month!==undefined){
+            $scope.getDays(newValue.year,newValue.month,1);
+            $scope.showBeginDay = true;
+        }else $scope.showBeginDay = false;
+        
+        
+        if(newValue.day !==undefined){
+            $scope.steps[0].beginDate = new Date(newValue.year, newValue.month, newValue.day);
+            console.log($scope.steps[0].beginDate);
+        }
+    },true);
+    
+    
+    $scope.$watch(function(){return $scope.endDate;},function(newValue){
+        console.log(newValue);
+        if(newValue.year !== undefined && newValue.month!==undefined){
+            $scope.getDays(newValue.year,newValue.month,2);
+            $scope.showEndDay = true;
+        }else $scope.showEndDay = false;
+        
+        
+        if(newValue.day !==undefined){
+            $scope.steps[0].endDate = new Date(newValue.year, newValue.month, parseInt(newValue.day));
+        }
+    },true);
+    
+    
     //the main model 
     $scope.steps = [
         {
@@ -417,7 +466,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                         $scope.files.splice($scope.files.indexOf(key.file), 1);
 
                         requestService.StepPost({id:userService.getDraft().id , step:7}, $scope.steps[6], function(res){
-                            //console.log(res);
+                            
                         });
 
                     }).error(function (data, status, headers, config) {
@@ -435,11 +484,19 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             });  
         }
     };
-
     
     function setEditModel(data){
-        $scope.steps[0].beginDate = new Date(data.beginDate);
-        $scope.steps[0].endDate = new Date(data.endDate);
+        var date = new Date(data.beginDate);
+        $scope.beginDate.year = date.getFullYear()+'';
+        $scope.beginDate.month = date.getMonth()+'';
+        $scope.beginDate.day = date.getDate()+'';
+        console.log($scope.beginDate);
+        //$scope.steps[0].beginDate = new Date($scope.beginDate.year, $scope.beginDate.month, $scope.beginDate.day);
+        var date = new Date(data.endDate);
+        //$scope.steps[0].endDate = new Date(data.endDate);
+        $scope.endDate.year = date.getFullYear()+'';
+        $scope.endDate.month = date.getMonth()+'';
+        $scope.endDate.day = date.getDate()+'';
 
         if(data.type == 'Studio'){
             $scope.isStudio = true;
@@ -498,23 +555,20 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         if(data.cover !== undefined){
             $scope.steps[6].cover = data.cover;
             $scope.steps[6].images = data.images;
-            //console.log($scope.steps[6].images);
         }
     };
 
     //set model when edit clicked 
     function setExistedFields(data){
-        if(!angular.equals(data,{})){//has a statue of edit
+        if(data.state !== 'post'){//has a statue of edit
             if(data.state == 'edit'){//unposted apt edit
                 requestService.GetAptDraft({id:data.id}, function(res){
-                    //console.log("EDIT", res);
 
                     $scope.setEditModel(res.data[0]);                
                 })
             }
             else if(data.state == 'update'){//posted apt edit
                 requestService.GetApt({id:data.id}, function(res){
-                    //console.log("UPDATE", res);
                     
                     $scope.setEditModel(res.data[0]);                
                 })
@@ -523,61 +577,32 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     };  
 
     function doPost() {//
-        
         if(userService.getDraft().state=='update')
         {
-            if($scope.activePage == 1){
-                requestService.StepPost({id:userService.getDraft().id , step:1}, $scope.steps[0], function(res){
-                    $mdDialog.hide();
-                    $location.path('/rooms/'+userService.getDraft().id);
-                });
-            }
-            else{
-                if(!angular.equals(userService.getDraft(),{}) && $scope.tableFilled[$scope.activePage-1].filled && $scope.activePage!==7){
-                    requestService.StepPost({id:userService.getDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                        $mdDialog.hide();
-                        $location.path('/rooms/'+userService.getDraft().id);
-                    });
-                }
-            }
-            
-        }
-        
-        requestService.StepPost({id:userService.getDraft().id , step:7}, $scope.steps[6], function(res){
-            //console.log("step6",res);
-            requestService.EndRoompost({id:userService.getDraft().id}, function(res){
-                //console.log("final", res);
-                userService.setDraft({});
                 $mdDialog.hide();
                 $location.path('/rooms/'+userService.getDraft().id);
+        }
+        else if(userService.getDraft().state=='edit' || userService.getDraft().state=='post'){
+            requestService.EndRoompost({id:userService.getDraft().id}, function(res){
+                console.log("final", res);
+                var id = userService.getDraft().id;
+                userService.setDraft({});
+                $mdDialog.hide();
+                $location.path('/rooms/'+id);
             });
-        });  
+        }
+        
     };
 
     //Room Post页切换功能
     function lastPage() {
-        setActivePage($scope.activePage-1);
+        $scope.activePage = $scope.activePage -1;
     };  
     function nextPage() {
-        setActivePage($scope.activePage+1);
+        $scope.activePage = $scope.activePage +1;
     };
 
     function setActivePage(page) {
-        if($scope.activePage == page){
-
-        } else{
-            if($scope.activePage == 1){
-                requestService.StepPost({id:userService.getDraft().id , step:1}, $scope.steps[0], function(res){
-                });
-            }
-            else{
-                if(!angular.equals(userService.getDraft(),{}) && $scope.tableFilled[$scope.activePage-1].filled && $scope.activePage!==7){
-                    requestService.StepPost({id:userService.getDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                        //console.log(res);
-                    });
-                }
-            }
-        }
         $scope.activePage = page;
     };
 
@@ -613,19 +638,17 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     });
     
     $scope.$watch(function(){return $scope.steps[0];}, function(newValue){
-        if(newValue.type == undefined || newValue.beginDate == null || newValue.endDate == null)
+        if(newValue.type == undefined || newValue.beginDate == undefined || newValue.endDate == undefined)
             $scope.tableFilled[0].filled = false; 
         else{
             $scope.tableFilled[0].filled = true; 
-            if(angular.equals(userService.getDraft(), {})){
+            if(userService.getDraft().id == ''){
                 requestService.StartRoompost($scope.steps[0], function(res){
                     userService.setDraft({id:res.data._id, state:"post"});
                     
                     requestService.StepPost({id:userService.getDraft().id , step:3}, $scope.steps[2], function(res){
                         //console.log(res);
                     });
-                    
-                    //console.log(res);
                 });
             }else{
                 requestService.StepPost({id:userService.getDraft().id , step:1}, $scope.steps[0], function(res){
@@ -662,64 +685,90 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     },true);
     
     
-    //表格是否填完显示变化函数
-    $scope.$watch('steps', function(){
-        var s0 = 0; //initial step page 1
-        var s2 = 0; //initial step page 3
-        $scope.sn = 0; //initial whole pages
-        //test if step page 1 is filled
-        angular.forEach($scope.steps[1].rooms, function(room){
+    $scope.$watch(function(){return $scope.steps[1];}, function(newValue){
+         angular.forEach(newValue.rooms, function(room){
             if(room.type == '' || room.share == null || room.price == '' || room.priceType == ''){
                 $scope.tableFilled[1].filled = false; 
             }else{
                 $scope.tableFilled[1].filled = true;
+                requestService.StepPost({id:userService.getDraft().id , step:2}, $scope.steps[1], function(res){
+                    console.log("step2",res);
+                });
             }
         });
-        //test if step page 3 is filled
-        /*for(var i = 0; i < 7; i++){
-            if($scope.steps[3].fees[i].price == null){s2 = s2 + 1;}
-        }*/
+    }, true);
+    
+    $scope.$watch(function(){return $scope.steps[2];}, function(newValue){
+        if(userService.getDraft().id !== ''){
+            requestService.StepPost({id:userService.getDraft().id , step:3}, $scope.steps[2], function(res){
+                console.log("step3",res);
+            });
+        }
+    }, true);
+    
+    $scope.$watch(function(){return $scope.steps[3];}, function(newValue){
+        //console.log(newValue);
+        var s2 = 0;
         angular.forEach($scope.steps[3].fees, function(key,value){
-            //console.log(key, value);
             if(key==null) {s2 = s2 + 1;}
         });
         if(s2 == 0){
             $scope.tableFilled[3].filled = true;
+            requestService.StepPost({id:userService.getDraft().id , step:4}, $scope.steps[3], function(res){
+                console.log("step4",res);
+            });
         }else{
             $scope.tableFilled[3].filled = false;
         }
-        //test if step page 4 is filled
+    }, true);
+    
+    $scope.$watch(function(){return $scope.steps[4];}, function(newValue){
         if($scope.steps[4].title != '' && $scope.steps[4].description != ''){
             $scope.tableFilled[4].filled = true;
+            requestService.StepPost({id:userService.getDraft().id , step:5}, $scope.steps[4], function(res){
+                console.log("step5",res);
+            });
         }else{
             $scope.tableFilled[4].filled = false;
         }
-        //test if step page 5 is filled
+    }, true);
+    
+    $scope.$watch(function(){return $scope.steps[5];}, function(newValue){
         if($scope.steps[5].address.zipcode != '' && $scope.steps[5].address.zipcode != undefined){
             $scope.tableFilled[5].filled = true;
+            requestService.StepPost({id:userService.getDraft().id , step:6}, $scope.steps[5], function(res){
+                console.log("step6",res);
+            });
         }else{
             $scope.tableFilled[5].filled = false;
         }
-        //test if step page 6 is filled  
+        
+        if($scope.steps[5].address.zipcode != undefined) $scope.addressCorrect = true;
+        else $scope.addressCorrect = false;
+        
+    }, true);
+    
+    $scope.$watch(function(){return $scope.steps[6].cover;}, function(newValue){
         if($scope.steps[6].cover !== '')
         {
             $scope.tableFilled[6].filled = true;
         }else{
             $scope.tableFilled[6].filled = false;
         }
-        //test if all tables are filled
+    }, true);
+    
+    $scope.$watch(function(){return $scope.tableFilled;}, function(newValue){
+        $scope.sn = 0;
         for(var i = 0; i < 7; i++){
-            if(!$scope.tableFilled[i].filled){$scope.sn = $scope.sn + 1;}
+            if(!newValue[i].filled){$scope.sn = $scope.sn + 1;}
         }
         if($scope.sn == 0){
             $scope.canPost = true;
         }else{
             $scope.canPost = false;
         }
-        //test if address is valid
-        if($scope.steps[5].address.zipcode != undefined) $scope.addressCorrect = true;
-        else $scope.addressCorrect = false;
-    }, true);
+    },true);
+    
     
     $scope.$watch(function(){return {studio:$scope.isStudio, bed:$scope.numBedrooms, bath:$scope.numBathrooms}}, function(newValue){
         if(newValue.studio){

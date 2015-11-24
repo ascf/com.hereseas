@@ -9,8 +9,8 @@
                         <div style="float:left"><h3 style="margin-top:0px;">{{item.itemName}}</h3></div>
                         <div style="float:right"><h3 style="margin-top:0px;">${{item.price}}</h3></div>
                     </div>
-                    <div style="background-color:rgb(202,204,205);height:400px;width:660px;" layout-align="center" >
-                    <img class="center-block" style="height:400px;width:aotu;max-width:660px;" ng-src="{{item.cover}}" ng-hide="item.images.length > 1"/>
+                    <div style="background-color:rgb(202,204,205);height:400px;width:660px;text-align:center;overflow:hidden;margin:0; padding:0;">
+                    <img class="center-block" style="height:400px;width:aotu;" ng-src="{{item.cover}}" ng-hide="item.images.length > 1"/>
                     <div id="myCarousel" class="carousel slide" data-ride="carousel" ng-show="item.images.length > 1">
                       <ol class="carousel-indicators">
                         <li data-target="#myCarousel" data-slide-to="0" class="active" style="margin-right:-3"></li>
@@ -18,11 +18,11 @@
                       </ol>
 
                       <div class="carousel-inner" role="listbox" style="text-align:center;">
-                          <div class="item active" style="height:100%;width:100%;">
-                             <img class="center-block" style="height:100%;width:auto;max-width:100%;" ng-src="{{item.cover}}"/>
+                          <div class="item active" style="background-color:rgb(202,204,205);height:400px;width:660px;text-align:center;overflow:hidden;margin:0; padding:0;">
+                             <img class="center-block" style="height:400px;width:auto;" ng-src="{{item.cover}}"/>
                           </div>
-                          <div class="item" ng-repeat="img in item.images"  ng-if="$index > 0" style="height:100%;width:100%;">
-                            <img class="center-block item" style="height:100%;width:auto;max-width:100%;" ng-src="{{img}}"/>
+                          <div class="item " ng-repeat="img in item.images"  ng-if="$index > 0" style="background-color:rgb(202,204,205);height:400px;width:660;text-align:center;overflow:hidden;margin:0; padding:0;">
+                            <img class="center-block item" style="height:400px;width:auto;" ng-src="{{img}}"/>
                           </div>
                         </div>
 
@@ -80,7 +80,7 @@
            
                         </div>
                 </div>
-                <div class="center-block" style="margin-top:10px;">该用户还发布了</div>
+                <div ng-hide="otherItems.length == 0" style="margin-top:10px;text-align:center;">该用户还发布了</div>
                 <div style="width:310px;height:303px;">
                     <div ng-repeat="otherItem in otherItems" style="padding:3px;float:left; outline:none;" ng-click="goToEach($index)">
                         <div ng-style="{'background-image':'url('+otherItem.content.cover+')'}" style="width:95px;height:95px;background-size:cover;margin-top:-1px;margin-left:-1px;"></div>

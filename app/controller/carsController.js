@@ -525,7 +525,12 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 }
             };
 
-            
+            $scope.bDate = {
+                date:'',
+                year: '',
+                month: '',
+                day: ''
+            };
             //the main model 
 	       $scope.steps = [
                 {
@@ -533,12 +538,12 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                     year : '',
                     make : '',
                     totalMiles : '',
-                    category : 'Sedan',
+                    category : '轿车',
                     model : '',
                     style:'',
                     price : '',
                     boughtDate : undefined,
-                    schoolId : $cookies['schoolId'] = undefined
+                    schoolId : $cookies['schoolId']
                  // available : true
                        
                 },
@@ -689,24 +694,26 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 }
             }
     
-            $scope.$watch(function(){return $scope.steps[0];}, function(newValue){
-                if(newValue.year == '' || newValue.make == '' || newValue.totalMiles == '' || newValue.category == '' || newValue.model == '' || newValue.price == '' || newValue.boughtDate == undefined)
+            $scope.$watch(function(){return {v1:$scope.steps[0],v2:$scope.bDate};}, function(newValue){
+                newValue.v2.date = newValue.v2.year + "/" + newValue.v2.month + "/" +newValue.v2.day;
+                newValue.v1.boughtDate = new Date(newValue.v2.date);
+                if(newValue.v1.year == '' || newValue.v1.make == '' || newValue.v1.totalMiles == '' || newValue.v1.category == '' || newValue.v1.model == '' || newValue.v1.price == '' || newValue.v1.boughtDate == undefined || newValue.v2.year=='' || newValue.v2.month=='' || newValue.v2.day=='')
                     $scope.tableFilled[0].filled = false; 
                 else{
                     $scope.tableFilled[0].filled = true; 
-                    if(angular.equals(userService.getCarDraft(), {})){
+                    console.log(userService.getCarDraft(),angular.equals(userService.getCarDraft(), {}));
+                    if(angular.equals(userService.getCarDraft().id, "")){
                         requestService.StartCarpost($scope.steps[0], function(res){
+                            console.log(res);
                             userService.setCarDraft({id:res.data._id, state:"post"});
                             
                             requestService.CarStepPost({id:userService.getCarDraft().id , step:3}, $scope.steps[2], function(res){
-                                //console.log(res);
+                                console.log(res);
                             });
-                            
-                            //console.log(res);
                         });
                     }else{
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:1}, $scope.steps[0], function(res){
-                            //console.log(res);
+                            console.log(res);
                         });
                     }
                 }
@@ -763,40 +770,34 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
             
             function doPost() {//
                 
-                if(userService.getCarDraft().state=='update'){
-                    if($scope.activePage == 1){
-                        requestService.CarStepPost({id:userService.getCarDraft().id , step:1}, $scope.steps[0], function(res){
+                if(userService.getCarDraft().state=='update')
+                {
+                    if($scope.activePage!==6 && $scope.activePage!==1){
+                        requestService.StepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
                             $mdDialog.hide();
                             $location.path('/cars/'+userService.getCarDraft().id);
                         });
-                    }else if($scope.activePage == 3){
+                    }    
+                }else if(userService.getCarDraft().state=='edit' || userService.getCarDraft().state=='post'){
+                    if($scope.activePage!==6 && $scope.activePage!==1){
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                            $mdDialog.hide();
-                            $location.path('/cars/'+userService.getCarDraft().id);
+                            requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
+                                var id = userService.getCarDraft().id;
+                                userService.setCarDraft({});
+                                $mdDialog.hide();
+                                $location.path('/cars/'+id);
+                            });
                         });
                     }else{
-                        if(!angular.equals(userService.getCarDraft(),{}) && $scope.tableFilled[$scope.activePage-1].filled){
-                            requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                                $mdDialog.hide();
-                                $location.path('/cars/'+userService.getCarDraft().id);
-                            });
-                        }
+                        requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
+                            var id = userService.getDraft().id;
+                            userService.setDraft({});
+                            $mdDialog.hide();
+                            $location.path('/cars/'+id);
+                        });
                     }
                 }
                 
-                requestService.CarStepPost({id:userService.getCarDraft().id , step:6}, $scope.steps[5], function(res){
-                    //console.log("step6",res);
-                    requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
-                        //console.log("final", res);
-                        if(res.result){
-                            userService.setCarDraft({});
-                            $mdDialog.hide();
-                            $location.path('/cars/'+res.data._id);
-                        }else{
-                            alert('发布失败');
-                        }
-                    });
-                });  
             };
             
             //Room Post页切换功能
@@ -811,20 +812,11 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 if($scope.activePage == page){
                     
                 } else{
-                    if($scope.activePage == 1){
-                        requestService.CarStepPost({id:userService.getCarDraft().id , step:1}, $scope.steps[0], function(res){
-                            //console.log(res);
-                        });
-                    }else if($scope.activePage == 3){
+                    
+                    if($scope.activePage !== 1 && $scope.activePage !== 6 && $scope.tableFilled[$scope.activePage-1].filled && userService.getCarDraft().id !==''){
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                            //console.log(res);
+                            
                         });
-                    }else{
-                        if(!angular.equals(userService.getCarDraft(),{}) && $scope.tableFilled[$scope.activePage-1].filled){
-                            requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                                //console.log(res);
-                            });
-                        }
                     }
                 }
                 $scope.activePage = page;

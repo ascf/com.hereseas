@@ -2,7 +2,7 @@
 
 <div layout="row" class="room_post" ng-controller="ItemsPostController">
     <!--Begin of left side nav_bar-->
-    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" >
+    <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" style="min-height:520px;">
         <md-content role="navigation" class="md-default-theme">
             <ul class="docs-menu">
                 <li style="margin-top:12px;">
@@ -63,35 +63,76 @@
         <div ng-show="activePage == 1" class="room_post_listing_content">
             <div style="border-bottom:1px solid #000000">
                 <div layout="row">
-                    <h4 class="text-muted">您的所有发布将不仅仅出现在您所属的学校信息页面中<br>还将出现在临近学校的页面中</h4>
+                    <h4 class="text-muted">发布您的物品</h4>
                 </div>
             </div>
             <!--Begin of room information-->
             <div layout="column">
                 <div layout="row" class="room_post_div_content" style="margin-top:15px">
-                    <div flex="23" layout-align="start end" layout="row">
+                    <div flex="15" layout-align="start end" layout="row">
                         <div>
                             <p class="room_post_font_content">有效期至</p>
                         </div>
                     </div>
-                    <div flex="75" layout="row" layout-align="start end">
-                        <div style="margin-right:10px">
-                            <input required ng-model="shared.expireAt" name="Date" type="date" aria-label="ItemsDate" style="border-radius:10px;height:19px;border:1px solid #D5D4D2;outline:none;"/>
-                        </div>
-                        <div style="width:21px;height:19px;background-image:url(/app/view/img/icon/post_calendar.png);">
-
-                        </div>
-                    </div>
-                </div>
-                <div layout="row" class="room_post_div_content">
-                    <div flex="23" layout-align="start end" layout="row">
+                    <div flex="85" layout="row" layout-align="start end">
                         <div>
-                            <p class="room_post_font_content" style="font-size:25px">物品信息</p>
+                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;"ng-model="eAt.year">
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            </select>年
+                        </div> 
+                        <div>
+                            <select class="rp_select"  style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;"ng-model="eAt.month">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            </select>月
                         </div>
-                    </div>
-                    <div flex="75" layout="row" layout-align="start end">
-                        <div style="color:#EA5743;font-size:15px">
-                            您可以在本页同时发布多个物品，平台会自动为您分开发布。
+                        <div>
+                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;"ng-model="eAt.day">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            </select>日
                         </div>
                     </div>
                 </div>
@@ -164,14 +205,8 @@
                                 <div ng-click="img.cancel()">取消</div>
                             </div>
                         </div>  
-                        
                     </div>
-                    
-                </div>
-                
-                
-                
-                
+                </div>          
                 </div>
                
                 <div layout="row" class="room_post_div_content" layout-align="start end" ng-click="add_item()">
