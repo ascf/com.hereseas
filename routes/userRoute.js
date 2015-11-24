@@ -807,7 +807,7 @@ function updateUserThreads(userId) {
                 } else {
                     thread.username = user.username;
                     thread.userAvatar = user.avatar;
-                    item.save(function() {});
+                    thread.save(function() {});
                 }
             });
         }
@@ -835,7 +835,7 @@ function updateUserComments(userId) {
                 } else {
                     comment.username = user.username;
                     comment.userAvatar = user.avatar;
-                    item.save(function() {});
+                    comment.save(function() {});
                 }
             });
         }
