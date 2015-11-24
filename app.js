@@ -65,7 +65,7 @@ app.use(session({
 
 
 
-app.use(cors());
+//app.use(cors());
 
 var allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Credentials", true);
