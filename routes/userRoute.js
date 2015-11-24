@@ -579,6 +579,12 @@ exports.editUser = function(req, res, next) {
             enrollYear: req.body.enrollYear,
             enrollSeason: req.body.enrollSeason
         }
+
+        if (tools.isEmpty(reqData.username)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+
     } else if (req.query.step == 2) {
         reqData = {
             address: req.body.address
@@ -592,11 +598,12 @@ exports.editUser = function(req, res, next) {
         return;
     }
 
-    if (tools.hasNull(reqData)) {
+    
+    // if (tools.hasNull(reqData)) {
 
-        res.json(Results.ERR_PARAM_ERR);
-        return;
-    }
+    //     res.json(Results.ERR_PARAM_ERR);
+    //     return;
+    // }
 
 
     User.findById(req.user.id,
