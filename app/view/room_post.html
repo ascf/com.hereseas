@@ -225,7 +225,7 @@
                         </div>
                         <div layout="row" ng-show="showBeginDay">
                             <select class="rp_select" value="1" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="beginDate.day">
-                            <option ng-repeat="day in beginDays" value="{{day}}">{{day}}</option>   
+                            <option ng-repeat="day in beginDays" ng-selected="day == beginDate.day" value="{{day}}">{{day}}</option>   
                             </select>日
                         </div>
                     </div>
@@ -263,7 +263,7 @@
                         </div>
                         <div layout="row" ng-show="showEndDay">
                             <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="endDate.day">
-                                <option ng-repeat="day in endDays" value="{{day}}">{{day}}</option>   
+                                <option ng-repeat="day in endDays" ng-selected="day == endDate.day" value="{{day}}">{{day}}</option>   
                             </select>日
                         </div>
                     </div>
