@@ -7,6 +7,7 @@ var School = require('../models').School;
 var Thread = require('../models').Thread;
 var Comment = require('../models').Comment;
 
+var adminRoute = require('./adminRoute');
 
 
 exports.getThreadById = function(req, res, next) {
@@ -415,3 +416,125 @@ function updateUserComments(commentId, userId) {
 	});
 
 }
+
+
+
+exports.adminEditThreadStatus = function(req, res, next) {
+	var ep = new EventProxy();
+	//check admin
+	adminRoute.isAdmin(req.user.email, function(result) {
+		if (result) {
+			ep.emit('checkAdmin');
+		} else {
+			res.json(Results.ERR_PERMISSION_ERR);
+		}
+	});
+	ep.all('checkAdmin', function() {
+		// execute admin function
+		var threadId = req.param('id');
+		var reqData = {
+			status: req.body.status
+		};
+		if (tools.isEmpty(threadId)) {
+			res.json(Results.ERR_PARAM_ERR);
+			return;
+		}
+		if (tools.hasNull(reqData)) {
+			res.json(Results.ERR_PARAM_ERR);
+			return;
+		}
+		var query = {
+			id: threadId
+		};
+		Thread.findById(threadId, function(err, thread) {
+			if (err) {
+				console.log(err);
+				return next();
+			} else if (!thread) {
+				res.json(Results.ERR_NOTFOUND_ERR);
+				return;
+			} else {
+				for (var key in reqData) {
+					thread[key] = reqData[key];
+				}
+				thread.save(function(err, threadSave) {
+					if (err) {
+						console.log(err);
+						return next();
+					} else {
+						res.json({
+							result: true,
+							data: {
+								'id': threadSave.id,
+								'username': threadSave.username,
+								'status': threadSave.status
+							}
+						});
+					}
+				});
+
+			}
+
+		});
+	});
+};
+
+exports.adminEditCommentStatus = function(req, res, next) {
+	var ep = new EventProxy();
+	//check admin
+	adminRoute.isAdmin(req.user.email, function(result) {
+		if (result) {
+			ep.emit('checkAdmin');
+		} else {
+			res.json(Results.ERR_PERMISSION_ERR);
+		}
+	});
+	ep.all('checkAdmin', function() {
+		// execute admin function
+		var commentId = req.param('id');
+		var reqData = {
+			status: req.body.status
+		};
+		if (tools.isEmpty(commentId)) {
+			res.json(Results.ERR_PARAM_ERR);
+			return;
+		}
+		if (tools.hasNull(reqData)) {
+			res.json(Results.ERR_PARAM_ERR);
+			return;
+		}
+		var query = {
+			id: commentId
+		};
+		Comment.findById(commentId, function(err, comment) {
+			if (err) {
+				console.log(err);
+				return next();
+			} else if (!comment) {
+				res.json(Results.ERR_NOTFOUND_ERR);
+				return;
+			} else {
+				for (var key in reqData) {
+					comment[key] = reqData[key];
+				}
+				comment.save(function(err, commentSave) {
+					if (err) {
+						console.log(err);
+						return next();
+					} else {
+						res.json({
+							result: true,
+							data: {
+								'id': commentSave.id,
+								'username': commentSave.username,
+								'status': commentSave.status
+							}
+						});
+					}
+				});
+
+			}
+
+		});
+	});
+};
