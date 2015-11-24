@@ -211,7 +211,7 @@ exports.getCommentsByThreadId = function(req, res, next) {
 			if (err) {
 				res.json(Results.ERR_DB_ERR);
 				return;
-			} else if (thread == null) {
+			} else if (thread == null || thread.status != 1) {
 				res.json(Results.ERR_NOTFOUND_ERR);
 				return;
 			} else {
