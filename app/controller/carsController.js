@@ -7,7 +7,6 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
     $scope.max_price = 40000;
     
     $("#price-slider").on("slideStop", function(slideEvt) {
-        //console.log(slideEvt);
         $scope.selectData.startPrice = slideEvt.value[0];
         $scope.selectData.endPrice = slideEvt.value[1];
         updatePage();
@@ -27,9 +26,7 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
     function updatePage(){
         requestService.GetCarsBySchool($scope.selectData,
         function(res){
-            //console.log(res);
             if(res.result){
-                //console.log(res.data);
                 var cars = res.data.cars;
                 $scope.carsResult = cars;
                 
@@ -70,7 +67,6 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
 
                 // initial map
                 var myLatLng=[];
-                //var apts = res.data.apartments;
                 for(var i=0; i<cars.length; i++){
                     myLatLng[i]={};
                     myLatLng[i].lat = parseFloat(cars[i].latitude);
@@ -103,25 +99,6 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
                     scrollwheel: false,
                     zoom: 12,
                 });
-
-                // Origins, anchor positions and coordinates of the marker increase in the X
-                // direction to the right and in the Y direction down.
-//                var image = {
-//                    url: '/app/view/img/apts/marker_big.png',
-//                    // This marker is 58 pixels wide by 24 pixels high.
-//                    size: new google.maps.Size(116, 48),
-//                    // The origin for this image is (0, 0).
-//                    origin: new google.maps.Point(0, 0),
-//                    // The anchor for this image is the base of the flagpole at (0, 24).
-//                    anchor: new google.maps.Point(70, 48)
-//                };
-                // Shapes define the clickable region of the icon. The type defines an HTML
-                // <area> element 'poly' which traces out a polygon as a series of X,Y points.
-                // The final coordinate closes the poly by connecting to the first coordinate.
-//                var shape = {
-//                    coords: [0, 0, 0, 48, 116, 48, 116, 0],
-//                    type: 'poly'
-//                };
 
                 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 var labelIndex = 0;
@@ -170,7 +147,6 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
     };
     
     $scope.changeSearch = function() {
-        //console.log($scope.selectData.hasPark);
         updatePage();
     }
 
@@ -199,8 +175,7 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
                 scrollwheel: false
             });
 
-            // Origins, anchor positions and coordinates of the marker increase in the X
-            // direction to the right and in the Y direction down.
+
             var image = {
                 url: '/app/view/img/apts/marker.png',
                     // This marker is 58 pixels wide by 24 pixels high.
@@ -235,12 +210,10 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
                     id:$stateParams.carId,
                     category:"cars"
                 }).then(function (res) {
-                    //console.log(res);
                     if (res.result) {
-                        //alert("Message has been sent");
                         $scope.isFav = false;
                     } else {
-                        //alert("err");
+
                     }
                 });
 
@@ -252,12 +225,10 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
                         id: $stateParams.carId,
                         category: "cars"
                     }).then(function (res) {
-                        //console.log(res);
                         if (res.result) {
                             $scope.isFav = true;
-                            //alert("Message has been sent");
+
                         } else {
-                            //alert("err");
                         }
                     });
                 }else{
@@ -271,12 +242,10 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
             $scope.images = [];
             for(var i=0; i<$scope.data.images.length; i++)
                 $scope.images.push({thumb:$scope.data.images[i], img: $scope.data.images[i]});
-            //console.log($scope.images);
             
 
             if($cookies.login=='true'){
                 requestService.GetFavList(function(res){
-                    //console.log(res);
                     if(res.data.cars !== null)
                         $scope.favoriteCars = res.data.cars;
                     else $scope.favoriteCars = [];
@@ -305,18 +274,16 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
 
             
             requestService.GetUser({id: $scope.data.userId},function(res){
-                //console.log(res.data)
                 $scope.seller = res.data;
             });
             
 
             requestService.GetSchool({id: $scope.data.schoolId}, function(res) {
                 if (res.result) {
-                    //console.log(res.data);
                     $scope.schoolName = res.data.name;
                     
                 } else {
-                    //http get school id error
+                    
                 }
             });
             
@@ -353,9 +320,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
             $scope.nextPage = nextPage;
             $scope.setActivePage = setActivePage;
             
-            //$scope.beginDate = new Date(),
-            //$scope.endDate = $scope.beginDate,
-            
             $scope.name = name;  //获取中午名称函数
             $scope.doPost = doPost;
             $scope.canPost = false; //检测所有表格是否填完
@@ -382,7 +346,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 if(newValue && $scope.validAddress(newValue)){//set the model 
                     $scope.addressGot = true;
                     $scope.addresses = [];
-                    //console.log( newValue);
                     var componentForm = {
                       street_number: 'short_name',
                       route: 'long_name',
@@ -403,14 +366,10 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                     $scope.steps[4].address.city = $scope.addresses[2];
                     $scope.steps[4].address.state = $scope.addresses[3];
                     $scope.steps[4].address.zipcode = $scope.addresses[4];
-                    //console.log($scope.steps[4].address.zipcode);
                     geocoder.geocode({ 'address' : $scope.steps[4].address.full}, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
-                            //console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-                            
                             $scope.steps[4].latitude = results[0].geometry.location.lat();
                             $scope.steps[4].longitude = results[0].geometry.location.lng();
-                            //console.log($scope.steps[4]);
                         } else {}
                     });
                 }
@@ -437,7 +396,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                             $scope.steps[5].cover = $scope.steps[5].images[0];
 
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:6}, $scope.steps[5], function(res){
-                            //console.log(res);
                             requestService.GetCar({id:userService.getCarDraft().id},function(res){
                                 $scope.steps[5].images = res.data[0].images;
                                 $scope.steps[5].cover = res.data[0].cover;
@@ -448,7 +406,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                     requestService.GetCarDraft({id:userService.getCarDraft().id},function(res){
 
                         $scope.steps[5].images = res.data[0].images;
-                        //console.log(res, $scope.steps[5].images,url);
                         var index = $scope.steps[5].images.indexOf(url);
                         $scope.steps[5].images.splice(index, 1);
                         if($scope.steps[5].images.length == 0)
@@ -457,7 +414,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                             $scope.steps[5].cover = $scope.steps[5].images[0];
 
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:6}, $scope.steps[5], function(res){
-                            //console.log(res);
                             requestService.GetCarDraft({id:userService.getCarDraft().id},function(res){
                                 $scope.steps[5].images = res.data[0].images;
                                 $scope.steps[5].cover = res.data[0].cover;
@@ -467,14 +423,12 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 }
             };
             $scope.$watch('files', function (newValue, oldValue) {
-                //files:image upload model
                 if(!angular.equals(newValue, oldValue)&& newValue !== [])
                     $scope.upload($scope.files);
             });
             
             $scope.upload = function (files) {
                 if (files && files.length && (files.length<(11-$scope.arrUploads.length))) {
-                    //console.log(files);
                     for (var i = $scope.arrUploads.length; i < files.length; i++) {  //ngf-keep为false时从0开始, false时处理重复图片较麻烦
                         $scope.arrUploads.push({file: files[i], prog: 0, content: "default.png", saved : false, cancel: "", id:""});
                     }                   
@@ -491,11 +445,8 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                             }).progress(function (evt) {
                                 key.prog = parseInt(100.0 * evt.loaded / evt.total);
                             }).success(function (data, status, headers, config) {
-                                //console.log('file ' + config.file.name + 'uploaded. Response: ');
-                                //console.log($scope.arrUploads);
                                 key.saved = true;
                                 key.id = 'https://s3.amazonaws.com/hereseas-public-images/'+data.data;
-                                //console.log(key.id);
                                 
                                 $scope.steps[5].images.push(key.id);
                                 if($scope.steps[5].images.length == 1)
@@ -504,12 +455,12 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                                 $scope.files.splice($scope.files.indexOf(key.file), 1);
 
                                 requestService.CarStepPost({id:userService.getCarDraft().id , step:6}, $scope.steps[5], function(res){
-                                    //console.log(res);
+                                    
                                 });
                                 
                             }).error(function (data, status, headers, config) {
                                 alert('上传失败'+data);
-                                //console.log('error status: ' + status);
+                                
                             })
                             
                             key.cancel = function(){
@@ -552,7 +503,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
             //the main model 
 	       $scope.steps = [
                 {
-                   // schoolId : '',
                     year : '',
                     make : '',
                     totalMiles : '',
@@ -562,8 +512,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                     price : '',
                     boughtDate : undefined,
                     schoolId : $cookies['schoolId']
-                 // available : true
-                       
                 },
                 {
                     color : '',
@@ -680,7 +628,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 if(data.address !== undefined)
                 {
                     $scope.steps[4].address = data.address;
-                    //console.log($scope.steps[4].address);
                     $scope.addressGot = true;
                     $scope.addresses[0] = $scope.steps[4].address.street.split(' ')[0];
                     $scope.addresses[1] = $scope.steps[4].address.street.split(' ')[1];
@@ -693,7 +640,6 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 if(data.cover !== undefined){
                     $scope.steps[5].cover = data.cover;
                     $scope.steps[5].images = data.images;
-                    //console.log($scope.steps[5].images);
                 }
             };
     
@@ -714,76 +660,95 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                     })
                 }
             }
+            
     
             $scope.$watch(function(){return $scope.steps[0];}, function(newValue){
                 if(newValue.year == '' || newValue.make == '' || newValue.totalMiles == '' || newValue.category == '' || newValue.model == '' || newValue.price == '' || newValue.boughtDate == undefined )
                     $scope.tableFilled[0].filled = false; 
                 else{
                     $scope.tableFilled[0].filled = true; 
-                    //console.log(userService.getCarDraft(),angular.equals(userService.getCarDraft(), {}));
                     if(angular.equals(userService.getCarDraft().id, "")){
                         requestService.StartCarpost($scope.steps[0], function(res){
-                            console.log(res);
                             userService.setCarDraft({id:res.data._id, state:"post"});
                             
                             requestService.CarStepPost({id:userService.getCarDraft().id , step:3}, $scope.steps[2], function(res){
-                                console.log(res);
+                                console.log("step3",res);
                             });
                         });
                     }else{
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:1}, $scope.steps[0], function(res){
-                            console.log(res);
+                            console.log("step1",res);
                         });
                     }
                 }
             }, true);
 
-            
-            //表格是否填完显示变化函数
-            $scope.$watch('steps', function(){
-                //console.log($scope.steps);
-                var s0 = 0; //initial step page 1
-                var s2 = 0; //initial step page 3
-                $scope.sn = 0; //initial whole pages
-                //test if step page 0 is filled
-                
-                
-                if($scope.steps[1].color == '' || $scope.steps[1].driveSystem ==
-                   ''||$scope.steps[1].transSystem == ''||$scope.steps[1].output == ''){
+            $scope.$watch(function(){return $scope.steps[1];}, function(newValue){
+                if(newValue.color == '' || newValue.driveSystem ==
+                   ''||newValue.transSystem == ''||newValue.output == ''){
                     $scope.tableFilled[1].filled = false;
                 }else{
                     $scope.tableFilled[1].filled = true; 
+                    requestService.CarStepPost({id:userService.getCarDraft().id , step:2}, $scope.steps[1], function(res){
+                        console.log("step2",res);
+                    });
                 }
-                
-                if($scope.steps[3].title != '' && $scope.steps[3].description != ''){
+            }, true);
+            
+            $scope.$watch(function(){return $scope.steps[2];}, function(newValue){
+                if(userService.getCarDraftDraft().id !== ''){
+                    requestService.CarStepPost({id:userService.getCarDraft().id , step:3}, $scope.steps[2], function(res){
+                        console.log("step3",res);
+                    });
+                }
+            }, true);
+            
+            $scope.$watch(function(){return $scope.steps[3];}, function(newValue){
+                if(newValue.title != '' && newValue.description != ''){
                     $scope.tableFilled[3].filled = true;
+                    requestService.CarStepPost({id:userService.getCarDraft().id , step:4}, $scope.steps[3], function(res){
+                        console.log("step4",res);
+                    });
                 }else{
                     $scope.tableFilled[3].filled = false;
                 }
-                //test if step page 5 is filled
-                if($scope.steps[4].address.zipcode != '' && $scope.steps[4].address.zipcode != undefined){
+            }, true);
+    
+            $scope.$watch(function(){return $scope.steps[4];}, function(newValue){
+                if(newValue.address.zipcode != '' && newValue.address.zipcode != undefined){
                     $scope.tableFilled[4].filled = true;
+                    requestService.CarStepPost({id:userService.getCarDraft().id , step:5}, $scope.steps[4], function(res){
+                        console.log("step5",res);
+                    });
                 }else{
                     $scope.tableFilled[4].filled = false;
                 }
-                //test if step page 6 is filled  
-                if($scope.steps[5].cover !== '')
+                
+                if(newValue.address.zipcode != undefined) $scope.addressCorrect = true;
+                else $scope.addressCorrect = false;
+            }, true);
+    
+            $scope.$watch(function(){return $scope.steps[5];}, function(newValue){
+                if(newValue.cover !== '')
                 {
                     $scope.tableFilled[5].filled = true;
                 }else{
                     $scope.tableFilled[5].filled = false;
                 }
-                //test if all tables are filled
+            }, true);
+            
+    
+            $scope.sn = 0;
+            $scope.$watch(function(){return $scope.tableFilled;}, function(newValue){
+                $scope.sn = 0;
                 for(var i = 0; i < 6; i++){
-                    if(!$scope.tableFilled[i].filled){$scope.sn = $scope.sn + 1;}
+                    if(!newValue[i].filled){$scope.sn = $scope.sn + 1;}
                 }
                 if($scope.sn == 0){
                     $scope.canPost = true;
                 }else{
                     $scope.canPost = false;
                 }
-                if($scope.steps[4].address.zipcode != undefined) $scope.addressCorrect = true;
-                else $scope.addressCorrect = false;
             }, true);
             
             
@@ -791,53 +756,30 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 
                 if(userService.getCarDraft().state=='update')
                 {
-                    if($scope.activePage!==6 && $scope.activePage!==1){
-                        requestService.StepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                            $mdDialog.hide();
-                            $location.path('/cars/'+userService.getCarDraft().id);
-                        });
-                    }    
-                }else if(userService.getCarDraft().state=='edit' || userService.getCarDraft().state=='post'){
-                    if($scope.activePage!==6 && $scope.activePage!==1){
-                        requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                            requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
-                                var id = userService.getCarDraft().id;
-                                userService.setCarDraft({});
-                                $mdDialog.hide();
-                                $location.path('/cars/'+id);
-                            });
-                        });
-                    }else{
-                        requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
-                            var id = userService.getDraft().id;
-                            userService.setDraft({});
-                            $mdDialog.hide();
-                            $location.path('/cars/'+id);
-                        });
-                    }
+                        $mdDialog.hide();
+                        $location.path('/cars/'+userService.getDraft().id);
+                }
+                else if(userService.getCarDraft().state=='edit' || userService.getCarDraft().state=='post'){
+                    requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
+                        console.log("final", res);
+                        var id = userService.getCarDraft().id;
+                        userService.setCarDraft({});
+                        $mdDialog.hide();
+                        $location.path('/cars/'+id);
+                    });
                 }
                 
             };
             
             //Room Post页切换功能
             function lastPage() {
-                setActivePage($scope.activePage-1);
+                $scope.activePage = $scope.activePage-1;
             };  
             function nextPage() {
-                setActivePage($scope.activePage+1);
+                $scope.activePage = $scope.activePage+1;
             };
 
             function setActivePage(page) {
-                if($scope.activePage == page){
-                    
-                } else{
-                    
-                    if($scope.activePage !== 1 && $scope.activePage !== 6 && $scope.tableFilled[$scope.activePage-1].filled && userService.getCarDraft().id !==''){
-                        requestService.CarStepPost({id:userService.getCarDraft().id , step:$scope.activePage}, $scope.steps[$scope.activePage-1], function(res){
-                            
-                        });
-                    }
-                }
                 $scope.activePage = page;
             };
 
