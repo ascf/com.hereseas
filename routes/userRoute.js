@@ -16,6 +16,9 @@ var School = require('../models').School;
 var Car = require('../models').Car;
 var Apartment = require('../models').Apartment;
 var Item = require('../models').Item;
+var Thread = require('../models').Thread;
+var Comment = require('../models').Comment;
+
 
 var passport = require('passport');
 
@@ -797,7 +800,7 @@ function updateUserThreads(userId) {
 
     epUser.all("findUser", function(user) {
         for (var i = 0; i < user.threads.length; i++) {
-            Item.findById(user.threads[i], function(err, thread) {
+            Thread.findById(user.threads[i], function(err, thread) {
                 if (err) {
                     console.log(err);
                     return false;
@@ -825,7 +828,7 @@ function updateUserComments(userId) {
 
     epUser.all("findUser", function(user) {
         for (var i = 0; i < user.comments.length; i++) {
-            Item.findById(user.comments[i], function(err, comment) {
+            Comment.findById(user.comments[i], function(err, comment) {
                 if (err) {
                     console.log(err);
                     return false;
