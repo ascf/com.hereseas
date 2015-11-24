@@ -579,7 +579,7 @@ exports.editUser = function(req, res, next) {
             enrollYear: req.body.enrollYear,
             enrollSeason: req.body.enrollSeason
         }
-        i
+        
         if (reqData.schoolId == "") {
             delete reqData.schoolId;
         }
