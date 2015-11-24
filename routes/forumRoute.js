@@ -259,6 +259,8 @@ exports.createThread = function(req, res, next) {
 				console.log(err);
 				return next();
 			} else {
+
+				updateUserThreads(thread._id, req.user.id);
 				res.json({
 					result: true,
 					data: {
@@ -283,6 +285,27 @@ exports.createThread = function(req, res, next) {
 			epUser.emit("findUser", user);
 	});
 };
+
+function updateUserThreads(threadId, userId) {
+	var epUser = new EventProxy();
+	epUser.all("findUser", function(user) {
+
+		user.threads.addToSet(threadId);
+		user.save(function() {});
+		return;
+	});
+
+	User.findById(userId, function(err, user) {
+		if (err) {
+			res.json(Results.ERR_DB_ERR);
+			return;
+		} else {
+			epUser.emit("findUser", user);
+		}
+	});
+
+}
+
 
 
 exports.createComment = function(req, res, next) {
@@ -327,6 +350,8 @@ exports.createComment = function(req, res, next) {
 						console.log(err);
 				});
 
+				updateUserComments(comment._id, req.user.id);
+
 				res.json({
 					result: true,
 					data: {
@@ -368,3 +393,25 @@ exports.createComment = function(req, res, next) {
 			ep.emit("findThread", thread);
 	});
 };
+
+
+
+function updateUserComments(commentId, userId) {
+	var epUser = new EventProxy();
+	epUser.all("findUser", function(user) {
+
+		user.comments.addToSet(commentId);
+		user.save(function() {});
+		return;
+	});
+
+	User.findById(userId, function(err, user) {
+		if (err) {
+			res.json(Results.ERR_DB_ERR);
+			return;
+		} else {
+			epUser.emit("findUser", user);
+		}
+	});
+
+}

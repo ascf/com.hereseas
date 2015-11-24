@@ -627,6 +627,8 @@ exports.editUser = function(req, res, next) {
                     updateUserApartments(user.id);
                     updateUserCars(user.id);
                     updateUserItems(user.id);
+                    updateUserThreads(user.id);
+                    updateUserComments(user.id);
                 }
 
                 if (req.query.step == 1)
@@ -774,6 +776,62 @@ function updateUserItems(userId) {
                 } else {
                     item.username = user.username;
                     item.userAvatar = user.avatar;
+                    item.save(function() {});
+                }
+            });
+        }
+    });
+
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+}
+
+function updateUserThreads(userId) {
+    var epUser = new EventProxy();
+
+    epUser.all("findUser", function(user) {
+        for (var i = 0; i < user.threads.length; i++) {
+            Item.findById(user.threads[i], function(err, thread) {
+                if (err) {
+                    console.log(err);
+                    return false;
+                } else {
+                    thread.username = user.username;
+                    thread.userAvatar = user.avatar;
+                    item.save(function() {});
+                }
+            });
+        }
+    });
+
+    User.findById(userId, function(err, user) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            epUser.emit("findUser", user);
+        }
+    });
+}
+
+function updateUserComments(userId) {
+    var epUser = new EventProxy();
+
+    epUser.all("findUser", function(user) {
+        for (var i = 0; i < user.comments.length; i++) {
+            Item.findById(user.comments[i], function(err, comment) {
+                if (err) {
+                    console.log(err);
+                    return false;
+                } else {
+                    comment.username = user.username;
+                    comment.userAvatar = user.avatar;
                     item.save(function() {});
                 }
             });
