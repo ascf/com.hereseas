@@ -579,6 +579,10 @@ exports.editUser = function(req, res, next) {
             enrollYear: req.body.enrollYear,
             enrollSeason: req.body.enrollSeason
         }
+        i
+        if (reqData.schoolId == "") {
+            delete reqData.schoolId;
+        }
 
         if (tools.isEmpty(reqData.username)) {
             res.json(Results.ERR_PARAM_ERR);
@@ -598,7 +602,7 @@ exports.editUser = function(req, res, next) {
         return;
     }
 
-    
+
     // if (tools.hasNull(reqData)) {
 
     //     res.json(Results.ERR_PARAM_ERR);
