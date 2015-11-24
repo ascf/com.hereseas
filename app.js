@@ -86,7 +86,7 @@ app.use(function(req, res, next) {
     if ('OPTIONS' == req.method) {
         res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization,X-Prototype-Version,Allow,*, Content-Length");
-        //res.send(200);
+        res.send(200);
     }
     next();
 });
