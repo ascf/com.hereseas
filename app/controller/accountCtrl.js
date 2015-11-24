@@ -98,11 +98,11 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
         if(!$scope.psworderr && !$scope.emailerr)
         {
             requestService.DoLogin($scope.user, function(res){
-                //console.log(res);
                 if(res.result){
                      requestService.GetUserSelf(function(res){
-                        //console.log(res);
-                        $cookies['schoolId'] = res.data.schoolId;
+                        if(res.data.schoolId !== undefined){
+                            $cookies['schoolId'] = res.data.schoolId;
+                        }
                         $cookies['userId'] = res.data.id;
 
                         $cookies.login = true;

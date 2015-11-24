@@ -46,7 +46,7 @@
             <div class="profile-page" layout="column" ng-show="activePage == 1" >
                 <span style="margin-left:40px;">基本信息</span>
                 <div class="div-vertical-center" layout="row" style="margin-left:160px;margin-top:10px;">
-                    <span>用户名（建议使用真实姓名，first name和last name,姓名会在您选择其他选项卡时保存）</span>
+                    <span>用户名（建议使用真实姓名，请不要超过十个汉字或字母）</span>
                 </div>
                 <div class="div-vertical-center" layout="row" style="margin-left:160px;margin-top:20px;">
                     <input class="form-control text-left" type="text" maxlength="10" style="width:415px;" ng-model="basicInfo.username"/>
@@ -55,10 +55,10 @@
                 <span style="margin-left:40px;margin-top:20px;">学校信息</span>
                 <div class="div-vertical-center" layout="row" style="margin-left:160px;margin-top:10px;">
                     <span style="margin-top:5px;">学校名称</span>
-                    <md-select ng-model="basicInfo.schoolId" style="width:400px;margin-left:15px;" aria-label="schoolId">
-                        <md-option value="{{id}}" ng-repeat="id in schoolIds">
+                    <select ng-model="basicInfo.schoolId" class="rp_select" style="width:400px;margin-left:15px;border-radius:10px;border:1px solid #D5D4D2;" aria-label="schoolId">
+                        <option value="{{id}}" ng-repeat="id in schoolIds" ng-selected="id == basicInfo.schoolId">
                             {{schoolNames[$index]}}
-                        </md-option>
+                        </option>
                         <!--option value="56147f7aef6d2a2806532536">
                             The George Washington University
                         </option>
@@ -68,7 +68,7 @@
                         <option value="56147fd4ef6d2a2806532538">
                             Georgetown University
                         </option-->
-                    </md-select>
+                    <select>
                     <!--<input ng-model='schoolName' class='form-control text-left' type='text' style='width:400px;margin-left:15px;' />-->
                 </div>
                 
@@ -78,16 +78,16 @@
                             <p style="margin-bottom:3px;">入学年份</p>
                         </div>
                         <div style="margin-left:10px;">
-                            <md-select placeholder="" ng-model="basicInfo.enrollYear" required class="rp_select" aria-label="enrollyear">
-                                <md-option value="2010">2010</md-option>
-                                <md-option value="2011">2011</md-option>
-                                <md-option value="2012">2012</md-option>
-                                <md-option value="2013">2013</md-option>
-                                <md-option value="2014">2014</md-option>
-                                <md-option value="2015">2015</md-option>
-                                <md-option value="2016">2016</md-option>
-                                <md-option value="2017">2017</md-option>
-                            </md-select>
+                            <select placeholder="" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="basicInfo.enrollYear" required class="rp_select" aria-label="enrollyear">
+                                <option value="2010">2010</option>
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                            </select>
                         </div>
                     </div>
                     <div layout-align="start center" layout="row">

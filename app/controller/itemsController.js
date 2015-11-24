@@ -194,12 +194,35 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                 //userService.setItemDraft([{}]);
                 $mdDialog.hide();
             };
-            $scope.eAt = {
-                date:'',
-                year : '',
-                month : '',
-                day : ''
+    
+            $scope.expireDate = {};
+            $scope.expireDays = [];
+
+            $scope.getDays = function(year, month){
+                var num =  new Date(year, month, 0).getDate();
+                
+                $scope.expireDays = [];
+                for(var i = 1; i<=num; i++)
+                    $scope.expireDays.push(i);
+                
             };
+    
+            $scope.$watch(function(){return $scope.expireDate;},function(newValue){
+                console.log(newValue);
+                if(newValue.year !== undefined && newValue.month!==undefined){
+                    $scope.getDays(newValue.year,newValue.month);
+                    $scope.showDay = true;
+                }else $scope.showDay = false;
+
+
+                if(newValue.day !==undefined){
+                    $scope.shared.expireAt = new Date(newValue.year, newValue.month, newValue.day);
+                    console.log($scope.shared.expireAt);
+                }
+            },true);
+    
+    
+    
             $scope.add_item = function(){
                 var val = {
                     steps:[{
@@ -405,11 +428,9 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
     
             
             //表格是否填完显示变化函数
-            $scope.$watch(function(){ return{v1:$scope.shared, v2:$scope.items, v3:$scope.eAt};}, function(newValue){
-                newValue.v3.date = newValue.v3.year + "/" + newValue.v3.month + "/" + newValue.v3.day;
-                $scope.shared.expireAt = new Date(newValue.v3.date);
+            $scope.$watch(function(){ return{v1:$scope.shared, v2:$scope.items};}, function(newValue){
                 angular.forEach($scope.items, function(item){
-                    if($scope.shared.expireAt == '' || item.steps[0].itemName == '' || item.steps[0].category == '' || item.steps[0].price == '' || item.steps[0].images.length==0 || $scope.eAt.year == '' || $scope.eAt.month == '' || $scope.eAt.day == '')
+                    if($scope.shared.expireAt == '' || item.steps[0].itemName == '' || item.steps[0].category == '' || item.steps[0].price == '' || item.steps[0].images.length==0)
                     {
                         $scope.tableFilled[0].filled = false; 
                     }else{
