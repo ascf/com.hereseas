@@ -11,11 +11,8 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
     
     $scope.userData = {};	
 	$scope.createForgetter = function () {
-		//console.log($scope.userData)
         requestService.CreateForgetter($scope.userData, function(res) {
-        	//console.log(res);
         	if (res.result) {
-        		//alert("email has been sent" );
                 $scope.state = 'resetTrue';
         	} else {
         		$scope.state = 'resetFalse';
@@ -83,13 +80,11 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
     };
     
     $scope.rememberMe = function(){
-        //console.log("before",$scope.user.remember);
-        //console.log($scope.user.remember);
+        
     }
     
     // controller to handle login check
     $scope.loginClick = function () {
-        //console.log($scope.user);
         var isMatch = $scope.emailpattern.test($scope.user.email);
         if(!isMatch){$scope.emailerr = true;}
             else{$scope.emailerr = false;}
@@ -98,10 +93,8 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
         if(!$scope.psworderr && !$scope.emailerr)
         {
             requestService.DoLogin($scope.user, function(res){
-                //console.log(res);
                 if(res.result){
                      requestService.GetUserSelf(function(res){
-                        //console.log(res);
                         $cookies['schoolId'] = res.data.schoolId;
                         $cookies['userId'] = res.data.id;
 
@@ -124,7 +117,6 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
             
     $scope.signUpSubmit = function () {
         var isMatch = $scope.emailpattern.test($scope.signUpData.email);
-        //console.log(isMatch);
         if(!isMatch){$scope.emailerr = true;}
             else{$scope.emailerr = false;}
         if($scope.signUpData.password == undefined){$scope.psworderr = true;}
@@ -134,7 +126,6 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
         if(!$scope.psworderr && !$scope.emailerr && !$scope.usererr)
         {
             requestService.DoRegister($scope.signUpData, function(res) {
-                //console.log(res);
                 if (res.result) {
                     alertService.alert("注册成功，请登录您的邮箱进行验证！");
                     
@@ -158,72 +149,3 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
         
     }
 });
-
-/*hereseasApp.controller('ChatCtrl',function($scope, $window, userService, requestService,$cookies){
-    console.log($window.senderId);
-    
-    $scope.initMsgs = initMsgs;
-    
-    $window.onbeforeunload = function(){
-        console.log($cookies);
-        delete $cookies[$window.senderId];
-        $scope.$apply();
-        
-        return "bbb";
-    };
-    
-    $scope.setCurContact = function(contactId){
-        $scope.curContact = contactId;
-    };
-    
-    $scope.contactDetails = {};
-    $scope.messages = {};
-    
-    initMsgs();
-    function initMsgs(){
-        requestService.GetContact(function(res){
-            console.log(res.contacts);
-            $scope.contacts = res.contacts;
-            $scope.curContact = $scope.contacts[0];
-            angular.forEach(res.contacts, function(key){
-                
-                requestService.GetUser({id:key}, function(res){
-                    console.log("contact", res.data);
-                    $scope.contactDetails[key] = res.data;
-                });
-                
-                
-                requestService.GetMsgs({userid:key}, function(res){
-                    console.log(res.data);
-                    if(!angular.equals(res.data,[])){
-                        $scope.messages[key] = res.data;
-                        console.log($scope.messages);
-                    }
-                });
-            });
-        });
-        
-    };
-    
-   
-    
-    $scope.sendMessage = function(){
-        console.log($scope.content);
-        userService.sendmessage({
-            id: $scope.recvId,
-            content: $scope.content
-        }).then(function (res) {
-            console.log(res);
-            if (res.result) {
-                //alert("Message has been sent");
-                requestService.GetMsgs({userid:$scope.recvId}, function(res){
-                    console.log(res);
-                    $scope.messages = res.data;
-                });
-            } else {
-                alert("err");
-            }
-        });
-    };
-    
-});*/

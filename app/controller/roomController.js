@@ -6,7 +6,6 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
     $scope.min_price = 0;
     $scope.max_price = 5000;
     $("#price-slider").on("slideStop", function(slideEvt) {
-        //console.log(slideEvt);
         $scope.selectData.startPrice = slideEvt.value[0];
         $scope.selectData.endPrice = slideEvt.value[1];
         updatePage();
@@ -31,15 +30,13 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
         requestService.GetAptsBySchool($scope.selectData,
         function(res){
             if(res.result){
-                //console.log(res.data);
                 var apts = res.data.apartments;
                 $scope.aptResult = apts;
                 
                 // store number of max pages
                 max_page = res.data.totalPage;
                 $scope.pages = [];
-//                $scope.pages_pre_dot = false;
-//                $scope.pages_end_dot = false;
+
                 for(var i=0; i<max_page; i++){
                     $scope.pages[i] = {};
                     $scope.pages[i].id = i+1;
@@ -179,7 +176,6 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
     };
     
     $scope.changeSearch = function() {
-        //console.log($scope.selectData.hasPark);
         updatePage();
     }
 });
@@ -245,7 +241,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     };
     
     $scope.$watch(function(){return $scope.beginDate;},function(newValue){
-        console.log(newValue);
         if(newValue.year !== undefined && newValue.month!==undefined){
             $scope.getDays(newValue.year,newValue.month,1);
             $scope.showBeginDay = true;
@@ -254,13 +249,11 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         
         if(newValue.day !==undefined){
             $scope.steps[0].beginDate = new Date(newValue.year, newValue.month, newValue.day);
-            console.log($scope.steps[0].beginDate);
         }
     },true);
     
     
     $scope.$watch(function(){return $scope.endDate;},function(newValue){
-        console.log(newValue);
         if(newValue.year !== undefined && newValue.month!==undefined){
             $scope.getDays(newValue.year,newValue.month,2);
             $scope.showEndDay = true;
@@ -404,7 +397,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                     $scope.steps[6].cover = $scope.steps[6].images[0];
 
                 requestService.StepPost({id:userService.getDraft().id , step:7}, $scope.steps[6], function(res){
-                    //console.log(res);
                     requestService.GetApt({id:userService.getDraft().id},function(res){
                         $scope.steps[6].images = res.data[0].images;
                         $scope.steps[6].cover = res.data[0].cover;
@@ -415,7 +407,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             requestService.GetAptDraft({id:userService.getDraft().id},function(res){
 
                 $scope.steps[6].images = res.data[0].images;
-                //console.log(res, $scope.steps[6].images,url);
                 var index = $scope.steps[6].images.indexOf(url);
                 $scope.steps[6].images.splice(index, 1);
                 if($scope.steps[6].images.length == 0)
@@ -424,7 +415,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                     $scope.steps[6].cover = $scope.steps[6].images[0];
 
                 requestService.StepPost({id:userService.getDraft().id , step:7}, $scope.steps[6], function(res){
-                    //console.log(res);
                     requestService.GetAptDraft({id:userService.getDraft().id},function(res){
                         $scope.steps[6].images = res.data[0].images;
                         $scope.steps[6].cover = res.data[0].cover;
@@ -436,7 +426,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
 
     function upload(files) {//图片上传函数
         if (files && files.length && (files.length<(11-$scope.arrUploads.length))) {
-            //console.log(files);
             for (var i = $scope.arrUploads.length; i < files.length; i++) {  //ngf-keep为false时从0开始, false时处理重复图片较麻烦
                 $scope.arrUploads.push({file: files[i], prog: 0, content: "default.png", saved : false, cancel: "", id:""});
             }                   
@@ -453,11 +442,8 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                     }).progress(function (evt) {
                         key.prog = parseInt(100.0 * evt.loaded / evt.total);
                     }).success(function (data, status, headers, config) {
-                        //console.log('file ' + config.file.name + 'uploaded. Response: ');
-                        //console.log($scope.arrUploads);
                         key.saved = true;
                         key.id = 'https://s3.amazonaws.com/hereseas-public-images/'+data.data;
-                        //console.log(key.id);
                         
                         $scope.steps[6].images.push(key.id);
                         if($scope.steps[6].images.length == 1)
@@ -471,14 +457,12 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
 
                     }).error(function (data, status, headers, config) {
                         alert('上传失败'+data);
-                        //console.log('error status: ' + status);
                     })
                     //cancel while uploading
                     key.cancel = function(){
                         up.abort();     
                         $scope.arrUploads.splice($scope.arrUploads.indexOf(key), 1);
                         $scope.files.splice($scope.files.indexOf(key.file), 1);
-                        //console.log("cancel during upload", $scope.files, $scope.arrUploads);
                     }
                 }
             });  
@@ -490,7 +474,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         $scope.beginDate.year = date.getFullYear()+'';
         $scope.beginDate.month = date.getMonth()+'';
         $scope.beginDate.day = date.getDate()+'';
-        console.log($scope.beginDate);
         //$scope.steps[0].beginDate = new Date($scope.beginDate.year, $scope.beginDate.month, $scope.beginDate.day);
         var date = new Date(data.endDate);
         //$scope.steps[0].endDate = new Date(data.endDate);
@@ -537,7 +520,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         if(data.address !== undefined)
         {
             $scope.steps[5].address = data.address;
-            //console.log($scope.steps[5].address);
             $scope.addressGot = true;
             var temp = $scope.steps[5].address.street.split(' ');
             $scope.addresses[0] = temp[0];
@@ -584,7 +566,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         }
         else if(userService.getDraft().state=='edit' || userService.getDraft().state=='post'){
             requestService.EndRoompost({id:userService.getDraft().id}, function(res){
-                console.log("final", res);
                 var id = userService.getDraft().id;
                 userService.setDraft({});
                 $mdDialog.hide();
@@ -647,12 +628,12 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                     userService.setDraft({id:res.data._id, state:"post"});
                     
                     requestService.StepPost({id:userService.getDraft().id , step:3}, $scope.steps[2], function(res){
-                        //console.log(res);
+                        
                     });
                 });
             }else{
                 requestService.StepPost({id:userService.getDraft().id , step:1}, $scope.steps[0], function(res){
-                    //console.log(res);
+                    
                 });
             }
         }
@@ -660,7 +641,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     
     //附加费用判断
     $scope.$watch('nofees',function(newValue,oldValue){
-        //console.log($scope.nofees);
         if(newValue.deposit !== oldValue.deposit)
             $scope.steps[3].fees.deposit = newValue.deposit ? 0 : null;
         
@@ -692,7 +672,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             }else{
                 $scope.tableFilled[1].filled = true;
                 requestService.StepPost({id:userService.getDraft().id , step:2}, $scope.steps[1], function(res){
-                    console.log("step2",res);
+                    
                 });
             }
         });
@@ -701,13 +681,12 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     $scope.$watch(function(){return $scope.steps[2];}, function(newValue){
         if(userService.getDraft().id !== ''){
             requestService.StepPost({id:userService.getDraft().id , step:3}, $scope.steps[2], function(res){
-                console.log("step3",res);
+                
             });
         }
     }, true);
     
     $scope.$watch(function(){return $scope.steps[3];}, function(newValue){
-        //console.log(newValue);
         var s2 = 0;
         angular.forEach($scope.steps[3].fees, function(key,value){
             if(key==null) {s2 = s2 + 1;}
@@ -715,7 +694,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         if(s2 == 0){
             $scope.tableFilled[3].filled = true;
             requestService.StepPost({id:userService.getDraft().id , step:4}, $scope.steps[3], function(res){
-                console.log("step4",res);
+                
             });
         }else{
             $scope.tableFilled[3].filled = false;
@@ -726,7 +705,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         if($scope.steps[4].title != '' && $scope.steps[4].description != ''){
             $scope.tableFilled[4].filled = true;
             requestService.StepPost({id:userService.getDraft().id , step:5}, $scope.steps[4], function(res){
-                console.log("step5",res);
+                
             });
         }else{
             $scope.tableFilled[4].filled = false;
@@ -737,7 +716,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         if($scope.steps[5].address.zipcode != '' && $scope.steps[5].address.zipcode != undefined){
             $scope.tableFilled[5].filled = true;
             requestService.StepPost({id:userService.getDraft().id , step:6}, $scope.steps[5], function(res){
-                console.log("step6",res);
+                
             });
         }else{
             $scope.tableFilled[5].filled = false;
@@ -776,7 +755,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         }else{
             $scope.steps[0].type = (newValue.bed==null||newValue.bath==null)?undefined:newValue.bed+'B'+newValue.bath+'B';
         }
-        //console.log($scope.steps[0].type);
+        
     },true);
     
     //control the field of bedroom num and bathroom num in case of studio selected
@@ -825,7 +804,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             $scope.steps[5].address.zipcode = $scope.addresses[4];
             geocoder.geocode({ 'address' : $scope.steps[5].address.full}, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
-                    //console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
                     $scope.steps[5].latitude = results[0].geometry.location.lat();
                     $scope.steps[5].longitude = results[0].geometry.location.lng();
                 } else {}
@@ -902,14 +880,12 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
             init();
             function init(){
                 $scope.data = res.data[0];
-                //console.log('1131',$scope.data);
                 
                 for(var i=0; i<$scope.data.rooms.length; i++)
                     $scope.hasShowInfo.push(false);
                 $scope.images = [];
                 for(var i=0; i<$scope.data.images.length; i++)
                     $scope.images.push({thumb:$scope.data.images[i], img: $scope.data.images[i]});
-                //console.log($scope.images);
 
                 $scope.sellerId = $scope.data.userId;
                 $scope.username = $scope.data.username;
@@ -924,13 +900,10 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
                 
                 requestService.GetSchool({id: $scope.data.schoolId}, function(res) {
                     if (res.result) {
-                        //console.log(res.data);
                         $scope.schoolName = res.data.name;
 
                         $scope.add_school = new google.maps.LatLng(res.data.latitude*1,res.data.longitude*1);
-                        //console.log($scope.add_school);
                         $scope.durations = roomService.calDurations($scope.add_apt, $scope.add_school);    
-                        //console.log($scope.durations);
 
                     } else {
                         //http get school id error
@@ -940,7 +913,6 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
                 
                 if($cookies.login=='true'){
                     requestService.GetFavList(function(res){
-                        //console.log(res);
                         if(res.data.apartments !== null)
                             $scope.favoriteApts = res.data.apartments;
                         else $scope.favoriteApts = [];
@@ -957,12 +929,10 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
                     id:$stateParams.aptId,
                     category:"apartments"
                 }).then(function (res) {
-                    //console.log(res);
                     if (res.result) {
-                        //alert("Message has been sent");
+                        
                         $scope.isFav = false;
                     } else {
-                        //alert("err");
                     }
                 });
 
@@ -980,12 +950,9 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
                         id: $stateParams.aptId,
                         category: "apartments"
                     }).then(function (res) {
-                        //console.log(res);
                         if (res.result) {
                             $scope.isFav = true;
-                            //alert("Message has been sent");
                         } else {
-                            //alert("err");
                         }
                     });
                 }else{
@@ -1002,7 +969,6 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
                         controller:['$scope', 'recvId', function($scope, recvId) { 
                             $scope.content = '';
                             $scope.sendmessage = function() {
-                                //console.log($scope.content);
                                 
                                 userService.sendmessage({
                                     id: recvId,
