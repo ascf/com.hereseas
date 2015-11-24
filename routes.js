@@ -160,6 +160,10 @@ module.exports = function(app) {
     app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
     app.get('/admin/cars', sign.ensureAuthenticated, carRoute.adminGetCars);
 
+    app.put('/admin/thread/:id/status', sign.ensureAuthenticated, apartmentRoute.adminEditThreadStatus);
+    app.put('/admin/comment/:id/status', sign.ensureAuthenticated, apartmentRoute.adminEditCommentStatus);
+
+
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
 
 
