@@ -625,7 +625,7 @@ exports.getCarDraftById = function(req, res, next) {
 
                 Car.find(
                         query,
-                        'userId username userAvatar schoolId title description cover images basicInfo color noAccident driveSystem transSystem output breakType security comfort available status address longitude latitude create_at update_at')
+                        'userId username userAvatar schoolId title description cover images year make totalMiles style category model price boughtDate basicInfo color noAccident driveSystem transSystem output breakType security comfort available status address longitude latitude create_at update_at')
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, cars) {

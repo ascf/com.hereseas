@@ -217,20 +217,16 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
                 coords: [0, 0, 0, 24, 58, 24, 58, 0],
                 type: 'poly'
             };
-
-            var price;
-                // Create a marker and set its position.
-            price = car.price;
-            var marker = new MarkerWithLabel({
+                
+            
+            var marker = new google.maps.Marker({
                 map: map,
                 position: myLatLng,
-                icon: image,
-                shape: shape,
-                labelContent: price,
+                label: 'A',
                 draggable: false,
-                labelClass: "labels",
-                labelAnchor: new google.maps.Point(18, 22)
+
             });
+            
             
             
             function delFav(){
@@ -379,6 +375,8 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 $mdDialog.hide();
             };
     
+    
+    
             //details1 is the detail address provided by google address autocomplete 
             $scope.$watch('details1', function(newValue){  //在地址合法之后的操作
                 if(newValue && $scope.validAddress(newValue)){//set the model 
@@ -524,13 +522,33 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                     });  
                 }
             };
+    
+            $scope.boughtDate ={};
+            $scope.boughtDays = [];
 
-            $scope.bDate = {
-                date:'',
-                year: '',
-                month: '',
-                day: ''
+            $scope.getDays = function(year, month){
+                var num =  new Date(year, month, 0).getDate();
+                
+                $scope.boughtDays = [];
+                for(var i = 1; i<=num; i++)
+                    $scope.boughtDays.push(i);
+                
             };
+
+            $scope.$watch(function(){return $scope.boughtDate;},function(newValue){
+                console.log(newValue);
+                if(newValue.year !== undefined && newValue.month!==undefined){
+                    $scope.getDays(newValue.year,newValue.month);
+                    $scope.showDay = true;
+                }else $scope.showDay = false;
+
+
+                if(newValue.day !==undefined){
+                    $scope.steps[0].boughtDate = new Date(newValue.year, newValue.month, newValue.day);
+                    console.log($scope.steps[0].boughtDate);
+                }
+            },true);
+    
             //the main model 
 	       $scope.steps = [
                 {
@@ -605,7 +623,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
     
             $scope.setEditModel = function(data){
                
-                
+                console.log(data);
                 if(data.year !== undefined)
                     $scope.steps[0].year = data.year;
                 if(data.make !== undefined)
@@ -620,11 +638,14 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                     $scope.steps[0].style = data.style;
                 if(data.price !== undefined)
                     $scope.steps[0].price = data.price;
-                if(data.boughtDate !== undefined)
-                    $scope.steps[0].boughtDate = new Date(data.boughtDate);
+                if(data.boughtDate !== undefined){
                 
-                
-                
+                    var date = new Date(data.boughtDate);
+                    $scope.boughtDate.year = date.getFullYear()+'';
+                    $scope.boughtDate.month = date.getMonth()+'';
+                    $scope.boughtDate.day = date.getDate()+'';
+                    console.log($scope.boughtDate);
+                }
                 
                 if(data.color !== undefined)
                     $scope.steps[1].color = data.color;
@@ -677,31 +698,29 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
             };
     
             
-            if(!angular.equals(userService.getCarDraft(),{})){
+            if(userService.getCarDraft().id !== ''){
                 if(userService.getCarDraft().state == 'edit'){
                     requestService.GetCarDraft({id:userService.getCarDraft().id}, function(res){
-                        //console.log("EDIT", res);
+                        console.log("EDIT", res);
 
                         $scope.setEditModel(res.data[0]);                
                     })
                 }
                 else if(userService.getCarDraft().state == 'update'){
                     requestService.GetCar({id:userService.getCarDraft().id}, function(res){
-                        //console.log("UPDATE", res);
+                        console.log("UPDATE", res);
                         
                         $scope.setEditModel(res.data[0]);                
                     })
                 }
             }
     
-            $scope.$watch(function(){return {v1:$scope.steps[0],v2:$scope.bDate};}, function(newValue){
-                newValue.v2.date = newValue.v2.year + "/" + newValue.v2.month + "/" +newValue.v2.day;
-                newValue.v1.boughtDate = new Date(newValue.v2.date);
-                if(newValue.v1.year == '' || newValue.v1.make == '' || newValue.v1.totalMiles == '' || newValue.v1.category == '' || newValue.v1.model == '' || newValue.v1.price == '' || newValue.v1.boughtDate == undefined || newValue.v2.year=='' || newValue.v2.month=='' || newValue.v2.day=='')
+            $scope.$watch(function(){return $scope.steps[0];}, function(newValue){
+                if(newValue.year == '' || newValue.make == '' || newValue.totalMiles == '' || newValue.category == '' || newValue.model == '' || newValue.price == '' || newValue.boughtDate == undefined )
                     $scope.tableFilled[0].filled = false; 
                 else{
                     $scope.tableFilled[0].filled = true; 
-                    console.log(userService.getCarDraft(),angular.equals(userService.getCarDraft(), {}));
+                    //console.log(userService.getCarDraft(),angular.equals(userService.getCarDraft(), {}));
                     if(angular.equals(userService.getCarDraft().id, "")){
                         requestService.StartCarpost($scope.steps[0], function(res){
                             console.log(res);
