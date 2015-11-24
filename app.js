@@ -11,7 +11,8 @@ var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 var md5 = require('MD5');
 var cors = require('cors')
-var emailTool = require('./common/email');
+
+
 
 
 
@@ -57,7 +58,7 @@ app.use(session({
     }),
     // cookie: { maxAge: 60000,secure: true },
     cookie: {
-        maxAge: 43200000
+        maxAge: 3600000
     },
     resave: true,
     saveUninitialized: true,
@@ -65,18 +66,20 @@ app.use(session({
 
 
 
-//app.use(cors());
+// app.use(cors());
 
-// var allowCrossDomain = function(req, res, next) {
-//     res.header("Access-Control-Allow-Credentials", true);
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-//     if ('OPTIONS' == req.method) {
-//         res.send(200);
-//     } else {
-//         next();
-//     }
-// }
-// app.use(allowCrossDomain);
+var allowCrossDomain = function(req, res, next) {
+        res.header("Access-Control-Allow-Credentials", true);
+        //   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+        // if ('OPTIONS' == req.method) {
+        //       res.send(200);
+        //     }
+        //     else {
+        //       next();
+        //     }
+
+    }
+    // app.use(allowCrossDomain);
 
 
 app.use(function(req, res, next) {
@@ -86,17 +89,6 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
     next();
 });
-
-
-// app.use(function(req, res, next) {
-//     // res.header("Access-Control-Allow-Origin", req.headers.origin);
-//     res.header("Access-Control-Allow-Origin", "*");
-
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization,X-Prototype-Version,Allow,*, Content-Length");
-//     //res.header("Access-Control-Allow-Credentials", false);
-//     //res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-//     next();
-// });
 
 
 
@@ -159,7 +151,7 @@ passport.use(new LocalStrategy({
                 if (user.password != md5(password)) {
                     return done(null, false, 'ERR_INVALID_PASSWORD');
                 }
-                if (user.verified != true || user.status != 1) {
+                if (user.verified != true || user.status != 1){
                     return done(null, false, 'ERR_ACTIVATED_ERR');
                 }
 
@@ -256,14 +248,6 @@ function eduChecker(email) {
     var str = email.substring(email.indexOf('@') + 1);
     return str.indexOf(".edu") > -1
 }
-
-process.on('uncaughtException', function(err) {
-    console.log(err);
-
-    var email = "hhz1992@gmail.com"
-    emailTool.sendCrashEmail(email, err);
-
-})
 
 
 module.exports = app;
