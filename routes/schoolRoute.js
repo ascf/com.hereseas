@@ -194,7 +194,9 @@ exports.getSchoolStudents = function(req, res, next) {
             if (school.status == 1) {
 
                 ep.after("findUser", school.users.length, function(users) {
-                    
+                    users.sort(function(a, b) {
+                        return a.createAt.valueOf() - b.createAt.valueOf();
+                    });
                     res.json({
                         result: true,
                         data: users
@@ -206,7 +208,7 @@ exports.getSchoolStudents = function(req, res, next) {
                     if (i < 0)
                         break;
 
-                    User.findById(school.users[i], "id username avatar enrollYear status", function(err, user) {
+                    User.findById(school.users[i], "id username avatar enrollYear status createAt", function(err, user) {
                         if (err) {
                             console.log(err);
                         }
