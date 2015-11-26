@@ -71,6 +71,7 @@ module.exports = function(app) {
     app.post('/sendmessage', sign.ensureAuthenticated, userRoute.sendMessage);
     app.get('/contact', sign.ensureAuthenticated, userRoute.getUserContact);
     app.get('/message', sign.ensureAuthenticated, userRoute.getUserMessage);
+    app.get('/unreadmessage', sign.ensureAuthenticated, userRoute.getUserUnreadMessage)
     app.put('/readmessage', sign.ensureAuthenticated, userRoute.readMessage);
 
 

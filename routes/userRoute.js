@@ -1188,6 +1188,48 @@ exports.getUserMessage = function(req, res, next) {
 
 }
 
+
+exports.getUserUnreadMessage = function(req, res, next) {
+    var userId = req.user.id;
+    var userUnreadMessages = [];
+    var query = {};
+    var ep = new EventProxy();
+    query.receiver = userId;
+    query.read = false;
+
+    if (tools.hasNull(query)) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    ep.all('findMessage', function() {
+        //sort userMessages by createAt in ascending order
+        userUnreadMessages.sort(function(a, b) {
+            return a.createAt.valueOf() - b.createAt.valueOf();
+        });
+        res.json({
+            result: true,
+            data: userUnreadMessages
+        });
+        return;
+    });
+
+    Message.find(query, function(err, messages) {
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            for (var i = 0; i < messages.length; i++) {
+                userUnreadMessages.push(messages[i]);
+            }
+            ep.emit('findMessage');
+        }
+    });
+
+}
+
+
+
 exports.readMessage = function(req, res, next) {
 
     if (tools.isEmpty(req.body.id)) {
@@ -1452,7 +1494,7 @@ exports.adminGetUsers = function(req, res, next) {
     ep.all('checkAdmin', function() {
         // execute admin function
         var query = {};
-        User.find(query, function(err, users) {
+        User.find(query, function(err, users){
             if (err) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
