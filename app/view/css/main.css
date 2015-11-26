@@ -714,7 +714,12 @@ md-sidenav.md-locked-open{
 .site-sidenav md-content {
   background: transparent;
 }
-
+.msg-sidenav {
+  background: rgb(233,87,66);
+}
+.msg-sidenav md-content{
+  background: rgb(233,87,66);
+}
 md-select{
     padding: 0px;
 }

@@ -19,7 +19,7 @@
                 </div>
                 
                 <div style="margin-bottom:50px;">
-                    <div  id="comments_panel" style="overflow-y:scroll;height:auto;margin-top:20px;">
+                    <div  id="comments_panel" style="height:auto;margin-top:20px;">
                         <div ng-repeat="comment in threadComments" style="padding:10 0 10 10;" layout="row">
                             <div> <div ng-click="showOtherUserInfo(comment.userId)" style="margin:0px 10px 0px 0px; padding:0px 0px 0px 0px; width:40px;height:40px;" ng-style="{'background-image':'url('+comment.userAvatar+')'}"  class="img-circle center-block mates_wrapper"></div>
                             </div>
@@ -89,4 +89,3 @@
         max-width:650px
     }
 </style>
-        

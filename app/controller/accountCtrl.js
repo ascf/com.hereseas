@@ -100,15 +100,16 @@ hereseasApp.controller('AccountCtrl', function($scope,$state,$window, requestSer
             requestService.DoLogin($scope.user, function(res){
                 if(res.result){
                      requestService.GetUserSelf(function(res){
-                        if(res.data.schoolId !== undefined){
-                            $cookies['schoolId'] = res.data.schoolId;
-                        }
                         $cookies['userId'] = res.data.id;
-
                         $cookies.login = true;
-                        $state.reload()
                         $scope.hide();
                         $scope.login_err = false;
+                        if(res.data.schoolId !== undefined){
+                            $cookies['schoolId'] = res.data.schoolId;
+                            $state.go('school',{schoolId:res.data.schoolId});
+                        }else{
+                            $state.reload()
+                        }
                     });                    
                 }else{
                     if(res.err == 'ERR_ACTIVATED_ERR'){

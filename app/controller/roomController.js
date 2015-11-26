@@ -77,6 +77,7 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
                     myLatLng[i].minPrice = apts[i].price.minPrice;
                     myLatLng[i].maxPrice = apts[i].price.maxPrice;
                 }
+                //console.log(apts);
                 cluster_ll = {};
                 for(var i=0; i<apts.length; i++){
                     if(cluster_ll[myLatLng[i].lat+','+myLatLng[i].lng]!=undefined){
@@ -227,8 +228,10 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     $scope.beginDays = [];
     $scope.endDays = [];
     
+
+    
     $scope.getDays = function(year, month, flag){
-        var num =  new Date(year, month, 0).getDate();
+        var num =  new Date(year, parseInt(month)+1, 0).getDate();
         if(flag ==1){
             $scope.beginDays = [];
             for(var i = 1; i<=num; i++)
@@ -240,28 +243,46 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         }
     };
     
-    $scope.$watch(function(){return $scope.beginDate;},function(newValue){
-        if(newValue.year !== undefined && newValue.month!==undefined){
-            $scope.getDays(newValue.year,newValue.month,1);
+    $scope.$watch(function(){return {year:$scope.beginDate.year, month:$scope.beginDate.month};},function(newValue){
+        if(newValue.year !== undefined && newValue.month !== undefined){
             $scope.showBeginDay = true;
-        }else $scope.showBeginDay = false;
-        
-        
-        if(newValue.day !==undefined){
-            $scope.steps[0].beginDate = new Date(newValue.year, newValue.month, newValue.day);
+            $scope.getDays(newValue.year,newValue.month,1);
+            
+            if($scope.beginDate.day !== undefined && $scope.beginDays.length < parseInt($scope.beginDate.day)) 
+                $scope.beginDate.day = $scope.beginDays.length+'';
+            
+            if($scope.beginDate.day !== undefined)
+                $scope.steps[0].beginDate = new Date(newValue.year, newValue.month, $scope.beginDate.day);
+        }
+        else 
+             $scope.showBeginDay = false;
+    },true);
+    
+    $scope.$watch(function(){return $scope.beginDate.day;},function(newValue){
+        if(newValue !== undefined){
+            $scope.steps[0].beginDate = new Date($scope.beginDate.year, $scope.beginDate.month, parseInt(newValue));
         }
     },true);
     
     
-    $scope.$watch(function(){return $scope.endDate;},function(newValue){
-        if(newValue.year !== undefined && newValue.month!==undefined){
-            $scope.getDays(newValue.year,newValue.month,2);
+    $scope.$watch(function(){return {year:$scope.endDate.year, month:$scope.endDate.month};},function(newValue){
+        if(newValue.year !== undefined && newValue.month !== undefined){
             $scope.showEndDay = true;
-        }else $scope.showEndDay = false;
-        
-        
-        if(newValue.day !==undefined){
-            $scope.steps[0].endDate = new Date(newValue.year, newValue.month, parseInt(newValue.day));
+            $scope.getDays(newValue.year,newValue.month,2);
+            
+            if($scope.endDate.day !== undefined && $scope.endDays.length < parseInt($scope.endDate.day)) 
+                $scope.endDate.day = $scope.endDays.length+'';
+            
+            if($scope.endDate.day !== undefined)
+                $scope.steps[0].endDate = new Date(newValue.year, newValue.month, $scope.endDate.day);
+        }
+        else 
+             $scope.showEndDay = false;
+    },true);
+    
+    $scope.$watch(function(){return $scope.endDate.day;},function(newValue){
+        if(newValue !== undefined){
+            $scope.steps[0].endDate = new Date($scope.endDate.year, $scope.endDate.month, parseInt(newValue));
         }
     },true);
     
@@ -474,9 +495,8 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         $scope.beginDate.year = date.getFullYear()+'';
         $scope.beginDate.month = date.getMonth()+'';
         $scope.beginDate.day = date.getDate()+'';
-        //$scope.steps[0].beginDate = new Date($scope.beginDate.year, $scope.beginDate.month, $scope.beginDate.day);
+
         var date = new Date(data.endDate);
-        //$scope.steps[0].endDate = new Date(data.endDate);
         $scope.endDate.year = date.getFullYear()+'';
         $scope.endDate.month = date.getMonth()+'';
         $scope.endDate.day = date.getDate()+'';
@@ -626,7 +646,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             if(userService.getDraft().id == ''){
                 requestService.StartRoompost($scope.steps[0], function(res){
                     userService.setDraft({id:res.data._id, state:"post"});
-                    
+                    console.log(res);
                     requestService.StepPost({id:userService.getDraft().id , step:3}, $scope.steps[2], function(res){
                         
                     });

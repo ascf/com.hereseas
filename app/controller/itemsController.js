@@ -191,7 +191,6 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
             ];
     
             $scope.hide = function() {
-                //userService.setItemDraft([{}]);
                 $mdDialog.hide();
             };
     
@@ -199,7 +198,7 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
             $scope.expireDays = [];
 
             $scope.getDays = function(year, month){
-                var num =  new Date(year, month, 0).getDate();
+                var num =  new Date(year, parseInt(month)+1, 0).getDate();
                 
                 $scope.expireDays = [];
                 for(var i = 1; i<=num; i++)
@@ -207,17 +206,24 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                 
             };
     
-            $scope.$watch(function(){return $scope.expireDate;},function(newValue){
-                console.log(newValue);
-                if(newValue.year !== undefined && newValue.month!==undefined){
-                    $scope.getDays(newValue.year,newValue.month);
+            $scope.$watch(function(){return {year:$scope.expireDate.year, month:$scope.expireDate.month};},function(newValue){
+                if(newValue.year !== undefined && newValue.month !== undefined){
                     $scope.showDay = true;
-                }else $scope.showDay = false;
+                    $scope.getDays(newValue.year,newValue.month);
 
+                    if($scope.expireDate.day !== undefined && $scope.expireDays.length < parseInt($scope.expireDate.day)) 
+                        $scope.expireDate.day = $scope.expireDays.length+'';
 
-                if(newValue.day !==undefined){
-                    $scope.shared.expireAt = new Date(newValue.year, newValue.month, newValue.day);
-                    console.log($scope.shared.expireAt);
+                    if($scope.expireDate.day !== undefined)
+                        $scope.shared.expireAt = new Date(newValue.year, newValue.month, $scope.expireDate.day);
+                }
+                else 
+                     $scope.showDay = false;
+            },true);
+
+            $scope.$watch(function(){return $scope.expireDate.day;},function(newValue){
+                if(newValue !== undefined){
+                    $scope.shared.expireAt = new Date($scope.expireDate.year, $scope.expireDate.month, parseInt(newValue));
                 }
             },true);
     

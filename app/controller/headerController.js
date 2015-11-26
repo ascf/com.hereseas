@@ -1,3 +1,20 @@
+hereseasApp.directive('schrollBottom', function ($timeout) {
+  return {
+    scope: {
+      schrollBottom: "="
+    },
+    link: function (scope, element) {
+      scope.$watchCollection('schrollBottom', function (newValue) {
+        if (newValue)
+        {
+            $timeout(function(){
+                $(element).scrollTop($(element)[0].scrollHeight);
+            },0);
+        }
+      });
+    }
+  }
+})
 hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootScope, $location, userService, $mdDialog, alertService, $http, requestService, $state,$cookies,$window){
     //login,signup,user ng-show
     $scope.logged = logged;
@@ -349,10 +366,10 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                         });
                     };
                 },
-                templateUrl: '/app/view/partials/_chat_window.html',
+                templateUrl: '/app/view/partials/_chat_window_temp.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
-                clickOutsideToClose:true
+                clickOutsideToClose:true,
             });
         }
         else alertService.alert("请先登录").then(function() {
@@ -369,13 +386,14 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                         if (res.result){
                             sessionCtrl();
                         }else{
-                            alert('Session time out, please login again!');
-                            requestService.LogOut(function() {
-                                $cookies.login = false;
-                                delete $cookies['userId'];
-                                delete $cookies['schoolId'];
-                                $scope.$emit('logout','1');
-                            });
+                            alertService.alert('Session time out, please login again!').then(function(){
+                                requestService.LogOut(function() {
+                                    $cookies.login = false;
+                                    delete $cookies['userId'];
+                                    delete $cookies['schoolId'];
+                                    $scope.$emit('logout','1');
+                                });
+                            });          
                         }
                     });
                 }
@@ -389,6 +407,8 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
 
 hereseasApp.controller('TopBarController', function($state, $scope, $stateParams,requestService){
     requestService.GetSchool({id:$stateParams.schoolId}, function(res){
-        $scope.avatar = res.data.avatar;
+        if(res.result){
+            $scope.avatar = res.data.avatar; 
+        }
     });
 });

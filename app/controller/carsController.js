@@ -298,7 +298,9 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
             };
             
         }else{
-            $state.go('home');
+            alertService.alert("该发布不存在或已被移除").then(function(){
+                $state.go('home');
+            });
         }
     });
 });
@@ -478,7 +480,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
             $scope.boughtDays = [];
 
             $scope.getDays = function(year, month){
-                var num =  new Date(year, month, 0).getDate();
+                var num =  new Date(year, parseInt(month)+1, 0).getDate();
                 
                 $scope.boughtDays = [];
                 for(var i = 1; i<=num; i++)
@@ -486,17 +488,24 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 
             };
 
-            $scope.$watch(function(){return $scope.boughtDate;},function(newValue){
-                //console.log(newValue);
-                if(newValue.year !== undefined && newValue.month!==undefined){
-                    $scope.getDays(newValue.year,newValue.month);
+            $scope.$watch(function(){return {year:$scope.boughtDate.year, month:$scope.boughtDate.month};},function(newValue){
+                if(newValue.year !== undefined && newValue.month !== undefined){
                     $scope.showDay = true;
-                }else $scope.showDay = false;
+                    $scope.getDays(newValue.year,newValue.month);
 
+                    if($scope.boughtDate.day !== undefined && $scope.boughtDays.length < parseInt($scope.boughtDate.day)) 
+                        $scope.boughtDate.day = $scope.boughtDays.length+'';
 
-                if(newValue.day !==undefined){
-                    $scope.steps[0].boughtDate = new Date(newValue.year, newValue.month, newValue.day);
-                    //console.log($scope.steps[0].boughtDate);
+                    if($scope.boughtDate.day !== undefined)
+                        $scope.steps[0].boughtDate = new Date(newValue.year, newValue.month, $scope.boughtDate.day);
+                }
+                else 
+                     $scope.showDay = false;
+            },true);
+
+            $scope.$watch(function(){return $scope.boughtDate.day;},function(newValue){
+                if(newValue !== undefined){
+                    $scope.steps[0].boughtDate = new Date($scope.boughtDate.year, $scope.boughtDate.month, parseInt(newValue));
                 }
             },true);
     

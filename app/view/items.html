@@ -62,8 +62,9 @@
                     </div>
                 </div>
                 <div style="padding-left:3px">
-                    <div class="well pre-scrollable" style="background-color:#FFFFFF;height:180px;padding-top:8px;padding-left:8px;padding-right:8px">
+                    <div class="well pre-scrollable" style="background-color:#FFFFFF;height:195px;padding-top:8px;padding-left:8px;padding-right:8px">
                         <p style="margin-top:0;font-size:15px;WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all">详细信息：<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地址：{{item.address.full}}
+                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有效期：{{item.expireAt | date:"yyyy-MM-dd"}}
                             <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;描述：{{item.description}}</p>
                         
                     </div>
@@ -87,7 +88,8 @@
                     </div>
                 </div>
                 <div ng-show="hasMore" style="margin-top:10px;">还有更多物品</div>
-                <div style="margin-top:103px;"><div id="itemMap" class="application" style="height:210px;width:300px;"></div></div>
+                <show-share style="padding-top:50px" ng-include="'app/view/partials/_share.html'"></show-share>
+                <div style="margin-top:10px;"><div id="itemMap" class="application" style="height:210px;width:300px;"></div></div>
             </div>
     </div>
     </div>
