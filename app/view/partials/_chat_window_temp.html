@@ -1,0 +1,69 @@
+
+<md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;">
+<div layout="row" style="height:475px;">
+    <!--Begin of left side nav_bar-->
+    <md-sidenav class="msg-sidenav md-sidenav-left md-whiteframe-z2 md-closed ng-isolate-scope" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" tabindex="-1" style="min-height:80%px;min-width:210px;max-width:210px;box-shadow:none;">
+        <md-content role="navigation" class="md-default-theme">
+            <div style="overflow:scroll;height:10%;border-bottom:1px rgb(169,169,169) solid;">
+            </div>
+            <div style="outline:none;color:white;" ng-repeat="contact in contactDetails" layout="column"  ng-click="setCurContact($index)">
+                <div layout="row" style="padding:5 10 5 10;background-color:rgb(253,107,86);" ng-show="$index == curContact">
+                    <div  flex="30" style="margin-right:5px;">
+                        <div style="height:60px;width:60px;border: 1px rgb(169,169,169) solid;" ng-style="{'background-image':'url('+contact.avatar+')'}" class="center-block mates_wrapper"></div>
+                    </div>
+                    <div flex="70" style="padding-top:20px; margin-left:10px;font-size:12px;">
+                        <strong>{{contact.username}}</strong>
+                    </div>
+                </div>
+                <div layout="row" style="padding:5 10 5 10;" ng-hide="$index == curContact">
+                    <div  flex="30" style="margin-right:5px;">
+                        <div style="height:60px;width:60px;border: 1px rgb(169,169,169) solid;" ng-style="{'background-image':'url('+contact.avatar+')'}" class="center-block mates_wrapper"></div>
+                    </div>
+                    <div flex="70" style="padding-top:20px; margin-left:10px;font-size:12px;">
+                        <strong>{{contact.username}}</strong>
+                    </div>
+                </div>
+            </div>
+        </md-content>
+        <div layout="row"></div>
+    </md-sidenav>
+    <!--End of side nav bar-->
+    <md-dialog-content style="max-width:550px;min-width:550px;border-left:1px rgb(169,169,169) solid;padding:0;box-shadow:none;">
+        <div layout="column">
+            <!--Begin of 聊天内容 Page-->
+            <div layout="column">
+                <div layout="column" >       
+                    <div style="overflow:scroll;height:10%;border-bottom:1px rgb(169,169,169) solid;">
+                        <div layout="row">
+                            <div style="float:left;padding-left:10px;">
+                                <p style="font-size:18px;height: 100%;line-height: 2.5;">{{contactDetails[curContact].username}}</p>
+                            </div>
+                            <div flex></div>
+                            <div style="float:right;background-color:rgb(233,87,66);margin:4;margin-right:15px;width:15px;height:15px;border-radius:50%;" ng-click="hide()"></div>
+                        </div>
+                    </div>
+                    <div style="overflow:auto;height:68%;padding:10px;" id="divmsg" schroll-bottom="messages">
+                        <div  ng-repeat="msg in messages" layout="column" >
+                            <p style="font-size:14px;color:rgb(233,87,66);"><strong>{{msg.senderUsername}}&nbsp;&nbsp;&nbsp;&nbsp;{{msg.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</strong></p>
+                            <p style="WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all">
+                            {{msg.content}}
+                            </p>
+                        </div>
+                    </div>
+                    <div layout="row" style="height:20%;border-top:1px rgb(169,169,169) solid;background-color:white;">
+                        <div style="padding:0;">
+                            <textarea ng-model="contents" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()" aria-label="contents" style="width:500px;height:100%;resize:none;border:0;outline:none;"></textarea>
+                        </div>
+                        <div style="display:none;">
+                            <div id="btnSearch" style="margin:18 2 5;border:1px rgb(169,169,169) solid;padding-top:15px;text-align:center;color:white;width:50px;height:50px;border-radius:50%; background-color:rgb(72,182,160);" ng-click="sendMessage()">
+                                <strong>彩蛋</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--End of 房屋设施 Page-->
+            </div>
+        </div>
+    </md-dialog-content>
+</div>
+</md-dialog>

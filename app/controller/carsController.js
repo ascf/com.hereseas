@@ -156,7 +156,7 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
     requestService.GetCar({id: $stateParams.carId}, function(res){
         
         if(res.result){
-            console.log(res);
+            //console.log(res);
             $scope.data = res.data[0];
             $scope.addFav = addFav;
             $scope.delFav = delFav;
@@ -298,7 +298,9 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
             };
             
         }else{
-            $state.go('home');
+            alertService.alert("该发布不存在或已被移除").then(function(){
+                $state.go('home');
+            });
         }
     });
 });
@@ -474,31 +476,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 }
             };
     
-            $scope.boughtDate ={};
-            $scope.boughtDays = [];
-
-            $scope.getDays = function(year, month){
-                var num =  new Date(year, month, 0).getDate();
-                
-                $scope.boughtDays = [];
-                for(var i = 1; i<=num; i++)
-                    $scope.boughtDays.push(i);
-                
-            };
-
-            $scope.$watch(function(){return $scope.boughtDate;},function(newValue){
-                console.log(newValue);
-                if(newValue.year !== undefined && newValue.month!==undefined){
-                    $scope.getDays(newValue.year,newValue.month);
-                    $scope.showDay = true;
-                }else $scope.showDay = false;
-
-
-                if(newValue.day !==undefined){
-                    $scope.steps[0].boughtDate = new Date(newValue.year, newValue.month, newValue.day);
-                    console.log($scope.steps[0].boughtDate);
-                }
-            },true);
+            
     
             //the main model 
 	       $scope.steps = [
@@ -571,7 +549,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
     
             $scope.setEditModel = function(data){
                
-                console.log(data);
+                //console.log(data);
                 if(data.year !== undefined)
                     $scope.steps[0].year = data.year;
                 if(data.make !== undefined)
@@ -587,12 +565,8 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 if(data.price !== undefined)
                     $scope.steps[0].price = data.price;
                 if(data.boughtDate !== undefined){
-                
-                    var date = new Date(data.boughtDate);
-                    $scope.boughtDate.year = date.getFullYear()+'';
-                    $scope.boughtDate.month = date.getMonth()+'';
-                    $scope.boughtDate.day = date.getDate()+'';
-                    console.log($scope.boughtDate);
+                    $scope.steps[0].boughtDate = data.boughtDate;
+                    
                 }
                 
                 if(data.color !== undefined)
@@ -647,14 +621,14 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
             if(userService.getCarDraft().id !== ''){
                 if(userService.getCarDraft().state == 'edit'){
                     requestService.GetCarDraft({id:userService.getCarDraft().id}, function(res){
-                        console.log("EDIT", res);
+                        //console.log("EDIT", res);
 
                         $scope.setEditModel(res.data[0]);                
                     })
                 }
                 else if(userService.getCarDraft().state == 'update'){
                     requestService.GetCar({id:userService.getCarDraft().id}, function(res){
-                        console.log("UPDATE", res);
+                        //console.log("UPDATE", res);
                         
                         $scope.setEditModel(res.data[0]);                
                     })
@@ -672,12 +646,12 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                             userService.setCarDraft({id:res.data._id, state:"post"});
                             
                             requestService.CarStepPost({id:userService.getCarDraft().id , step:3}, $scope.steps[2], function(res){
-                                console.log("step3",res);
+                                //console.log("step3",res);
                             });
                         });
                     }else{
                         requestService.CarStepPost({id:userService.getCarDraft().id , step:1}, $scope.steps[0], function(res){
-                            console.log("step1",res);
+                            //console.log("step1",res);
                         });
                     }
                 }
@@ -690,15 +664,15 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 }else{
                     $scope.tableFilled[1].filled = true; 
                     requestService.CarStepPost({id:userService.getCarDraft().id , step:2}, $scope.steps[1], function(res){
-                        console.log("step2",res);
+                        //console.log("step2",res);
                     });
                 }
             }, true);
             
             $scope.$watch(function(){return $scope.steps[2];}, function(newValue){
-                if(userService.getCarDraftDraft().id !== ''){
+                if(userService.getCarDraft().id !== ''){
                     requestService.CarStepPost({id:userService.getCarDraft().id , step:3}, $scope.steps[2], function(res){
-                        console.log("step3",res);
+                        //console.log("step3",res);
                     });
                 }
             }, true);
@@ -707,7 +681,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 if(newValue.title != '' && newValue.description != ''){
                     $scope.tableFilled[3].filled = true;
                     requestService.CarStepPost({id:userService.getCarDraft().id , step:4}, $scope.steps[3], function(res){
-                        console.log("step4",res);
+                        //console.log("step4",res);
                     });
                 }else{
                     $scope.tableFilled[3].filled = false;
@@ -718,7 +692,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 if(newValue.address.zipcode != '' && newValue.address.zipcode != undefined){
                     $scope.tableFilled[4].filled = true;
                     requestService.CarStepPost({id:userService.getCarDraft().id , step:5}, $scope.steps[4], function(res){
-                        console.log("step5",res);
+                        //console.log("step5",res);
                     });
                 }else{
                     $scope.tableFilled[4].filled = false;
@@ -761,7 +735,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 }
                 else if(userService.getCarDraft().state=='edit' || userService.getCarDraft().state=='post'){
                     requestService.EndCarpost({id:userService.getCarDraft().id}, function(res){
-                        console.log("final", res);
+                        //console.log("final", res);
                         var id = userService.getCarDraft().id;
                         userService.setCarDraft({});
                         $mdDialog.hide();

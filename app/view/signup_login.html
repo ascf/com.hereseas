@@ -46,7 +46,7 @@
                     密码至少为6位，请重试。
                 </div>
                 <div ng-show="state=='signup'" class="sign_form_row input-group input-group-lg">
-                <input style="border-radius:3px;" class="form-control" type="text" maxlength="10" placeholder="Username (必填, 不能超过10个字符)" data-required="required" maxlength="32" autocorrect="off" autocapitalize="off" ng-model="signUpData.username">
+                <input style="border-radius:3px;" class="form-control" type="text" maxlength="10" placeholder="Username (必填, 不能超过10个汉字或字母)" data-required="required" maxlength="32" autocorrect="off" autocapitalize="off" ng-model="signUpData.username">
                 </div>
                 <div class="sl_err" ng-show="usererr">
                     请填写用户名。

@@ -10,7 +10,7 @@
     <div id="content">
         <div top-bar></div>
         <div class="container" style="padding-top:27.7px;padding-bottom:27.7px;width:1000px">
-            <div class="row" style="overflow-y:scroll;margin-left:5px;margin-right:5px;">
+            <div id="schoolmates_panel" class="row" style="overflow-y:scroll;margin-left:5px;margin-right:5px;">
                 <div class="col-xs-3 col-sm-3" layout="column" ng-repeat="mate in schoolMates" style="padding:10px;min-height:140px;width:190px;">
                     <div ng-click="seeOthersProfile($index)" ng-style="{'background-image':'url('+mate.avatar+')'}" class="center-block mates_wrapper">
                         <div class="mask">
@@ -29,8 +29,10 @@
     </div>
 </div>
 
-<style>
-    
-</style>
+<script>
+    $('#schoolmates_panel').slimScroll({
+        height: '250px'
+    });
+</script>
 
 

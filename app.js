@@ -14,8 +14,6 @@ var cors = require('cors')
 
 
 
-
-
 //var routes = require('./routes/index');
 //var users = require('./routes/users');
 
@@ -31,6 +29,10 @@ var crypto = require('crypto');
 
 var multer = require('multer');
 
+
+var compress = require('compression');
+
+app.use(compress());
 
 require('./common/dateformat.js');
 
@@ -151,7 +153,7 @@ passport.use(new LocalStrategy({
                 if (user.password != md5(password)) {
                     return done(null, false, 'ERR_INVALID_PASSWORD');
                 }
-                if (user.verified != true || user.status != 1){
+                if (user.verified != true || user.status != 1) {
                     return done(null, false, 'ERR_ACTIVATED_ERR');
                 }
 

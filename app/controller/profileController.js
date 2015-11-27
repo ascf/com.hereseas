@@ -1,4 +1,4 @@
-hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,requestService,userService, Upload, fileReader, $window,$cookies) {
+hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,requestService,userService, alertService, Upload, fileReader, $window,$cookies) {
     $scope.$on('logout',function(){
         $state.go('home');
     });
@@ -378,8 +378,21 @@ hereseasApp.controller('ProfileController', function ($state, $scope,$timeout,re
             
             $scope.updateInfo = function(res){
                 requestService.ChangeProfile({step:1},$scope.basicInfo, function(res){
-                    //console.log(res);
-                    $state.reload();
+                    if(res.result){
+                        if(res.data.schoolId == undefined){
+                            alertService.alert("用户名更新成功").then(function(){
+                                $state.reload();
+                            });  
+                        }else{
+                            alertService.alert("信息更新成功，跳转到学校页面").then(function(){
+                                $state.go('school',{schoolId:res.data.schoolId});
+                            });
+                        }
+                    }else{
+                        alertService.alert("更新信息失败").then(function(){
+                            $state.reload();
+                        });
+                    }
                 });
             }
             

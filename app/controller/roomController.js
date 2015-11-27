@@ -69,7 +69,7 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
                 
                 // initial map
                 var myLatLng=[];
-                //var apts = res.data.apartments;
+
                 for(var i=0; i<apts.length; i++){
                     myLatLng[i]={};
                     myLatLng[i].lat = parseFloat(apts[i].latitude);
@@ -77,6 +77,7 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
                     myLatLng[i].minPrice = apts[i].price.minPrice;
                     myLatLng[i].maxPrice = apts[i].price.maxPrice;
                 }
+
                 cluster_ll = {};
                 for(var i=0; i<apts.length; i++){
                     if(cluster_ll[myLatLng[i].lat+','+myLatLng[i].lng]!=undefined){
@@ -102,25 +103,6 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
                     scrollwheel: false,
                     zoom: 12,
                 });
-
-                // Origins, anchor positions and coordinates of the marker increase in the X
-                // direction to the right and in the Y direction down.
-//                var image = {
-//                    url: '/app/view/img/apts/marker_big.png',
-//                    // This marker is 58 pixels wide by 24 pixels high.
-//                    size: new google.maps.Size(116, 48),
-//                    // The origin for this image is (0, 0).
-//                    origin: new google.maps.Point(0, 0),
-//                    // The anchor for this image is the base of the flagpole at (0, 24).
-//                    anchor: new google.maps.Point(70, 48)
-//                };
-                // Shapes define the clickable region of the icon. The type defines an HTML
-                // <area> element 'poly' which traces out a polygon as a series of X,Y points.
-                // The final coordinate closes the poly by connecting to the first coordinate.
-//                var shape = {
-//                    coords: [0, 0, 0, 48, 116, 48, 116, 0],
-//                    type: 'poly'
-//                };
 
                 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 var labelIndex = 0;
@@ -180,8 +162,25 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
     }
 });
 
-hereseasApp.controller('RoomPostController', function ($scope,$location, languageService, userService, alertService, $state, $mdDialog, roomService, Upload, fileReader, requestService, $filter,$cookies) {
+hereseasApp.controller('RoomPostController', function ($scope,$location, languageService, userService, alertService, $state, $mdDialog, roomService, Upload, fileReader, requestService, $filter,$cookies,dateService) {
     
+    //functions exposed to page
+    //$scope.yearShow = yearShow;
+    //$scope.monthShow = monthShow;
+    //$scope.dayShow = dayShow;
+    $scope.lastPage = lastPage;
+    $scope.nextPage = nextPage;
+    $scope.setActivePage = setActivePage;
+    
+    $scope.AddRoom = AddRoom;
+    $scope.RemoveRoom = RemoveRoom;
+    $scope.removeImage = removeImage;
+    $scope.doPost = doPost;
+    
+    $scope.name = name;  //获取中午名称函数
+    $scope.hide = hide;
+    
+    //variables
     var geocoder = new google.maps.Geocoder();
     //地址自动完成相关变量
     $scope.options1 = null;
@@ -198,6 +197,13 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
    
     $scope.canPost = false; //检测所有表格是否填完
     $scope.arrUploads = [];
+    
+    
+    //$scope.beginDate ={};
+    //$scope.endDate ={};
+    //$scope.beginDays = [];
+    //$scope.endDays = [];
+    
     //表格是否填完变量
     $scope.tableFilled = [
         {filled: false},
@@ -219,52 +225,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             clean: false
         }
     ;
-    
-    $scope.beginDate ={};
-    
-    $scope.endDate ={};
-    
-    $scope.beginDays = [];
-    $scope.endDays = [];
-    
-    $scope.getDays = function(year, month, flag){
-        var num =  new Date(year, month, 0).getDate();
-        if(flag ==1){
-            $scope.beginDays = [];
-            for(var i = 1; i<=num; i++)
-                $scope.beginDays.push(i);
-        }else{
-            $scope.endDays = [];
-            for(var i = 1; i<=num; i++)
-                $scope.endDays.push(i);
-        }
-    };
-    
-    $scope.$watch(function(){return $scope.beginDate;},function(newValue){
-        if(newValue.year !== undefined && newValue.month!==undefined){
-            $scope.getDays(newValue.year,newValue.month,1);
-            $scope.showBeginDay = true;
-        }else $scope.showBeginDay = false;
-        
-        
-        if(newValue.day !==undefined){
-            $scope.steps[0].beginDate = new Date(newValue.year, newValue.month, newValue.day);
-        }
-    },true);
-    
-    
-    $scope.$watch(function(){return $scope.endDate;},function(newValue){
-        if(newValue.year !== undefined && newValue.month!==undefined){
-            $scope.getDays(newValue.year,newValue.month,2);
-            $scope.showEndDay = true;
-        }else $scope.showEndDay = false;
-        
-        
-        if(newValue.day !==undefined){
-            $scope.steps[0].endDate = new Date(newValue.year, newValue.month, parseInt(newValue.day));
-        }
-    },true);
-    
     
     //the main model 
     $scope.steps = [
@@ -354,37 +314,48 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
         }
     ];
     
-    $scope.lastPage = lastPage;
-    $scope.nextPage = nextPage;
-    $scope.setActivePage = setActivePage;
     
-    $scope.AddRoom = AddRoom;
-    $scope.RemoveRoom = RemoveRoom;
-
-    $scope.name = name;  //获取中午名称函数
-    $scope.doPost = doPost;
-
-    $scope.hide = hide;
-    
-    $scope.removeImage = removeImage;
-    $scope.setEditModel = setEditModel;
-    
+    //initial
     setExistedFields(userService.getDraft());
     
     
-    function hide() {
-        userService.setDraft({});
-        $mdDialog.hide();
+    
+    
+    
+    
+    //Room Post页切换功能
+    function lastPage() {
+        $scope.activePage = $scope.activePage -1;
+    };  
+    function nextPage() {
+        $scope.activePage = $scope.activePage +1;
     };
 
-    function validAddress(value) {//判断地址是否合法
-        var num = 0;
-        angular.forEach( value, function() {
-            num++;
-        });
-        return num==1 ? false : true;
+    function setActivePage(page) {
+        $scope.activePage = page;
     };
 
+    function AddRoom() {
+        if($scope.steps[1].rooms.length<6){
+            $scope.steps[1].rooms.push(
+                {
+                    share : null,
+                    type :    '',
+                    price :       '',
+                    priceType :   '',
+                    bathroom:    false,
+                    walkInCloset:   false,
+                    closet:        false
+                }
+            );
+        }
+    };
+
+    function RemoveRoom(index) {
+        $scope.steps[1].rooms.splice(index,1);
+    };
+    
+    
     function removeImage(url){//图片上传完之后的删除
         if(userService.getDraft().state == 'update'){
             requestService.GetApt({id:userService.getDraft().id},function(res){
@@ -422,6 +393,40 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                 });
             });
         }
+    };
+    
+    function doPost() {//
+        if(userService.getDraft().state=='update')
+        {
+                $mdDialog.hide();
+                $location.path('/rooms/'+userService.getDraft().id);
+        }
+        else if(userService.getDraft().state=='edit' || userService.getDraft().state=='post'){
+            requestService.EndRoompost({id:userService.getDraft().id}, function(res){
+                var id = userService.getDraft().id;
+                userService.setDraft({});
+                $mdDialog.hide();
+                $location.path('/rooms/'+id);
+            });
+        }   
+    };
+    
+    
+    
+    
+    
+    
+    function hide() {
+        userService.setDraft({});
+        $mdDialog.hide();
+    };
+
+    function validAddress(value) {//判断地址是否合法
+        var num = 0;
+        angular.forEach( value, function() {
+            num++;
+        });
+        return num==1 ? false : true;
     };
 
     function upload(files) {//图片上传函数
@@ -470,16 +475,10 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     };
     
     function setEditModel(data){
-        var date = new Date(data.beginDate);
-        $scope.beginDate.year = date.getFullYear()+'';
-        $scope.beginDate.month = date.getMonth()+'';
-        $scope.beginDate.day = date.getDate()+'';
-        //$scope.steps[0].beginDate = new Date($scope.beginDate.year, $scope.beginDate.month, $scope.beginDate.day);
-        var date = new Date(data.endDate);
-        //$scope.steps[0].endDate = new Date(data.endDate);
-        $scope.endDate.year = date.getFullYear()+'';
-        $scope.endDate.month = date.getMonth()+'';
-        $scope.endDate.day = date.getDate()+'';
+        $scope.steps[0].beginDate = data.beginDate;
+        $scope.steps[0].endDate = data.endDate;
+        
+        
 
         if(data.type == 'Studio'){
             $scope.isStudio = true;
@@ -501,7 +500,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
                 walkInCloset:  false,
                 closet:   false
             }];
-
 
         if(data.facilities !== undefined){
             $scope.steps[2].facilities = data.facilities;
@@ -546,71 +544,23 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             if(data.state == 'edit'){//unposted apt edit
                 requestService.GetAptDraft({id:data.id}, function(res){
 
-                    $scope.setEditModel(res.data[0]);                
+                    setEditModel(res.data[0]);                
                 })
             }
             else if(data.state == 'update'){//posted apt edit
                 requestService.GetApt({id:data.id}, function(res){
                     
-                    $scope.setEditModel(res.data[0]);                
+                    setEditModel(res.data[0]);                
                 })
             }
         }
     };  
 
-    function doPost() {//
-        if(userService.getDraft().state=='update')
-        {
-                $mdDialog.hide();
-                $location.path('/rooms/'+userService.getDraft().id);
-        }
-        else if(userService.getDraft().state=='edit' || userService.getDraft().state=='post'){
-            requestService.EndRoompost({id:userService.getDraft().id}, function(res){
-                var id = userService.getDraft().id;
-                userService.setDraft({});
-                $mdDialog.hide();
-                $location.path('/rooms/'+id);
-            });
-        }
-        
-    };
-
-    //Room Post页切换功能
-    function lastPage() {
-        $scope.activePage = $scope.activePage -1;
-    };  
-    function nextPage() {
-        $scope.activePage = $scope.activePage +1;
-    };
-
-    function setActivePage(page) {
-        $scope.activePage = page;
-    };
-
-    function AddRoom() {
-        if($scope.steps[1].rooms.length<6){
-            $scope.steps[1].rooms.push(
-                {
-                    share : null,
-                    type :    '',
-                    price :       '',
-                    priceType :   '',
-                    bathroom:    false,
-                    walkInCloset:   false,
-                    closet:        false
-                }
-            );
-        }
-    };
-
-    function RemoveRoom(index) {
-        $scope.steps[1].rooms.splice(index,1);
-    };
-
-
     function name(name) {
         return languageService.getChineseName(name);
     };
+    
+    
     
     $scope.$watch('files', function (newValue, oldValue) {
         //files:image upload model
@@ -619,6 +569,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     });
     
     $scope.$watch(function(){return $scope.steps[0];}, function(newValue){
+        console.log(newValue);
         if(newValue.type == undefined || newValue.beginDate == undefined || newValue.endDate == undefined)
             $scope.tableFilled[0].filled = false; 
         else{
@@ -626,7 +577,7 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             if(userService.getDraft().id == ''){
                 requestService.StartRoompost($scope.steps[0], function(res){
                     userService.setDraft({id:res.data._id, state:"post"});
-                    
+
                     requestService.StepPost({id:userService.getDraft().id , step:3}, $scope.steps[2], function(res){
                         
                     });
@@ -810,8 +761,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             });
         }
     });
-    
-
 });
 
 

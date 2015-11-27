@@ -5,24 +5,24 @@
         </div>
         <div layout="row">
             <div flex="25" style="padding-bottom:0px;border:1px rgb(169,169,169) solid;overflow:scroll;max-height:525px;min-height:525px;">
-                <div style="outline:none;" ng-repeat="message in messages" layout="column"  ng-click="setCurContact($index)">
+                <div style="outline:none;" ng-repeat="contact in contactDetails" layout="column"  ng-click="setCurContact($index)">
                     <div layout="row" style="margin:15 10 0 10;">
                         <div  flex="30" style="margin-right:5px;">
-                            <div style="height:60px;width:60px;border: 1px rgb(169,169,169) solid;" ng-style="{'background-image':'url('+contactDetails[$index].avatar+')'}" class="center-block mates_wrapper"></div>
+                            <div style="height:60px;width:60px;border: 1px rgb(169,169,169) solid;" ng-style="{'background-image':'url('+contact.avatar+')'}" class="center-block mates_wrapper"></div>
                         </div>
                         <div ng-show="$index == curContact" flex="70" style="color: rgb(55,120,106);padding-top:20px; margin-left:10px;font-size:12px;">
-                            <strong>{{contactDetails[$index].username}}</strong>
+                            <strong>{{contact.username}}</strong>
                         </div>
                         <div ng-hide="$index == curContact" flex="70" style="padding-top:20px; margin-left:10px;font-size:12px;">
-                            <strong>{{contactDetails[$index].username}}</strong>
+                            <strong>{{contact.username}}</strong>
                         </div>
                     </div>
                 </div>
             </div>
             <div flex="75" style="border:1px rgb(169,169,169) solid;">
-                <div layout="column"  ng-show="$index == curContact" ng-repeat="message in messages">        
+                <div layout="column" >        
                    <div style="padding:10;overflow:scroll;max-height:440px;min-height:440px;">
-                        <div  ng-repeat="msg in message" layout="column" >
+                        <div  ng-repeat="msg in messages" layout="column" >
                             <p style="font-size:12px;color:rgb(55,120,106);"><strong>{{msg.senderUsername}}&nbsp;&nbsp;&nbsp;&nbsp;{{msg.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</strong></p>
                             <p style="WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all">
                             {{msg.content}}
@@ -31,10 +31,10 @@
                     </div>
                     <div layout="row" style="max-height:82px;min-height:82px;border-top:2px rgb(169,169,169) solid;background-color:white;">
                         <div flex="90" style="padding:20 20 0 20;">
-                            <textarea ng-model="contents[$index]" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()" aria-label="contents" style="width:540px;resize:none;border:0;outline:none;"></textarea>
+                            <textarea ng-model="contents" onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()" aria-label="contents" style="width:540px;resize:none;border:0;outline:none;"></textarea>
                         </div>
                         <div flex="10" >
-                            <div id="btnSearch" style="margin:18 2 5;border:1px rgb(169,169,169) solid;padding-top:15px;text-align:center;color:white;width:50px;height:50px;border-radius:50%; background-color:rgb(72,182,160);" ng-click="sendMessage($index)">
+                            <div id="btnSearch" style="margin:18 2 5;border:1px rgb(169,169,169) solid;padding-top:15px;text-align:center;color:white;width:50px;height:50px;border-radius:50%; background-color:rgb(72,182,160);" ng-click="sendMessage()">
                                 <strong>发送</strong>
                             </div>
                         </div>

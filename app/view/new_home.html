@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html>    
 <body>
-    
 <!--header-->
 <div class="wrapper" style="position:relative;padding-bottom:45.45%;min-height:700px;min-width:1000px;">
     <nav class="navbar navbar-default" style="background-color:transparent;border-color:transparent;z-index:2;">
         <div class="container-fluid headerdiv" ng-controller="HeaderController">
-                <!-- Brand and toggle get grouped for better mobile display -->
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            
             <div> 
-                <a class="navbar-brand" style="padding-left:13px;padding-top:8px;" href="#"><img class="logo" clickme ng-click="goHome()" style="height:42px;" src="/app/view/img/header/hereseas.svg"></img></a>
-
+                <a class="hdlogo" style="padding-left:13px;padding-top:8px;" href="#"><img class="logo" clickme ng-click="goHome()" style="height:42px;" src="/app/view/img/header/hereseas.svg"></img></a>
                 <ul class="hdul">
                     <li class="nav-li" ng-hide="logged()">
                         <a class="hd nav-li-a" ng-click="showLogin()" href="#" style="color:white;outline:none;">登录</a>
@@ -42,9 +36,7 @@
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
-
-    </nav>
-    
+    </nav>   
         <div class="" style="padding-top:0;padding-bottom:0;position:absolute;left:0;right:0;top:0;z-index:1;background-repeat:no-repeat;background-size:cover;height:100%;width:auto;overflow:hidden;">
         <div id="title-carousel" class="carousel slide" style="height:100%;" data-ride="carousel">
           <!-- Indicators -->
@@ -53,7 +45,6 @@
             <li data-target="#title-carousel" data-slide-to="1"></li>
             <li data-target="#title-carousel" data-slide-to="2"></li>
           </ol>
-
           <!-- Wrapper for slides -->
           <div class="carousel-inner" role="listbox" style="height:100%;width:100%;margin:auto">
             <div class="item active" style="height:100%;width:100%;margin:auto">
@@ -72,8 +63,7 @@
             interval: 5000,
             pause: false
         })    
-        </script>
-        
+        </script>       
     </div>
     <div class="search-area"> 
         <div class="main-title">
@@ -96,14 +86,12 @@
         </div> 
     </div>
 </div>
-
 <!--hot recomment-->
 <div class="jumbotron" style="background-image:url(/app/view/img/home/recommend.jpg);background-repeat:no-repeat;background-size:cover;height:10%px;;width:auto;overflow:hidden;min-width:1000px;">
     <div class="container text-center">
         <span class="" style="font-size:42px;color:#FFFFFF;" id="title-zh">热门推荐</span> 
     </div>
 </div>
-
 <div class="container" style="width:1000px;margin-bottom:30px;">
     <div layout="row" layout-align="center" style="margin-bottom:30px;">
         <div style="margin-right:25px;">
@@ -120,8 +108,7 @@
             <a href="#/school/{{schools[2]._id}}"  style="background-image:url(/app/view/img/school/gu_shouye.jpg);" class="school">
                 <span class="school_name" style="bottom: 45%;"><strong>Georgetown</strong></span>
             </a>
-        </div>
-        
+        </div>       
     </div>
 </div>
 <div footer></div>
@@ -131,7 +118,7 @@
 <!--
 <div class="tool_title"><b>分享到：&nbsp;</b></div>
     <div class='share'>
-        <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a><a title="分享到QQ好友" href="#" class="bds_sqq" data-cmd="sqq"></a></div>
+        <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a><a title="分享到QQ好友" href="#" class="bds_sqq" data-cmd="sqq"></a></div></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"内容","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","tqq","qzone","weixin","sqq"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","tqq","qzone","weixin","sqq"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 -->
 </body>

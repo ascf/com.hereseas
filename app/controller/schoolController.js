@@ -33,8 +33,12 @@ hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookie
     function init(id){
         requestService.GetSchool({id:id}, function(res){
             //console.log("school:",res.data);
-            $scope.image = res.data.image;
-            $scope.avatar = res.data.avatar;
+            if(res.result){
+                $scope.image = res.data.image;
+                $scope.avatar = res.data.avatar;
+            }else{
+                $state.go('home');
+            }
         });
 
         requestService.GetNewSchoolMates({id:id}, function(res){

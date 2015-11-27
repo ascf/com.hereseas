@@ -1,22 +1,3 @@
-<script type="text/javascript">
-            // When the document is ready
-            $(document).ready(function () {
-                
-                $('#example1').datepicker({
-                    format: "dd/mm/yyyy"
-                });  
-            
-            });
-    $(document).ready(function () {
-                
-                $('#example2').datepicker({
-                    format: "dd/mm/yyyy"
-                });  
-            
-            });
-</script>
-
-
 <md-dialog style="border-radius: 0 0 38px 0;overflow-y: scroll;">
 
 <div layout="row" class="room_post" ng-controller="RoomPostController">
@@ -199,36 +180,10 @@
                         </div>
                     </div>
                     <div flex="80" layout="row" layout-align="start end">
-                        <div layout="row" >
-                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;"ng-model="beginDate.year">
-                            <option value="2015">2015</option>
-                            <option value="2016">2016</option>
-                            <option value="2017">2017</option>
-                            <option value="2018">2018</option>
-                            </select>年
-                        </div> 
-                        <div layout="row" >
-                            <select class="rp_select"  style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;"ng-model="beginDate.month">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            </select>月
-                        </div>
-                        <div layout="row" ng-show="showBeginDay">
-                            <select class="rp_select" value="1" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="beginDate.day">
-                            <option ng-repeat="day in beginDays" ng-selected="day == beginDate.day" value="{{day}}">{{day}}</option>   
-                            </select>日
-                        </div>
+                        <input type="text" ui-date ng-model="steps[0].beginDate">
                     </div>
+                    
+                    
                 </div>
                 <div layout="row" class="room_post_div_content">
                     <div flex="20" layout-align="start end" layout="row">
@@ -236,37 +191,11 @@
                         <p class="room_post_font_content">搬出时间</p>
                         </div>
                     </div>
+                    
                     <div flex="80" layout="row" layout-align="start end">
-                        <div layout="row" >
-                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="endDate.year">
-                            <option value="2015">2015</option>
-                            <option value="2016">2016</option>
-                            <option value="2017">2017</option>
-                            <option value="2018">2018</option>
-                            </select>年
-                        </div> 
-                        <div layout="row" >
-                            <select class="rp_select"  style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="endDate.month">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            </select>月
-                        </div>
-                        <div layout="row" ng-show="showEndDay">
-                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="endDate.day">
-                                <option ng-repeat="day in endDays" ng-selected="day == endDate.day" value="{{day}}">{{day}}</option>   
-                            </select>日
-                        </div>
+                        <input type="text" ui-date ng-model="steps[0].endDate">
                     </div>
+                    
                 </div>
             </div>
             <!--End of room infomation-->
