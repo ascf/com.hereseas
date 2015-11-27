@@ -352,7 +352,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                     
                     function updateMsgs(){
                         angular.forEach($scope.messages, function(msg){
-                            if(msg.read == false && msg.sender !== $cookies['userId'])
+                            if((msg.read == false && msg.sender !== $cookies['userId']) || (msg.read == false && msg.sender==msg.receiver))
                             {
                                 userService.updateMessages({
                                     id: msg._id

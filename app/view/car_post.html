@@ -183,45 +183,12 @@
                    <div flex="15">
                         <p class="room_post_font_content">购买日期</p>
                     </div>
+                    
                     <div flex="85" layout="row" layout-align="start end">
-                        <div layout="row">
-                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="boughtDate.year">
-                            <option value="2005">2005</option>
-                            <option value="2006">2006</option>
-                            <option value="2007">2007</option>
-                            <option value="2008">2008</option>
-                            <option value="2009">2009</option>
-                            <option value="2010">2010</option>
-                            <option value="2011">2011</option>
-                            <option value="2012">2012</option>
-                            <option value="2013">2013</option>
-                            <option value="2014">2014</option>
-                            <option value="2015">2015</option>
-                            <option value="2016">2016</option>
-                            </select>年
-                        </div> 
-                        <div layout="row">
-                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;margin-left:10px;"  ng-model="boughtDate.month">
-                            <option value="0">1</option>
-                            <option value="1">2</option>
-                            <option value="2">3</option>
-                            <option value="3">4</option>
-                            <option value="4">5</option>
-                            <option value="5">6</option>
-                            <option value="6">7</option>
-                            <option value="7">8</option>
-                            <option value="8">9</option>
-                            <option value="9">10</option>
-                            <option value="10">11</option>
-                            <option value="11">12</option>
-                            </select>月
-                        </div>
-                        <div layout="row" ng-show="showDay">
-                            <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;margin-left:10px;"  ng-model="boughtDate.day">
-                            <option ng-repeat="day in boughtDays" ng-selected="day == boughtDate.day" value="{{day}}">{{day}}</option>   
-                            </select>日
-                        </div>
+                        <input type="text" ui-date ng-model="steps[0].boughtDate">
                     </div>
+                    
+                    
                 </div>
             </div>
             <!--End of room infomation-->

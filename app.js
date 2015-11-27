@@ -30,6 +30,9 @@ var crypto = require('crypto');
 
 var multer = require('multer');
 
+var compress = require('compression');
+
+app.use(compress());
 
 require('./common/dateformat.js');
 

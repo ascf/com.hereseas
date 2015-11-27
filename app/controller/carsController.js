@@ -476,38 +476,7 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 }
             };
     
-            $scope.boughtDate ={};
-            $scope.boughtDays = [];
-
-            $scope.getDays = function(year, month){
-                var num =  new Date(year, parseInt(month)+1, 0).getDate();
-                
-                $scope.boughtDays = [];
-                for(var i = 1; i<=num; i++)
-                    $scope.boughtDays.push(i);
-                
-            };
-
-            $scope.$watch(function(){return {year:$scope.boughtDate.year, month:$scope.boughtDate.month};},function(newValue){
-                if(newValue.year !== undefined && newValue.month !== undefined){
-                    $scope.showDay = true;
-                    $scope.getDays(newValue.year,newValue.month);
-
-                    if($scope.boughtDate.day !== undefined && $scope.boughtDays.length < parseInt($scope.boughtDate.day)) 
-                        $scope.boughtDate.day = $scope.boughtDays.length+'';
-
-                    if($scope.boughtDate.day !== undefined)
-                        $scope.steps[0].boughtDate = new Date(newValue.year, newValue.month, $scope.boughtDate.day);
-                }
-                else 
-                     $scope.showDay = false;
-            },true);
-
-            $scope.$watch(function(){return $scope.boughtDate.day;},function(newValue){
-                if(newValue !== undefined){
-                    $scope.steps[0].boughtDate = new Date($scope.boughtDate.year, $scope.boughtDate.month, parseInt(newValue));
-                }
-            },true);
+            
     
             //the main model 
 	       $scope.steps = [
@@ -596,12 +565,8 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 if(data.price !== undefined)
                     $scope.steps[0].price = data.price;
                 if(data.boughtDate !== undefined){
-                
-                    var date = new Date(data.boughtDate);
-                    $scope.boughtDate.year = date.getFullYear()+'';
-                    $scope.boughtDate.month = date.getMonth()+'';
-                    $scope.boughtDate.day = date.getDate()+'';
-                    //console.log($scope.boughtDate);
+                    $scope.steps[0].boughtDate = data.boughtDate;
+                    
                 }
                 
                 if(data.color !== undefined)

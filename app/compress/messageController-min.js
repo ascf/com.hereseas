@@ -1,0 +1,1 @@
+hereseasApp.controller("MessageCtrl",function($scope,userService,$mdDialog){$scope.userData={};$scope.sendmessage=function(){userService.sendmessage({id:$mdDialog.recvId,content:$scope.userData.content}).then(function(res){if(res.result){alert("Message has been sent")}else{alert("err")}})}});

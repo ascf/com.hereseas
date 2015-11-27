@@ -10,9 +10,6 @@ var errResponseHandler = function (res) {
 };
 
 hereseasApp.factory('alertService', function ($http,$mdDialog) {
-
-
-
     return {
         alert: function (msg, $event) {
             //console.log("$event",$event);
@@ -32,6 +29,19 @@ hereseasApp.factory('alertService', function ($http,$mdDialog) {
         }
     };
 });
+
+
+hereseasApp.factory('dateService', function () {
+    return {
+        getDayNunByYearMonth: function (year, month) {
+            return new Date(year, parseInt(month)+1, 0).getDate();
+        },
+        compareDate:function(){
+            
+        }
+    };
+});
+
 
 
 hereseasApp.factory('requestService', ['$resource','userService', function($resource,userService){

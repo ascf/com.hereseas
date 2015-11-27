@@ -2,7 +2,7 @@ var hereseasApp = angular.module('hereseasApp', [
     'ngAnimate', 'ngCookies', 'ngSanitize','ui.select2',
     'ui.router', 'ngMaterial', 'ngMessages',
     'pascalprecht.translate', 'LocalStorageModule', 
-    'hereseasDirectives','uiGmapgoogle-maps','ngResource', 'ngFileUpload','ui.bootstrap','jkuri.gallery','textAngular'
+    'hereseasDirectives','uiGmapgoogle-maps','ngResource', 'ngFileUpload','ui.bootstrap','jkuri.gallery','textAngular','ui.date'
 ]);
 
 hereseasApp.constant('APP', {

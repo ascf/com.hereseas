@@ -74,7 +74,12 @@
                             <p class="room_post_font_content">有效期至</p>
                         </div>
                     </div>
+                    
                     <div flex="85" layout="row" layout-align="start end">
+                        <input type="text" ui-date ng-model="shared.expireAt">
+                    </div>
+                    
+                    <!--div flex="85" layout="row" layout-align="start end">
                         <div>
                             <select class="rp_select" style="border-radius:10px;border:1px solid #D5D4D2;width:90px;margin-right:10px;" ng-model="expireDate.year">
                             <option value="2015">2015</option>
@@ -104,7 +109,7 @@
                                 <option ng-repeat="day in expireDays" ng-selected="day == expireDate.day" value="{{day}}">{{day}}</option>
                             </select>日
                         </div>
-                    </div>
+                    </div-->
                 </div>
                 <div ng-repeat="item in items">
                 <div layout="row" class="room_post_div_content" layout-align="start end" style="margin-top:10px">
