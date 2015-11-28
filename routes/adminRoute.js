@@ -181,46 +181,77 @@ exports.showCollections = function(req, res, next) {
 };
 
 exports.adminSendEmail = function(req, res, next) {
-    console.log("test email");
+    var ep = new EventProxy();
     var ses = new AWS.SES({
         apiVersion: '2010-12-01',
         region: 'us-east-1'
     });
     var emailHereseas = "no-reply@hereseas.com";
-    var params = {
-      Destination: { /* required */
-        BccAddresses: [
-          'sunbojun@hotmail.com'
-        ],
-        CcAddresses: [
-          'sunbojun@hotmail.com'
-        ],
-        ToAddresses: [
-          'sunbojun@hotmail.com'
-        ]
-      },
-      Message: { /* required */
-        Body: { /* required */
-          Html: {
-            Data: '<html><head></head><body><div><p>Hello world!</p></div></body></html>'
-          }
-        },
-        Subject: { /* required */
-          Data: 'Hello'
+
+    ep.all('findUser', function(users) {
+        var emailList = "";
+
+        for (var i = 0; i < users.length; i++) {
+            emailList += "'" + users[i].email + "'" + ",";
         }
-      },
-      Source: "'Hereseas account activation' <" + emailHereseas + ">'", /* required */
-      ReplyToAddresses: [
-        'sunbojun@hotmail.com'
-      ]
-    };
-    ses.sendEmail(params, function(err, data) {
-      if (err) console.log(err, err.stack); // an error occurred
-      else     console.log(data);           // successful response
-    });
+        emailList = emailList.substring(0, emailList.length - 1);
+
+        //console.log(emailList);
+
+        var params = {
+          Destination: { /* required */
+            /*
+            BccAddresses: [
+              '@'
+            ],
+            CcAddresses: [
+              '@'
+            ],*/
+            ToAddresses: [
+              //'sunbojun@hotmail.com'
+              emailList
+            ]
+          },
+          Message: { /* required */
+            Body: { /* required */
+              Html: {
+                Data: '<html><head></head><body><div><p>Hello world!</p></div></body></html>'
+              }
+            },
+            Subject: { /* required */
+              Data: 'Hereseas Notification'
+            }
+          },
+          Source: "'Hereseas Community' <" + emailHereseas + ">'", /* required */
+          ReplyToAddresses: [
+            'hereseas@gmail.com'
+          ]
+        };
     
-    res.json({
-        result: true
+        //console.log(params);
+        ses.sendEmail(params, function(err, data) {
+            if (err) {
+                res.json({
+                    result: false
+                 });
+                //console.log(err, err.stack); // an error occurred
+            }
+            else {
+                res.json({
+                    result: true
+                 });
+                //console.log(data);           // successful response
+            }
+        });
     });
 
+
+    User.find({}, 'email', function(err, users) {
+        //console.log(users);
+        if (err) {
+            res.json(Results.ERR_DB_ERR);
+        } else {
+            ep.emit('findUser', users);
+        }
+    });
 }
