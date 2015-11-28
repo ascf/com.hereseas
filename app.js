@@ -60,7 +60,8 @@ app.use(session({
     }),
     // cookie: { maxAge: 60000,secure: true },
     cookie: {
-        maxAge: 43200000
+        maxAge: 43200000,
+        domain: '.hereseas.com'
     },
     resave: true,
     saveUninitialized: true,
