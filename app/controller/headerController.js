@@ -1,21 +1,5 @@
-hereseasApp.directive('schrollBottom', function ($timeout) {
-  return {
-    scope: {
-      schrollBottom: "="
-    },
-    link: function (scope, element) {
-      scope.$watchCollection('schrollBottom', function (newValue) {
-        if (newValue)
-        {
-            $timeout(function(){
-                $(element).scrollTop($(element)[0].scrollHeight);
-            },0);
-        }
-      });
-    }
-  }
-})
-hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootScope, $location, userService, $mdDialog, alertService, $http, requestService, $state,$cookies,$window){
+
+hereseasApp.controller('HeaderController', ['$scope','userService','$mdDialog','alertService','requestService','$state','$cookies',function($scope, userService, $mdDialog, alertService, requestService, $state,$cookies){
     //login,signup,user ng-show
     $scope.logged = logged;
     $scope.logOut = logOut;
@@ -265,7 +249,7 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
         if(logged())
         {
             $mdDialog.show({
-                controller: function($scope ,userService, requestService,$cookies,$mdDialog) { 
+                controller:['$scope','userService','requestService','$cookies','$mdDialog', function($scope ,userService, requestService,$cookies,$mdDialog) { 
     
                     $scope.hide = function(){
                         $mdDialog.hide();
@@ -352,21 +336,21 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                     
                     function updateMsgs(){
                         angular.forEach($scope.messages, function(msg){
-                            if((msg.read == false && msg.sender !== $cookies['userId']) || (msg.read == false && msg.sender==msg.receiver))
+                            if((msg.read == false && msg.sender !== $cookies.userId) || (msg.read == false && msg.sender==msg.receiver))
                             {
                                 userService.updateMessages({
                                     id: msg._id
                                 }).then(function (res) {
                                     if (res.result) {
                                         msg.read = true;
-                                        $cookies['newmsg'] = parseInt($cookies['newmsg']) - 1;
+                                        $cookies.newmsg = parseInt($cookies.newmsg) - 1;
                                     } 
                                 });
                             }
                         });
                     };
-                },
-                templateUrl: '/app/view/partials/_chat_window_temp.html',
+                }],
+                templateUrl:'/app/view/partials/_chat_window_temp.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true,
@@ -389,8 +373,8 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
                             alertService.alert('Session time out, please login again!').then(function(){
                                 requestService.LogOut(function() {
                                     $cookies.login = false;
-                                    delete $cookies['userId'];
-                                    delete $cookies['schoolId'];
+                                    delete $cookies.userId;
+                                    delete $cookies.schoolId;
                                     $scope.$emit('logout','1');
                                 });
                             });          
@@ -403,12 +387,12 @@ hereseasApp.controller('HeaderController', function($scope, $stateParams, $rootS
         
     }
     sessionCtrl();
-});
+}]);
 
-hereseasApp.controller('TopBarController', function($state, $scope, $stateParams,requestService){
+hereseasApp.controller('TopBarController', ['$scope','$stateParams','requestService',function($scope, $stateParams,requestService){
     requestService.GetSchool({id:$stateParams.schoolId}, function(res){
         if(res.result){
             $scope.avatar = res.data.avatar; 
         }
     });
-});
+}]);
