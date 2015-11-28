@@ -192,16 +192,8 @@ exports.adminSendEmail = function(req, res, next) {
         var emailList = [];
 
         for (var i = 0; i < users.length; i++) {
-            //emailList += "'" + users[i].email + "'" + ",";
-            //var tmp = "'".concat(users[i].email).concat("'");
-            //console.log(tmp);
             emailList.push(users[i].email);
         }
-        //emailList = emailList.substring(0, emailList.length - 1);
-
-        console.log(emailList);
-        console.log("ssss");
-        console.log(emailList[0]);
 
         var params = {
           Destination: { /* required */
@@ -212,10 +204,7 @@ exports.adminSendEmail = function(req, res, next) {
             CcAddresses: [
               '@'
             ],*/
-            ToAddresses: 
-              //'sunbojun@hotmail.com'
-              emailList
-            
+            ToAddresses: emailList
           },
           Message: { /* required */
             Body: { /* required */
@@ -233,7 +222,7 @@ exports.adminSendEmail = function(req, res, next) {
           ]
         };
     
-        console.log(params);
+        //console.log(params);
         ses.sendEmail(params, function(err, data) {
             if (err) {
                 console.log(err, err.stack); // an error occurred
@@ -251,12 +240,26 @@ exports.adminSendEmail = function(req, res, next) {
     });
 
 
-    User.find({}, 'email', function(err, users) {
-        //console.log(users);
-        if (err) {
-            res.json(Results.ERR_DB_ERR);
+    ep.all('checkAdmin', function() {
+        //console.log("ok");
+        // execute admin function
+        User.find({}, 'email', function(err, users) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+            } else {
+                ep.emit('findUser', users);
+            }
+        });
+
+    });
+
+
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+            //console.log("success");
+            ep.emit('checkAdmin');
         } else {
-            ep.emit('findUser', users);
+            res.json(Results.ERR_PERMISSION_ERR);
         }
     });
 }
