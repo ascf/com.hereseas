@@ -193,9 +193,9 @@ exports.adminSendEmail = function(req, res, next) {
 
         for (var i = 0; i < users.length; i++) {
             //emailList += "'" + users[i].email + "'" + ",";
-            var tmp = "'".concat(users[i].email).concat("'");
-            console.log(tmp);
-            emailList.push("'".concat(users[i].email).concat("'"));
+            //var tmp = "'".concat(users[i].email).concat("'");
+            //console.log(tmp);
+            emailList.push(users[i].email);
         }
         //emailList = emailList.substring(0, emailList.length - 1);
 
@@ -212,10 +212,10 @@ exports.adminSendEmail = function(req, res, next) {
             CcAddresses: [
               '@'
             ],*/
-            ToAddresses: [
-              'sunbojun@hotmail.com'
-              //emailList
-            ]
+            ToAddresses: 
+              //'sunbojun@hotmail.com'
+              emailList
+            
           },
           Message: { /* required */
             Body: { /* required */
@@ -233,7 +233,7 @@ exports.adminSendEmail = function(req, res, next) {
           ]
         };
     
-        //console.log(params);
+        console.log(params);
         ses.sendEmail(params, function(err, data) {
             if (err) {
                 console.log(err, err.stack); // an error occurred
