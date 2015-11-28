@@ -16,6 +16,7 @@ var adminRoute = require('./adminRoute');
 var User = require('../models').User;
 var mongoose = require('mongoose');
 var mongo_db = 'mongodb://localhost/hereseas_dev';
+var AWS = require('aws-sdk');
 
 exports.createAdmin = function(req, res, next) {
     var admin = new Admin();
@@ -178,3 +179,48 @@ exports.showCollections = function(req, res, next) {
         });
     });
 };
+
+exports.adminSendEmail = function(req, res, next) {
+    console.log("test email");
+    var ses = new AWS.SES({
+        apiVersion: '2010-12-01',
+        region: 'us-east-1'
+    });
+    var emailHereseas = "no-reply@hereseas.com";
+    var params = {
+      Destination: { /* required */
+        BccAddresses: [
+          'sunbojun@hotmail.com'
+        ],
+        CcAddresses: [
+          'sunbojun@hotmail.com'
+        ],
+        ToAddresses: [
+          'sunbojun@hotmail.com'
+        ]
+      },
+      Message: { /* required */
+        Body: { /* required */
+          Html: {
+            Data: '<html><head></head><body><div><p>Hello world!</p></div></body></html>'
+          }
+        },
+        Subject: { /* required */
+          Data: 'Hello'
+        }
+      },
+      Source: "'Hereseas account activation' <" + emailHereseas + ">'", /* required */
+      ReplyToAddresses: [
+        'sunbojun@hotmail.com'
+      ]
+    };
+    ses.sendEmail(params, function(err, data) {
+      if (err) console.log(err, err.stack); // an error occurred
+      else     console.log(data);           // successful response
+    });
+    
+    res.json({
+        result: true
+    });
+
+}

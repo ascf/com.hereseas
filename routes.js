@@ -160,13 +160,11 @@ module.exports = function(app) {
     app.get('/admin/apartment/:id', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentAllInfo);
     app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
     app.get('/admin/cars', sign.ensureAuthenticated, carRoute.adminGetCars);
-
     app.put('/admin/thread/:id/status', sign.ensureAuthenticated, forumRoute.adminEditThreadStatus);
     app.put('/admin/comment/:id/status', sign.ensureAuthenticated, forumRoute.adminEditCommentStatus);
-
-
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
 
+    app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);
 
 
     app.get('/', function(req, res) {
