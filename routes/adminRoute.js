@@ -228,13 +228,13 @@ exports.adminSendEmail = function(req, res, next) {
           ]
         };
     
-        //console.log(params);
+        console.log(params);
         ses.sendEmail(params, function(err, data) {
             if (err) {
+                console.log(err, err.stack); // an error occurred
                 res.json({
                     result: false
                  });
-                //console.log(err, err.stack); // an error occurred
             }
             else {
                 res.json({
