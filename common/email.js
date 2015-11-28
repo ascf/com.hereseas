@@ -12,7 +12,7 @@ exports.sendEmail = function(email, url){
 
     var ses_mail = "From: 'Hereseas.com' <" + emailHereseas + ">\n";
     ses_mail = ses_mail + "To: " + emailTO + "\n";
-    ses_mail = ses_mail + "Subject: Hereseas account activation\n";
+    ses_mail = ses_mail + "Subject: Hereseas Password Reset\n";
     ses_mail = ses_mail + "MIME-Version: 1.0\n";
     ses_mail = ses_mail + "Content-Type: multipart/mixed; boundary=\"NextPart\"\n\n";
     ses_mail = ses_mail + "--NextPart\n";
