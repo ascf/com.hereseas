@@ -189,14 +189,16 @@ exports.adminSendEmail = function(req, res, next) {
     var emailHereseas = "no-reply@hereseas.com";
 
     ep.all('findUser', function(users) {
-        var emailList = "";
+        var emailList = [];
 
         for (var i = 0; i < users.length; i++) {
-            emailList += "'" + users[i].email + "'" + ",";
+            //emailList += "'" + users[i].email + "'" + ",";
+            var tmp = "'".concat(users[i].email).concat("'");
+            emailList.push(tmp);
         }
-        emailList = emailList.substring(0, emailList.length - 1);
+        //emailList = emailList.substring(0, emailList.length - 1);
 
-        //console.log(emailList);
+        console.log(emailList);
 
         var params = {
           Destination: { /* required */
@@ -207,10 +209,10 @@ exports.adminSendEmail = function(req, res, next) {
             CcAddresses: [
               '@'
             ],*/
-            ToAddresses: [
+            ToAddresses: 
               //'sunbojun@hotmail.com'
               emailList
-            ]
+            
           },
           Message: { /* required */
             Body: { /* required */
