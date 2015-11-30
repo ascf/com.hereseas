@@ -9,6 +9,9 @@ var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
 var tools = require('./common/tools');
 
+
+var imageUploadTestRoute = require('./routes/imageUploadTestRoute');
+
 var User = require('./models').User;
 
 var multer = require('multer');
@@ -163,7 +166,7 @@ module.exports = function(app) {
     app.put('/admin/thread/:id/status', sign.ensureAuthenticated, forumRoute.adminEditThreadStatus);
     app.put('/admin/comment/:id/status', sign.ensureAuthenticated, forumRoute.adminEditCommentStatus);
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
-    app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadRoute.image_upload);
+    app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadTestRoute.image_upload);
 
 
     app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);
