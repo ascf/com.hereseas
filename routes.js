@@ -166,7 +166,7 @@ module.exports = function(app) {
     app.put('/admin/thread/:id/status', sign.ensureAuthenticated, forumRoute.adminEditThreadStatus);
     app.put('/admin/comment/:id/status', sign.ensureAuthenticated, forumRoute.adminEditCommentStatus);
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
-    app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadTestRoute.image_upload);
+    app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadTestRoute.image_upload_test);
 
 
     app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);
