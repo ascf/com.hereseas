@@ -72,6 +72,7 @@ module.exports = function(app) {
     app.get('/contact', sign.ensureAuthenticated, userRoute.getUserContact);
     app.get('/message', sign.ensureAuthenticated, userRoute.getUserMessage);
     app.put('/readmessage', sign.ensureAuthenticated, userRoute.readMessage);
+    app.get('/unreadmessage', sign.ensureAuthenticated, userRoute.getUserUnreadMessage)
 
 
     /*  favorite */
