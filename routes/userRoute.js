@@ -964,7 +964,7 @@ function sendEmail(email, url) {
     ses_mail = ses_mail + "Content-Type: multipart/mixed; boundary=\"NextPart\"\n\n";
     ses_mail = ses_mail + "--NextPart\n";
     ses_mail = ses_mail + "Content-Type: text/html; charset=us-ascii\n\n";
-    ses_mail = ses_mail + "Thank you for joining Hereseas community ! Please click the link below to verify your EDU email address: " + url + '\n\n';
+    ses_mail = ses_mail + "Thank you for joining Hereseas community ! Please click the link below to verify your email address: " + url + '\n\n';
     // ses_mail = url + "\n\n";
 
 
