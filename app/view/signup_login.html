@@ -8,10 +8,10 @@
             <i class="material-icons">error</i>
             请先进注册邮箱激活账号！
         </div>
-        <div class="login_err" layout="row" ng-show="(state=='signup') && nonedu_err">
+        <!--div class="login_err" layout="row" ng-show="(state=='signup') && nonedu_err">
             <i class="material-icons">error</i>
             需要使用edu邮箱进行注册！
-        </div>
+        </div-->
         <div class="login_err" layout="row" ng-show="(state=='signup') && exist_err">
             <i class="material-icons">error</i>
             该邮箱已被注册！
@@ -27,7 +27,7 @@
                     <input style="border-radius:3px;" class="form-control" type="email" placeholder="Email" ng-model="user.email" id="login-username" name="email" ng-pattern="/^.+@.+\..+$/">
                 </div>
                 <div ng-show="state=='signup'" class="sign_form_row input-group input-group-lg" >
-                    <input style="border-radius:3px;" class="form-control withBorderRdius" type="email" placeholder="Email (仅限edu邮箱)" ng-model="signUpData.email" id="login-username" name="login-username">
+                    <input style="border-radius:3px;" class="form-control withBorderRdius" type="email" placeholder="Email" ng-model="signUpData.email" id="login-username" name="login-username">
                 </div>
                 <div ng-show="(state=='reset')||(state == 'resetFalse')" class="sign_form_row input-group input-group-lg" >
                     <input style="border-radius:3px;" class="form-control withBorderRdius" type="email" placeholder="Email" ng-model="userData.email" name="username">
