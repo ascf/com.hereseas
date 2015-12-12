@@ -27,7 +27,7 @@ var AWS = require('aws-sdk');
 
 var APIHOST = "http://www.hereseas.com/#";
 //var APIHOST = "http://52.25.82.212:8080/#";
-
+var emailService = require('../common/email');
 
 
 exports.test = function(req, res, next) {
@@ -1363,6 +1363,30 @@ exports.getUserAllPost = function(req, res, next) {
                 ep.emit('findApartments')
             }
         });
+}
+
+exports.sendMilkEmail = function(req, res, next) {
+    var userEmail = req.body.email;
+    User.findOne({email: req.body.email}, function(err, user) {
+        if (user != null) {
+            var tmp = emailService.sendMilkEmail(userEmail);
+            if (tmp) {
+                res.json({
+                    result: true
+                });
+            } else {
+                res.json({
+                    result: false,
+                    err: 'ERR_NOT_ALLOWED'
+                });
+            }
+        } else {
+            res.json({
+                result: false,
+                err: 'ERR_NOTFOUND_ERR'
+            });
+        }
+    });
 }
 
 //admin functions
