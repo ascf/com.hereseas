@@ -1369,17 +1369,10 @@ exports.sendMilkEmail = function(req, res, next) {
     var userEmail = req.body.email;
     User.findOne({email: req.body.email}, function(err, user) {
         if (user != null) {
-            var tmp = emailService.sendMilkEmail(userEmail);
-            if (tmp) {
-                res.json({
-                    result: true
-                });
-            } else {
-                res.json({
-                    result: false,
-                    err: 'ERR_NOT_ALLOWED'
-                });
-            }
+            emailService.sendMilkEmail(userEmail);
+            res.json({
+                result: true
+            });
         } else {
             res.json({
                 result: false,
