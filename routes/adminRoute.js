@@ -210,8 +210,7 @@ exports.adminSendEmail = function(req, res, next) {
             Body: { /* required */
               Html: {
                 //Data: '<html><head></head><body><div><p>Hello world!</p></div></body></html>'
-                Data: '<html><head></head><title>hereseas.com</title>
-                <body><div style="text-align:center"><img src="https://s3.amazonaws.com/hereseas-public-images/email/milktea.jpg"/></div></body></html>'
+                Data: '<html><head></head><title>hereseas.com</title><body><div style="text-align:center"><img src="https://s3.amazonaws.com/hereseas-public-images/email/milktea.jpg"/></div></body></html>'
               }
             },
             Subject: { /* required */
