@@ -1568,6 +1568,7 @@ function eduChecker(email) {
 
     console.log(str);
 
-    return str.indexOf(".edu") > -1
+    //return str.indexOf(".edu") > -1
+    return true;
 
 }
