@@ -935,7 +935,8 @@ exports.activeUserVerifyLink = function(req, res, next) {
                 } else
                     res.json({
                         result: true,
-                        id: user.id
+                        id: user.id,
+                        email: user.email
                     });
             });
         }
