@@ -60,7 +60,8 @@ app.use(session({
     }),
     // cookie: { maxAge: 60000,secure: true },
     cookie: {
-        maxAge: 43200000
+        maxAge: 43200000,
+        domain: '.hereseas.com'
     },
     resave: true,
     saveUninitialized: true,
@@ -250,6 +251,18 @@ function eduChecker(email) {
     var str = email.substring(email.indexOf('@') + 1);
     return str.indexOf(".edu") > -1
 }
+
+
+process.on('uncaughtException', function(err) {
+    console.log(err);
+
+    var email = "hhz1992@gmail.com";
+
+    emailTool.sendCrashEmail(email, err);
+    email = "sunbojun@hotmail.com";
+    emailTool.sendCrashEmail(email, err);
+
+});
 
 
 module.exports = app;

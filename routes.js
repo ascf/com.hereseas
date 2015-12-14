@@ -77,6 +77,7 @@ module.exports = function(app) {
     app.get('/message', sign.ensureAuthenticated, userRoute.getUserMessage);
     app.get('/unreadmessage', sign.ensureAuthenticated, userRoute.getUserUnreadMessage)
     app.put('/readmessage', sign.ensureAuthenticated, userRoute.readMessage);
+    app.get('/unreadmessage', sign.ensureAuthenticated, userRoute.getUserUnreadMessage)
 
 
     /*  favorite */
