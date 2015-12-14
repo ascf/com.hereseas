@@ -1,1 +1,1 @@
-hereseasApp.controller("HomeController",function($scope,userService,alertService,$state,$mdDialog,requestService){requestService.GetThreeSchools(function(res){$scope.schools=res.data})});
+hereseasApp.controller("HomeController",["$scope","requestService",function(e,o){o.GetThreeSchools(function(o){e.schools=o.data})}]);

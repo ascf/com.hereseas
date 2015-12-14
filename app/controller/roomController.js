@@ -1,4 +1,4 @@
-hereseasApp.controller('AptsController',function($stateParams,$scope,requestService,roomService, userService, $cookies){
+hereseasApp.controller('AptsController',['$stateParams','$scope','requestService',function($stateParams,$scope,requestService){
     
     // store current page number
     var cur_page = 1;
@@ -160,14 +160,11 @@ hereseasApp.controller('AptsController',function($stateParams,$scope,requestServ
     $scope.changeSearch = function() {
         updatePage();
     }
-});
+}]);
 
-hereseasApp.controller('RoomPostController', function ($scope,$location, languageService, userService, alertService, $state, $mdDialog, roomService, Upload, fileReader, requestService, $filter,$cookies,dateService) {
+hereseasApp.controller('RoomPostController',['$scope','$location','languageService','userService','alertService','$mdDialog','Upload','fileReader','requestService','$cookies', function ($scope,$location, languageService, userService, alertService, $mdDialog, Upload, fileReader, requestService,$cookies) {
     
     //functions exposed to page
-    //$scope.yearShow = yearShow;
-    //$scope.monthShow = monthShow;
-    //$scope.dayShow = dayShow;
     $scope.lastPage = lastPage;
     $scope.nextPage = nextPage;
     $scope.setActivePage = setActivePage;
@@ -198,11 +195,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     $scope.canPost = false; //检测所有表格是否填完
     $scope.arrUploads = [];
     
-    
-    //$scope.beginDate ={};
-    //$scope.endDate ={};
-    //$scope.beginDays = [];
-    //$scope.endDays = [];
     
     //表格是否填完变量
     $scope.tableFilled = [
@@ -317,11 +309,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     
     //initial
     setExistedFields(userService.getDraft());
-    
-    
-    
-    
-    
     
     //Room Post页切换功能
     function lastPage() {
@@ -569,7 +556,6 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
     });
     
     $scope.$watch(function(){return $scope.steps[0];}, function(newValue){
-        console.log(newValue);
         if(newValue.type == undefined || newValue.beginDate == undefined || newValue.endDate == undefined)
             $scope.tableFilled[0].filled = false; 
         else{
@@ -761,12 +747,12 @@ hereseasApp.controller('RoomPostController', function ($scope,$location, languag
             });
         }
     });
-});
+}]);
 
 
 
 
-hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,userService,$mdDialog,alertService,$cookies) {         
+hereseasApp.controller('RoomDisplayController',['$state', '$scope', 'roomService', '$stateParams', 'languageService', 'requestService','userService','$mdDialog','alertService','$cookies', function ($state, $scope, roomService, $stateParams, languageService, requestService,userService,$mdDialog,alertService,$cookies) {         
     requestService.GetApt({id: $stateParams.aptId}, function(res){
         if(res.result){
             $scope.aptId = $stateParams.aptId;
@@ -1013,4 +999,4 @@ hereseasApp.controller('RoomDisplayController', function ($state, $scope, roomSe
     $scope.showOtherUserInfo = function(othersId){
         $state.go('othersProfile',{schoolId:$scope.data.schoolId,othersId:othersId}); 
     }
-});
+}]);

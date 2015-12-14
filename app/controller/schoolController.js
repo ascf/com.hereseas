@@ -1,8 +1,5 @@
-hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookies,roomService, requestService, $window, $state) {
+hereseasApp.controller('SchoolController',['$stateParams','$scope','requestService','$state', function ($stateParams,$scope, requestService, $state) {
     $scope.schoolId = $stateParams.schoolId;
-    
-//    $scope.bgImg = "/app/view/img/school/bg1.svg";
-//    $scope.schlImg = "/app/view/img/school/gwu_title.JPG";
 
     $scope.new_users = [
             {img :"/app/view/img/user/img1.JPG"},
@@ -137,10 +134,10 @@ hereseasApp.controller('SchoolController', function ($stateParams,$scope,$cookie
     }
     
     
-});
+}]);
 
 
-hereseasApp.controller('SchoolSearchCtrl', function($scope, $state,requestService) {
+hereseasApp.controller('SchoolSearchCtrl', ['$scope','$state','requestService',function($scope, $state,requestService) {
 /*
     $scope.selected = undefined;
     
@@ -251,9 +248,7 @@ hereseasApp.controller('SchoolSearchCtrl', function($scope, $state,requestServic
         });
 
     });
-
-
-});
+}]);
 
 /*
 //This code is to show typeahead when focus on input.
@@ -291,17 +286,14 @@ hereseasApp.directive('typeaheadFocus', function () {
   };
 });
 */
-hereseasApp.controller('SchoolMatesCtrl', function($scope, $stateParams, $state, requestService) {
+hereseasApp.controller('SchoolMatesCtrl',['$scope','$stateParams','$state','requestService', function($scope, $stateParams, $state, requestService) {
 
     requestService.GetSchoolMates({id: $stateParams.schoolId}, function(res){
-        //console.log(res.data);
-
         $scope.schoolMates = res.data;
     });
     
     $scope.seeOthersProfile = function(index){
-        //console.log(index);
         $state.go('othersProfile',{othersId:$scope.schoolMates[index]._id, schoolId:$stateParams.schoolId}); 
     }
 
-});
+}]);

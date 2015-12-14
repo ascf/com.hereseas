@@ -1,5 +1,4 @@
-hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestService,userService){
-    
+hereseasApp.controller('AllCarsController',['$scope','$stateParams','requestService','userService',function($scope,$stateParams,requestService,userService){
     var cur_page = 1;
     var max_page = 1;
 
@@ -150,13 +149,12 @@ hereseasApp.controller('AllCarsController',function($scope,$stateParams,requestS
         updatePage();
     }
 
-});
+}]);
 
-hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateParams, languageService, requestService,$mdDialog,userService,alertService,$cookies) {         
+hereseasApp.controller('CarDisplayController', ['$state','$scope','$stateParams','languageService','requestService','$mdDialog','userService','alertService','$cookies',function ($state, $scope, $stateParams, languageService, requestService,$mdDialog,userService,alertService,$cookies) {         
     requestService.GetCar({id: $stateParams.carId}, function(res){
         
         if(res.result){
-            //console.log(res);
             $scope.data = res.data[0];
             $scope.addFav = addFav;
             $scope.delFav = delFav;
@@ -303,9 +301,9 @@ hereseasApp.controller('CarDisplayController', function ($state, $scope, $stateP
             });
         }
     });
-});
+}]);
 
-hereseasApp.controller('CarPostController', function($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter,$cookies){
+hereseasApp.controller('CarPostController', ['$scope','$location','languageService','userService','$mdDialog','Upload','fileReader','requestService','$cookies',function($scope, $location, languageService, userService, $mdDialog, Upload, fileReader, requestService,$cookies){
     
             var geocoder = new google.maps.Geocoder();
             //地址自动完成相关变量
@@ -761,4 +759,4 @@ hereseasApp.controller('CarPostController', function($scope, $location, language
                 return languageService.getChineseName(name);
             };
 
-});
+}]);

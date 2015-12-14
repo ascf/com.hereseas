@@ -22,6 +22,26 @@ hereseasDirectives.directive('matchValue', function () {
     };
 });
 
+hereseasApp.directive('schrollBottom', function ($timeout) {
+  return {
+    scope: {
+      schrollBottom: "="
+    },
+    link: function (scope, element) {
+      scope.$watchCollection('schrollBottom', function (newValue) {
+        if (newValue)
+        {
+            $timeout(function(){
+                $(element).scrollTop($(element)[0].scrollHeight);
+            },0);
+        }
+      });
+    }
+  }
+})
+
+
+
 hereseasApp.directive('clickme', function() {
   return function(scope, element, attrs) {
     var clickingCallback = function() {

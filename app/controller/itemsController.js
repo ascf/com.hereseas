@@ -1,4 +1,4 @@
-hereseasApp.controller('ItemsController',function($stateParams,$scope,requestService,userService){
+hereseasApp.controller('ItemsController',['$stateParams','$scope','requestService',function($stateParams,$scope,requestService){
     
     var cur_page = 1;
     var max_page = 1;
@@ -144,9 +144,9 @@ hereseasApp.controller('ItemsController',function($stateParams,$scope,requestSer
         updatePage();
     }
     
-});
+}]);
 
-hereseasApp.controller('ItemsPostController', function ($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$filter,$cookies,dateService) {
+hereseasApp.controller('ItemsPostController', ['$scope','$location','languageService','userService','alertService','$state','$mdDialog','Upload','fileReader','requestService','$cookies',function ($scope, $location, languageService, userService, alertService, $state, $mdDialog, Upload, fileReader, requestService,$cookies) {
    var geocoder = new google.maps.Geocoder();
             //地址自动完成相关变量
             $scope.options1 = null;
@@ -215,17 +215,6 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
             
             $scope.items.files = [];
             $scope.items.uploadList = [];
-    
-            /*$scope.expireDate = {};
-            $scope.expireDays = [];
-
-            function getDays(year, month){
-                var num =  dateService.getDayNunByYearMonth(year,month);
-                
-                $scope.expireDays = [];
-                for(var i = 1; i<=num; i++)
-                    $scope.expireDays.push(i);
-            };*/
     
             $scope.hide = function() {
                 $mdDialog.hide();
@@ -426,27 +415,6 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                 }
             }, true);
             
-            /*$scope.$watch(function(){return {year:$scope.expireDate.year, month:$scope.expireDate.month};},function(newValue){
-                if(newValue.year !== undefined && newValue.month !== undefined){
-                    $scope.showDay = true;
-                    getDays(newValue.year,newValue.month);
-
-                    if($scope.expireDate.day !== undefined && $scope.expireDays.length < parseInt($scope.expireDate.day)) 
-                        $scope.expireDate.day = $scope.expireDays.length+'';
-
-                    if($scope.expireDate.day !== undefined)
-                        $scope.shared.expireAt = new Date(newValue.year, newValue.month, $scope.expireDate.day);
-                }
-                else 
-                     $scope.showDay = false;
-            },true);
-
-            $scope.$watch(function(){return $scope.expireDate.day;},function(newValue){
-                if(newValue !== undefined){
-                    $scope.shared.expireAt = new Date($scope.expireDate.year, $scope.expireDate.month, parseInt(newValue));
-                }
-            },true);*/
-            
             //details1 is the detail address provided by google address autocomplete 
             $scope.$watch('details1', function(newValue){  //在地址合法之后的操作
                 if(newValue && $scope.validAddress(newValue)){//set the model 
@@ -482,9 +450,9 @@ hereseasApp.controller('ItemsPostController', function ($scope, $location, langu
                     });
                 }
             });
-});
+}]);
 
-hereseasApp.controller('ItemsDisplayController', function ($state, $scope, roomService, $stateParams, languageService, requestService,$mdDialog,userService,alertService,$cookies) {
+hereseasApp.controller('ItemsDisplayController', ['$state','$scope','$stateParams','languageService','requestService','$mdDialog','userService','alertService','$cookies',function ($state, $scope, $stateParams, languageService, requestService,$mdDialog,userService,alertService,$cookies) {
     
     $scope.addFav = addFav;
     $scope.delFav = delFav;
@@ -654,4 +622,4 @@ hereseasApp.controller('ItemsDisplayController', function ($state, $scope, roomS
     $scope.showOtherUserInfo = function(othersId){
         $state.go('othersProfile',{schoolId:$scope.item.schoolId,othersId:othersId}); 
     }
-});
+}]);
