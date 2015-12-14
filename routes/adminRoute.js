@@ -196,8 +196,8 @@ exports.adminSendEmail = function(req, res, next) {
         }
 
         var k, j, tmp;
-        for (k = 0, j = emailList.length; k < j; k += 50) {
-            tmp = emailList.slice(k, k + 50);
+        for (k = 0, j = emailList.length; k < j; k += 1) {
+            tmp = emailList.slice(k, k + 1);
 
             var params = {
               Destination: { /* required */
