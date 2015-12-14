@@ -195,49 +195,52 @@ exports.adminSendEmail = function(req, res, next) {
             emailList.push(users[i].email);
         }
 
-        var params = {
-          Destination: { /* required */
-            /*
-            BccAddresses: [
-              '@'
-            ],
-            CcAddresses: [
-              '@'
-            ],*/
-            ToAddresses: emailList
-          },
-          Message: { /* required */
-            Body: { /* required */
-              Html: {
-                //Data: '<html><head></head><body><div><p>Hello world!</p></div></body></html>'
-                Data: '<html><head></head><title>hereseas.com</title><body><div style="text-align:center"><img src="https://s3.amazonaws.com/hereseas-public-images/email/milktea.jpg"/></div></body></html>'
-              }
-            },
-            Subject: { /* required */
-              Data: 'Hereseas Notification'
-            }
-          },
-          Source: "'Hereseas Community' <" + emailHereseas + ">'", /* required */
-          ReplyToAddresses: [
-            'hereseas@gmail.com'
-          ]
-        };
-    
-        //console.log(params);
-        ses.sendEmail(params, function(err, data) {
-            if (err) {
-                console.log(err, err.stack); // an error occurred
-                res.json({
-                    result: false
-                 });
-            }
-            else {
-                res.json({
-                    result: true
-                 });
-                //console.log(data);           // successful response
-            }
-        });
+        var k, j, tmp;
+        for (k = 0, j = emailList.length; k < j; k += 50) {
+            tmp = emailList.slice(k, k + 50);
+
+            var params = {
+              Destination: { /* required */
+                /*
+                BccAddresses: [
+                  '@'
+                ],
+                CcAddresses: [
+                  '@'
+                ],*/
+                ToAddresses: tmp
+              },
+              Message: { /* required */
+                Body: { /* required */
+                  Html: {
+                    //Data: '<html><head></head><body><div><p>Hello world!</p></div></body></html>'
+                    Data: '<html><head></head><title>hereseas.com</title><body><div style="text-align:center"><img src="https://s3.amazonaws.com/hereseas-public-images/email/milktea.jpg"/></div></body></html>'
+                  }
+                },
+                Subject: { /* required */
+                  Data: 'Hereseas Notification'
+                }
+              },
+              Source: "'Hereseas Community' <" + emailHereseas + ">'", /* required */
+              ReplyToAddresses: [
+                'hereseas@gmail.com'
+              ]
+            };
+        
+            //console.log(params);
+            ses.sendEmail(params, function(err, data) {
+                if (err) {
+                    console.log(err, err.stack); // an error occurred
+                }
+                else {
+                    
+                    //console.log(data);           // successful response
+                }
+            });
+        }
+        res.json({
+            result: true
+         });
     });
 
 
