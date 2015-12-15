@@ -7,6 +7,7 @@ var adminRoute = require('./routes/adminRoute');
 var forgetterRoute = require('./routes/forgetterRoute');
 var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
+var professorRoute = require('./routes/professorRoute');
 var tools = require('./common/tools');
 
 
@@ -144,6 +145,8 @@ module.exports = function(app) {
     app.post('/forum/comment', sign.ensureAuthenticated, forumRoute.createComment);
     app.post('/forum/m_upload_image', sign.ensureAuthenticated, upload.array("forum", 1), imageUploadRoute.image_upload);
 
+    /* professor */
+    app.post('/professor', sign.ensureAuthenticated, professorRoute.createProfessor);
 
     /*  admin */
     app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
