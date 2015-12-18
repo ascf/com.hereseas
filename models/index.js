@@ -21,6 +21,7 @@ require('./item.js');
 require('./thread.js');
 require('./comment.js');
 require('./professor.js');
+require('./rate.js');
 
 exports.User = mongoose.model('User');
 exports.Apartment = mongoose.model('Apartment');
@@ -34,3 +35,4 @@ exports.Item = mongoose.model('Item');
 exports.Thread = mongoose.model('Thread');
 exports.Comment = mongoose.model('Comment');
 exports.Professor = mongoose.model('Professor');
+exports.Rate = mongoose.model('Rate');

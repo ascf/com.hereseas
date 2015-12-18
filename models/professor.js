@@ -28,6 +28,11 @@ var ProfessorSchema = new Schema({
         type: Number
     },
 
+    status: {
+        type: Number,
+        default: 1
+    },
+    
 	createAt: {
         type: Date,
         default: Date.now

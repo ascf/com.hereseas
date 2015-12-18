@@ -147,6 +147,7 @@ module.exports = function(app) {
 
     /* professor */
     app.post('/professor', sign.ensureAuthenticated, professorRoute.createProfessor);
+    app.post('/professor/rate', sign.ensureAuthenticated, professorRoute.createRate);
 
     /*  admin */
     app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
