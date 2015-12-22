@@ -148,6 +148,12 @@ module.exports = function(app) {
     /* professor */
     app.post('/professor', sign.ensureAuthenticated, professorRoute.createProfessor);
     app.post('/professor/rate', sign.ensureAuthenticated, professorRoute.createRate);
+    app.get('/professors', professorRoute.getProfessorList);
+    app.get('/professor/:id', professorRoute.getProfessor);
+    app.get('/school/:id/departments', professorRoute.getDepartmentList);
+    app.get('/professor/:id/rates', professorRoute.getProfessorRates);
+
+
 
     /*  admin */
     app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
@@ -157,6 +163,8 @@ module.exports = function(app) {
     app.put('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolById);
     app.put('/admin/school/:id/status', sign.ensureAuthenticated, schoolRoute.adminEditSchoolStatus);
     app.put('/admin/school/:id/connection', sign.ensureAuthenticated, schoolRoute.adminSetSchoolConnectionById);
+    app.put('/admin/school/:id/department', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolDepartmentById);
+
     app.get('/admin/userid', userRoute.adminGetUserId);
     app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);
     app.get('/admin/users', userRoute.adminGetUsers);

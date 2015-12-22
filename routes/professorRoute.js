@@ -4,9 +4,11 @@ var Results = require('./commonResult');
 var tools = require('../common/tools');
 var Professor = require('../models').Professor;
 var Rate = require('../models').Rate;
+var School = require('../models').School;
+
 
 //need to check if the professor has alreay been created
-exports.createProfessor = function (req, res, next) {
+exports.createProfessor = function(req, res, next) {
     var reqData = {
         name: req.body.name,
         schoolId: req.body.schoolId,
@@ -113,4 +115,164 @@ exports.createRate = function(req, res, next) {
             ep.emit("findProfessor", professor);
         }
     });
+}
+
+
+exports.getProfessorList = function(req, res, next) {
+
+    var query = {};
+    var schoolId = req.query.schoolId;
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var connection;
+    var ep = new EventProxy();
+
+    ep.all('findSchoolConnection', function(school) {
+
+        query['schoolId'] = schoolId;
+        query['status'] = 1;
+
+        if (req.query.department) {
+            query['department'] = req.query.department;
+        }
+
+        Professor.find(query, 'id name department star').exec(function(err, professors) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!professors.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+
+                res.json({
+                    result: true,
+                    data: professors
+                });
+            }
+
+        });
+    });
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+                connection = school.connection;
+                ep.emit('findSchoolConnection', school);
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+    });
+
+}
+
+exports.getProfessor = function(req, res, next) {
+
+    var professorId = req.param('id');
+
+    if (!professorId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    Professor.findById(professorId, function(err, professor) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else if (!professor) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else if (professor.status != 1) {
+            res.json(Results.ERR_ACTIVATED_ERR);
+            return;
+        } else {
+            res.json({
+                result: true,
+                data: professor
+            });
+            return;
+        }
+    });
+
+}
+
+exports.getDepartmentList = function(req, res, next) {
+
+    var schoolId = req.param('id');
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else if (!school) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else if (school.status != 1) {
+            res.json(Results.ERR_ACTIVATED_ERR);
+            return;
+        } else {
+
+            res.json({
+                result: true,
+                data: school.department
+            });
+            return;
+        }
+    });
+
+}
+
+
+exports.getProfessorRates = function(req, res, next) {
+
+    var query = {};
+    var professorId = req.param('id');
+
+    if (!professorId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    query['status'] = 1;
+    query['professorId'] = professorId;
+
+    Rate.find(query, function(err, rates) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else if (!rates) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else {
+            res.json({
+                result: true,
+                data: rates
+            });
+            return;
+        }
+    });
+
 }
