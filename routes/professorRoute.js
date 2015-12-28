@@ -45,12 +45,16 @@ exports.createProfessor = function(req, res, next) {
 exports.createRate = function(req, res, next) {
     var ep = new EventProxy();
 
-    if (tools.isEmpty(req.body.professorId)) {
+    var starAve = 0;
+    var rateCount = 0;
+
+    if (tools.isEmpty(req.body.professorId) || tools.isEmpty(req.body.star)) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
 
-    ep.all("findUser", "findProfessor", function(user, professor) {
+    ep.all("findUser", "findProfessor", "findRate", function(user, professor) {
+
         var reqData = {
             userId: user.id,
             username: user.username,
@@ -61,14 +65,21 @@ exports.createRate = function(req, res, next) {
             star: req.body.star,
             className: req.body.className
         };
+
         if (tools.hasNull(reqData)) {
             res.json(Results.ERR_PARAM_ERR);
             return;
         }
+
         var rate = new Rate();
         for (var key in reqData) {
             rate[key] = reqData[key];
         }
+
+        professor["star"] = starAve;
+        professor["rateCount"] = rateCount;
+        professor.save(function() {});
+
         rate.save(function(err, rate) {
             if (err) {
                 console.log(err);
@@ -115,6 +126,35 @@ exports.createRate = function(req, res, next) {
             ep.emit("findProfessor", professor);
         }
     });
+
+    var query = {};
+    query['status'] = 1;
+    query['professorId'] = req.body.professorId;
+
+    Rate.find(query, function(err, rates) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+        } else {
+            if (!rates) {
+                starAve = req.body.star;
+            } else {
+                var starSum = 0;
+                for (var i = 0; i < rates.length; i++) {
+                    starSum = starSum + rates[i].star;
+                }
+                starSum = starSum + req.body.star;
+                starAve = starSum / (rates.length + 1);
+                rateCount = rates.length + 1;
+                console.log(starAve);
+            }
+            ep.emit("findRate");
+        }
+
+    });
+
+
 }
 
 
@@ -140,7 +180,7 @@ exports.getProfessorList = function(req, res, next) {
             query['department'] = req.query.department;
         }
 
-        Professor.find(query, 'id name department star').exec(function(err, professors) {
+        Professor.find(query, 'id name department star rateCount').exec(function(err, professors) {
             if (err) {
                 console.log(err);
                 res.json(Results.ERR_DB_ERR);
@@ -184,68 +224,33 @@ exports.getProfessorList = function(req, res, next) {
 exports.getProfessor = function(req, res, next) {
 
     var professorId = req.param('id');
-    var starAve = 0;
-    var query = {};
-
 
     if (!professorId) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
 
-    var ep = new EventProxy();
-
-    ep.all('findRate', function() {
-
-        Professor.findById(professorId, function(err, professor) {
-            if (err) {
-                console.log(err);
-                res.json(Results.ERR_DB_ERR);
-                return;
-            } else if (!professor) {
-                res.json(Results.ERR_NOTFOUND_ERR);
-                return;
-            } else if (professor.status != 1) {
-                res.json(Results.ERR_ACTIVATED_ERR);
-                return;
-            } else {
-                professor["star"] = starAve;
-
-                res.json({
-                    result: true,
-                    data: professor
-                });
-                return;
-            }
-        });
-
-    });
-
-
-    query['status'] = 1;
-    query['professorId'] = professorId;
-
-    Rate.find(query, function(err, rates) {
+    Professor.findById(professorId, function(err, professor) {
         if (err) {
             console.log(err);
             res.json(Results.ERR_DB_ERR);
             return;
+        } else if (!professor) {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        } else if (professor.status != 1) {
+            res.json(Results.ERR_ACTIVATED_ERR);
+            return;
         } else {
-            if (!rates) {
-                starAve = 0;
-            } else {
-                var starSum = 0;
-                for (var i = 0; i < rates.length; i++) {
-                    starSum = starSum + rates[i].star;
-                }
-                starAve = starSum / rates.length;
-                console.log(starAve);
-            }
-            ep.emit("findRate");
+
+            res.json({
+                result: true,
+                data: professor
+            });
+
+            return;
         }
-
     });
-
 
 
 }

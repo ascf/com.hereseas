@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ProfessorSchema = new Schema({
-	name: {
+    name: {
         type: String
     },
 
@@ -12,9 +12,9 @@ var ProfessorSchema = new Schema({
     },
 
     department: {
-		type: String,
-		default: ''
-	},
+        type: String,
+        default: ''
+    },
 
     biography: {
         type: String
@@ -28,12 +28,17 @@ var ProfessorSchema = new Schema({
         type: Number
     },
 
+    rateCount: {
+        type: Number,
+        default: 0
+    },
+
     status: {
         type: Number,
         default: 1
     },
-    
-	createAt: {
+
+    createAt: {
         type: Date,
         default: Date.now
     },
