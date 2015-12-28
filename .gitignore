@@ -11,3 +11,5 @@ www/js/*.html
 tests/coverage/
 public/angular/docs/
 public/angular/i18n/
+app.js
+config.js
