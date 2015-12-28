@@ -1,268 +1,192 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
-var passport = require('passport');
-var flash = require('connect-flash');
-var LocalStrategy = require('passport-local').Strategy;
-var md5 = require('MD5');
-var cors = require('cors')
-var emailTool = require('./common/tools');
+var userRoute = require('./routes/userRoute');
+var apartmentRoute = require('./routes/apartmentRoute');
+var schoolRoute = require('./routes/schoolRoute');
+var carRoute = require('./routes/carRoute');
+var imageUploadRoute = require('./routes/imageUploadRoute');
+var adminRoute = require('./routes/adminRoute');
+var forgetterRoute = require('./routes/forgetterRoute');
+var itemRoute = require('./routes/itemRoute');
+var forumRoute = require('./routes/forumRoute');
+var professorRoute = require('./routes/professorRoute');
+var tools = require('./common/tools');
 
 
-//var routes = require('./routes/index');
-//var users = require('./routes/users');
+var imageUploadTestRoute = require('./routes/imageUploadTestRoute');
 
-var config = require('./config');
-var _ = require('lodash');
-
-
-var app = express();
-
-var routes = require('./routes');
-//var authUser = require('./common/auth.js');
-var crypto = require('crypto');
+var User = require('./models').User;
 
 var multer = require('multer');
-
-
-var compress = require('compression');
-
-app.use(compress());
-
-require('./common/dateformat.js');
-
-// view eƒƒngine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'html');
-app.engine('html', require('ejs-mate'));
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
-app.use(cookieParser());
-app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use('/app', express.static(path.join(__dirname, 'app')));
-
-
-app.use(session({
-    secret: config.session_secret,
-    store: new MongoStore({
-        url: config.db
-    }),
-    // cookie: { maxAge: 60000,secure: true },
-    cookie: {
-        maxAge: 43200000,
-        domain: '.hereseas.com'
-    },
-    resave: true,
-    saveUninitialized: true,
-}));
-
-
-
-// app.use(cors());
-
-var allowCrossDomain = function(req, res, next) {
-        res.header("Access-Control-Allow-Credentials", true);
-        //   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-        // if ('OPTIONS' == req.method) {
-        //       res.send(200);
-        //     }
-        //     else {
-        //       next();
-        //     }
-
-    }
-    // app.use(allowCrossDomain);
-
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization,X-Prototype-Version,Allow,*, Content-Length");
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-    next();
+var upload = multer({
+    dest: 'uploads/'
 });
 
+var sign = require('./routes/sign');
+
+var passport = require('passport');
+
+module.exports = function(app) {
 
 
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
-app.use(flash());
-app.use(passport.initialize());
-app.use(passport.session());
-//app.use(authUser.authUser);
+    app.get('/test', function(req, res, next) {
 
+        // var sanitizeHtml = require('sanitize-html');
+        // var dirty = '<p><img src="https://s3.amazonaws.com/hereseas-public-images/forum/26de3a81-d73e-4370-8b2b-ddca35d5f2b1.gif"/><span class="rangySelectionBoundary">&#65279;</span><span class="rangySelectionBoundary">&#65279;</span></p><p><br/></p><p><br/></p><p>为了显示部分内容</p><p>   test!!!</p><p>蛤蛤 蛤蛤 蛤蛤</p';
+        // var clean = sanitizeHtml(dirty, {
+        //     allowedTags: [],
+        //     allowedAttributes: []
+        // });
+        // User.findOne({
+        //     id: "req.user.id"
+        // }, function(err, user) {
+        //     console.log(user.id);
+        // });
 
+        // console.log(asd.sad);
 
-// Passport session setup.
-//   To support persistent login sessions, Passport needs to be able to
-//   serialize users into and deserialize users out of the session.  Typically,
-//   this will be as simple as storing the user ID when serializing, and finding
-//   the user by ID when deserializing.
-passport.serializeUser(function(user, done) {
-    //res.locals.current_user
-    done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-        done(err, user);
-    });
-});
-
-// Use the LocalStrategy within Passport.
-//   Strategies in passport require a `verify` function, which accept
-//   credentials (in this case, a username and password), and invoke a callback
-//   with a user object.  In the real world, this would query a database;
-//   however, in this example we are using a baked-in set of users.
-var User = require('./models').User;
-passport.use(new LocalStrategy({
-        usernameField: 'email',
-        passwordField: 'password',
-        badRequestMessage: 'ERR_MISSING_CREDENTIALS'
-    },
-    function(email, password, done) {
-        // asynchronous verification, for effect...
-        process.nextTick(function() {
-
-
-
-            // Find the user by username.  If there is no user with the given
-            // username, or the password is not correct, set the user to `false` to
-            // indicate failure and set a flash message.  Otherwise, return the
-            // authenticated `user`.
-            User.findOne({
-                email: email.toLowerCase()
-            }, function(err, user) {
-                if (err) {
-                    console.log(err);
-                    return done(err);
-                }
-                if (!user) {
-                    return done(null, false, 'ERR_INVALID_USER');
-                }
-                if (user.password != md5(password)) {
-                    return done(null, false, 'ERR_INVALID_PASSWORD');
-                }
-                if (user.verified != true || user.status != 1) {
-                    return done(null, false, 'ERR_ACTIVATED_ERR');
-                }
-
-                user.last_login = new Date();
-                user.save();
-
-                // var auth_token = encrypt(user._id + '\t' + user.pass + '\t' + user.email, config.session_secret);
-
-                // res.cookie(config.auth_cookie_name, auth_token, {
-                //     path: '/',
-                //     maxAge: 1000 * 60 * 60 * 24
-                // }); //cookie 有效期1天
-
-                return done(null, user);
-            })
-        });
-    }
-));
-
-
-// app.use(multer({
-//     dest: './public/upload'
-// }));
-
-// routes
-routes(app);
-
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
+        res.json({
+            test: 'this is testing'
         });
     });
 
-}
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.json({
-        result: false,
-        err: 'ERR_SERVICE_ERROR',
-        message: err
+    app.get('/init', sign.initialize);
+
+
+    /*   user */
+    //app.get('/users', userRoute.getUserList);
+    app.get('/user/:id', userRoute.getUser);
+    app.get('/userself', sign.ensureAuthenticated, userRoute.getSelfInfo);
+    app.post('/user', userRoute.createUser);
+    app.post('/login', userRoute.login);
+    app.get('/logout', sign.ensureAuthenticated, sign.logout);
+    app.post('/user/active', userRoute.activeUserSendEmail);
+    app.post('/user/verify', userRoute.activeUserVerifyLink);
+    app.put('/user', sign.ensureAuthenticated, userRoute.editUser);
+    app.post('/avatar/m_upload_image', sign.ensureAuthenticated, upload.array("avatar", 1), imageUploadRoute.image_upload);
+    app.get('/user/allpost/:id', userRoute.getUserAllPost);
+    app.post('/user/sendmilkemail', userRoute.sendMilkEmail);
+
+    /* reset password */
+    app.post('/beforereset', forgetterRoute.createForgetter);
+    app.post('/checkreset', forgetterRoute.checkForgetter);
+    app.put('/reset', forgetterRoute.resetForgetter);
+
+
+    /*  message */
+    app.post('/sendmessage', sign.ensureAuthenticated, userRoute.sendMessage);
+    app.get('/contact', sign.ensureAuthenticated, userRoute.getUserContact);
+    app.get('/message', sign.ensureAuthenticated, userRoute.getUserMessage);
+    app.get('/unreadmessage', sign.ensureAuthenticated, userRoute.getUserUnreadMessage)
+    app.put('/readmessage', sign.ensureAuthenticated, userRoute.readMessage);
+    app.get('/unreadmessage', sign.ensureAuthenticated, userRoute.getUserUnreadMessage)
+
+
+    /*  favorite */
+    app.get('/favorite', sign.ensureAuthenticated, userRoute.getFavorite);
+    app.get('/favorite/list', sign.ensureAuthenticated, userRoute.getFavoriteList);
+    app.post('/favorite', sign.ensureAuthenticated, userRoute.addFavorite);
+    app.delete('/favorite', sign.ensureAuthenticated, userRoute.deleteFavorite);
+
+
+    /*  school */
+    app.get('/school/:id', schoolRoute.getSchoolById);
+    app.get('/schools', schoolRoute.getSchoolList);
+    app.get('/schools/three', schoolRoute.getSchoolListThree);
+    app.get('/school/:id/newstudents', schoolRoute.getSchoolNewStudents);
+    app.get('/school/:id/students', schoolRoute.getSchoolStudents);
+
+
+    /*  apartment */
+    app.get('/apartments/three', apartmentRoute.getThreeApartments);
+    app.get('/apartment/:id', apartmentRoute.getApartmentById);
+    app.get('/apartments/draft', sign.ensureAuthenticated, apartmentRoute.getApartmentDraftList);
+    app.get('/apartment/draft/:id', sign.ensureAuthenticated, apartmentRoute.getApartmentDraftById);
+    app.get('/apartments/:schoolId/search', apartmentRoute.searchApartment);
+    app.get('/apartments', sign.ensureAuthenticated, apartmentRoute.getApartmentList);
+    app.post('/apartment', sign.ensureAuthenticated, apartmentRoute.createApartment);
+    app.put('/apartment/:id', sign.ensureAuthenticated, apartmentRoute.editApartmentById);
+    app.put('/apartment/post/:id', sign.ensureAuthenticated, apartmentRoute.postApartmentById);
+    app.post('/apartment/m_upload_image', sign.ensureAuthenticated, upload.array("apartment", 1), imageUploadRoute.image_upload);
+    app.delete('/apartment/:id', sign.ensureAuthenticated, apartmentRoute.deleteApartmentById)
+
+
+    /*  car */
+    app.post('/car', sign.ensureAuthenticated, carRoute.createCar);
+    app.put('/car/:id', sign.ensureAuthenticated, carRoute.editCarById);
+    app.put('/car/post/:id', sign.ensureAuthenticated, carRoute.postCarById);
+    app.get('/cars', sign.ensureAuthenticated, carRoute.getCarList);
+    app.get('/car/:id', carRoute.getCarById);
+    app.get('/cars/three', carRoute.getThreeCars);
+    app.get('/cars/:schoolId/search', carRoute.searchCar);
+    app.post('/car/m_upload_image', sign.ensureAuthenticated, upload.array("car", 1), imageUploadRoute.image_upload);
+    app.get('/cars/draft', sign.ensureAuthenticated, carRoute.getCarDraftList);
+    app.get('/car/draft/:id', sign.ensureAuthenticated, carRoute.getCarDraftById);
+    app.delete('/car/:id', sign.ensureAuthenticated, carRoute.deleteCarById);
+
+
+    /*  item */
+    app.post('/item', sign.ensureAuthenticated, itemRoute.createItem);
+    app.put('/item/:id', sign.ensureAuthenticated, itemRoute.editItemById);
+    app.put('/item/post/:id', sign.ensureAuthenticated, itemRoute.postItemById);
+    app.get('/items', sign.ensureAuthenticated, itemRoute.getItemList);
+    app.get('/item/:id', itemRoute.getItemById);
+    app.get('/items/three', itemRoute.getThreeItems);
+    app.get('/items/other/:id', itemRoute.getUserOtherItems);
+    app.get('/items/:schoolId/search', itemRoute.searchItem);
+    app.post('/item/m_upload_image', sign.ensureAuthenticated, upload.array("item", 1), imageUploadRoute.image_upload);
+    app.delete('/item/:id', sign.ensureAuthenticated, itemRoute.deleteItemById);
+
+
+    /*  forum */
+    app.get('/forum/:id/threads', forumRoute.getThreadsBySchoolId);
+    app.get('/forum/thread/:id', forumRoute.getThreadById);
+    app.get('/forum/thread/:id/comments', forumRoute.getCommentsByThreadId);
+    app.post('/forum/thread', sign.ensureAuthenticated, forumRoute.createThread);
+    app.post('/forum/comment', sign.ensureAuthenticated, forumRoute.createComment);
+    app.post('/forum/m_upload_image', sign.ensureAuthenticated, upload.array("forum", 1), imageUploadRoute.image_upload);
+
+    /* professor */
+    app.post('/professor', sign.ensureAuthenticated, professorRoute.createProfessor);
+    app.post('/professor/rate', sign.ensureAuthenticated, professorRoute.createRate);
+    app.get('/professors', professorRoute.getProfessorList);
+    app.get('/professor/:id', professorRoute.getProfessor);
+    app.get('/school/:id/departments', professorRoute.getDepartmentList);
+    app.get('/professor/:id/rates', professorRoute.getProfessorRates);
+
+
+    /*  admin */
+    app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
+    app.get('/admin/schools', sign.ensureAuthenticated, schoolRoute.adminGetSchoolInfoList);
+    app.get('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminGetSchoolAllInfo);
+    app.post('/admin/school', sign.ensureAuthenticated, schoolRoute.adminAddSchool);
+    app.put('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolById);
+    app.put('/admin/school/:id/status', sign.ensureAuthenticated, schoolRoute.adminEditSchoolStatus);
+    app.put('/admin/school/:id/connection', sign.ensureAuthenticated, schoolRoute.adminSetSchoolConnectionById);
+    app.put('/admin/school/:id/department', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolDepartmentById);
+
+    app.get('/admin/userid', userRoute.adminGetUserId);
+    app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);
+    app.get('/admin/users', userRoute.adminGetUsers);
+    app.put('/admin/edituser/:id', sign.ensureAuthenticated, userRoute.adminEditUserStatus);
+    app.post('/admin/user/:id/active', userRoute.adminActiveUser);
+    app.post('/admin/favorite/update', sign.ensureAuthenticated, adminRoute.updateFavorite);
+    app.get('/admin/db/show', sign.ensureAuthenticated, adminRoute.showCollections);
+    app.post('/admin/update', adminRoute.updateFavorite);
+    app.get('/admin/apartments', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentId);
+    app.get('/admin/apartment/:id', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentAllInfo);
+    app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
+    app.get('/admin/cars', sign.ensureAuthenticated, carRoute.adminGetCars);
+    app.put('/admin/thread/:id/status', sign.ensureAuthenticated, forumRoute.adminEditThreadStatus);
+    app.put('/admin/comment/:id/status', sign.ensureAuthenticated, forumRoute.adminEditCommentStatus);
+    app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
+    //app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadTestRoute.image_upload_test);
+
+
+    app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);
+
+
+    app.get('/', function(req, res) {
+        res.render('index');
     });
-});
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    res.json({
-        result: false,
-        err: 'ERR_SERVICE_NOT_FOUND'
-    });
-});
-
-
-// set static, dynamic helpers
-_.extend(app.locals, {
-    config: config
-});
-
-
-
-_.extend(app.locals, require('./common/render_helpers'));
-
-
-function encrypt(str, secret) {
-    var cipher = crypto.createCipher('aes192', secret);
-    var enc = cipher.update(str, 'utf8', 'hex');
-    enc += cipher.final('hex');
-    return enc;
-}
-
-function decrypt(str, secret) {
-    var decipher = crypto.createDecipher('aes192', secret);
-    var dec = decipher.update(str, 'hex', 'utf8');
-    dec += decipher.final('utf8');
-    return dec;
-}
-
-function md5(str) {
-    var md5sum = crypto.createHash('md5');
-    md5sum.update(str);
-    str = md5sum.digest('hex');
-    return str;
-}
-
-
-function eduChecker(email) {
-    var str = email.substring(email.indexOf('@') + 1);
-    return str.indexOf(".edu") > -1
-}
-
-
-process.on('uncaughtException', function(err) {
-    console.log(err);
-
-    var email = "hhz1992@gmail.com";
-
-    emailTool.sendCrashEmail(email, err);
-    email = "sunbojun@hotmail.com";
-    emailTool.sendCrashEmail(email, err);
-
-});
-
-
-module.exports = app;
+};
