@@ -11,7 +11,7 @@ var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 var md5 = require('MD5');
 var cors = require('cors')
-
+var emailTool = require('./common/email.js')
 
 
 //var routes = require('./routes/index');
@@ -61,7 +61,7 @@ app.use(session({
     // cookie: { maxAge: 60000,secure: true },
     cookie: {
         maxAge: 43200000,
-        domain: '.hereseas.com'
+        //domain: '.hereseas.com'
     },
     resave: true,
     saveUninitialized: true,
@@ -252,17 +252,6 @@ function eduChecker(email) {
     return str.indexOf(".edu") > -1
 }
 
-
-process.on('uncaughtException', function(err) {
-    console.log(err);
-
-    var email = "hhz1992@gmail.com";
-
-    emailTool.sendCrashEmail(email, err);
-    email = "sunbojun@hotmail.com";
-    emailTool.sendCrashEmail(email, err);
-
-});
 
 
 module.exports = app;
