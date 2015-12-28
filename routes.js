@@ -7,6 +7,7 @@ var adminRoute = require('./routes/adminRoute');
 var forgetterRoute = require('./routes/forgetterRoute');
 var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
+var professorRoute = require('./routes/professorRoute');
 var tools = require('./common/tools');
 
 var User = require('./models').User;
@@ -140,6 +141,14 @@ module.exports = function(app) {
     app.post('/forum/comment', sign.ensureAuthenticated, forumRoute.createComment);
     app.post('/forum/m_upload_image', sign.ensureAuthenticated, upload.array("forum", 1), imageUploadRoute.image_upload);
 
+    /* professor */
+    app.post('/professor', sign.ensureAuthenticated, professorRoute.createProfessor);
+    app.post('/professor/rate', sign.ensureAuthenticated, professorRoute.createRate);
+    app.get('/professors', professorRoute.getProfessorList);
+    app.get('/professor/:id', professorRoute.getProfessor);
+    app.get('/school/:id/departments', professorRoute.getDepartmentList);
+    app.get('/professor/:id/rates', professorRoute.getProfessorRates);
+
 
     /*  admin */
     app.get('/admin/schoolid', sign.ensureAuthenticated, schoolRoute.adminGetSchoolId);
@@ -149,6 +158,8 @@ module.exports = function(app) {
     app.put('/admin/school/:id', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolById);
     app.put('/admin/school/:id/status', sign.ensureAuthenticated, schoolRoute.adminEditSchoolStatus);
     app.put('/admin/school/:id/connection', sign.ensureAuthenticated, schoolRoute.adminSetSchoolConnectionById);
+    app.put('/admin/school/:id/department', sign.ensureAuthenticated, schoolRoute.adminUpdateSchoolDepartmentById);
+
     app.get('/admin/userid', userRoute.adminGetUserId);
     app.get('/admin/user/:id', userRoute.adminGetUserAllInfo);
     app.get('/admin/users', userRoute.adminGetUsers);
