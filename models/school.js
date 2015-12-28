@@ -39,6 +39,10 @@ var SchoolSchema = new Schema({
 		type: String
 	},
 
+	department: [{
+		type: String
+	}],
+
 	users: [{
 		type: Schema.ObjectId,
 		ref: 'User'

@@ -195,6 +195,10 @@ exports.getSchoolStudents = function(req, res, next) {
 
                 ep.after("findUser", school.users.length, function(users) {
 
+                    users.sort(function(a, b) {
+                        return a.createAt.valueOf() - b.createAt.valueOf();
+                    });
+
                     res.json({
                         result: true,
                         data: users
@@ -206,7 +210,7 @@ exports.getSchoolStudents = function(req, res, next) {
                     if (i < 0)
                         break;
 
-                    User.findById(school.users[i], "id username avatar enrollYear status", function(err, user) {
+                    User.findById(school.users[i], "id username avatar enrollYear status createAt", function(err, user) {
                         if (err) {
                             console.log(err);
                         }
@@ -482,6 +486,74 @@ exports.adminUpdateSchoolDepartmentById = function(req, res, next) {
         });
     });
 }
+
+
+exports.adminUpdateSchoolDepartmentById = function(req, res, next) {
+
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+            ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+
+        var schoolId = req.param('id');
+
+        var reqData = {
+            department: req.body.department
+        };
+
+        if (tools.isEmpty(schoolId)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+
+        if (tools.hasNull(reqData)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+
+        School.findById(schoolId, function(err, school) {
+            if (err) {
+                console.log(err);
+                return next();
+
+            } else if (!school) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+
+                for (var key in reqData) {
+                    school[key] = reqData[key];
+                }
+
+                school.save(function(err, schoolSave) {
+
+                    if (err) {
+                        console.log(err);
+                        return next();
+                    } else {
+
+                        res.json({
+                            result: true,
+                            data: {
+                                'id': schoolSave.id
+                            }
+                        });
+                    }
+                });
+
+            }
+
+        });
+    });
+}
+
+
 
 exports.adminGetSchoolAllInfo = function(req, res, next) {
     var ep = new EventProxy();

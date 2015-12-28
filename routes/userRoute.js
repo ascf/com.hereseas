@@ -603,6 +603,13 @@ exports.editUser = function(req, res, next) {
     }
 
 
+    // if (tools.hasNull(reqData)) {
+
+    //     res.json(Results.ERR_PARAM_ERR);
+    //     return;
+    // }
+
+
     User.findById(req.user.id,
         function(err, user) {
             if (err) {
@@ -1182,6 +1189,7 @@ exports.getUserMessage = function(req, res, next) {
 
 }
 
+
 exports.readMessage = function(req, res, next) {
 
     if (tools.isEmpty(req.body.id)) {
@@ -1503,7 +1511,7 @@ exports.adminGetUsers = function(req, res, next) {
     ep.all('checkAdmin', function() {
         // execute admin function
         var query = {};
-        User.find(query, function(err, users) {
+        User.find(query, function(err, users){
             if (err) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
@@ -1588,6 +1596,7 @@ function eduChecker(email) {
     console.log(str);
 
     //return str.indexOf(".edu") > -1
+
     return true;
 
 }

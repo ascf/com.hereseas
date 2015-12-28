@@ -61,7 +61,7 @@ app.use(session({
     // cookie: { maxAge: 60000,secure: true },
     cookie: {
         maxAge: 43200000,
-        domain: '.hereseas.com'
+        //domain: '.hereseas.com'
     },
     resave: true,
     saveUninitialized: true,
@@ -251,6 +251,7 @@ function eduChecker(email) {
     var str = email.substring(email.indexOf('@') + 1);
     return str.indexOf(".edu") > -1
 }
+
 
 process.on('uncaughtException', function(err) {
     console.log(err);

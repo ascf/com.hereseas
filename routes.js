@@ -10,6 +10,9 @@ var forumRoute = require('./routes/forumRoute');
 var professorRoute = require('./routes/professorRoute');
 var tools = require('./common/tools');
 
+
+var imageUploadTestRoute = require('./routes/imageUploadTestRoute');
+
 var User = require('./models').User;
 
 var multer = require('multer');
@@ -73,6 +76,7 @@ module.exports = function(app) {
     app.post('/sendmessage', sign.ensureAuthenticated, userRoute.sendMessage);
     app.get('/contact', sign.ensureAuthenticated, userRoute.getUserContact);
     app.get('/message', sign.ensureAuthenticated, userRoute.getUserMessage);
+    app.get('/unreadmessage', sign.ensureAuthenticated, userRoute.getUserUnreadMessage)
     app.put('/readmessage', sign.ensureAuthenticated, userRoute.readMessage);
     app.get('/unreadmessage', sign.ensureAuthenticated, userRoute.getUserUnreadMessage)
 
@@ -175,8 +179,11 @@ module.exports = function(app) {
     app.put('/admin/thread/:id/status', sign.ensureAuthenticated, forumRoute.adminEditThreadStatus);
     app.put('/admin/comment/:id/status', sign.ensureAuthenticated, forumRoute.adminEditCommentStatus);
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
+    //app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadTestRoute.image_upload_test);
+
 
     app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);
+
 
     app.get('/', function(req, res) {
         res.render('index');
