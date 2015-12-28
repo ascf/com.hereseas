@@ -62,7 +62,7 @@ exports.createRate = function(req, res, next) {
             schoolId: req.body.schoolId,
             professorId: professor.id,
             content: req.body.content,
-            //star: req.body.star,
+            star: req.body.star,
             className: req.body.className
         };
 
