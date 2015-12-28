@@ -184,31 +184,69 @@ exports.getProfessorList = function(req, res, next) {
 exports.getProfessor = function(req, res, next) {
 
     var professorId = req.param('id');
+    var starAve = 0;
+    var query = {};
+
 
     if (!professorId) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }
 
-    Professor.findById(professorId, function(err, professor) {
+    var ep = new EventProxy();
+
+    ep.all('findRate', function() {
+
+        Professor.findById(professorId, function(err, professor) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!professor) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else if (professor.status != 1) {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            } else {
+                professor["star"] = starAve;
+
+                res.json({
+                    result: true,
+                    data: professor
+                });
+                return;
+            }
+        });
+
+    });
+
+
+    query['status'] = 1;
+    query['professorId'] = professorId;
+
+    Rate.find(query, function(err, rates) {
         if (err) {
             console.log(err);
             res.json(Results.ERR_DB_ERR);
             return;
-        } else if (!professor) {
-            res.json(Results.ERR_NOTFOUND_ERR);
-            return;
-        } else if (professor.status != 1) {
-            res.json(Results.ERR_ACTIVATED_ERR);
-            return;
         } else {
-            res.json({
-                result: true,
-                data: professor
-            });
-            return;
+            if (!rates) {
+                starAve = 0;
+            } else {
+                var starSum = 0;
+                for (var i = 0; i < rates.length; i++) {
+                    starSum = starSum + rates[i].star;
+                }
+                starAve = starSum / rates.length;
+                console.log(starAve);
+            }
+            ep.emit("findRate");
         }
+
     });
+
+
 
 }
 
