@@ -33,7 +33,7 @@ exports.saveParticipantInfo = function(req, res, next) {
             return;
         } else {
 
-            emailService.sendEventEmail(email, name);
+            emailService.sendEventEmail(eventValentine.email, eventValentine.name);
             res.json({
                 result: true,
                 data: eventValentine
