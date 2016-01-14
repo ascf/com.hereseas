@@ -14,7 +14,6 @@ exports.saveParticipantInfo = function(req, res, next) {
         organization: req.body.organization,
         email: req.body.email
     }
-    console.log(reqData);
 
     if (tools.hasNull(reqData) || tools.isEmpty(reqData)) {
         res.json(Results.ERR_PARAM_ERR);
