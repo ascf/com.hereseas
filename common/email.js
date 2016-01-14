@@ -141,6 +141,8 @@ exports.sendEventEmail = function(email, name) {
         apiVersion: '2010-12-01',
         region: 'us-east-1'
     });
+    var emailList = [];
+    emailList.push(email);
     var emailHereseas = "no-reply@hereseas.com";
     var params = {
         Destination: { /* required */
@@ -151,7 +153,7 @@ exports.sendEventEmail = function(email, name) {
             CcAddresses: [
               '@'
             ],*/
-            ToAddresses: email
+            ToAddresses: emailList
         },
         Message: { /* required */
             Body: { /* required */
