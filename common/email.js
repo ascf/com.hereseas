@@ -134,3 +134,51 @@ exports.sendMilkEmail = function(email) {
         }
     });
 }
+
+
+exports.sendEventEmail = function(email, name) {
+    var ses = new AWS.SES({
+        apiVersion: '2010-12-01',
+        region: 'us-east-1'
+    });
+    var emailHereseas = "no-reply@hereseas.com";
+    var params = {
+        Destination: { /* required */
+            /*
+            BccAddresses: [
+              '@'
+            ],
+            CcAddresses: [
+              '@'
+            ],*/
+            ToAddresses: email
+        },
+        Message: { /* required */
+            Body: { /* required */
+                Html: {
+                    //Data: '<html><head></head><body><div><p>Hello world!</p></div></body></html>'
+                    Data: '<html><head><p>' + name + '</p></head><title>hereseas.com</title><body><div style="text-align:center"><img src="https://s3.amazonaws.com/hereseas-public-images/email/milktea.jpg"/></div></body></html>'
+                }
+            },
+            Subject: { /* required */
+                Data: 'Hereseas 213 Event'
+            }
+        },
+        Source: "'Hereseas Community' <" + emailHereseas + ">'",
+        /* required */
+        ReplyToAddresses: [
+            'hereseas@gmail.com'
+        ]
+    };
+
+    //console.log(params);
+    ses.sendEmail(params, function(err, data) {
+        if (err) {
+            console.log(err, err.stack); // an error occurred
+            return false;
+        } else {
+            return true;
+            //console.log(data);           // successful response
+        }
+    });
+}
