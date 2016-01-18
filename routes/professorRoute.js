@@ -48,7 +48,7 @@ exports.createRate = function(req, res, next) {
     var starAve = 0;
     var rateCount = 0;
 
-    if (tools.isEmpty(req.body.professorId) || tools.isEmpty(req.body.star)) {
+    if (tools.isEmpty(req.body.professorId) || isNaN(req.body.star)) {
         res.json(Results.ERR_PARAM_ERR);
         return;
     }

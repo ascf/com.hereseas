@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 var config = require('../config');
 
-mongoose.connect(config.db, function (err) {
-    if (err) {
-        console.error('connect to %s error: ', config.db, err.message);
-        process.exit(1);
-    }
+mongoose.connect(config.db, function(err) {
+	if (err) {
+		console.error('connect to %s error: ', config.db, err.message);
+		process.exit(1);
+	}
 });
 
 // models
@@ -22,6 +22,7 @@ require('./thread.js');
 require('./comment.js');
 require('./professor.js');
 require('./rate.js');
+require('./eventValentine.js');
 
 exports.User = mongoose.model('User');
 exports.Apartment = mongoose.model('Apartment');
@@ -36,3 +37,4 @@ exports.Thread = mongoose.model('Thread');
 exports.Comment = mongoose.model('Comment');
 exports.Professor = mongoose.model('Professor');
 exports.Rate = mongoose.model('Rate');
+exports.EventValentine = mongoose.model('EventValentine');

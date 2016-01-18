@@ -8,8 +8,9 @@ var forgetterRoute = require('./routes/forgetterRoute');
 var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
 var professorRoute = require('./routes/professorRoute');
-var tools = require('./common/tools');
+var eventRoute = require('./routes/eventRoute');
 
+var tools = require('./common/tools');
 
 var imageUploadTestRoute = require('./routes/imageUploadTestRoute');
 
@@ -64,7 +65,8 @@ module.exports = function(app) {
     app.put('/user', sign.ensureAuthenticated, userRoute.editUser);
     app.post('/avatar/m_upload_image', sign.ensureAuthenticated, upload.array("avatar", 1), imageUploadRoute.image_upload);
     app.get('/user/allpost/:id', userRoute.getUserAllPost);
-    app.post('/user/sendmilkemail', userRoute.sendMilkEmail);
+
+    //app.post('/user/sendmilkemail', userRoute.sendMilkEmail);
 
     /* reset password */
     app.post('/beforereset', forgetterRoute.createForgetter);
@@ -152,6 +154,11 @@ module.exports = function(app) {
     app.get('/professor/:id', professorRoute.getProfessor);
     app.get('/school/:id/departments', professorRoute.getDepartmentList);
     app.get('/professor/:id/rates', professorRoute.getProfessorRates);
+
+    /* event */
+    app.post('/event213/user', eventRoute.saveParticipantInfo);
+
+    app.get('/admin/event213/users', sign.ensureAuthenticated, eventRoute.getAllParticipantsInfo);
 
 
     /*  admin */
