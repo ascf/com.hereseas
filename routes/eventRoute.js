@@ -4,6 +4,7 @@ var tools = require('../common/tools');
 var EventValentine = require('../models').EventValentine;
 var adminRoute = require('./adminRoute');
 var emailService = require('../common/email');
+var User = require('../models').User;
 
 
 exports.saveParticipantInfo = function(req, res, next) {
@@ -32,7 +33,15 @@ exports.saveParticipantInfo = function(req, res, next) {
             return;
         } else {
 
-            emailService.sendEventEmail(eventValentine.email, eventValentine.name);
+            User.findOne({
+                email: eventValentine.email
+            }, function(err, item) {
+                if (item != null) {
+                    emailService.sendEventEmail(eventValentine.email, eventValentine.name);
+                }
+
+            });
+
             res.json({
                 result: true,
                 data: eventValentine

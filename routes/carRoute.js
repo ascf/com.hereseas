@@ -749,3 +749,63 @@ exports.adminGetCars = function(req, res, next) {
     });
 
 };
+
+exports.adminEditCarStatus = function(req, res, next) {
+    var ep = new EventProxy();
+    //check admin
+    adminRoute.isAdmin(req.user.email, function(result) {
+        if (result) {
+            ep.emit('checkAdmin');
+        } else {
+            res.json(Results.ERR_PERMISSION_ERR);
+        }
+    });
+    ep.all('checkAdmin', function() {
+        // execute admin function
+        var carId = req.param('id');
+        var reqData = {
+            status: req.body.status
+        };
+        if (tools.isEmpty(carId)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        if (tools.hasNull(reqData)) {
+            res.json(Results.ERR_PARAM_ERR);
+            return;
+        }
+        var query = {
+            id: carId
+        };
+        Car.findById(carId, function(err, car) {
+            if (err) {
+                console.log(err);
+                return next();
+            } else if (!car) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                for (var key in reqData) {
+                    car[key] = reqData[key];
+                }
+                car.save(function(err, carSave) {
+                    if (err) {
+                        console.log(err);
+                        return next();
+                    } else {
+                        res.json({
+                            result: true,
+                            data: {
+                                'id': carSave.id,
+                                'username': carSave.username,
+                                'status': carSave.status
+                            }
+                        });
+                    }
+                });
+
+            }
+
+        });
+    });
+};
