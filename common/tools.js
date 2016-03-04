@@ -121,3 +121,31 @@ exports.checkPositiveNumber = function(n) {
 exports.replaceAll = function(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
 };
+
+/*
+    author: yzhou
+    used to substitute the old news with latest news
+    return the id of previous element that should be
+    deleted
+*/
+exports.updateRecent = function(pre_list, new_elem){
+    if(pre_list.length < 2){
+        return null;
+    }
+    if(pre_list[0].createAt >= pre_list[1].createAt){
+        return pre_list[1]._id;
+    }else{
+        return pre_list[0]._id;
+    }
+}
+
+/*
+    author: yzhou
+    used to generate preview info from description
+*/
+exports.generatePreview = function(descpt){
+    if(descpt.length < 50){
+       return descpt;
+    }
+    return descpt.substring(0, 49) + '...';
+}
