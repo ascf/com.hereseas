@@ -883,7 +883,7 @@ exports.postApartmentById = function(req, res, next) {
             userAvatar: apartment.userAvatar,
             schoolId: apartment.schoolId,
             title: apartment.title,
-            preview: generatePreview(apartment.description),
+            preview: tools.generatePreview(apartment.description),
             category: '最新房源',
             status: apartment.status,
             priority: 1,
@@ -907,7 +907,7 @@ exports.postApartmentById = function(req, res, next) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
             } else {
-                var delete_id = updateRecent(news, recent)
+                var delete_id = tools.updateRecent(news, recent)
                 if(delete_id != null){
                     Recent.findById(delete_id).remove().exec();
                 }
