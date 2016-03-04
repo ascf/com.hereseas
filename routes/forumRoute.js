@@ -8,6 +8,7 @@ var Thread = require('../models').Thread;
 var Comment = require('../models').Comment;
 
 var adminRoute = require('./adminRoute');
+var recentRoute = require('./recentRoute');
 
 
 exports.getThreadById = function(req, res, next) {
@@ -260,9 +261,9 @@ exports.createThread = function(req, res, next) {
 				console.log(err);
 				return next();
 			} else {
-
-				updateUserThreads(thread._id, req.user.id);
-				res.json({
+                updateUserThreads(thread._id, req.user.id);
+                recentRoute.updateRecentList(thread, 4);
+                res.json({
 					result: true,
 					data: {
 						id: thread.id

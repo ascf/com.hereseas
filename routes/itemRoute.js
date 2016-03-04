@@ -7,6 +7,8 @@ var School = require('../models').School;
 var Car = require('../models').Car;
 var Apartment = require('../models').Apartment;
 
+var recentRoute = require('./recentRoute');
+
 exports.createItem = function(req, res, next) {
     var epUser = new EventProxy();
 
@@ -41,6 +43,7 @@ exports.createItem = function(req, res, next) {
             } else {
 
                 updateUserItems(item._id, req.user.id);
+                recentRoute.updateRecentList(thread, 3);
                 res.json({
                     result: true,
                     data: item

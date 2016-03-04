@@ -126,12 +126,23 @@ exports.replaceAll = function(str, find, replace) {
     author: yzhou
     used to substitute the old news with latest news
     return the id of previous element that should be
-    deleted
+    deleted. first compare the priority of every 
+    elements. if they are on same level then compare 
+    the date.
 */
 exports.updateRecent = function(pre_list, new_elem){
     if(pre_list.length < 2){
         return null;
     }
+    
+    if(new_elem.priority > pre_list[0].priority){
+        return pre_list[0]._id; 
+    }
+    
+    if(new_elem.priority > pre_list[1].priority){
+        return pre_list[1]._id;
+    }
+    
     if(pre_list[0].createAt >= pre_list[1].createAt){
         return pre_list[1]._id;
     }else{

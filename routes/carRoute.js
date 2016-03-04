@@ -5,6 +5,7 @@ var tools = require('../common/tools');
 var Car = require('../models').Car;
 var School = require('../models').School;
 var adminRoute = require('./adminRoute');
+var recentRoute = require('./recentRoute');
 
 exports.createCar = function(req, res, next) {
     var epUser = new EventProxy();
@@ -58,7 +59,7 @@ exports.createCar = function(req, res, next) {
                 return next();
             } else {
                 updateUserCars(car._id, req.user.id);
-
+                recentRoute.updateRecentList(thread, 2);
                 res.json({
                     result: true,
                     data: car

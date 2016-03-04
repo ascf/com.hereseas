@@ -20,6 +20,10 @@ var RecentSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'School'
     },
+    
+    objectId:{
+        type: Schema.ObjectId
+    },
 
     title: {
         type: String
@@ -29,8 +33,13 @@ var RecentSchema = new Schema({
         type: String
     },
     
+    cover:{
+        type: String
+    },
+    
     category: {
-        type: String    
+        type: Number,
+        default: 0
     },
 
     status: {

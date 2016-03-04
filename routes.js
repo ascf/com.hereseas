@@ -9,6 +9,7 @@ var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
 var professorRoute = require('./routes/professorRoute');
 var eventRoute = require('./routes/eventRoute');
+var recentRoute = require('./route/recentRoute');
 
 var tools = require('./common/tools');
 
@@ -188,7 +189,11 @@ module.exports = function(app) {
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
     //app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadTestRoute.image_upload_test);
 
-
+    
+    /* recent */
+    app.get('/recent/getRecentList', recentRoute.getRecentList);
+    
+    
     app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);
 
 
