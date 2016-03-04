@@ -13,6 +13,8 @@ var Apartment = require('../models').Apartment;
 var Room = require('../models').Room;
 var User = require('../models').User;
 var School = require('../models').School;
+var Recent = require('../models').Recent;
+
 
 var fs = require('fs');
 var adminRoute = require('./adminRoute');
