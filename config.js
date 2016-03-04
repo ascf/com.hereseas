@@ -5,7 +5,7 @@ var config = {
 	website_name: 'Hereseas',
 	description: 'Make our life easier!',
 	site_static_host: '',
-	port: 80,
+	port: 8080,
 
 	auth_cookie_name: 'hereseas_cookie',
 
