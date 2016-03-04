@@ -59,7 +59,7 @@ exports.createCar = function(req, res, next) {
                 return next();
             } else {
                 updateUserCars(car._id, req.user.id);
-                recentRoute.updateRecentList(thread, 2);
+                recentRoute.updateRecentList(car, 2);
                 res.json({
                     result: true,
                     data: car

@@ -43,7 +43,7 @@ exports.createItem = function(req, res, next) {
             } else {
 
                 updateUserItems(item._id, req.user.id);
-                recentRoute.updateRecentList(thread, 3);
+                recentRoute.updateRecentList(item, 3);
                 res.json({
                     result: true,
                     data: item
