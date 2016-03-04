@@ -9,7 +9,7 @@ var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
 var professorRoute = require('./routes/professorRoute');
 var eventRoute = require('./routes/eventRoute');
-var recentRoute = require('./route/recentRoute');
+var recentRoute = require('./routes/recentRoute');
 
 var tools = require('./common/tools');
 
