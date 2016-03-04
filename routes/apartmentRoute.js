@@ -905,9 +905,6 @@ exports.postApartmentById = function(req, res, next) {
                 console.log(err);
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
-            } else if (!news.length) {
-                res.json(Results.ERR_NOTFOUND_ERR);
-                return;
             } else {
                 var delete_id = tools.updateRecent(news, recent)
                 if(delete_id != null){
