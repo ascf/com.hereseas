@@ -41,9 +41,7 @@ exports.createItem = function(req, res, next) {
                 console.log(err);
                 return next();
             } else {
-
                 updateUserItems(item._id, req.user.id);
-                recentRoute.updateRecentList(item, 3);
                 res.json({
                     result: true,
                     data: item
@@ -333,6 +331,7 @@ exports.postItemById = function(req, res, next) {
                         //consolo.log(err);
                         return next();
                     } else {
+                        recentRoute.updateRecentList(item, 3);
                         res.json({
                             result: true,
                             data: {

@@ -59,7 +59,6 @@ exports.createCar = function(req, res, next) {
                 return next();
             } else {
                 updateUserCars(car._id, req.user.id);
-                recentRoute.updateRecentList(car, 2);
                 res.json({
                     result: true,
                     data: car
@@ -254,6 +253,7 @@ exports.postCarById = function(req, res, next) {
                         consolo.log(err);
                         return next();
                     } else {
+                        recentRoute.updateRecentList(car, 2);
                         res.json({
                             result: true,
                             data: {
