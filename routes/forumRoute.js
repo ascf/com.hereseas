@@ -10,6 +10,85 @@ var Comment = require('../models').Comment;
 var adminRoute = require('./adminRoute');
 var recentRoute = require('./recentRoute');
 
+/*
+    author: yzhou
+    get four threads showing on the user home page
+*/
+exports.getFourThreads = function(req, res, next) {
+
+    var schoolId = req.query.schoolId;
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var ep = new EventProxy();
+
+    ep.all('findSchoolConnection', function() {
+
+        var query = {
+            'status': 1,
+            'available': true,
+            'schoolId': schoolId
+        };
+
+        Thread.find(
+                query,
+                'id userId userName userAvatar schoolId title preview createAt')
+            .sort({
+                createAt: 'desc'
+            }).
+        limit(4).
+        exec(function(err, threads) {
+            if (err) {
+                res.json(Results.ERR_DB_ERR);
+                console.log(err);
+                return;
+            } else if (!threads.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+                Thread.count({schoolId:schoolId}, function(err, count){
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                        console.log(err);
+                        return;
+                    }
+                    
+                    res.json({
+                        result: true,
+                        data: threads,
+                        count: count
+                    });
+                });
+                return;
+            }
+        });
+    });
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+                ep.emit('findSchoolConnection');
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+
+    });
+
+
+};
 
 exports.getThreadById = function(req, res, next) {
 	var threadId = req.param('id');
