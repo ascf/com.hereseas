@@ -141,6 +141,7 @@ module.exports = function(app) {
 
 
     /*  forum */
+    app.get('/forum/four', forumRoute.getFourThreads);
     app.get('/forum/:id/threads', forumRoute.getThreadsBySchoolId);
     app.get('/forum/thread/:id', forumRoute.getThreadById);
     app.get('/forum/thread/:id/comments', forumRoute.getCommentsByThreadId);
