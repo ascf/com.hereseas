@@ -29,7 +29,6 @@ exports.getFourThreads = function(req, res, next) {
 
         var query = {
             'status': 1,
-            'available': true,
             'schoolId': schoolId
         };
 
