@@ -23,7 +23,7 @@ var recentRoute = require('./recentRoute');
 
 exports.getThreeApartments = function(req, res, next) {
 
-    schoolId = req.query.schoolId
+    var schoolId = req.query.schoolId;
 
     if (!schoolId) {
         res.json(Results.ERR_PARAM_ERR);
@@ -60,9 +60,18 @@ exports.getThreeApartments = function(req, res, next) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
             } else {
-                res.json({
-                    result: true,
-                    data: apartments
+                Apartment.count({schoolId:schoolId,available:true}, function(err, count){
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                        console.log(err);
+                        return;
+                    }
+                    
+                    res.json({
+                        result: true,
+                        data: apartments,
+                        count: count
+                    });
                 });
                 return;
             }
