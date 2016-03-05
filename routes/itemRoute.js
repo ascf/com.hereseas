@@ -331,6 +331,7 @@ exports.postItemById = function(req, res, next) {
                         //consolo.log(err);
                         return next();
                     } else {
+                        item.title = item.itemName;
                         recentRoute.updateRecentList(item, 3);
                         res.json({
                             result: true,
