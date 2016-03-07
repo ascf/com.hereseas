@@ -380,9 +380,17 @@ exports.getThreeCars = function(req, res, next) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
             } else {
-                res.json({
-                    result: true,
-                    data: cars
+                Car.count({schoolId:schoolId}, function(err, count){
+                    if (err) {
+                        res.json(Results.ERR_DB_ERR);
+                        console.log(err);
+                        return;
+                    }               
+                    res.json({
+                        result: true,
+                        data: cars,
+                        count: count
+                    });
                 });
                 return;
             }
