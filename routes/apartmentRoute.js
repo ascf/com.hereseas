@@ -855,6 +855,13 @@ exports.postApartmentById = function(req, res, next) {
                         console.log(err);
                         return next();
                     } else {
+                        res.json({
+                            result: true,
+                            data: {
+                                "_id": apartment.id,
+                                "schoolId": apartment.schoolId
+                            }
+                        });
                         
                         epUser.emit("savedApt", apartment);
 
@@ -905,23 +912,7 @@ exports.postApartmentById = function(req, res, next) {
                 if(delete_id != null){
                     Recent.findById(delete_id).remove().exec();
                 }
-                recent.save(function(err, recent) {
-                    if (err) {
-                        console.log(err);
-                        return next();
-                    } else {
-                        
-                        res.json({
-                            result: true,
-                            data: {
-                                "_id": apartment.id,
-                                "schoolId": apartment.schoolId
-                            }
-                        });
-
-                    }
-                });
-                
+                recent.save({});
                 return;
             }
         })      
