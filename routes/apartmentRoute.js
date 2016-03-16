@@ -14,10 +14,6 @@ var Room = require('../models').Room;
 var User = require('../models').User;
 var School = require('../models').School;
 var Recent = require('../models').Recent;
-<<<<<<< HEAD
-
-=======
->>>>>>> 7d7d6f0852665e0548b9725839d2bcd82d60e3d3
 
 var fs = require('fs');
 var adminRoute = require('./adminRoute');
@@ -876,67 +872,12 @@ exports.postApartmentById = function(req, res, next) {
                                 "_id": apartment.id,
                                 "schoolId": apartment.schoolId
                             }
-<<<<<<< HEAD
                         });           
-=======
-                        });
-                        
-                        epUser.emit("savedApt", apartment);
-
->>>>>>> 7d7d6f0852665e0548b9725839d2bcd82d60e3d3
                     }
                 });
             }
         });
     });
-<<<<<<< HEAD
-=======
-    
-    /*  author: yzhou
-        update the recent data base shown on the user home
-    */
-    epUser.all("savedApt", function(apartment) {
-        var reqData = {
-            userId: apartment.userId,
-            username: apartment.username,
-            userAvatar: apartment.userAvatar,
-            schoolId: apartment.schoolId,
-            title: apartment.title,
-            preview: generatePreview(apartment.description),
-            category: '最新房源',
-            status: apartment.status,
-            priority: 1,
-            createAt: apartment.createAt,
-            updateAt: apartment.updateAt
-        }
-        
-        var recent = new Recent();
-
-        for (var key in reqData) {
-            recent[key] = reqData[key];
-        };
-        
-        Recent.find({schoolId: reqData.schoolId})
-        .exec(function(err, news) {
-            if (err) {
-                console.log(err);
-                res.json(Results.ERR_NOTFOUND_ERR);
-                return;
-            } else if (!news.length) {
-                res.json(Results.ERR_NOTFOUND_ERR);
-                return;
-            } else {
-                var delete_id = updateRecent(news, recent)
-                if(delete_id != null){
-                    Recent.findById(delete_id).remove().exec();
-                }
-                recent.save({});
-                return;
-            }
-        })      
-    });
-
->>>>>>> 7d7d6f0852665e0548b9725839d2bcd82d60e3d3
 }
 
 exports.deleteApartmentById = function(req, res, next) {

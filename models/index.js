@@ -23,13 +23,10 @@ require('./comment.js');
 require('./professor.js');
 require('./rate.js');
 require('./eventValentine.js');
-<<<<<<< HEAD
 require('./recent.js');
-=======
 //added on 3/16/2016 by Chengyu 
-require('./city.js') 
+require('./city.js');
 
->>>>>>> 7d7d6f0852665e0548b9725839d2bcd82d60e3d3
 
 exports.User = mongoose.model('User');
 exports.Apartment = mongoose.model('Apartment');
@@ -45,8 +42,6 @@ exports.Comment = mongoose.model('Comment');
 exports.Professor = mongoose.model('Professor');
 exports.Rate = mongoose.model('Rate');
 exports.EventValentine = mongoose.model('EventValentine');
-<<<<<<< HEAD
 exports.Recent = mongoose.model('Recent');
-=======
-exports.City = mongoose.model('City')
->>>>>>> 7d7d6f0852665e0548b9725839d2bcd82d60e3d3
+exports.City = mongoose.model('City');
+
