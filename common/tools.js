@@ -143,6 +143,7 @@ exports.updateRecent = function(pre_list, new_elem){
         return pre_list[1]._id;
     }
     
+
     if(pre_list[0].createAt >= pre_list[1].createAt){
         return pre_list[1]._id;
     }else{
@@ -160,3 +161,4 @@ exports.generatePreview = function(descpt){
     }
     return descpt.substring(0, 49) + '...';
 }
+

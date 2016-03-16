@@ -9,7 +9,11 @@ var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
 var professorRoute = require('./routes/professorRoute');
 var eventRoute = require('./routes/eventRoute');
+<<<<<<< HEAD
 var recentRoute = require('./routes/recentRoute');
+=======
+var cityRoute = require('./routes/cityRoute'); //edited at 3/6/2016 by Chengyu Huang
+>>>>>>> 7d7d6f0852665e0548b9725839d2bcd82d60e3d3
 
 var tools = require('./common/tools');
 
@@ -185,14 +189,25 @@ module.exports = function(app) {
     app.get('/admin/apartment/:id', sign.ensureAuthenticated, apartmentRoute.adminGetApartmentAllInfo);
     app.put('/admin/editapartment/:id', sign.ensureAuthenticated, apartmentRoute.adminEditApartmentStatus);
     app.get('/admin/cars', sign.ensureAuthenticated, carRoute.adminGetCars);
+    app.put('/admin/editcar/:id', sign.ensureAuthenticated, carRoute.adminEditCarStatus);
     app.put('/admin/thread/:id/status', sign.ensureAuthenticated, forumRoute.adminEditThreadStatus);
     app.put('/admin/comment/:id/status', sign.ensureAuthenticated, forumRoute.adminEditCommentStatus);
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
     //app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadTestRoute.image_upload_test);
+<<<<<<< HEAD
 
     
     /* recent */
     app.get('/recent/getRecentList', recentRoute.getRecentList);
+=======
+    
+    /* city routes */ //edited at 3/6/2016 -- Chengyu Huang
+    app.get('/cities', cityRoute.getCityList);
+    app.get('/city/:zip', cityRoute.getCityByZip);
+    
+    
+    
+>>>>>>> 7d7d6f0852665e0548b9725839d2bcd82d60e3d3
     
     
     app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);
