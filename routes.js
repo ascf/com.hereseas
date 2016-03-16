@@ -9,6 +9,7 @@ var itemRoute = require('./routes/itemRoute');
 var forumRoute = require('./routes/forumRoute');
 var professorRoute = require('./routes/professorRoute');
 var eventRoute = require('./routes/eventRoute');
+var cityRoute = require('./routes/cityRoute'); //edited at 3/6/2016 by Chengyu Huang
 
 var tools = require('./common/tools');
 
@@ -188,8 +189,15 @@ module.exports = function(app) {
     app.put('/admin/comment/:id/status', sign.ensureAuthenticated, forumRoute.adminEditCommentStatus);
     app.post('/admin', sign.ensureAuthenticated, adminRoute.createAdmin);
     //app.post('/picture/m_upload_image', upload.array("picture", 1), imageUploadTestRoute.image_upload_test);
-
-
+    
+    /* city routes */ //edited at 3/6/2016 -- Chengyu Huang
+    app.get('/cities', cityRoute.getCityList);
+    app.get('/city/:zip', cityRoute.getCityByZip);
+    
+    
+    
+    
+    
     app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);
 
 
