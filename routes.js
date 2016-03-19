@@ -201,6 +201,10 @@ module.exports = function(app) {
     app.get('/cities', cityRoute.getCityList);
     app.get('/city/:zip', cityRoute.getCityByZip);
     
+    /* get by distance */ //edited at 3/18/2016 -- Chengyu Huang
+    app.get('/apartments/bydistance',apartmentRoute.searchApartmentByGeo);
+    
+    
     
     
     app.post('/admin/sendemail', sign.ensureAuthenticated, adminRoute.adminSendEmail);

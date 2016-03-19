@@ -135,6 +135,13 @@ var ApartmentSchema = new Schema({
 		type: String
 	},
 
+    // added geo code object  -- 3/18/2016 -- Chengyu Huang
+    loc: {
+        type: [Number],
+        index:'2dsphere'
+    },
+    /*  ***/
+    
 	status: {
 		type: Number,
 		default: 2

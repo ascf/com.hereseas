@@ -506,6 +506,41 @@ exports.searchApartment = function(req, res, next) {
 
 }
 
+/*** add get apartment by distance **/ // added 3/18/2016 // Chengyu Huang
+exports.searchApartmentByGeo = function(req,res,next){
+    var limit = Number(req.query.limit) || 20;
+    var skip = Number(req.query.skip) || 0;
+    //get the max distance or set it to 8 kilometers
+    var maxDistance = req.query.distance || 5;  // distance is measured by meters
+    maxDistance =maxDistance*1000*1.6; // distance is measured in meters, convert it to miles here 
+
+    //get [long , lat]
+    var coords = [];
+    coords[0]=Number(req.query.longitude);
+    coords[1]=Number(req.query.latitude);
+
+    //find location 
+        Apartment.find({
+         loc: {
+             $near:{
+                $geometry:{
+                 type: "Point",
+                 coordinates: coords
+                },
+                 $maxDistance: maxDistance,
+                 $minDistance: 0
+             }
+         }   
+        }).limit(limit).skip(skip).exec(function(err,citiesList){
+            if (err){
+                return res.json(500,err);
+            }
+            res.json({
+                    result:200,
+                    data: citiesList});
+            return 
+        });
+};
 
 function calculatePrice(rooms) {
     var max = 0
