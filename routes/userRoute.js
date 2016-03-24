@@ -219,6 +219,7 @@ exports.getUser = function(req, res, next) {
 
 exports.getSelfInfo = function(req, res, next) {
     var userId = req.user.id;
+    console.log(userId);
     if (userId) {
         User.findById(userId,
             function(err, user) {
