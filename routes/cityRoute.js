@@ -23,7 +23,7 @@ exports.getCityList = function(req, res, next) {
     // put limit as 20
     City.find(
         query,
-        'id city state postal latitude longitude').limit(20).exec(
+        'id city state zipcode latitude longitude').limit(20).exec(
         function(err, cities) {
             if (err) {
                 res.json(Results.ERR_NOTFOUND_ERR);
@@ -46,12 +46,12 @@ exports.getCityByZip = function(req, res, next) {
         return;
     };
     
-    var query = {'postal': zip};
+    var query = {'zipcode': zip};
     console.log();
     // put limit as 10
     City.findOne(
         query,
-        'id city state postal latitude longitude').exec(
+        'id city state zipcode latitude longitude').exec(
         function(err, cities) {
             if (err) {
                 res.json(Results.ERR_NOTFOUND_ERR);

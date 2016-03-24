@@ -12,7 +12,7 @@ var CitySchema = new Schema({
 		type: String
 	},
 
-	postal: {
+	zipcode: {
 		type: Number
 	},
     
