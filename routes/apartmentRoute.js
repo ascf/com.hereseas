@@ -507,40 +507,187 @@ exports.searchApartment = function(req, res, next) {
 }
 
 /*** add get apartment by distance **/ // added 3/18/2016 // Chengyu Huang
-exports.searchApartmentByGeo = function(req,res,next){
-    var limit = Number(req.query.limit) || 20;
-    var skip = Number(req.query.skip) || 0;
-    //get the max distance or set it to 8 kilometers
-    var maxDistance = req.query.distance || 5;  // distance is measured by meters
-    maxDistance =maxDistance*1000*1.6; // distance is measured in meters, convert it to miles here 
-
-    //get [long , lat]
-    var coords = [];
-    coords[0]=Number(req.query.longitude);
-    coords[1]=Number(req.query.latitude);
-
-    //find location 
-        Apartment.find({
-         loc: {
-             $near:{
-                $geometry:{
-                 type: "Point",
-                 coordinates: coords
-                },
-                 $maxDistance: maxDistance,
-                 $minDistance: 0
-             }
-         }   
-        }).limit(limit).skip(skip).exec(function(err,citiesList){
-            if (err){
-                return res.json(500,err);
+exports.searchApartmentByGeo = function (req, res, next) {
+        //sort order 
+            var sortOrder = {};
+            var sortObj = req.query.sort;
+            if (sortObj){
+            if (sortObj == "price"){
+                sortOrder = {"rooms.price": 1};
+            }else if(sortObj == "dprice"){
+                sortOrder = {"rooms.price": -1};
+            }else if(sortObj == "time"){
+                sortOrder = {"createAt": -1};
+            }else if(sortObj =="dtime"){
+                sortOrder = {"createAt": 1};
             }
-            res.json({
-                    result:200,
-                    data: citiesList});
-            return 
-        });
+            }
+        //pages 
+            var currentPage = parseInt(req.query.page,10) || 1;
+            var totalPage;
+            var pageSize = parseInt(req.query.pagesize,10) || 6;
+        
+        //geo query prams set up 
+            var limit = pageSize;
+            var skip = (currentPage-1)*pageSize;
+        //get the max distance or set it to 8 kilometers
+            var maxDistance = req.query.distance || 5;  // distance is measured by meters
+            maxDistance =maxDistance*1000*1.6; // distance is measured in meters, convert it to miles here 
+            
+        //get [long , lat]
+            var coords = [];
+            coords[0]=Number(req.query.longitude);
+            coords[1]=Number(req.query.latitude);   
+        // build query
+            var mongoQuery = {};
+            var query = {};
+            var aptQuery = {};
+            var schoolId = req.query.schoolId;  
+            
+            function buildquery(){
+                        var subQuery = {};
+                        
+                        if (schoolId) {
+                            aptQuery['schoolId'] = schoolId;
+                        }
+                        if (req.query.startPrice && req.query.endPrice) {
+                            var subQuery = {};
+                            subQuery['$gte'] = req.query.startPrice;
+                            subQuery['$lt'] = req.query.endPrice;
+                            query['price'] = subQuery;
+                        } else if (req.query.startPrice) {
+                            var subQuery = {};
+                            subQuery['$gte'] = req.query.startPrice;
+                            query['price'] = subQuery;
+                        } else if (req.query.endPrice) {
+                            var subQuery = {};
+                            subQuery['$lt'] = req.query.endPrice;
+                            query['price'] = subQuery;
+                        }
+
+                        if (req.query.apartmentType) {
+                            aptQuery['type'] = req.query.apartmentType;
+                        }
+
+                        if (req.query.roomType) {
+                            query['type'] = req.query.roomType;
+                        }
+
+                        if (req.query.beginDate) {
+                            var subQuery1 = {};
+                            subQuery1['$gte'] = new Date(req.query.beginDate);
+                            aptQuery['beginDate'] = subQuery1;
+                        }
+                        
+                        if (req.query.endDate) {
+                            var subQuery2 = {};
+                            subQuery2['$lte'] = new Date(req.query.endDate);
+                            aptQuery['endDate'] = subQuery2;
+                        }
+
+                        query['available'] = true;
+                        query['status'] = 1;
+
+                        var prepareQuery = {};
+                        prepareQuery['$elemMatch'] = query;
+                        aptQuery['rooms'] = prepareQuery;
+
+                        aptQuery['status'] = 1;
+                        aptQuery['available'] = true;
+
+                        // build loc for geo search 
+                        if (coords[0] && coords[1]){
+                        aptQuery['loc'] = {
+                            $near:{
+                                $geometry:{
+                                    type: "Point",
+                                    coordinates: coords
+                                },
+                                    $maxDistance: maxDistance,
+                                    $minDistance: 0
+                                }
+                            };
+                        }
+                        
+                return aptQuery;
+            };  
+            
+        //query the database
+            mongoQuery = buildquery();
+                //console.log(mongoQuery);
+             var resData = [];
+             Apartment.count(mongoQuery).exec(function(err,count){
+             if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+                } else if (count == 0) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+                }else {
+                    totalPage = Math.ceil(count/pageSize);
+        
+                //find apartment query
+                    Apartment.find(mongoQuery,'userId username userAvatar title schoolId cover rooms longitude latitude createAt')
+                    .populate('schoolId','name shortName cnName')
+                    .sort(sortOrder)
+                    .skip(skip)
+                    .limit(limit)
+                    .exec(function(err,apartments){
+                            if (err){
+                                console.log(err);
+                                res.json(Results.ERR_DB_ERR);
+                                return;
+                            } else if (!apartments.length){
+                                res.json(Results.ERR_NOTFOUND_ERR);
+                                return;
+                            }
+                            for (var i = 0; i < apartments.length; i++) {
+                                var apartment = apartments[i];
+                                var price = {
+                                    maxPrice: calculatePrice(apartment.rooms).maxPrice,
+                                    minPrice: calculatePrice(apartment.rooms).minPrice
+                                }
+                                var type = getType(apartment.rooms);
+
+                                var sameSchool = true;
+
+                                if (schoolId != apartment.schoolId._id) {
+                                    sameSchool = false;
+                                }
+
+                                resData.push({
+                                    "id": apartment.id,
+                                    "schoolId": apartment.schoolId._id,
+                                    "schoolName": apartment.schoolId.name,
+                                    "schoolShortName": apartment.schoolId.shortName,
+                                    "schoolCnName": apartment.schoolId.cnName,
+                                    "sameSchool": sameSchool,
+                                    "username": apartment.username,
+                                    "userAvatar": apartment.userAvatar,
+                                    "title" : apartment.title,
+                                    "latitude": apartment.latitude,
+                                    "longitude": apartment.longitude,
+                                    "cover": apartment.cover,
+                                    "price": price,
+                                    "type": type
+                                });
+                            }
+                            res.json({
+                                        result:true,
+                                        data:{
+                                            "totalPage": totalPage,
+                                            "currentPage": currentPage,
+                                            "apartments": resData,
+                                        } 
+                                    });
+                            return;
+                        });
+                };
+            }); // end of the entire qurey
 };
+// end of geoApartment search 
+
 
 function calculatePrice(rooms) {
     var max = 0
