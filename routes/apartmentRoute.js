@@ -507,7 +507,7 @@ exports.searchApartment = function(req, res, next) {
 }
 
 /*** add get apartment by distance **/ // added 3/18/2016 // Chengyu Huang
-exports.searchApartmentByGeo = function (req, res, next) {
+exports.geosearchApartment = function (req, res, next) {
         //sort order 
             var sortOrder = {};
             var sortObj = req.query.sort;
