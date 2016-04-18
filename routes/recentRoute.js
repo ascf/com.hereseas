@@ -76,7 +76,7 @@ exports.updateRecentList = function(object, cg) {
     create time
 */
 exports.getRecentList = function(req, res, next) {
-    schoolId = req.query.schoolId
+    var schoolId = req.param('id');
 
     if (!schoolId) {
         res.json(Results.ERR_PARAM_ERR);
