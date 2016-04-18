@@ -194,11 +194,11 @@ module.exports = function(app) {
     
     
     /* recent */
-    app.get('/recent/getRecentList', recentRoute.getRecentList);
+    app.get('/recent/getRecentList/:id', recentRoute.getRecentList);
 
     
     /* city routes */ //edited at 3/6/2016 -- Chengyu Huang
-    app.get('/cities', cityRoute.getCityList);
+    app.get('/cities/', cityRoute.getCityList);
     app.get('/city/:zip', cityRoute.getCityByZip);
     
     /* get by distance */ //edited at 3/18/2016 -- Chengyu Huang
