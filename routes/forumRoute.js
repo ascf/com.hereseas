@@ -149,10 +149,10 @@ exports.getThreadsBySchoolId = function(req, res, next) {
 	};
 
 	var option = {
-		'columns': 'userId username userAvatar schoolId title preview createAt lastReplayUserId replayCount updateAt',
+		'select': 'userId username userAvatar schoolId title preview createAt lastReplayUserId replayCount updateAt',
 		'page': currentPage,
 		'limit': pageSize,
-		'sortBy': {
+		'sort': {
 			'updateAt': -1
 		},
 		populate: [{
