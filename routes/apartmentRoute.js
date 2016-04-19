@@ -45,7 +45,7 @@ exports.getThreeApartments = function(req, res, next) {
 
         Apartment.find(
                 query,
-                'id userId userName userAvatar schoolId title price address cover type')
+                'id userId userName userAvatar schoolId title rooms address cover type')
             .sort({
                 createAt: 'desc'
             }).
@@ -59,6 +59,13 @@ exports.getThreeApartments = function(req, res, next) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
             } else {
+                for (var i = 0; i < apartments.length; i++) {
+                    apartments[i].price = {
+                        maxPrice: calculatePrice(apartments[i].rooms).maxPrice,
+                        minPrice: calculatePrice(apartments[i].rooms).minPrice
+                    };
+                }
+                
                 Apartment.count({schoolId:schoolId,available:true}, function(err, count){
                     if (err) {
                         res.json(Results.ERR_DB_ERR);
