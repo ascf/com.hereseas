@@ -45,7 +45,7 @@ exports.getThreeApartments = function(req, res, next) {
 
         Apartment.find(
                 query,
-                'id userId userName userAvatar schoolId title cover type')
+                'id userId userName userAvatar schoolId title price cover type')
             .sort({
                 createAt: 'desc'
             }).
