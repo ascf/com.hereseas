@@ -40,7 +40,7 @@
         "easyimage": "*",
         "aws-sdk": "*",
         "sanitize-html": "*",
-        "mongoose-paginate": "*",
+        "mongoose-paginate": "4.2.0",
         "compression": "*"
     }
 }
