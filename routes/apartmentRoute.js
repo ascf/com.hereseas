@@ -65,7 +65,7 @@ exports.getThreeApartments = function(req, res, next) {
                         minPrice: calculatePrice(apartments[i].rooms).minPrice
                     };
                 }
-                
+                console.log(apartments);
                 Apartment.count({schoolId:schoolId,available:true}, function(err, count){
                     if (err) {
                         res.json(Results.ERR_DB_ERR);
