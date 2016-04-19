@@ -204,7 +204,7 @@ exports.getThreeItems = function(req, res, next) {
             'schoolId': schoolId
         };
 
-        Item.find(query, 'id userId username userAvatar schoolId cover').sort({
+        Item.find(query, 'id itemName userId username userAvatar schoolId cover').sort({
             createAt: 'desc'
         }).limit(3).exec(function(err, items) {
             if (err) {
