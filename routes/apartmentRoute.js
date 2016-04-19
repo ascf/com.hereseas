@@ -59,12 +59,6 @@ exports.getThreeApartments = function(req, res, next) {
                 res.json(Results.ERR_NOTFOUND_ERR);
                 return;
             } else {
-                for (var i = 0; i < apartments.length; i++) {
-                    apartments[i].price = {
-                        maxPrice: calculatePrice(apartments[i].rooms).maxPrice,
-                        minPrice: calculatePrice(apartments[i].rooms).minPrice
-                    };
-                }
                 Apartment.count({schoolId:schoolId,available:true}, function(err, count){
                     if (err) {
                         res.json(Results.ERR_DB_ERR);
