@@ -34,7 +34,7 @@ exports.getFourThreads = function(req, res, next) {
 
         Thread.find(
                 query,
-                'id userId userName userAvatar schoolId title preview createAt')
+                'id userId username userAvatar schoolId title preview createAt')
             .sort({
                 createAt: 'desc'
             }).
