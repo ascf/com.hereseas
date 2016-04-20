@@ -221,6 +221,68 @@ exports.getProfessorList = function(req, res, next) {
 
 }
 
+exports.getHotProfessors = function(req, res, next) {
+
+    var query = {};
+    var schoolId = req.query.schoolId;
+
+    if (!schoolId) {
+        res.json(Results.ERR_PARAM_ERR);
+        return;
+    }
+
+    var connection;
+    var ep = new EventProxy();
+
+    ep.all('findSchoolConnection', function(school) {
+
+        query['schoolId'] = schoolId;
+        query['status'] = 1;
+
+        Professor.find(query, 'id name star')
+            .sort({rateCount:'desc'})
+            .limit(5)
+            .exec(function(err, professors) {
+            if (err) {
+                console.log(err);
+                res.json(Results.ERR_DB_ERR);
+                return;
+            } else if (!professors.length) {
+                res.json(Results.ERR_NOTFOUND_ERR);
+                return;
+            } else {
+
+                res.json({
+                    result: true,
+                    data: professors
+                });
+            }
+
+        });
+    });
+
+    School.findById(schoolId, function(err, school) {
+        if (err) {
+            console.log(err);
+            res.json(Results.ERR_DB_ERR);
+            return;
+
+        } else if (school) {
+            if (school.status == 1) {
+                connection = school.connection;
+                ep.emit('findSchoolConnection', school);
+            } else {
+                res.json(Results.ERR_ACTIVATED_ERR);
+                return;
+            }
+        } else {
+            res.json(Results.ERR_NOTFOUND_ERR);
+            return;
+        }
+    });
+
+}
+
 exports.getProfessor = function(req, res, next) {
 
     var professorId = req.param('id');
