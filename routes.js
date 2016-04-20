@@ -157,7 +157,7 @@ module.exports = function(app) {
     app.get('/professor/:id', professorRoute.getProfessor);
     app.get('/school/:id/departments', professorRoute.getDepartmentList);
     app.get('/professor/:id/rates', professorRoute.getProfessorRates);
-    app.get('/professor/hot',professorRoute.getHotProfessors);
+    app.get('/professors/hot',professorRoute.getHotProfessors);
 
     /* event */
     app.post('/event213/user', eventRoute.saveParticipantInfo);
