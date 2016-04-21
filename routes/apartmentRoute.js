@@ -122,7 +122,7 @@ exports.getApartmentList = function(req, res, next) {
     var resData = [];
     Apartment.find(
             query,
-            'id schoolId title cover rooms type longitude latitude createAt updateAt')
+            'id schoolId title cover rooms type longitude latitude address createAt updateAt')
         .sort({
             createAt: 'desc'
         }).exec(function(err, apartments) {
