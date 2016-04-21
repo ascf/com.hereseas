@@ -649,7 +649,7 @@ exports.geosearchApartment = function (req, res, next) {
                                     maxPrice: calculatePrice(apartment.rooms).maxPrice,
                                     minPrice: calculatePrice(apartment.rooms).minPrice
                                 }
-                                var type = getType(apartment.rooms);
+//                                var type = getType(apartment.rooms);
 
                                 var sameSchool = true;
 
@@ -671,7 +671,7 @@ exports.geosearchApartment = function (req, res, next) {
                                     "longitude": apartment.longitude,
                                     "cover": apartment.cover,
                                     "price": price,
-                                    "type": type
+                                    "type": apartment.type
                                 });
                             }
                             res.json({
