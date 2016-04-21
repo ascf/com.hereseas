@@ -421,7 +421,7 @@ exports.searchApartment = function(req, res, next) {
                 totalPage = Math.ceil(count / pageSize);
 
                 var resData = [];
-                Apartment.find(aptQuery, 'userId username userAvatar title schoolId cover rooms longitude latitude address createAt', pagination).populate('schoolId', 'name shortName cnName')
+                Apartment.find(aptQuery, 'userId username userAvatar title schoolId cover rooms longitude latitude address type createAt', pagination).populate('schoolId', 'name shortName cnName')
                     .sort({
                         createAt: 'desc'
                     }).exec(function(err, apartments) {
@@ -439,7 +439,7 @@ exports.searchApartment = function(req, res, next) {
                                     maxPrice: calculatePrice(apartment.rooms).maxPrice,
                                     minPrice: calculatePrice(apartment.rooms).minPrice
                                 }
-                                var type = getType(apartment.rooms);
+//                                var type = getType(apartment.rooms);
 
                                 var sameSchool = true;
 
@@ -462,7 +462,7 @@ exports.searchApartment = function(req, res, next) {
                                     "address": apartment.address,
                                     "cover": apartment.cover,
                                     "price": price,
-                                    "type": type,
+                                    "type": apartment.type,
                                     "sameSchool": sameSchool
                                 });
                             }
@@ -629,7 +629,7 @@ exports.geosearchApartment = function (req, res, next) {
                     totalPage = Math.ceil(count/pageSize);
         
                 //find apartment query
-                    Apartment.find(mongoQuery,'userId username userAvatar title schoolId cover rooms longitude latitude createAt')
+                    Apartment.find(mongoQuery,'userId username userAvatar title schoolId cover rooms longitude latitude address type createAt')
                     .populate('schoolId','name shortName cnName')
                     .sort(sortOrder)
                     .skip(skip)
@@ -671,7 +671,8 @@ exports.geosearchApartment = function (req, res, next) {
                                     "longitude": apartment.longitude,
                                     "cover": apartment.cover,
                                     "price": price,
-                                    "type": apartment.type
+                                    "type": apartment.type,
+                                    "address": apartment.address
                                 });
                             }
                             res.json({
