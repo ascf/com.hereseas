@@ -459,6 +459,7 @@ exports.searchApartment = function(req, res, next) {
                                     "title" : apartment.title,
                                     "latitude": apartment.latitude,
                                     "longitude": apartment.longitude,
+                                    "address": apartment.address,
                                     "cover": apartment.cover,
                                     "price": price,
                                     "type": type,
