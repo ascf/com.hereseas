@@ -379,9 +379,10 @@ exports.searchApartment = function(req, res, next) {
             subQuery['$lt'] = req.query.endPrice;
             query['price'] = subQuery;
         }
-
+        
         if (req.query.apartmentType) {
-            aptQuery['type'] = req.query.apartmentType;
+            var re = new RegExp(req.query.apartmentType, '^(1)');
+            aptQuery['type'] = re;
         }
 
         if (req.query.roomType) {
@@ -439,7 +440,7 @@ exports.searchApartment = function(req, res, next) {
                                     maxPrice: calculatePrice(apartment.rooms).maxPrice,
                                     minPrice: calculatePrice(apartment.rooms).minPrice
                                 }
-//                                var type = getType(apartment.rooms);
+                                var type = getType(apartment.rooms);
 
                                 var sameSchool = true;
 
@@ -462,7 +463,7 @@ exports.searchApartment = function(req, res, next) {
                                     "address": apartment.address,
                                     "cover": apartment.cover,
                                     "price": price,
-                                    "type": apartment.type,
+                                    "type": type,
                                     "sameSchool": sameSchool
                                 });
                             }
@@ -649,7 +650,7 @@ exports.geosearchApartment = function (req, res, next) {
                                     maxPrice: calculatePrice(apartment.rooms).maxPrice,
                                     minPrice: calculatePrice(apartment.rooms).minPrice
                                 }
-//                                var type = getType(apartment.rooms);
+                                var type = getType(apartment.rooms);
 
                                 var sameSchool = true;
 
@@ -671,7 +672,7 @@ exports.geosearchApartment = function (req, res, next) {
                                     "longitude": apartment.longitude,
                                     "cover": apartment.cover,
                                     "price": price,
-                                    "type": apartment.type,
+                                    "type": type,
                                     "address": apartment.address
                                 });
                             }
