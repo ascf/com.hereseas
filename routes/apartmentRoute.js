@@ -381,7 +381,7 @@ exports.searchApartment = function(req, res, next) {
         }
         
         if (req.query.apartmentType) {
-            var re = new RegExp(req.query.apartmentType, '^(1)');
+            var re = new RegExp('^('+req.query.apartmentType+')', 'i');
             aptQuery['type'] = re;
         }
 
